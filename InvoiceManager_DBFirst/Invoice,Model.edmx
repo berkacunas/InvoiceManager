@@ -1,0 +1,1070 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="InvoicesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CashTransfer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="From" Type="int" Nullable="false" />
+          <Property Name="To" Type="int" Nullable="false" />
+          <Property Name="Direction" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Val" Type="decimal" Precision="19" Scale="2" Nullable="false" />
+          <Property Name="PaymentMethodId" Type="int" Nullable="false" />
+          <Property Name="For" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Note" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CurrencyMovement">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="From" Type="nvarchar" MaxLength="8" Nullable="false" />
+          <Property Name="To" Type="nvarchar" MaxLength="8" Nullable="false" />
+          <Property Name="AmountOf" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="AmountTo" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Rate" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
+          <Property Name="Size" Type="nvarchar" MaxLength="50" />
+          <Property Name="Note" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ItemGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="TopGroupId" Type="int" />
+        </EntityType>
+        <EntityType Name="ItemSubType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ItemTopGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PaymentMethod">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Seller">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="512" />
+          <Property Name="Tel" Type="nvarchar" MaxLength="64" />
+          <Property Name="Web" Type="nvarchar" MaxLength="512" />
+          <Property Name="Email" Type="nvarchar" MaxLength="512" />
+        </EntityType>
+        <EntityType Name="Shop">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
+          <Property Name="Nickname" Type="nvarchar" MaxLength="512" />
+          <Property Name="No" Type="nvarchar" MaxLength="512" />
+          <Property Name="Address" Type="nvarchar" MaxLength="512" />
+          <Property Name="Tel" Type="nvarchar" MaxLength="512" />
+          <Property Name="Web" Type="nvarchar" MaxLength="512" />
+          <Property Name="Email" Type="nvarchar" MaxLength="512" />
+        </EntityType>
+        <EntityType Name="ShopGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="TypeId" Type="int" Nullable="false" />
+          <Property Name="Owner" Type="nvarchar" MaxLength="100" />
+          <Property Name="SellerId" Type="int" />
+          <Property Name="Note" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ShopType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Taction">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Dt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="TotalPrice" Type="decimal" Precision="19" Scale="2" Nullable="false" />
+          <Property Name="PaymentMethodId" Type="int" Nullable="false" />
+          <Property Name="No" Type="nvarchar" MaxLength="50" />
+          <Property Name="SellerId" Type="int" />
+          <Property Name="WhoDidIt" Type="int" />
+        </EntityType>
+        <EntityType Name="TactionDetails">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransactionId" Type="int" Nullable="false" />
+          <Property Name="ItemId" Type="int" Nullable="false" />
+          <Property Name="ItemSubTypeId" Type="int" />
+          <Property Name="Unit" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="UnitPrice" Type="decimal" Precision="19" Scale="2" Nullable="false" />
+          <Property Name="Vat" Type="int" Nullable="false" />
+          <Property Name="DiscountRate" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="DiscountedPrice" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="Note" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_CashTransferFrom_PersonId">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CashTransfer">
+              <PropertyRef Name="From" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashTransferPaymentMethodId_PaymentMethodId">
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
+          <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CashTransfer">
+              <PropertyRef Name="PaymentMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashTransferTo_PersonId">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CashTransfer">
+              <PropertyRef Name="To" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemGroupId_ItemGroupId">
+          <End Role="ItemGroup" Type="Self.ItemGroup" Multiplicity="1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemGroupTopGroupId_ItemTopGroupId">
+          <End Role="ItemTopGroup" Type="Self.ItemTopGroup" Multiplicity="0..1" />
+          <End Role="ItemGroup" Type="Self.ItemGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemTopGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ItemGroup">
+              <PropertyRef Name="TopGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentMethodPersonId_PersonId">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PaymentMethod">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShopGroupId_ShopGroupId">
+          <End Role="ShopGroup" Type="Self.ShopGroup" Multiplicity="1" />
+          <End Role="Shop" Type="Self.Shop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShopGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Shop">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShopGroupSellerId_SellerId">
+          <End Role="Seller" Type="Self.Seller" Multiplicity="0..1" />
+          <End Role="ShopGroup" Type="Self.ShopGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seller">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShopGroup">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShopGroupTypeId_ShopTypeId">
+          <End Role="ShopType" Type="Self.ShopType" Multiplicity="1" />
+          <End Role="ShopGroup" Type="Self.ShopGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShopType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShopGroup">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionDetailsItemId_ItemId">
+          <End Role="Item" Type="Self.Item" Multiplicity="1" />
+          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TactionDetails">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionDetailsItemSubTypeId">
+          <End Role="ItemSubType" Type="Self.ItemSubType" Multiplicity="0..1" />
+          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemSubType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TactionDetails">
+              <PropertyRef Name="ItemSubTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionDetailsTactionId">
+          <End Role="Taction" Type="Self.Taction" Multiplicity="1" />
+          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Taction">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TactionDetails">
+              <PropertyRef Name="TransactionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionPaymentMethodId">
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
+          <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Taction">
+              <PropertyRef Name="PaymentMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionSellerId">
+          <End Role="Seller" Type="Self.Seller" Multiplicity="0..1" />
+          <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seller">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Taction">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionShopId">
+          <End Role="Shop" Type="Self.Shop" Multiplicity="1" />
+          <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Taction">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionWhoDid_PersonId">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Taction">
+              <PropertyRef Name="WhoDidIt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InvoicesModelStoreContainer">
+          <EntitySet Name="CashTransfer" EntityType="Self.CashTransfer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CurrencyMovement" EntityType="Self.CurrencyMovement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemGroup" EntityType="Self.ItemGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemSubType" EntityType="Self.ItemSubType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemTopGroup" EntityType="Self.ItemTopGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentMethod" EntityType="Self.PaymentMethod" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Seller" EntityType="Self.Seller" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Shop" EntityType="Self.Shop" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShopGroup" EntityType="Self.ShopGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShopType" EntityType="Self.ShopType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Taction" EntityType="Self.Taction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TactionDetails" EntityType="Self.TactionDetails" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CashTransferFrom_PersonId" Association="Self.FK_CashTransferFrom_PersonId">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="CashTransfer" EntitySet="CashTransfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashTransferPaymentMethodId_PaymentMethodId" Association="Self.FK_CashTransferPaymentMethodId_PaymentMethodId">
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+            <End Role="CashTransfer" EntitySet="CashTransfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashTransferTo_PersonId" Association="Self.FK_CashTransferTo_PersonId">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="CashTransfer" EntitySet="CashTransfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemGroupId_ItemGroupId" Association="Self.FK_ItemGroupId_ItemGroupId">
+            <End Role="ItemGroup" EntitySet="ItemGroup" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemGroupTopGroupId_ItemTopGroupId" Association="Self.FK_ItemGroupTopGroupId_ItemTopGroupId">
+            <End Role="ItemTopGroup" EntitySet="ItemTopGroup" />
+            <End Role="ItemGroup" EntitySet="ItemGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentMethodPersonId_PersonId" Association="Self.FK_PaymentMethodPersonId_PersonId">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShopGroupId_ShopGroupId" Association="Self.FK_ShopGroupId_ShopGroupId">
+            <End Role="ShopGroup" EntitySet="ShopGroup" />
+            <End Role="Shop" EntitySet="Shop" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShopGroupSellerId_SellerId" Association="Self.FK_ShopGroupSellerId_SellerId">
+            <End Role="Seller" EntitySet="Seller" />
+            <End Role="ShopGroup" EntitySet="ShopGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShopGroupTypeId_ShopTypeId" Association="Self.FK_ShopGroupTypeId_ShopTypeId">
+            <End Role="ShopType" EntitySet="ShopType" />
+            <End Role="ShopGroup" EntitySet="ShopGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionDetailsItemId_ItemId" Association="Self.FK_TactionDetailsItemId_ItemId">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="TactionDetails" EntitySet="TactionDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionDetailsItemSubTypeId" Association="Self.FK_TactionDetailsItemSubTypeId">
+            <End Role="ItemSubType" EntitySet="ItemSubType" />
+            <End Role="TactionDetails" EntitySet="TactionDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionDetailsTactionId" Association="Self.FK_TactionDetailsTactionId">
+            <End Role="Taction" EntitySet="Taction" />
+            <End Role="TactionDetails" EntitySet="TactionDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionPaymentMethodId" Association="Self.FK_TactionPaymentMethodId">
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+            <End Role="Taction" EntitySet="Taction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionSellerId" Association="Self.FK_TactionSellerId">
+            <End Role="Seller" EntitySet="Seller" />
+            <End Role="Taction" EntitySet="Taction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionShopId" Association="Self.FK_TactionShopId">
+            <End Role="Shop" EntitySet="Shop" />
+            <End Role="Taction" EntitySet="Taction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionWhoDid_PersonId" Association="Self.FK_TactionWhoDid_PersonId">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Taction" EntitySet="Taction" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="InvoicesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CashTransfer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="From" Type="Int32" Nullable="false" />
+          <Property Name="To" Type="Int32" Nullable="false" />
+          <Property Name="Direction" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Val" Type="Decimal" Precision="19" Scale="2" Nullable="false" />
+          <Property Name="PaymentMethodId" Type="Int32" Nullable="false" />
+          <Property Name="For" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Person" Relationship="Self.FK_CashTransferFrom_PersonId" FromRole="CashTransfer" ToRole="Person" />
+          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_CashTransferPaymentMethodId_PaymentMethodId" FromRole="CashTransfer" ToRole="PaymentMethod" />
+          <NavigationProperty Name="Person1" Relationship="Self.FK_CashTransferTo_PersonId" FromRole="CashTransfer" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="CurrencyMovement">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="From" Type="String" MaxLength="8" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="To" Type="String" MaxLength="8" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AmountOf" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="AmountTo" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Rate" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <Property Name="Size" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ItemGroup" Relationship="Self.FK_ItemGroupId_ItemGroupId" FromRole="Item" ToRole="ItemGroup" />
+          <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetailsItemId_ItemId" FromRole="Item" ToRole="TactionDetails" />
+        </EntityType>
+        <EntityType Name="ItemGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TopGroupId" Type="Int32" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_ItemGroupId_ItemGroupId" FromRole="ItemGroup" ToRole="Item" />
+          <NavigationProperty Name="ItemTopGroup" Relationship="Self.FK_ItemGroupTopGroupId_ItemTopGroupId" FromRole="ItemGroup" ToRole="ItemTopGroup" />
+        </EntityType>
+        <EntityType Name="ItemSubType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetailsItemSubTypeId" FromRole="ItemSubType" ToRole="TactionDetails" />
+        </EntityType>
+        <EntityType Name="ItemTopGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ItemGroup" Relationship="Self.FK_ItemGroupTopGroupId_ItemTopGroupId" FromRole="ItemTopGroup" ToRole="ItemGroup" />
+        </EntityType>
+        <EntityType Name="PaymentMethod">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="CashTransfer" Relationship="Self.FK_CashTransferPaymentMethodId_PaymentMethodId" FromRole="PaymentMethod" ToRole="CashTransfer" />
+          <NavigationProperty Name="Person" Relationship="Self.FK_PaymentMethodPersonId_PersonId" FromRole="PaymentMethod" ToRole="Person" />
+          <NavigationProperty Name="Taction" Relationship="Self.FK_TactionPaymentMethodId" FromRole="PaymentMethod" ToRole="Taction" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="CashTransfer" Relationship="Self.FK_CashTransferFrom_PersonId" FromRole="Person" ToRole="CashTransfer" />
+          <NavigationProperty Name="CashTransfer1" Relationship="Self.FK_CashTransferTo_PersonId" FromRole="Person" ToRole="CashTransfer" />
+          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_PaymentMethodPersonId_PersonId" FromRole="Person" ToRole="PaymentMethod" />
+          <NavigationProperty Name="Taction" Relationship="Self.FK_TactionWhoDid_PersonId" FromRole="Person" ToRole="Taction" />
+        </EntityType>
+        <EntityType Name="Seller">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Tel" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Web" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ShopGroup" Relationship="Self.FK_ShopGroupSellerId_SellerId" FromRole="Seller" ToRole="ShopGroup" />
+          <NavigationProperty Name="Taction" Relationship="Self.FK_TactionSellerId" FromRole="Seller" ToRole="Taction" />
+        </EntityType>
+        <EntityType Name="Shop">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <Property Name="Nickname" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="No" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Tel" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Web" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ShopGroup" Relationship="Self.FK_ShopGroupId_ShopGroupId" FromRole="Shop" ToRole="ShopGroup" />
+          <NavigationProperty Name="Taction" Relationship="Self.FK_TactionShopId" FromRole="Shop" ToRole="Taction" />
+        </EntityType>
+        <EntityType Name="ShopGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TypeId" Type="Int32" Nullable="false" />
+          <Property Name="Owner" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SellerId" Type="Int32" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Seller" Relationship="Self.FK_ShopGroupSellerId_SellerId" FromRole="ShopGroup" ToRole="Seller" />
+          <NavigationProperty Name="Shop" Relationship="Self.FK_ShopGroupId_ShopGroupId" FromRole="ShopGroup" ToRole="Shop" />
+          <NavigationProperty Name="ShopType" Relationship="Self.FK_ShopGroupTypeId_ShopTypeId" FromRole="ShopGroup" ToRole="ShopType" />
+        </EntityType>
+        <EntityType Name="ShopType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ShopGroup" Relationship="Self.FK_ShopGroupTypeId_ShopTypeId" FromRole="ShopType" ToRole="ShopGroup" />
+        </EntityType>
+        <EntityType Name="Taction">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Dt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="19" Scale="2" Nullable="false" />
+          <Property Name="PaymentMethodId" Type="Int32" Nullable="false" />
+          <Property Name="No" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SellerId" Type="Int32" />
+          <Property Name="WhoDidIt" Type="Int32" />
+          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_TactionPaymentMethodId" FromRole="Taction" ToRole="PaymentMethod" />
+          <NavigationProperty Name="Person" Relationship="Self.FK_TactionWhoDid_PersonId" FromRole="Taction" ToRole="Person" />
+          <NavigationProperty Name="Seller" Relationship="Self.FK_TactionSellerId" FromRole="Taction" ToRole="Seller" />
+          <NavigationProperty Name="Shop" Relationship="Self.FK_TactionShopId" FromRole="Taction" ToRole="Shop" />
+          <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetailsTactionId" FromRole="Taction" ToRole="TactionDetails" />
+        </EntityType>
+        <EntityType Name="TactionDetails">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionId" Type="Int32" Nullable="false" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="ItemSubTypeId" Type="Int32" />
+          <Property Name="Unit" Type="Decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="2" Nullable="false" />
+          <Property Name="Vat" Type="Int32" Nullable="false" />
+          <Property Name="DiscountRate" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="DiscountedPrice" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_TactionDetailsItemId_ItemId" FromRole="TactionDetails" ToRole="Item" />
+          <NavigationProperty Name="ItemSubType" Relationship="Self.FK_TactionDetailsItemSubTypeId" FromRole="TactionDetails" ToRole="ItemSubType" />
+          <NavigationProperty Name="Taction" Relationship="Self.FK_TactionDetailsTactionId" FromRole="TactionDetails" ToRole="Taction" />
+        </EntityType>
+        <Association Name="FK_CashTransferFrom_PersonId">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CashTransfer">
+              <PropertyRef Name="From" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashTransferPaymentMethodId_PaymentMethodId">
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
+          <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CashTransfer">
+              <PropertyRef Name="PaymentMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashTransferTo_PersonId">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CashTransfer">
+              <PropertyRef Name="To" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemGroupId_ItemGroupId">
+          <End Role="ItemGroup" Type="Self.ItemGroup" Multiplicity="1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionDetailsItemId_ItemId">
+          <End Role="Item" Type="Self.Item" Multiplicity="1" />
+          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TactionDetails">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemGroupTopGroupId_ItemTopGroupId">
+          <End Role="ItemTopGroup" Type="Self.ItemTopGroup" Multiplicity="0..1" />
+          <End Role="ItemGroup" Type="Self.ItemGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemTopGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ItemGroup">
+              <PropertyRef Name="TopGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionDetailsItemSubTypeId">
+          <End Role="ItemSubType" Type="Self.ItemSubType" Multiplicity="0..1" />
+          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemSubType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TactionDetails">
+              <PropertyRef Name="ItemSubTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentMethodPersonId_PersonId">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PaymentMethod">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionPaymentMethodId">
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
+          <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Taction">
+              <PropertyRef Name="PaymentMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionWhoDid_PersonId">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Taction">
+              <PropertyRef Name="WhoDidIt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShopGroupSellerId_SellerId">
+          <End Role="Seller" Type="Self.Seller" Multiplicity="0..1" />
+          <End Role="ShopGroup" Type="Self.ShopGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seller">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShopGroup">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionSellerId">
+          <End Role="Seller" Type="Self.Seller" Multiplicity="0..1" />
+          <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seller">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Taction">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShopGroupId_ShopGroupId">
+          <End Role="ShopGroup" Type="Self.ShopGroup" Multiplicity="1" />
+          <End Role="Shop" Type="Self.Shop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShopGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Shop">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionShopId">
+          <End Role="Shop" Type="Self.Shop" Multiplicity="1" />
+          <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Taction">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShopGroupTypeId_ShopTypeId">
+          <End Role="ShopType" Type="Self.ShopType" Multiplicity="1" />
+          <End Role="ShopGroup" Type="Self.ShopGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShopType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShopGroup">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionDetailsTactionId">
+          <End Role="Taction" Type="Self.Taction" Multiplicity="1" />
+          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Taction">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TactionDetails">
+              <PropertyRef Name="TransactionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InvoicesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CashTransfer" EntityType="Self.CashTransfer" />
+          <EntitySet Name="CurrencyMovement" EntityType="Self.CurrencyMovement" />
+          <EntitySet Name="Item" EntityType="Self.Item" />
+          <EntitySet Name="ItemGroup" EntityType="Self.ItemGroup" />
+          <EntitySet Name="ItemSubType" EntityType="Self.ItemSubType" />
+          <EntitySet Name="ItemTopGroup" EntityType="Self.ItemTopGroup" />
+          <EntitySet Name="PaymentMethod" EntityType="Self.PaymentMethod" />
+          <EntitySet Name="Person" EntityType="Self.Person" />
+          <EntitySet Name="Seller" EntityType="Self.Seller" />
+          <EntitySet Name="Shop" EntityType="Self.Shop" />
+          <EntitySet Name="ShopGroup" EntityType="Self.ShopGroup" />
+          <EntitySet Name="ShopType" EntityType="Self.ShopType" />
+          <EntitySet Name="Taction" EntityType="Self.Taction" />
+          <EntitySet Name="TactionDetails" EntityType="Self.TactionDetails" />
+          <AssociationSet Name="FK_CashTransferFrom_PersonId" Association="Self.FK_CashTransferFrom_PersonId">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="CashTransfer" EntitySet="CashTransfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashTransferPaymentMethodId_PaymentMethodId" Association="Self.FK_CashTransferPaymentMethodId_PaymentMethodId">
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+            <End Role="CashTransfer" EntitySet="CashTransfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashTransferTo_PersonId" Association="Self.FK_CashTransferTo_PersonId">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="CashTransfer" EntitySet="CashTransfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemGroupId_ItemGroupId" Association="Self.FK_ItemGroupId_ItemGroupId">
+            <End Role="ItemGroup" EntitySet="ItemGroup" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionDetailsItemId_ItemId" Association="Self.FK_TactionDetailsItemId_ItemId">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="TactionDetails" EntitySet="TactionDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemGroupTopGroupId_ItemTopGroupId" Association="Self.FK_ItemGroupTopGroupId_ItemTopGroupId">
+            <End Role="ItemTopGroup" EntitySet="ItemTopGroup" />
+            <End Role="ItemGroup" EntitySet="ItemGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionDetailsItemSubTypeId" Association="Self.FK_TactionDetailsItemSubTypeId">
+            <End Role="ItemSubType" EntitySet="ItemSubType" />
+            <End Role="TactionDetails" EntitySet="TactionDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentMethodPersonId_PersonId" Association="Self.FK_PaymentMethodPersonId_PersonId">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionPaymentMethodId" Association="Self.FK_TactionPaymentMethodId">
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+            <End Role="Taction" EntitySet="Taction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionWhoDid_PersonId" Association="Self.FK_TactionWhoDid_PersonId">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Taction" EntitySet="Taction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShopGroupSellerId_SellerId" Association="Self.FK_ShopGroupSellerId_SellerId">
+            <End Role="Seller" EntitySet="Seller" />
+            <End Role="ShopGroup" EntitySet="ShopGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionSellerId" Association="Self.FK_TactionSellerId">
+            <End Role="Seller" EntitySet="Seller" />
+            <End Role="Taction" EntitySet="Taction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShopGroupId_ShopGroupId" Association="Self.FK_ShopGroupId_ShopGroupId">
+            <End Role="ShopGroup" EntitySet="ShopGroup" />
+            <End Role="Shop" EntitySet="Shop" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionShopId" Association="Self.FK_TactionShopId">
+            <End Role="Shop" EntitySet="Shop" />
+            <End Role="Taction" EntitySet="Taction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShopGroupTypeId_ShopTypeId" Association="Self.FK_ShopGroupTypeId_ShopTypeId">
+            <End Role="ShopType" EntitySet="ShopType" />
+            <End Role="ShopGroup" EntitySet="ShopGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionDetailsTactionId" Association="Self.FK_TactionDetailsTactionId">
+            <End Role="Taction" EntitySet="Taction" />
+            <End Role="TactionDetails" EntitySet="TactionDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="InvoicesModelStoreContainer" CdmEntityContainer="InvoicesEntities">
+          <EntitySetMapping Name="CashTransfer">
+            <EntityTypeMapping TypeName="InvoicesModel.CashTransfer">
+              <MappingFragment StoreEntitySet="CashTransfer">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="Direction" ColumnName="Direction" />
+                <ScalarProperty Name="Val" ColumnName="Val" />
+                <ScalarProperty Name="PaymentMethodId" ColumnName="PaymentMethodId" />
+                <ScalarProperty Name="For" ColumnName="For" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrencyMovement">
+            <EntityTypeMapping TypeName="InvoicesModel.CurrencyMovement">
+              <MappingFragment StoreEntitySet="CurrencyMovement">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="dt" ColumnName="dt" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="AmountOf" ColumnName="AmountOf" />
+                <ScalarProperty Name="AmountTo" ColumnName="AmountTo" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Item">
+            <EntityTypeMapping TypeName="InvoicesModel.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemGroup">
+            <EntityTypeMapping TypeName="InvoicesModel.ItemGroup">
+              <MappingFragment StoreEntitySet="ItemGroup">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TopGroupId" ColumnName="TopGroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemSubType">
+            <EntityTypeMapping TypeName="InvoicesModel.ItemSubType">
+              <MappingFragment StoreEntitySet="ItemSubType">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemTopGroup">
+            <EntityTypeMapping TypeName="InvoicesModel.ItemTopGroup">
+              <MappingFragment StoreEntitySet="ItemTopGroup">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentMethod">
+            <EntityTypeMapping TypeName="InvoicesModel.PaymentMethod">
+              <MappingFragment StoreEntitySet="PaymentMethod">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Person">
+            <EntityTypeMapping TypeName="InvoicesModel.Person">
+              <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Seller">
+            <EntityTypeMapping TypeName="InvoicesModel.Seller">
+              <MappingFragment StoreEntitySet="Seller">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Web" ColumnName="Web" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shop">
+            <EntityTypeMapping TypeName="InvoicesModel.Shop">
+              <MappingFragment StoreEntitySet="Shop">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Web" ColumnName="Web" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShopGroup">
+            <EntityTypeMapping TypeName="InvoicesModel.ShopGroup">
+              <MappingFragment StoreEntitySet="ShopGroup">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShopType">
+            <EntityTypeMapping TypeName="InvoicesModel.ShopType">
+              <MappingFragment StoreEntitySet="ShopType">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Taction">
+            <EntityTypeMapping TypeName="InvoicesModel.Taction">
+              <MappingFragment StoreEntitySet="Taction">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Dt" ColumnName="Dt" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="PaymentMethodId" ColumnName="PaymentMethodId" />
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+                <ScalarProperty Name="WhoDidIt" ColumnName="WhoDidIt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TactionDetails">
+            <EntityTypeMapping TypeName="InvoicesModel.TactionDetails">
+              <MappingFragment StoreEntitySet="TactionDetails">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="ItemSubTypeId" ColumnName="ItemSubTypeId" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Vat" ColumnName="Vat" />
+                <ScalarProperty Name="DiscountRate" ColumnName="DiscountRate" />
+                <ScalarProperty Name="DiscountedPrice" ColumnName="DiscountedPrice" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
