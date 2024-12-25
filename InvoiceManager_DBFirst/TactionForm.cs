@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace InvoiceManager_DBFirst
 {
@@ -61,14 +65,15 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewTactions == null)
                 return;
 
-            string[] tactionsHeaderTexts = new string[] { "tactionId", "Date", "Shop", "Total Price", "Payment Type", "No", "Who did it" };
-            int[] tactionsColumnWidths = new int[] { 50, 110, 200, 100, 120, 50, 100 };
+            string[] tactionsHeaderTexts = new string[] { "tactionId", "Date", "Shop", "Total Price", "Payment Type", "No", "Seller", "Who did it" };
+            int[] tactionsColumnWidths = new int[] { 50, 110, 200, 100, 120, 50, 100, 100 };
             DataGridViewContentAlignment[] tactionsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleRight,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleRight,
+                                                                DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft };
 
             _setDefaultGridViewHeaderStyles(this.dataGridViewTactions, tactionsHeaderTexts, tactionsColumnWidths, tactionsColumnAlignments);
@@ -155,18 +160,101 @@ namespace InvoiceManager_DBFirst
 
         private void buttonSaveTaction_Click(object sender, EventArgs e)
         {
+            if (this._newTaction.TactionDetails.Count == 0) 
+            {
+                MessageBox.Show("Transaction Details are missing.", "You didn't enter any transaction detail to the list.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; 
+            }
 
+            if (string.IsNullOrEmpty(this.textBoxShop.Text))
+            {
+                MessageBox.Show("Missing value.", "You didn't enter shop.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(this.comboBoxPaymentMethod.Text))
+            {
+                MessageBox.Show("Missing value.", "You didn't select payment method.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (this.checkBoxSeller.Checked)
+            {
+                if (string.IsNullOrEmpty(this.textBoxSeller.Text) )
+                {
+                    MessageBox.Show("Missing seller value.", "You checked seller option but you didn't enter a seller.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
+            this._newTaction.Dt = this.dateTimePickerTactionDate.Value;
+            this._newTaction.ShopId = conn.Shop.Where(r => r.Name == this.textBoxShop.Text).FirstOrDefault().id;
+            this._newTaction.PaymentMethodId = conn.PaymentMethod.Where(r => r.Name == this.comboBoxPaymentMethod.Text).FirstOrDefault().id;
+
+
+            if (this.checkBoxSeller.Checked) 
+                _newTaction.SellerId = conn.Seller.Where(r => r.Name == this.textBoxSeller.Text).FirstOrDefault().id;
+
+            this._newTaction.No = this.textBoxTactionNo.Text;
+            this._newTaction.TotalPrice = _newTaction.TactionDetails.Sum(r => r.UnitPrice * r.Unit);
+
+            this.conn.Taction.Add(this._newTaction);
+
+            try
+            {
+                this.conn.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occured while adding taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._clearTactionControls();
+            this._clearDetailsControls();
+            this.dataGridViewTactionDetails.DataSource = null;
+            this._newTaction = new Taction();
         }
 
         private void buttonUpdateTaction_Click(object sender, EventArgs e)
         {
-            //...
 
         }
 
         private void buttonDeleteTaction_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewTactions.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+            var taction = conn.Taction.Where(r => r.id == tactionId).FirstOrDefault();
+
+            try
+            {
+                var details = taction.TactionDetails.ToList();
+                foreach (var detail in details)
+                {
+                    taction.TactionDetails.Remove(detail);
+                    conn.TactionDetails.Remove(detail);
+                }
+
+                conn.Taction.Remove(taction);
+
+                this.conn.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occured while deleting taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._clearTactionControls();
+            this._clearDetailsControls();
+            this.dataGridViewTactionDetails.DataSource = null;
+
+            this._bindDataToGridViewTaction();
         }
 
         private void buttonCancelTaction_Click(object sender, EventArgs e)
@@ -176,10 +264,12 @@ namespace InvoiceManager_DBFirst
             this._checkEditableCheckBoxes(false);
             this._enableDiscountFields(false);
             this._enableSellerField(false);
+            this._clearTactionControls();
             this._clearDetailsControls();
             this.dataGridViewTactionDetails.DataSource = null;
             this.comboBoxPaymentMethod.Text = string.Empty;
 
+            this._newTaction = null;
             this._mode = Mode.Display;
         }
 
@@ -236,6 +326,7 @@ namespace InvoiceManager_DBFirst
 
             TactionDetails details = new TactionDetails();
 
+            details.Taction = _newTaction;
             details.ItemId = conn.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
             details.ItemSubTypeId = conn.ItemSubType.Where(r => r.Name == this.textBoxItemSubType.Text).FirstOrDefault()?.id;
 
@@ -265,6 +356,8 @@ namespace InvoiceManager_DBFirst
 
             this._newTaction.TactionDetails.Add(details);
             this._addDetailsToDataGridView();
+
+            textBoxTotalPrice.Text = _newTaction.TactionDetails.Sum(r => r.UnitPrice * r.Unit).ToString();
             //conn.SaveChanges();
         }
 
@@ -375,8 +468,15 @@ namespace InvoiceManager_DBFirst
             var query = from taction in conn.Taction
                         join shop in conn.Shop on taction.ShopId equals shop.id
                         join payment in conn.PaymentMethod on taction.PaymentMethodId equals payment.id
-                        //join seller in conn.Seller on taction.SellerId equals seller.id
-                        join person in conn.Person on taction.WhoDidIt equals person.id
+
+                        join seller in conn.Seller on taction.SellerId equals seller.id into sellerJoinTable
+                        from sjt in sellerJoinTable.DefaultIfEmpty()
+                            //join seller in conn.Seller on taction.SellerId equals seller.id
+
+                        join person in conn.Person on taction.WhoDidIt equals person.id into personJoinTable
+                        from pjt in personJoinTable.DefaultIfEmpty()
+                            //join person in conn.Person on taction.WhoDidIt equals person.id
+
                         orderby taction.Dt ascending
                         select new
                         {
@@ -386,8 +486,8 @@ namespace InvoiceManager_DBFirst
                             totalPrice = taction.TotalPrice + " TL",
                             paymentName = payment.Name,
                             tactionNo = taction.No,
-                            //sellerName = seller.Name,
-                            personName = person.Name + " " + person.Surname
+                            sellerName = sjt.Name,
+                            personName = pjt.Name + " " + pjt.Surname
                         };
 
             this.dataGridViewTactions.DataSource = query.ToList();
@@ -584,6 +684,10 @@ namespace InvoiceManager_DBFirst
             foreach (Control c in this.groupBoxTactionOptions.Controls)
                 if (c is TextBox)
                     ((TextBox)c).Clear();
+
+            foreach (Control c in this.groupBoxTactionOptions.Controls)
+                if (c is ComboBox)
+                    ((ComboBox)c).Text = string.Empty;
         }
 
         private void _clearDetailsControls()
