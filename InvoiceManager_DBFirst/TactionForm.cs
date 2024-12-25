@@ -31,7 +31,7 @@ namespace InvoiceManager_DBFirst
             Search
         }
 
-        private InvoicesEntities conn;
+        private InvoicesEntities dbContext;
         private Taction _newTaction;
         private Mode _mode;
 
@@ -39,7 +39,7 @@ namespace InvoiceManager_DBFirst
         {
             InitializeComponent();
 
-            this.conn = new InvoicesEntities();
+            this.dbContext = new InvoicesEntities();
             this.dataGridViewTactions.DataSourceChanged += DataGridViewTactions_DataSourceChanged;
             this.dataGridViewTactionDetails.DataSourceChanged += DataGridViewTactionDetails_DataSourceChanged;
         }
@@ -164,11 +164,11 @@ namespace InvoiceManager_DBFirst
         private void buttonSaveTaction_Click(object sender, EventArgs e)
         {
             this._setTactionDataFromUiToObject(this._newTaction);
-            this.conn.Taction.Add(this._newTaction);
+            this.dbContext.Taction.Add(this._newTaction);
 
             try
             {
-                this.conn.SaveChanges();
+                this.dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -192,7 +192,7 @@ namespace InvoiceManager_DBFirst
             }
 
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
-            Taction taction = conn.Taction.Where(r => r.id == tactionId).Include(r => r.TactionDetails).FirstOrDefault();
+            Taction taction = dbContext.Taction.Where(r => r.id == tactionId).Include(r => r.TactionDetails).FirstOrDefault();
 
             if (taction.TactionDetails.Count == 0)
             {
@@ -204,7 +204,7 @@ namespace InvoiceManager_DBFirst
 
             try
             {
-                this.conn.SaveChanges();
+                this.dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -224,7 +224,7 @@ namespace InvoiceManager_DBFirst
             }
 
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
-            var taction = conn.Taction.Where(r => r.id == tactionId).FirstOrDefault();
+            var taction = dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
 
             try
             {
@@ -232,12 +232,11 @@ namespace InvoiceManager_DBFirst
                 foreach (var detail in details)
                 {
                     taction.TactionDetails.Remove(detail);
-                    conn.TactionDetails.Remove(detail);
+                    dbContext.TactionDetails.Remove(detail);
                 }
 
-                conn.Taction.Remove(taction);
-
-                this.conn.SaveChanges();
+                dbContext.Taction.Remove(taction);
+                this.dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -275,7 +274,6 @@ namespace InvoiceManager_DBFirst
             this._addDetailsToDataGridView();
 
             textBoxTotalPrice.Text = _newTaction.TactionDetails.Sum(r => r.UnitPrice * r.Unit).ToString();
-            //conn.SaveChanges();
         }
 
         private void buttonUpdateDetail_Click(object sender, EventArgs e)
@@ -290,9 +288,18 @@ namespace InvoiceManager_DBFirst
             int detailsId = Convert.ToInt32(row.Cells["detailsId"].Value);
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
 
-            var details = conn.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
+            var details = dbContext.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
             this._setTactionDetailsDataFromUiToObject(details);
-            conn.SaveChanges();
+
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occured while removing detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             this._bindDataToGridViewTactionDetails(tactionId);
         }
 
@@ -302,15 +309,23 @@ namespace InvoiceManager_DBFirst
 
             if (row == null)
             {
-                MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Row not selected.", "Select the row you want to remove first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             int detailsId = Convert.ToInt32(row.Cells["detailsId"].Value);
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
 
-            var details = conn.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
-            conn.TactionDetails.Remove(details);
-            conn.SaveChanges();
+            var details = dbContext.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
+            dbContext.TactionDetails.Remove(details);
+
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occured while removing detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             this._bindDataToGridViewTactionDetails(tactionId);
         }
@@ -351,24 +366,23 @@ namespace InvoiceManager_DBFirst
         {
             this._formatTwoDigitNumericTextBox(sender, e);
         }
-
         private void textBoxItemGroup_Leave(object sender, EventArgs e)
         {
             AutoCompleteStringCollection autoCompleteStringCollection = null;
             IQueryable<string> query = null;
 
-            if (conn.ItemGroup.Any(r => r.Name == this.textBoxItemGroup.Text))
+            if (dbContext.ItemGroup.Any(r => r.Name == this.textBoxItemGroup.Text))
             {
-                query = from item in conn.Item
-                        join itemGroup in conn.ItemGroup on item.GroupId equals itemGroup.id
+                query = from item in dbContext.Item
+                        join itemGroup in dbContext.ItemGroup on item.GroupId equals itemGroup.id
                         where itemGroup.Name == textBoxItemGroup.Text
                         select item.Name;
 
             }
             else
             {
-                query = from item in conn.Item
-                        join itemGroup in conn.ItemGroup on item.GroupId equals itemGroup.id
+                query = from item in dbContext.Item
+                        join itemGroup in dbContext.ItemGroup on item.GroupId equals itemGroup.id
                         select item.Name;
             }
 
@@ -385,17 +399,17 @@ namespace InvoiceManager_DBFirst
             AutoCompleteStringCollection autoCompleteStringCollection = null;
             IQueryable<string> query = null;
 
-            if (conn.Item.Any(r => r.Name == this.textBoxItem.Text))
+            if (dbContext.Item.Any(r => r.Name == this.textBoxItem.Text))
             {
-                query = from itemGroup in conn.ItemGroup
-                        join item in conn.Item on itemGroup.id equals item.GroupId
+                query = from itemGroup in dbContext.ItemGroup
+                        join item in dbContext.Item on itemGroup.id equals item.GroupId
                         where item.Name == textBoxItem.Text
                         select itemGroup.Name;
             }
             else
             {
-                query = from itemGroup in conn.ItemGroup
-                        join item in conn.Item on itemGroup.id equals item.GroupId
+                query = from itemGroup in dbContext.ItemGroup
+                        join item in dbContext.Item on itemGroup.id equals item.GroupId
                         select itemGroup.Name;
             }
 
@@ -409,17 +423,17 @@ namespace InvoiceManager_DBFirst
 
         private void _bindDataToGridViewTaction()
         {
-            var query = from taction in conn.Taction
-                        join shop in conn.Shop on taction.ShopId equals shop.id
-                        join payment in conn.PaymentMethod on taction.PaymentMethodId equals payment.id
+            var query = from taction in dbContext.Taction
+                        join shop in dbContext.Shop on taction.ShopId equals shop.id
+                        join payment in dbContext.PaymentMethod on taction.PaymentMethodId equals payment.id
 
-                        join seller in conn.Seller on taction.SellerId equals seller.id into sellerJoinTable
+                        join seller in dbContext.Seller on taction.SellerId equals seller.id into sellerJoinTable
                         from sjt in sellerJoinTable.DefaultIfEmpty()
-                            //join seller in conn.Seller on taction.SellerId equals seller.id
+                            //join seller in dbContext.Seller on taction.SellerId equals seller.id
 
-                        join person in conn.Person on taction.WhoDidIt equals person.id into personJoinTable
+                        join person in dbContext.Person on taction.WhoDidIt equals person.id into personJoinTable
                         from pjt in personJoinTable.DefaultIfEmpty()
-                            //join person in conn.Person on taction.WhoDidIt equals person.id
+                            //join person in dbContext.Person on taction.WhoDidIt equals person.id
 
                         orderby taction.Dt ascending
                         select new
@@ -439,10 +453,10 @@ namespace InvoiceManager_DBFirst
 
         private void _bindDataToGridViewTactionDetails(int tactionId)
         {
-            var query = from details in conn.TactionDetails
-                        join item in conn.Item on details.ItemId equals item.id
-                        join itemGroup in conn.ItemGroup on item.GroupId equals itemGroup.id
-                        join itemSubType in conn.ItemSubType on details.ItemSubTypeId equals itemSubType.id into joinTable
+            var query = from details in dbContext.TactionDetails
+                        join item in dbContext.Item on details.ItemId equals item.id
+                        join itemGroup in dbContext.ItemGroup on item.GroupId equals itemGroup.id
+                        join itemSubType in dbContext.ItemSubType on details.ItemSubTypeId equals itemSubType.id into joinTable
                         from jt in joinTable.DefaultIfEmpty()
                         where details.TransactionId == tactionId
                         orderby details.UnitPrice * details.Unit descending
@@ -468,9 +482,9 @@ namespace InvoiceManager_DBFirst
         private void _addDetailsToDataGridView()
         {
             var query = from details in _newTaction.TactionDetails.ToList()
-                                                         join item in conn.Item on details.ItemId equals item.id
-                                                         join itemGroup in conn.ItemGroup on item.GroupId equals itemGroup.id
-                                                         join itemSubType in conn.ItemSubType on details.ItemSubTypeId equals itemSubType.id into joinTable
+                                                         join item in dbContext.Item on details.ItemId equals item.id
+                                                         join itemGroup in dbContext.ItemGroup on item.GroupId equals itemGroup.id
+                                                         join itemSubType in dbContext.ItemSubType on details.ItemSubTypeId equals itemSubType.id into joinTable
                                                          from jt in joinTable.DefaultIfEmpty()
                                                          orderby details.UnitPrice * details.Unit descending
                                                          select new
@@ -494,7 +508,7 @@ namespace InvoiceManager_DBFirst
 
         private void _bindDataToComboBoxPaymentMethod()
         {
-            var query = from payment in conn.PaymentMethod
+            var query = from payment in dbContext.PaymentMethod
                         select payment;
 
             this.comboBoxPaymentMethod.DataSource = query.ToList();
@@ -544,19 +558,19 @@ namespace InvoiceManager_DBFirst
             this.textBoxItem.AutoCompleteSource = AutoCompleteSource.CustomSource;
             this.textBoxItemSubType.AutoCompleteSource = AutoCompleteSource.CustomSource;
 
-            var shopNameQuery = from shop in conn.Shop
+            var shopNameQuery = from shop in dbContext.Shop
                                 select shop.Name;
 
-            var sellerNameQuery = from seller in conn.Seller
+            var sellerNameQuery = from seller in dbContext.Seller
                                   select seller.Name;
 
-            var itemGroupNameQuery = from itemGroup in conn.ItemGroup
+            var itemGroupNameQuery = from itemGroup in dbContext.ItemGroup
                                      select itemGroup.Name;
 
-            var itemNameQuery = from item in conn.Item
+            var itemNameQuery = from item in dbContext.Item
                                 select item.Name;
 
-            var itemSubTypeNameQuery = from itemSubType in conn.ItemSubType
+            var itemSubTypeNameQuery = from itemSubType in dbContext.ItemSubType
                                        select itemSubType.Name;
 
             AutoCompleteStringCollection shopNameCollection = new AutoCompleteStringCollection();
@@ -648,11 +662,11 @@ namespace InvoiceManager_DBFirst
             }
 
             taction.Dt = this.dateTimePickerTactionDate.Value;
-            taction.ShopId = conn.Shop.Where(r => r.Name == this.textBoxShop.Text).FirstOrDefault().id;
-            taction.PaymentMethodId = conn.PaymentMethod.Where(r => r.Name == this.comboBoxPaymentMethod.Text).FirstOrDefault().id;
+            taction.ShopId = dbContext.Shop.Where(r => r.Name == this.textBoxShop.Text).FirstOrDefault().id;
+            taction.PaymentMethodId = dbContext.PaymentMethod.Where(r => r.Name == this.comboBoxPaymentMethod.Text).FirstOrDefault().id;
 
             if (this.checkBoxSeller.Checked)
-                taction.SellerId = conn.Seller.Where(r => r.Name == this.textBoxSeller.Text).FirstOrDefault().id;
+                taction.SellerId = dbContext.Seller.Where(r => r.Name == this.textBoxSeller.Text).FirstOrDefault().id;
 
             taction.No = this.textBoxTactionNo.Text;
             taction.TotalPrice = taction.TactionDetails.Sum(r => r.UnitPrice * r.Unit);
@@ -660,13 +674,13 @@ namespace InvoiceManager_DBFirst
 
         private void _setTactionDetailsDataFromUiToObject(TactionDetails details)
         {
-            if (!conn.Item.Any(r => r.Name == this.textBoxItem.Text))
+            if (!dbContext.Item.Any(r => r.Name == this.textBoxItem.Text))
             {
                 MessageBox.Show("Input doesn't exist.", "The item you entered does not exist in database. Please first save this item to item table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (!string.IsNullOrEmpty(this.textBoxItemSubType.Text) && !conn.ItemSubType.Any(r => r.Name == this.textBoxItemSubType.Text))
+            if (!string.IsNullOrEmpty(this.textBoxItemSubType.Text) && !dbContext.ItemSubType.Any(r => r.Name == this.textBoxItemSubType.Text))
             {
                 MessageBox.Show("Input doesn't exist.", "The itemsubtype you entered does not exist in database. Please first save this itemsubtype into itemsubtype table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -712,12 +726,12 @@ namespace InvoiceManager_DBFirst
             {
                 DataGridViewRow row = this.dataGridViewTactions.CurrentRow;
                 int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
-                this._newTaction = conn.Taction.Where(r => r.id == tactionId).FirstOrDefault();
+                this._newTaction = dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
             }
 
             details.Taction = this._newTaction;
-            details.ItemId = conn.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
-            details.ItemSubTypeId = conn.ItemSubType.Where(r => r.Name == this.textBoxItemSubType.Text).FirstOrDefault()?.id;
+            details.ItemId = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
+            details.ItemSubTypeId = dbContext.ItemSubType.Where(r => r.Name == this.textBoxItemSubType.Text).FirstOrDefault()?.id;
 
             details.Unit = Convert.ToDecimal(this.textBoxUnit.Text);
             details.UnitPrice = Convert.ToDecimal(this.textBoxUnitPrice.Text);
