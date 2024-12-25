@@ -8,7 +8,9 @@ using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography.X509Certificates;
@@ -39,6 +41,11 @@ namespace InvoiceManager_DBFirst
         {
             InitializeComponent();
 
+            this.toolStripMenuItemItems.Image = BitmapResourceLoader.Item;
+            this.toolStripMenuItemShops.Image = BitmapResourceLoader.Shop;
+            this.toolStripMenuItemSeller.Image = BitmapResourceLoader.Seller;
+            this.toolStripMenuItemPaymentMethods.Image = BitmapResourceLoader.PaymentMethod;
+
             this.dbContext = new InvoicesEntities();
             this.dataGridViewTactions.DataSourceChanged += DataGridViewTactions_DataSourceChanged;
             this.dataGridViewTactionDetails.DataSourceChanged += DataGridViewTactionDetails_DataSourceChanged;
@@ -46,7 +53,7 @@ namespace InvoiceManager_DBFirst
 
         private void TactionForm_Load(object sender, EventArgs e)
         {
-            this.StartPosition = FormStartPosition.CenterParent;
+            this.StartPosition = FormStartPosition.CenterScreen;
 
             this._setEditableTactions(false);
             this._setEditableDetails(false);
@@ -65,7 +72,7 @@ namespace InvoiceManager_DBFirst
 
         private void DataGridViewTactions_DataSourceChanged(object sender, EventArgs e)
         {
-            if (this.dataGridViewTactions == null)
+            if (this.dataGridViewTactions.DataSource == null)
                 return;
 
             string[] tactionsHeaderTexts = new string[] { "tactionId", "Date", "Shop", "Total Price", "Payment Type", "No", "Seller", "Who did it" };
@@ -172,7 +179,7 @@ namespace InvoiceManager_DBFirst
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occured while adding taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred while adding taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             this._clearTactionControls();
@@ -208,7 +215,7 @@ namespace InvoiceManager_DBFirst
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occured while updating taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred while updating taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             this._bindDataToGridViewTaction();
@@ -240,7 +247,7 @@ namespace InvoiceManager_DBFirst
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occured while deleting taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred while deleting taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             this._clearTactionControls();
@@ -297,7 +304,7 @@ namespace InvoiceManager_DBFirst
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occured while removing detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred while removing detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             this._bindDataToGridViewTactionDetails(tactionId);
@@ -324,7 +331,7 @@ namespace InvoiceManager_DBFirst
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occured while removing detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred while removing detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             this._bindDataToGridViewTactionDetails(tactionId);
@@ -827,6 +834,15 @@ namespace InvoiceManager_DBFirst
                 autoCompleteStringCollection.Add(item);
 
             return autoCompleteStringCollection;
+        }
+
+        private void toolStripMenuItemItems_Click(object sender, EventArgs e)
+        {
+            ItemForm itemForm = new ItemForm();
+            if (itemForm.ShowDialog() == DialogResult.OK)
+            {
+
+            }
         }
     }
 }

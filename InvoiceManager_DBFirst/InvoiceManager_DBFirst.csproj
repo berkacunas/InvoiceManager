@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitmapResourceLoader.cs" />
     <Compile Include="CashTransfer.cs">
       <DependentUpon>Invoice,Model.tt</DependentUpon>
     </Compile>
@@ -78,6 +79,12 @@
     </Compile>
     <Compile Include="Item.cs">
       <DependentUpon>Invoice,Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ItemForm.Designer.cs">
+      <DependentUpon>ItemForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ItemGroup.cs">
       <DependentUpon>Invoice,Model.tt</DependentUpon>
@@ -129,6 +136,9 @@
     <Compile Include="TactionForm.Designer.cs">
       <DependentUpon>TactionForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ItemForm.resx">
+      <DependentUpon>ItemForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -169,6 +179,15 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\24-hours.png" />
+    <EmbeddedResource Include="assets\item.png" />
+    <Content Include="assets\convenience-store.png" />
+    <EmbeddedResource Include="assets\payment-method.png" />
+    <Content Include="assets\packaging.png" />
+    <Content Include="assets\procurement.png" />
+    <EmbeddedResource Include="assets\seller.png" />
+    <EmbeddedResource Include="assets\shop.png" />
+    <Content Include="assets\stand.png" />
     <Content Include="Invoice,Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Invoice,Model.edmx</DependentUpon>

@@ -75,12 +75,20 @@
             this.buttonCancelTaction = new System.Windows.Forms.Button();
             this.checkBoxTactionsEditable = new System.Windows.Forms.CheckBox();
             this.groupBoxTactionDetailsOptions = new System.Windows.Forms.GroupBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.toolStripMenuItemActions = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemItems = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemShops = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemPaymentMethods = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripMenuItemSeller = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactions)).BeginInit();
             this.groupBoxTactions.SuspendLayout();
             this.groupBoxTactionDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactionDetails)).BeginInit();
             this.groupBoxTactionOptions.SuspendLayout();
             this.groupBoxTactionDetailsOptions.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewTactions
@@ -97,7 +105,7 @@
             // 
             this.groupBoxTactions.Controls.Add(this.dataGridViewTactions);
             this.groupBoxTactions.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxTactions.Location = new System.Drawing.Point(12, 13);
+            this.groupBoxTactions.Location = new System.Drawing.Point(12, 52);
             this.groupBoxTactions.Name = "groupBoxTactions";
             this.groupBoxTactions.Size = new System.Drawing.Size(733, 832);
             this.groupBoxTactions.TabIndex = 2;
@@ -110,7 +118,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTactionDetails.Controls.Add(this.dataGridViewTactionDetails);
             this.groupBoxTactionDetails.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxTactionDetails.Location = new System.Drawing.Point(751, 14);
+            this.groupBoxTactionDetails.Location = new System.Drawing.Point(751, 53);
             this.groupBoxTactionDetails.Name = "groupBoxTactionDetails";
             this.groupBoxTactionDetails.Size = new System.Drawing.Size(927, 479);
             this.groupBoxTactionDetails.TabIndex = 3;
@@ -488,7 +496,7 @@
             this.groupBoxTactionOptions.Controls.Add(this.buttonUpdateTaction);
             this.groupBoxTactionOptions.Controls.Add(this.textBoxTactionNo);
             this.groupBoxTactionOptions.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxTactionOptions.Location = new System.Drawing.Point(751, 499);
+            this.groupBoxTactionOptions.Location = new System.Drawing.Point(751, 538);
             this.groupBoxTactionOptions.Name = "groupBoxTactionOptions";
             this.groupBoxTactionOptions.Size = new System.Drawing.Size(922, 166);
             this.groupBoxTactionOptions.TabIndex = 4;
@@ -542,22 +550,78 @@
             this.groupBoxTactionDetailsOptions.Controls.Add(this.buttonAddDetail);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.textBoxDetailsNote);
             this.groupBoxTactionDetailsOptions.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxTactionDetailsOptions.Location = new System.Drawing.Point(751, 671);
+            this.groupBoxTactionDetailsOptions.Location = new System.Drawing.Point(751, 710);
             this.groupBoxTactionDetailsOptions.Name = "groupBoxTactionDetailsOptions";
             this.groupBoxTactionDetailsOptions.Size = new System.Drawing.Size(927, 168);
             this.groupBoxTactionDetailsOptions.TabIndex = 4;
             this.groupBoxTactionDetailsOptions.TabStop = false;
             this.groupBoxTactionDetailsOptions.Text = "Detail Options";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemActions});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1690, 24);
+            this.menuStrip1.TabIndex = 5;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // toolStripMenuItemActions
+            // 
+            this.toolStripMenuItemActions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemItems,
+            this.toolStripMenuItemShops,
+            this.toolStripMenuItemPaymentMethods,
+            this.toolStripMenuItemSeller});
+            this.toolStripMenuItemActions.Name = "toolStripMenuItemActions";
+            this.toolStripMenuItemActions.Size = new System.Drawing.Size(59, 20);
+            this.toolStripMenuItemActions.Text = "&Actions";
+            // 
+            // toolStripMenuItemItems
+            // 
+            this.toolStripMenuItemItems.Name = "toolStripMenuItemItems";
+            this.toolStripMenuItemItems.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemItems.Text = "Items";
+            this.toolStripMenuItemItems.Click += new System.EventHandler(this.toolStripMenuItemItems_Click);
+            // 
+            // toolStripMenuItemShops
+            // 
+            this.toolStripMenuItemShops.Name = "toolStripMenuItemShops";
+            this.toolStripMenuItemShops.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemShops.Text = "Shops";
+            // 
+            // toolStripMenuItemPaymentMethods
+            // 
+            this.toolStripMenuItemPaymentMethods.Name = "toolStripMenuItemPaymentMethods";
+            this.toolStripMenuItemPaymentMethods.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemPaymentMethods.Text = "Payment Methods";
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1690, 25);
+            this.toolStrip1.TabIndex = 6;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripMenuItemSeller
+            // 
+            this.toolStripMenuItemSeller.Name = "toolStripMenuItemSeller";
+            this.toolStripMenuItemSeller.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemSeller.Text = "Sellers";
+            // 
             // TactionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1690, 858);
+            this.ClientSize = new System.Drawing.Size(1690, 907);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.groupBoxTactionOptions);
             this.Controls.Add(this.groupBoxTactionDetailsOptions);
             this.Controls.Add(this.groupBoxTactionDetails);
             this.Controls.Add(this.groupBoxTactions);
+            this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
@@ -572,7 +636,10 @@
             this.groupBoxTactionOptions.PerformLayout();
             this.groupBoxTactionDetailsOptions.ResumeLayout(false);
             this.groupBoxTactionDetailsOptions.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -625,5 +692,12 @@
         private System.Windows.Forms.CheckBox checkBoxTactionsEditable;
         private System.Windows.Forms.Button buttonCancelTaction;
         private System.Windows.Forms.GroupBox groupBoxTactionDetailsOptions;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemActions;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemItems;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemShops;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPaymentMethods;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSeller;
     }
 }
