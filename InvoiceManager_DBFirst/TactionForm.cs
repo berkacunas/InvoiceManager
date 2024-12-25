@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -25,7 +27,8 @@ namespace InvoiceManager_DBFirst
         {
             Display,
             Add,
-            Edit
+            Edit,
+            Search
         }
 
         private InvoicesEntities conn;
@@ -160,44 +163,7 @@ namespace InvoiceManager_DBFirst
 
         private void buttonSaveTaction_Click(object sender, EventArgs e)
         {
-            if (this._newTaction.TactionDetails.Count == 0) 
-            {
-                MessageBox.Show("Transaction Details are missing.", "You didn't enter any transaction detail to the list.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return; 
-            }
-
-            if (string.IsNullOrEmpty(this.textBoxShop.Text))
-            {
-                MessageBox.Show("Missing value.", "You didn't enter shop.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (string.IsNullOrEmpty(this.comboBoxPaymentMethod.Text))
-            {
-                MessageBox.Show("Missing value.", "You didn't select payment method.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (this.checkBoxSeller.Checked)
-            {
-                if (string.IsNullOrEmpty(this.textBoxSeller.Text) )
-                {
-                    MessageBox.Show("Missing seller value.", "You checked seller option but you didn't enter a seller.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-
-            this._newTaction.Dt = this.dateTimePickerTactionDate.Value;
-            this._newTaction.ShopId = conn.Shop.Where(r => r.Name == this.textBoxShop.Text).FirstOrDefault().id;
-            this._newTaction.PaymentMethodId = conn.PaymentMethod.Where(r => r.Name == this.comboBoxPaymentMethod.Text).FirstOrDefault().id;
-
-
-            if (this.checkBoxSeller.Checked) 
-                _newTaction.SellerId = conn.Seller.Where(r => r.Name == this.textBoxSeller.Text).FirstOrDefault().id;
-
-            this._newTaction.No = this.textBoxTactionNo.Text;
-            this._newTaction.TotalPrice = _newTaction.TactionDetails.Sum(r => r.UnitPrice * r.Unit);
-
+            this._setTactionDataFromUiToObject(this._newTaction);
             this.conn.Taction.Add(this._newTaction);
 
             try
@@ -212,12 +178,40 @@ namespace InvoiceManager_DBFirst
             this._clearTactionControls();
             this._clearDetailsControls();
             this.dataGridViewTactionDetails.DataSource = null;
+            this._bindDataToGridViewTaction();
             this._newTaction = new Taction();
         }
 
         private void buttonUpdateTaction_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewTactions.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+            Taction taction = conn.Taction.Where(r => r.id == tactionId).Include(r => r.TactionDetails).FirstOrDefault();
+
+            if (taction.TactionDetails.Count == 0)
+            {
+                MessageBox.Show("Transaction Details are missing.", "You didn't enter any transaction detail to the list.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            this._setTactionDataFromUiToObject(taction);
+
+            try
+            {
+                this.conn.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occured while updating taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToGridViewTaction();
         }
 
         private void buttonDeleteTaction_Click(object sender, EventArgs e)
@@ -275,85 +269,8 @@ namespace InvoiceManager_DBFirst
 
         private void buttonAddDetail_Click(object sender, EventArgs e)
         {
-
-            if (!conn.Item.Any(r => r.Name == this.textBoxItem.Text))
-            {
-                MessageBox.Show("Input doesn't exist.", "The item you entered does not exist in database. Please first save this item to item table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (!string.IsNullOrEmpty(this.textBoxItemSubType.Text) && !conn.ItemSubType.Any(r => r.Name == this.textBoxItemSubType.Text))
-            {
-                MessageBox.Show("Input doesn't exist.", "The itemsubtype you entered does not exist in database. Please first save this itemsubtype into itemsubtype table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (string.IsNullOrEmpty(this.textBoxUnit.Text))
-            {
-                MessageBox.Show("Missing value.", "You didn't enter unit.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (string.IsNullOrEmpty(this.textBoxUnitPrice.Text))
-            {
-                MessageBox.Show("Missing value.", "You didn't enter unit price.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (string.IsNullOrEmpty(this.textBoxVat.Text))
-            {
-                MessageBox.Show("Missing value.", "You didn't enter vat.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (this.checkBoxDiscount.Checked)
-            {
-                if (string.IsNullOrEmpty(this.textBoxDiscountRate.Text) && string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
-                {
-                    MessageBox.Show("Missing discount value.", "You didn't enter discounted price or discount rate.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-
-            if (this.checkBoxDiscount.Checked)
-            {
-                if (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text) && !string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
-                {
-                    MessageBox.Show("Too many values.", "You entered discounted price and discount rate, together. Enter only one of them.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-
             TactionDetails details = new TactionDetails();
-
-            details.Taction = _newTaction;
-            details.ItemId = conn.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
-            details.ItemSubTypeId = conn.ItemSubType.Where(r => r.Name == this.textBoxItemSubType.Text).FirstOrDefault()?.id;
-
-            details.Unit = Convert.ToDecimal(this.textBoxUnit.Text);
-            details.UnitPrice = Convert.ToDecimal(this.textBoxUnitPrice.Text);
-            details.Vat = Convert.ToInt32(this.textBoxVat.Text);
-
-            if (checkBoxDiscount.Checked)
-            {
-                if (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text))
-                {
-                    details.DiscountRate = Convert.ToDecimal(this.textBoxDiscountRate.Text);
-
-                    details.DiscountedPrice = (1 - details.DiscountRate) * details.UnitPrice;
-                    this.textBoxDiscountedPrice.Text = details.DiscountedPrice.ToString();
-                }
-                else if (!string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
-                {
-                    details.DiscountedPrice = Convert.ToDecimal(this.textBoxDiscountedPrice.Text);
-
-                    details.DiscountRate = 1 - details.DiscountedPrice / details.UnitPrice;
-                    this.textBoxDiscountRate.Text = Math.Round(Convert.ToDouble(details.DiscountRate), 2).ToString();
-                }
-            }
-
-            details.Note = !string.IsNullOrEmpty(this.textBoxDetailsNote.Text) ? this.textBoxDetailsNote.Text : null;
-
+            this._setTactionDetailsDataFromUiToObject(details);
             this._newTaction.TactionDetails.Add(details);
             this._addDetailsToDataGridView();
 
@@ -363,12 +280,39 @@ namespace InvoiceManager_DBFirst
 
         private void buttonUpdateDetail_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewTactionDetails.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            int detailsId = Convert.ToInt32(row.Cells["detailsId"].Value);
+            int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+
+            var details = conn.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
+            this._setTactionDetailsDataFromUiToObject(details);
+            conn.SaveChanges();
+            this._bindDataToGridViewTactionDetails(tactionId);
         }
 
         private void buttonRemoveDetail_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewTactionDetails.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            int detailsId = Convert.ToInt32(row.Cells["detailsId"].Value);
+            int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+
+            var details = conn.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
+            conn.TactionDetails.Remove(details);
+            conn.SaveChanges();
+
+            this._bindDataToGridViewTactionDetails(tactionId);
         }
 
         private void checkBoxDetailsEditable_CheckedChanged(object sender, EventArgs e)
@@ -672,6 +616,132 @@ namespace InvoiceManager_DBFirst
             this.checkBoxSeller.Enabled = isEditable;
             this.textBoxSeller.ReadOnly = !isEditable;
             this.textBoxTactionNo.ReadOnly = !isEditable;
+        }
+
+        private void _setTactionDataFromUiToObject(Taction taction)
+        {
+            if (taction.TactionDetails.Count == 0)
+            {
+                MessageBox.Show("Transaction Details are missing.", "You didn't enter any transaction detail to the list.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(this.textBoxShop.Text))
+            {
+                MessageBox.Show("Missing value.", "You didn't enter shop.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(this.comboBoxPaymentMethod.Text))
+            {
+                MessageBox.Show("Missing value.", "You didn't select payment method.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (this.checkBoxSeller.Checked)
+            {
+                if (string.IsNullOrEmpty(this.textBoxSeller.Text))
+                {
+                    MessageBox.Show("Missing seller value.", "You checked seller option but you didn't enter a seller.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
+            taction.Dt = this.dateTimePickerTactionDate.Value;
+            taction.ShopId = conn.Shop.Where(r => r.Name == this.textBoxShop.Text).FirstOrDefault().id;
+            taction.PaymentMethodId = conn.PaymentMethod.Where(r => r.Name == this.comboBoxPaymentMethod.Text).FirstOrDefault().id;
+
+            if (this.checkBoxSeller.Checked)
+                taction.SellerId = conn.Seller.Where(r => r.Name == this.textBoxSeller.Text).FirstOrDefault().id;
+
+            taction.No = this.textBoxTactionNo.Text;
+            taction.TotalPrice = taction.TactionDetails.Sum(r => r.UnitPrice * r.Unit);
+        }
+
+        private void _setTactionDetailsDataFromUiToObject(TactionDetails details)
+        {
+            if (!conn.Item.Any(r => r.Name == this.textBoxItem.Text))
+            {
+                MessageBox.Show("Input doesn't exist.", "The item you entered does not exist in database. Please first save this item to item table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(this.textBoxItemSubType.Text) && !conn.ItemSubType.Any(r => r.Name == this.textBoxItemSubType.Text))
+            {
+                MessageBox.Show("Input doesn't exist.", "The itemsubtype you entered does not exist in database. Please first save this itemsubtype into itemsubtype table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(this.textBoxUnit.Text))
+            {
+                MessageBox.Show("Missing value.", "You didn't enter unit.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(this.textBoxUnitPrice.Text))
+            {
+                MessageBox.Show("Missing value.", "You didn't enter unit price.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(this.textBoxVat.Text))
+            {
+                MessageBox.Show("Missing value.", "You didn't enter vat.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (this.checkBoxDiscount.Checked)
+            {
+                if (string.IsNullOrEmpty(this.textBoxDiscountRate.Text) && string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
+                {
+                    MessageBox.Show("Missing discount value.", "You didn't enter discounted price or discount rate.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
+            if (this.checkBoxDiscount.Checked)
+            {
+                if (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text) && !string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
+                {
+                    MessageBox.Show("Too many values.", "You entered discounted price and discount rate, together. Enter only one of them.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
+            if (this._newTaction == null)   // Edit mode: taction exists in db, we get this taction object from database.
+            {
+                DataGridViewRow row = this.dataGridViewTactions.CurrentRow;
+                int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+                this._newTaction = conn.Taction.Where(r => r.id == tactionId).FirstOrDefault();
+            }
+
+            details.Taction = this._newTaction;
+            details.ItemId = conn.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
+            details.ItemSubTypeId = conn.ItemSubType.Where(r => r.Name == this.textBoxItemSubType.Text).FirstOrDefault()?.id;
+
+            details.Unit = Convert.ToDecimal(this.textBoxUnit.Text);
+            details.UnitPrice = Convert.ToDecimal(this.textBoxUnitPrice.Text);
+            details.Vat = Convert.ToInt32(this.textBoxVat.Text);
+
+            if (checkBoxDiscount.Checked)
+            {
+                if (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text))
+                {
+                    details.DiscountRate = Convert.ToDecimal(this.textBoxDiscountRate.Text);
+
+                    details.DiscountedPrice = (1 - details.DiscountRate) * details.UnitPrice;
+                    this.textBoxDiscountedPrice.Text = details.DiscountedPrice.ToString();
+                }
+                else if (!string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
+                {
+                    details.DiscountedPrice = Convert.ToDecimal(this.textBoxDiscountedPrice.Text);
+
+                    details.DiscountRate = 1 - details.DiscountedPrice / details.UnitPrice;
+                    this.textBoxDiscountRate.Text = Math.Round(Convert.ToDouble(details.DiscountRate), 2).ToString();
+                }
+            }
+
+            details.Note = !string.IsNullOrEmpty(this.textBoxDetailsNote.Text) ? this.textBoxDetailsNote.Text : null;
         }
 
         private static void _limitTextBoxCharLength(TextBox textBox, int maxLength)
