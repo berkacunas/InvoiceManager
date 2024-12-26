@@ -44,13 +44,13 @@
             this.groupBoxItemGroups = new System.Windows.Forms.GroupBox();
             this.dataGridViewItemGroups = new System.Windows.Forms.DataGridView();
             this.groupBoxItemGroupOptions = new System.Windows.Forms.GroupBox();
+            this.textBoxGroupOptionsGroup = new System.Windows.Forms.TextBox();
+            this.labelGroupOptionsGroup = new System.Windows.Forms.Label();
             this.buttonDeleteGroup = new System.Windows.Forms.Button();
             this.buttonUpdateGroup = new System.Windows.Forms.Button();
             this.buttonSaveGroup = new System.Windows.Forms.Button();
             this.textBoxGroupOptionsTopGroup = new System.Windows.Forms.TextBox();
             this.labelTopGroupOptionsGroup = new System.Windows.Forms.Label();
-            this.textBoxGroupOptionsGroup = new System.Windows.Forms.TextBox();
-            this.labelGroupOptionsGroup = new System.Windows.Forms.Label();
             this.groupBoxItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItems)).BeginInit();
             this.groupBoxItemOptions.SuspendLayout();
@@ -82,6 +82,7 @@
             this.dataGridViewItems.Size = new System.Drawing.Size(601, 741);
             this.dataGridViewItems.TabIndex = 0;
             this.dataGridViewItems.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewItems_CellClick);
+            this.dataGridViewItems.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewItems_ColumnHeaderMouseClick);
             // 
             // groupBoxItemOptions
             // 
@@ -214,6 +215,7 @@
             this.dataGridViewItemGroups.Size = new System.Drawing.Size(343, 741);
             this.dataGridViewItemGroups.TabIndex = 0;
             this.dataGridViewItemGroups.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewItemGroups_CellClick);
+            this.dataGridViewItemGroups.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewItemGroups_ColumnHeaderMouseClick);
             // 
             // groupBoxItemGroupOptions
             // 
@@ -230,6 +232,22 @@
             this.groupBoxItemGroupOptions.TabIndex = 9;
             this.groupBoxItemGroupOptions.TabStop = false;
             this.groupBoxItemGroupOptions.Text = "Group Options";
+            // 
+            // textBoxGroupOptionsGroup
+            // 
+            this.textBoxGroupOptionsGroup.Location = new System.Drawing.Point(86, 61);
+            this.textBoxGroupOptionsGroup.Name = "textBoxGroupOptionsGroup";
+            this.textBoxGroupOptionsGroup.Size = new System.Drawing.Size(330, 23);
+            this.textBoxGroupOptionsGroup.TabIndex = 10;
+            // 
+            // labelGroupOptionsGroup
+            // 
+            this.labelGroupOptionsGroup.AutoSize = true;
+            this.labelGroupOptionsGroup.Location = new System.Drawing.Point(27, 64);
+            this.labelGroupOptionsGroup.Name = "labelGroupOptionsGroup";
+            this.labelGroupOptionsGroup.Size = new System.Drawing.Size(41, 15);
+            this.labelGroupOptionsGroup.TabIndex = 9;
+            this.labelGroupOptionsGroup.Text = "Group";
             // 
             // buttonDeleteGroup
             // 
@@ -276,22 +294,6 @@
             this.labelTopGroupOptionsGroup.Size = new System.Drawing.Size(63, 15);
             this.labelTopGroupOptionsGroup.TabIndex = 0;
             this.labelTopGroupOptionsGroup.Text = "Top Group";
-            // 
-            // textBoxGroupOptionsGroup
-            // 
-            this.textBoxGroupOptionsGroup.Location = new System.Drawing.Point(86, 61);
-            this.textBoxGroupOptionsGroup.Name = "textBoxGroupOptionsGroup";
-            this.textBoxGroupOptionsGroup.Size = new System.Drawing.Size(330, 23);
-            this.textBoxGroupOptionsGroup.TabIndex = 10;
-            // 
-            // labelGroupOptionsGroup
-            // 
-            this.labelGroupOptionsGroup.AutoSize = true;
-            this.labelGroupOptionsGroup.Location = new System.Drawing.Point(27, 64);
-            this.labelGroupOptionsGroup.Name = "labelGroupOptionsGroup";
-            this.labelGroupOptionsGroup.Size = new System.Drawing.Size(41, 15);
-            this.labelGroupOptionsGroup.TabIndex = 9;
-            this.labelGroupOptionsGroup.Text = "Group";
             // 
             // ItemForm
             // 

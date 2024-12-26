@@ -62,6 +62,8 @@
     <Compile Include="CurrencyMovement.cs">
       <DependentUpon>Invoice,Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="QueryableExtensions.cs" />
+    <Compile Include="RowComparer.cs" />
     <Compile Include="Invoice,Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,12 +15,23 @@ namespace InvoiceManager_DBFirst
 {
     public partial class ItemForm : Form
     {
+        private enum SortOrder
+        {
+            ASC,
+            DESC,
+            UNORDERED
+        }
+
         private InvoicesEntities dbContext;
+
+        private SortOrder[] _sortOrdersDataGridViewItemGroups = { SortOrder.ASC, SortOrder.UNORDERED };
+        private SortOrder[] _sortOrdersDataGridViewItems = { SortOrder.ASC, SortOrder.UNORDERED };
+        
 
         public ItemForm()
         {
             InitializeComponent();
-            
+
             this.Icon = Icon.FromHandle(BitmapResourceLoader.Item.GetHicon());
 
             this.dbContext = new InvoicesEntities();
@@ -33,6 +47,9 @@ namespace InvoiceManager_DBFirst
 
             this._bindDataToGridViewItemGroup();
             this._bindDataToGridViewItem();
+
+            //this.dataGridViewItems.Columns["Item"].SortMode = DataGridViewColumnSortMode.Programmatic;
+            //this.dataGridViewItems.Columns["Group"].SortMode = DataGridViewColumnSortMode.Automatic;
         }
 
         private void DataGridViewItemGroups_DataSourceChanged(object sender, EventArgs e)
@@ -40,7 +57,7 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewItemGroups.DataSource == null)
                 return;
 
-            string[] tactionsHeaderTexts = new string[] { "itemGroupId", "itemTopGroupId", "Group Name", "Top Group Name"};
+            string[] tactionsHeaderTexts = new string[] { "itemGroupId", "itemTopGroupId", "Group", "Top Group" };
             int[] tactionsColumnWidths = new int[] { 50, 50, 150, 150 };
             DataGridViewContentAlignment[] tactionsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
                                                                         DataGridViewContentAlignment.MiddleLeft,
@@ -58,12 +75,12 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewItems.DataSource == null)
                 return;
 
-            string[] tactionsHeaderTexts = new string[] { "itemId", "groupId", "Item Name", "Group Name", "Note" };
+            string[] tactionsHeaderTexts = new string[] { "itemId", "groupId", "Item", "Group", "Note" };
             int[] tactionsColumnWidths = new int[] { 50, 50, 280, 160, 120 };
             DataGridViewContentAlignment[] tactionsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
                                                                         DataGridViewContentAlignment.MiddleLeft,
-                                                                        DataGridViewContentAlignment.MiddleLeft, 
-                                                                        DataGridViewContentAlignment.MiddleLeft, 
+                                                                        DataGridViewContentAlignment.MiddleLeft,
+                                                                        DataGridViewContentAlignment.MiddleLeft,
                                                                         DataGridViewContentAlignment.MiddleLeft };
 
             _setDefaultGridViewHeaderStyles(this.dataGridViewItems, tactionsHeaderTexts, tactionsColumnWidths, tactionsColumnAlignments);
@@ -213,6 +230,64 @@ namespace InvoiceManager_DBFirst
             foreach (Control c in this.groupBoxItemOptions.Controls)
                 if (c is ComboBox)
                     ((ComboBox)c).Text = string.Empty;
+        }
+
+        private void dataGridViewItems_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            string columnName = this.dataGridViewItems.Columns[e.ColumnIndex].HeaderText;
+
+            var query = dbContext.Item.Join(dbContext.ItemGroup,
+                        item => item.GroupId, itemGroup => itemGroup.id,
+                        (item, itemGroup) =>
+                        new
+                        {
+                            itemId = item.id,
+                            itemGroupId = itemGroup.id,
+                            itemName = item.Name,
+                            itemGroupName = itemGroup.Name,
+                            itemNote = item.Note
+                        });
+
+            switch (columnName)
+            {
+                case "Item":
+                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? query.OrderBy(r => r.itemName).ToList() : query.OrderByDescending(r => r.itemName).ToList();
+                    this._sortOrdersDataGridViewItems[0] = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    break;
+                
+                case "Group":
+                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
+                    this._sortOrdersDataGridViewItems[1] = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    break;
+            }
+        }
+
+        private void dataGridViewItemGroups_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            string columnName = this.dataGridViewItemGroups.Columns[e.ColumnIndex].HeaderText;
+
+            var query = dbContext.ItemGroup.Join(dbContext.ItemTopGroup,
+                        itemGroup => itemGroup.TopGroupId, itemTopGroup => itemTopGroup.id, 
+                        (itemGroup, itemTopGroup) => 
+                        new
+                        {
+                            itemGroupId = itemGroup.id,
+                            itemTopGroupId = itemTopGroup.id,
+                            itemGroupName = itemGroup.Name,
+                            itemTopGroupName = itemTopGroup.Name
+                        });
+
+            switch (columnName)
+            {
+                case "Group":
+                    this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[0] == SortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
+                    this._sortOrdersDataGridViewItemGroups[0] = (this._sortOrdersDataGridViewItemGroups[0] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    break;
+                case "Top Group":
+                    this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemTopGroupName).ToList() : query.OrderByDescending(r => r.itemTopGroupName).ToList();
+                    this._sortOrdersDataGridViewItemGroups[1] = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    break;
+            }
         }
     }
 }
