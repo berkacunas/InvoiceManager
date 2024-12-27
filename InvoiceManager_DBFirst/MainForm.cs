@@ -31,5 +31,16 @@ namespace InvoiceManager_DBFirst
                 
             }
         }
+
+        private void toolStripMenuItem_Items_Click(object sender, EventArgs e)
+        {
+            ItemForm form = new ItemForm();
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+
+        }
     }
 }

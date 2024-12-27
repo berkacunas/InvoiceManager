@@ -476,7 +476,7 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="TopGroupId" Type="Int32" />
+          <Property Name="TopGroupId" Type="Int32" Nullable="true" />
           <NavigationProperty Name="Item" Relationship="Self.FK_ItemGroupId_ItemGroupId" FromRole="ItemGroup" ToRole="Item" />
           <NavigationProperty Name="ItemTopGroup" Relationship="Self.FK_ItemGroupTopGroupId_ItemTopGroupId" FromRole="ItemGroup" ToRole="ItemTopGroup" />
         </EntityType>

@@ -31,6 +31,7 @@
             this.groupBoxItems = new System.Windows.Forms.GroupBox();
             this.dataGridViewItems = new System.Windows.Forms.DataGridView();
             this.groupBoxItemOptions = new System.Windows.Forms.GroupBox();
+            this.buttonNewItem = new System.Windows.Forms.Button();
             this.buttonDeleteItem = new System.Windows.Forms.Button();
             this.buttonUpdateItem = new System.Windows.Forms.Button();
             this.buttonSaveItem = new System.Windows.Forms.Button();
@@ -44,19 +45,28 @@
             this.groupBoxItemGroups = new System.Windows.Forms.GroupBox();
             this.dataGridViewItemGroups = new System.Windows.Forms.DataGridView();
             this.groupBoxItemGroupOptions = new System.Windows.Forms.GroupBox();
+            this.comboBoxGroupOptionsTopGroup = new System.Windows.Forms.ComboBox();
+            this.buttonNewGroup = new System.Windows.Forms.Button();
             this.textBoxGroupOptionsGroup = new System.Windows.Forms.TextBox();
             this.labelGroupOptionsGroup = new System.Windows.Forms.Label();
             this.buttonDeleteGroup = new System.Windows.Forms.Button();
             this.buttonUpdateGroup = new System.Windows.Forms.Button();
             this.buttonSaveGroup = new System.Windows.Forms.Button();
-            this.textBoxGroupOptionsTopGroup = new System.Windows.Forms.TextBox();
-            this.labelTopGroupOptionsGroup = new System.Windows.Forms.Label();
+            this.labelGroupOptionsTopGroup = new System.Windows.Forms.Label();
+            this.groupBoxItemTopGroupOptions = new System.Windows.Forms.GroupBox();
+            this.buttonNewTopGroup = new System.Windows.Forms.Button();
+            this.labelTopGroupOptionsTopGroup = new System.Windows.Forms.Label();
+            this.buttonDeleteTopGroup = new System.Windows.Forms.Button();
+            this.buttonUpdateTopGroup = new System.Windows.Forms.Button();
+            this.buttonSaveTopGroup = new System.Windows.Forms.Button();
+            this.comboBoxTopGroupOptionsTopGroup = new System.Windows.Forms.ComboBox();
             this.groupBoxItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItems)).BeginInit();
             this.groupBoxItemOptions.SuspendLayout();
             this.groupBoxItemGroups.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItemGroups)).BeginInit();
             this.groupBoxItemGroupOptions.SuspendLayout();
+            this.groupBoxItemTopGroupOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxItems
@@ -86,6 +96,7 @@
             // 
             // groupBoxItemOptions
             // 
+            this.groupBoxItemOptions.Controls.Add(this.buttonNewItem);
             this.groupBoxItemOptions.Controls.Add(this.buttonDeleteItem);
             this.groupBoxItemOptions.Controls.Add(this.buttonUpdateItem);
             this.groupBoxItemOptions.Controls.Add(this.buttonSaveItem);
@@ -95,16 +106,26 @@
             this.groupBoxItemOptions.Controls.Add(this.labelItemOptionsGroup);
             this.groupBoxItemOptions.Controls.Add(this.textBoxItemOptionsItem);
             this.groupBoxItemOptions.Controls.Add(this.labelItemOptionsItem);
-            this.groupBoxItemOptions.Location = new System.Drawing.Point(1004, 158);
+            this.groupBoxItemOptions.Location = new System.Drawing.Point(1004, 248);
             this.groupBoxItemOptions.Name = "groupBoxItemOptions";
             this.groupBoxItemOptions.Size = new System.Drawing.Size(433, 201);
             this.groupBoxItemOptions.TabIndex = 4;
             this.groupBoxItemOptions.TabStop = false;
             this.groupBoxItemOptions.Text = "Item Options";
             // 
+            // buttonNewItem
+            // 
+            this.buttonNewItem.Location = new System.Drawing.Point(86, 170);
+            this.buttonNewItem.Name = "buttonNewItem";
+            this.buttonNewItem.Size = new System.Drawing.Size(75, 23);
+            this.buttonNewItem.TabIndex = 9;
+            this.buttonNewItem.Text = "New";
+            this.buttonNewItem.UseVisualStyleBackColor = true;
+            this.buttonNewItem.Click += new System.EventHandler(this.buttonNewItem_Click);
+            // 
             // buttonDeleteItem
             // 
-            this.buttonDeleteItem.Location = new System.Drawing.Point(256, 170);
+            this.buttonDeleteItem.Location = new System.Drawing.Point(339, 170);
             this.buttonDeleteItem.Name = "buttonDeleteItem";
             this.buttonDeleteItem.Size = new System.Drawing.Size(75, 23);
             this.buttonDeleteItem.TabIndex = 8;
@@ -114,7 +135,7 @@
             // 
             // buttonUpdateItem
             // 
-            this.buttonUpdateItem.Location = new System.Drawing.Point(171, 170);
+            this.buttonUpdateItem.Location = new System.Drawing.Point(254, 170);
             this.buttonUpdateItem.Name = "buttonUpdateItem";
             this.buttonUpdateItem.Size = new System.Drawing.Size(75, 23);
             this.buttonUpdateItem.TabIndex = 7;
@@ -124,7 +145,7 @@
             // 
             // buttonSaveItem
             // 
-            this.buttonSaveItem.Location = new System.Drawing.Point(86, 170);
+            this.buttonSaveItem.Location = new System.Drawing.Point(169, 170);
             this.buttonSaveItem.Name = "buttonSaveItem";
             this.buttonSaveItem.Size = new System.Drawing.Size(75, 23);
             this.buttonSaveItem.TabIndex = 6;
@@ -219,19 +240,38 @@
             // 
             // groupBoxItemGroupOptions
             // 
+            this.groupBoxItemGroupOptions.Controls.Add(this.comboBoxGroupOptionsTopGroup);
+            this.groupBoxItemGroupOptions.Controls.Add(this.buttonNewGroup);
             this.groupBoxItemGroupOptions.Controls.Add(this.textBoxGroupOptionsGroup);
             this.groupBoxItemGroupOptions.Controls.Add(this.labelGroupOptionsGroup);
             this.groupBoxItemGroupOptions.Controls.Add(this.buttonDeleteGroup);
             this.groupBoxItemGroupOptions.Controls.Add(this.buttonUpdateGroup);
             this.groupBoxItemGroupOptions.Controls.Add(this.buttonSaveGroup);
-            this.groupBoxItemGroupOptions.Controls.Add(this.textBoxGroupOptionsTopGroup);
-            this.groupBoxItemGroupOptions.Controls.Add(this.labelTopGroupOptionsGroup);
-            this.groupBoxItemGroupOptions.Location = new System.Drawing.Point(1004, 24);
+            this.groupBoxItemGroupOptions.Controls.Add(this.labelGroupOptionsTopGroup);
+            this.groupBoxItemGroupOptions.Location = new System.Drawing.Point(1004, 114);
             this.groupBoxItemGroupOptions.Name = "groupBoxItemGroupOptions";
             this.groupBoxItemGroupOptions.Size = new System.Drawing.Size(433, 126);
             this.groupBoxItemGroupOptions.TabIndex = 9;
             this.groupBoxItemGroupOptions.TabStop = false;
             this.groupBoxItemGroupOptions.Text = "Group Options";
+            // 
+            // comboBoxGroupOptionsTopGroup
+            // 
+            this.comboBoxGroupOptionsTopGroup.FormattingEnabled = true;
+            this.comboBoxGroupOptionsTopGroup.Location = new System.Drawing.Point(86, 32);
+            this.comboBoxGroupOptionsTopGroup.Name = "comboBoxGroupOptionsTopGroup";
+            this.comboBoxGroupOptionsTopGroup.Size = new System.Drawing.Size(328, 23);
+            this.comboBoxGroupOptionsTopGroup.TabIndex = 12;
+            // 
+            // buttonNewGroup
+            // 
+            this.buttonNewGroup.Location = new System.Drawing.Point(86, 92);
+            this.buttonNewGroup.Name = "buttonNewGroup";
+            this.buttonNewGroup.Size = new System.Drawing.Size(75, 23);
+            this.buttonNewGroup.TabIndex = 11;
+            this.buttonNewGroup.Text = "New";
+            this.buttonNewGroup.UseVisualStyleBackColor = true;
+            this.buttonNewGroup.Click += new System.EventHandler(this.buttonNewGroup_Click);
             // 
             // textBoxGroupOptionsGroup
             // 
@@ -251,7 +291,7 @@
             // 
             // buttonDeleteGroup
             // 
-            this.buttonDeleteGroup.Location = new System.Drawing.Point(256, 92);
+            this.buttonDeleteGroup.Location = new System.Drawing.Point(339, 92);
             this.buttonDeleteGroup.Name = "buttonDeleteGroup";
             this.buttonDeleteGroup.Size = new System.Drawing.Size(75, 23);
             this.buttonDeleteGroup.TabIndex = 8;
@@ -261,7 +301,7 @@
             // 
             // buttonUpdateGroup
             // 
-            this.buttonUpdateGroup.Location = new System.Drawing.Point(171, 92);
+            this.buttonUpdateGroup.Location = new System.Drawing.Point(254, 92);
             this.buttonUpdateGroup.Name = "buttonUpdateGroup";
             this.buttonUpdateGroup.Size = new System.Drawing.Size(75, 23);
             this.buttonUpdateGroup.TabIndex = 7;
@@ -271,7 +311,7 @@
             // 
             // buttonSaveGroup
             // 
-            this.buttonSaveGroup.Location = new System.Drawing.Point(86, 92);
+            this.buttonSaveGroup.Location = new System.Drawing.Point(169, 92);
             this.buttonSaveGroup.Name = "buttonSaveGroup";
             this.buttonSaveGroup.Size = new System.Drawing.Size(75, 23);
             this.buttonSaveGroup.TabIndex = 6;
@@ -279,27 +319,93 @@
             this.buttonSaveGroup.UseVisualStyleBackColor = true;
             this.buttonSaveGroup.Click += new System.EventHandler(this.buttonSaveGroup_Click);
             // 
-            // textBoxGroupOptionsTopGroup
+            // labelGroupOptionsTopGroup
             // 
-            this.textBoxGroupOptionsTopGroup.Location = new System.Drawing.Point(86, 32);
-            this.textBoxGroupOptionsTopGroup.Name = "textBoxGroupOptionsTopGroup";
-            this.textBoxGroupOptionsTopGroup.Size = new System.Drawing.Size(330, 23);
-            this.textBoxGroupOptionsTopGroup.TabIndex = 1;
+            this.labelGroupOptionsTopGroup.AutoSize = true;
+            this.labelGroupOptionsTopGroup.Location = new System.Drawing.Point(5, 37);
+            this.labelGroupOptionsTopGroup.Name = "labelGroupOptionsTopGroup";
+            this.labelGroupOptionsTopGroup.Size = new System.Drawing.Size(63, 15);
+            this.labelGroupOptionsTopGroup.TabIndex = 0;
+            this.labelGroupOptionsTopGroup.Text = "Top Group";
             // 
-            // labelTopGroupOptionsGroup
+            // groupBoxItemTopGroupOptions
             // 
-            this.labelTopGroupOptionsGroup.AutoSize = true;
-            this.labelTopGroupOptionsGroup.Location = new System.Drawing.Point(5, 37);
-            this.labelTopGroupOptionsGroup.Name = "labelTopGroupOptionsGroup";
-            this.labelTopGroupOptionsGroup.Size = new System.Drawing.Size(63, 15);
-            this.labelTopGroupOptionsGroup.TabIndex = 0;
-            this.labelTopGroupOptionsGroup.Text = "Top Group";
+            this.groupBoxItemTopGroupOptions.Controls.Add(this.comboBoxTopGroupOptionsTopGroup);
+            this.groupBoxItemTopGroupOptions.Controls.Add(this.buttonNewTopGroup);
+            this.groupBoxItemTopGroupOptions.Controls.Add(this.labelTopGroupOptionsTopGroup);
+            this.groupBoxItemTopGroupOptions.Controls.Add(this.buttonDeleteTopGroup);
+            this.groupBoxItemTopGroupOptions.Controls.Add(this.buttonUpdateTopGroup);
+            this.groupBoxItemTopGroupOptions.Controls.Add(this.buttonSaveTopGroup);
+            this.groupBoxItemTopGroupOptions.Location = new System.Drawing.Point(1004, 12);
+            this.groupBoxItemTopGroupOptions.Name = "groupBoxItemTopGroupOptions";
+            this.groupBoxItemTopGroupOptions.Size = new System.Drawing.Size(433, 96);
+            this.groupBoxItemTopGroupOptions.TabIndex = 12;
+            this.groupBoxItemTopGroupOptions.TabStop = false;
+            this.groupBoxItemTopGroupOptions.Text = "Top Group Options";
+            // 
+            // buttonNewTopGroup
+            // 
+            this.buttonNewTopGroup.Location = new System.Drawing.Point(86, 62);
+            this.buttonNewTopGroup.Name = "buttonNewTopGroup";
+            this.buttonNewTopGroup.Size = new System.Drawing.Size(75, 23);
+            this.buttonNewTopGroup.TabIndex = 11;
+            this.buttonNewTopGroup.Text = "New";
+            this.buttonNewTopGroup.UseVisualStyleBackColor = true;
+            this.buttonNewTopGroup.Click += new System.EventHandler(this.buttonNewTopGroup_Click);
+            // 
+            // labelTopGroupOptionsTopGroup
+            // 
+            this.labelTopGroupOptionsTopGroup.AutoSize = true;
+            this.labelTopGroupOptionsTopGroup.Location = new System.Drawing.Point(5, 36);
+            this.labelTopGroupOptionsTopGroup.Name = "labelTopGroupOptionsTopGroup";
+            this.labelTopGroupOptionsTopGroup.Size = new System.Drawing.Size(63, 15);
+            this.labelTopGroupOptionsTopGroup.TabIndex = 9;
+            this.labelTopGroupOptionsTopGroup.Text = "Top Group";
+            // 
+            // buttonDeleteTopGroup
+            // 
+            this.buttonDeleteTopGroup.Location = new System.Drawing.Point(339, 62);
+            this.buttonDeleteTopGroup.Name = "buttonDeleteTopGroup";
+            this.buttonDeleteTopGroup.Size = new System.Drawing.Size(75, 23);
+            this.buttonDeleteTopGroup.TabIndex = 8;
+            this.buttonDeleteTopGroup.Text = "Delete";
+            this.buttonDeleteTopGroup.UseVisualStyleBackColor = true;
+            this.buttonDeleteTopGroup.Click += new System.EventHandler(this.buttonDeleteTopGroup_Click);
+            // 
+            // buttonUpdateTopGroup
+            // 
+            this.buttonUpdateTopGroup.Location = new System.Drawing.Point(254, 62);
+            this.buttonUpdateTopGroup.Name = "buttonUpdateTopGroup";
+            this.buttonUpdateTopGroup.Size = new System.Drawing.Size(75, 23);
+            this.buttonUpdateTopGroup.TabIndex = 7;
+            this.buttonUpdateTopGroup.Text = "Update";
+            this.buttonUpdateTopGroup.UseVisualStyleBackColor = true;
+            this.buttonUpdateTopGroup.Click += new System.EventHandler(this.buttonUpdateTopGroup_Click);
+            // 
+            // buttonSaveTopGroup
+            // 
+            this.buttonSaveTopGroup.Location = new System.Drawing.Point(169, 62);
+            this.buttonSaveTopGroup.Name = "buttonSaveTopGroup";
+            this.buttonSaveTopGroup.Size = new System.Drawing.Size(75, 23);
+            this.buttonSaveTopGroup.TabIndex = 6;
+            this.buttonSaveTopGroup.Text = "Save";
+            this.buttonSaveTopGroup.UseVisualStyleBackColor = true;
+            this.buttonSaveTopGroup.Click += new System.EventHandler(this.buttonSaveTopGroup_Click);
+            // 
+            // comboBoxTopGroupOptionsTopGroup
+            // 
+            this.comboBoxTopGroupOptionsTopGroup.FormattingEnabled = true;
+            this.comboBoxTopGroupOptionsTopGroup.Location = new System.Drawing.Point(86, 33);
+            this.comboBoxTopGroupOptionsTopGroup.Name = "comboBoxTopGroupOptionsTopGroup";
+            this.comboBoxTopGroupOptionsTopGroup.Size = new System.Drawing.Size(328, 23);
+            this.comboBoxTopGroupOptionsTopGroup.TabIndex = 12;
             // 
             // ItemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1446, 793);
+            this.Controls.Add(this.groupBoxItemTopGroupOptions);
             this.Controls.Add(this.groupBoxItemGroupOptions);
             this.Controls.Add(this.groupBoxItemGroups);
             this.Controls.Add(this.buttonClose);
@@ -318,6 +424,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItemGroups)).EndInit();
             this.groupBoxItemGroupOptions.ResumeLayout(false);
             this.groupBoxItemGroupOptions.PerformLayout();
+            this.groupBoxItemTopGroupOptions.ResumeLayout(false);
+            this.groupBoxItemTopGroupOptions.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -343,9 +451,18 @@
         private System.Windows.Forms.Button buttonDeleteGroup;
         private System.Windows.Forms.Button buttonUpdateGroup;
         private System.Windows.Forms.Button buttonSaveGroup;
-        private System.Windows.Forms.TextBox textBoxGroupOptionsTopGroup;
-        private System.Windows.Forms.Label labelTopGroupOptionsGroup;
+        private System.Windows.Forms.Label labelGroupOptionsTopGroup;
         private System.Windows.Forms.TextBox textBoxGroupOptionsGroup;
         private System.Windows.Forms.Label labelGroupOptionsGroup;
+        private System.Windows.Forms.Button buttonNewGroup;
+        private System.Windows.Forms.Button buttonNewItem;
+        private System.Windows.Forms.GroupBox groupBoxItemTopGroupOptions;
+        private System.Windows.Forms.Button buttonNewTopGroup;
+        private System.Windows.Forms.Label labelTopGroupOptionsTopGroup;
+        private System.Windows.Forms.Button buttonDeleteTopGroup;
+        private System.Windows.Forms.Button buttonUpdateTopGroup;
+        private System.Windows.Forms.Button buttonSaveTopGroup;
+        private System.Windows.Forms.ComboBox comboBoxGroupOptionsTopGroup;
+        private System.Windows.Forms.ComboBox comboBoxTopGroupOptionsTopGroup;
     }
 }

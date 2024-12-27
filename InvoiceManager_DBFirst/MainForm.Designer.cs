@@ -32,6 +32,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_Transactions = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_Items = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,7 +56,8 @@
             // windowsToolStripMenuItem
             // 
             this.windowsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_Transactions});
+            this.toolStripMenuItem_Transactions,
+            this.toolStripMenuItem_Items});
             this.windowsToolStripMenuItem.Name = "windowsToolStripMenuItem";
             this.windowsToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
             this.windowsToolStripMenuItem.Text = "Windows";
@@ -66,6 +68,13 @@
             this.toolStripMenuItem_Transactions.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem_Transactions.Text = "Transactions";
             this.toolStripMenuItem_Transactions.Click += new System.EventHandler(this.toolStripMenuItem_Transactions_Click);
+            // 
+            // toolStripMenuItem_Items
+            // 
+            this.toolStripMenuItem_Items.Name = "toolStripMenuItem_Items";
+            this.toolStripMenuItem_Items.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem_Items.Text = "Items";
+            this.toolStripMenuItem_Items.Click += new System.EventHandler(this.toolStripMenuItem_Items_Click);
             // 
             // MainForm
             // 
@@ -90,6 +99,7 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem windowsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Transactions;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Items;
     }
 }
 
