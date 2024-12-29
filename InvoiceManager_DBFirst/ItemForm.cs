@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Data.SqlClient;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
@@ -187,12 +188,69 @@ namespace InvoiceManager_DBFirst
 
         private void buttonUpdateItem_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewItems.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
+            Item item = dbContext.Item.Where(r => r.id == itemId).FirstOrDefault();
+
+            this._setItemDataFromUiToObject(item);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while updating item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToGridViewItem();
         }
 
         private void buttonDeleteItem_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewItems.CurrentRow;
 
+
+            /*
+             DataGridViewRow row = this.dataGridViewTactions.CurrentRow;
+
+            if (row == null)
+            {
+                MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+            var taction = dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
+
+            try
+            {
+                var details = taction.TactionDetails.ToList();
+                foreach (var detail in details)
+                {
+                    taction.TactionDetails.Remove(detail);
+                    dbContext.TactionDetails.Remove(detail);
+                }
+
+                dbContext.Taction.Remove(taction);
+                this.dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._clearTactionControls();
+            this._clearDetailsControls();
+            this.dataGridViewTactionDetails.DataSource = null;
+
+            this._bindDataToGridViewTaction();
+            */
         }
 
         private void buttonNewGroup_Click(object sender, EventArgs e)
@@ -239,7 +297,28 @@ namespace InvoiceManager_DBFirst
 
         private void buttonUpdateGroup_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewItemGroups.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            int groupId = Convert.ToInt32(row.Cells["itemGroupId"].Value);
+            ItemGroup itemGroup = dbContext.ItemGroup.Where(r => r.id == groupId).FirstOrDefault();
+
+            this._setItemGroupDataFromUiToObject(itemGroup);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToGridViewItemGroup();
         }
 
         private void buttonDeleteGroup_Click(object sender, EventArgs e)
@@ -260,13 +339,20 @@ namespace InvoiceManager_DBFirst
             else
                 this._setEditableItemTopGroups(false);
 
+            this._bindDataToComboBoxGroupOptionsTopGroup(-1);
             this._clearItemTopGroupControls();
         }
 
         private void buttonSaveTopGroup_Click(object sender, EventArgs e)
         {
-            this._setItemTopGroupDataFromUiToObject(this._newItemTopGroup);
-            this.dbContext.ItemTopGroup.Add(this._newItemTopGroup);
+            if (string.IsNullOrEmpty(this.comboBoxTopGroupOptionsTopGroup.Text))
+            {
+                MessageBox.Show("Text not entered.", "Enter top group item name first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            this._newItemTopGroup.Name = this.comboBoxTopGroupOptionsTopGroup.Text;
+            this._newItemTopGroup = this.dbContext.ItemTopGroup.Add(this._newItemTopGroup);
 
             try
             {
@@ -277,6 +363,7 @@ namespace InvoiceManager_DBFirst
                 MessageBox.Show("An error occurred while adding item top group.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            this._bindDataToComboBoxTopGroupOptionsTopGroup(this._newItemTopGroup.id);
             this._clearItemTopGroupControls();
             this._setEditableItemTopGroups(false);
             this._newItemTopGroup = new ItemTopGroup();
@@ -286,6 +373,24 @@ namespace InvoiceManager_DBFirst
         private void buttonUpdateTopGroup_Click(object sender, EventArgs e)
         {
 
+            if (this.comboBoxTopGroupOptionsTopGroup.SelectedItem == null)
+            {
+                MessageBox.Show("Item not selected.", "Select the top group item you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            ItemTopGroup itemTopGroup = (ItemTopGroup)this.comboBoxTopGroupOptionsTopGroup.SelectedItem;
+            this._setItemTopGroupDataFromUiToObject(itemTopGroup);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToComboBoxGroupOptionsTopGroup(itemTopGroup.id);
         }
 
         private void buttonDeleteTopGroup_Click(object sender, EventArgs e)

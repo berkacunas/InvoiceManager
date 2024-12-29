@@ -195,7 +195,7 @@ namespace InvoiceManager_DBFirst
 
             if (row == null)
             {
-                MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
