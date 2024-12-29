@@ -54,12 +54,14 @@
             this.buttonSaveGroup = new System.Windows.Forms.Button();
             this.labelGroupOptionsTopGroup = new System.Windows.Forms.Label();
             this.groupBoxItemTopGroupOptions = new System.Windows.Forms.GroupBox();
+            this.comboBoxTopGroupOptionsTopGroup = new System.Windows.Forms.ComboBox();
             this.buttonNewTopGroup = new System.Windows.Forms.Button();
             this.labelTopGroupOptionsTopGroup = new System.Windows.Forms.Label();
             this.buttonDeleteTopGroup = new System.Windows.Forms.Button();
             this.buttonUpdateTopGroup = new System.Windows.Forms.Button();
             this.buttonSaveTopGroup = new System.Windows.Forms.Button();
-            this.comboBoxTopGroupOptionsTopGroup = new System.Windows.Forms.ComboBox();
+            this.checkBoxItemOptionsEdit = new System.Windows.Forms.CheckBox();
+            this.checkBoxGroupOptionsEdit = new System.Windows.Forms.CheckBox();
             this.groupBoxItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItems)).BeginInit();
             this.groupBoxItemOptions.SuspendLayout();
@@ -93,9 +95,11 @@
             this.dataGridViewItems.TabIndex = 0;
             this.dataGridViewItems.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewItems_CellClick);
             this.dataGridViewItems.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewItems_ColumnHeaderMouseClick);
+            this.dataGridViewItems.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewItems_DataBindingComplete);
             // 
             // groupBoxItemOptions
             // 
+            this.groupBoxItemOptions.Controls.Add(this.checkBoxItemOptionsEdit);
             this.groupBoxItemOptions.Controls.Add(this.buttonNewItem);
             this.groupBoxItemOptions.Controls.Add(this.buttonDeleteItem);
             this.groupBoxItemOptions.Controls.Add(this.buttonUpdateItem);
@@ -237,9 +241,11 @@
             this.dataGridViewItemGroups.TabIndex = 0;
             this.dataGridViewItemGroups.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewItemGroups_CellClick);
             this.dataGridViewItemGroups.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewItemGroups_ColumnHeaderMouseClick);
+            this.dataGridViewItemGroups.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewItemGroups_DataBindingComplete);
             // 
             // groupBoxItemGroupOptions
             // 
+            this.groupBoxItemGroupOptions.Controls.Add(this.checkBoxGroupOptionsEdit);
             this.groupBoxItemGroupOptions.Controls.Add(this.comboBoxGroupOptionsTopGroup);
             this.groupBoxItemGroupOptions.Controls.Add(this.buttonNewGroup);
             this.groupBoxItemGroupOptions.Controls.Add(this.textBoxGroupOptionsGroup);
@@ -343,6 +349,14 @@
             this.groupBoxItemTopGroupOptions.TabStop = false;
             this.groupBoxItemTopGroupOptions.Text = "Top Group Options";
             // 
+            // comboBoxTopGroupOptionsTopGroup
+            // 
+            this.comboBoxTopGroupOptionsTopGroup.FormattingEnabled = true;
+            this.comboBoxTopGroupOptionsTopGroup.Location = new System.Drawing.Point(86, 33);
+            this.comboBoxTopGroupOptionsTopGroup.Name = "comboBoxTopGroupOptionsTopGroup";
+            this.comboBoxTopGroupOptionsTopGroup.Size = new System.Drawing.Size(328, 23);
+            this.comboBoxTopGroupOptionsTopGroup.TabIndex = 12;
+            // 
             // buttonNewTopGroup
             // 
             this.buttonNewTopGroup.Location = new System.Drawing.Point(86, 62);
@@ -392,13 +406,27 @@
             this.buttonSaveTopGroup.UseVisualStyleBackColor = true;
             this.buttonSaveTopGroup.Click += new System.EventHandler(this.buttonSaveTopGroup_Click);
             // 
-            // comboBoxTopGroupOptionsTopGroup
+            // checkBoxItemOptionsEdit
             // 
-            this.comboBoxTopGroupOptionsTopGroup.FormattingEnabled = true;
-            this.comboBoxTopGroupOptionsTopGroup.Location = new System.Drawing.Point(86, 33);
-            this.comboBoxTopGroupOptionsTopGroup.Name = "comboBoxTopGroupOptionsTopGroup";
-            this.comboBoxTopGroupOptionsTopGroup.Size = new System.Drawing.Size(328, 23);
-            this.comboBoxTopGroupOptionsTopGroup.TabIndex = 12;
+            this.checkBoxItemOptionsEdit.AutoSize = true;
+            this.checkBoxItemOptionsEdit.Location = new System.Drawing.Point(6, 176);
+            this.checkBoxItemOptionsEdit.Name = "checkBoxItemOptionsEdit";
+            this.checkBoxItemOptionsEdit.Size = new System.Drawing.Size(47, 19);
+            this.checkBoxItemOptionsEdit.TabIndex = 10;
+            this.checkBoxItemOptionsEdit.Text = "Edit";
+            this.checkBoxItemOptionsEdit.UseVisualStyleBackColor = true;
+            this.checkBoxItemOptionsEdit.CheckedChanged += new System.EventHandler(this.checkBoxItemOptionsEdit_CheckedChanged);
+            // 
+            // checkBoxGroupOptionsEdit
+            // 
+            this.checkBoxGroupOptionsEdit.AutoSize = true;
+            this.checkBoxGroupOptionsEdit.Location = new System.Drawing.Point(6, 96);
+            this.checkBoxGroupOptionsEdit.Name = "checkBoxGroupOptionsEdit";
+            this.checkBoxGroupOptionsEdit.Size = new System.Drawing.Size(47, 19);
+            this.checkBoxGroupOptionsEdit.TabIndex = 11;
+            this.checkBoxGroupOptionsEdit.Text = "Edit";
+            this.checkBoxGroupOptionsEdit.UseVisualStyleBackColor = true;
+            this.checkBoxGroupOptionsEdit.CheckedChanged += new System.EventHandler(this.checkBoxGroupOptionsEdit_CheckedChanged);
             // 
             // ItemForm
             // 
@@ -464,5 +492,7 @@
         private System.Windows.Forms.Button buttonSaveTopGroup;
         private System.Windows.Forms.ComboBox comboBoxGroupOptionsTopGroup;
         private System.Windows.Forms.ComboBox comboBoxTopGroupOptionsTopGroup;
+        private System.Windows.Forms.CheckBox checkBoxItemOptionsEdit;
+        private System.Windows.Forms.CheckBox checkBoxGroupOptionsEdit;
     }
 }

@@ -75,8 +75,8 @@ namespace InvoiceManager_DBFirst
             this.comboBoxItemOptionsGroup.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxGroupOptionsTopGroup.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            this._bindDataToGridViewItemGroup();
             this._bindDataToGridViewItem();
+            this._bindDataToGridViewItemGroup();
         }
 
         private void DataGridViewItemGroups_DataSourceChanged(object sender, EventArgs e)
@@ -116,32 +116,40 @@ namespace InvoiceManager_DBFirst
             this.dataGridViewItems.Columns["itemGroupId"].Visible = false;
         }
 
-        private void dataGridViewItemGroups_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            this._clearItemGroupControls();
-
-            DataGridViewRow row = this.dataGridViewItemGroups.CurrentRow;
-            int topGroupId = Convert.ToInt32(row.Cells["itemTopGroupId"].Value);
-
-            this._bindDataToComboBoxTopGroupOptionsTopGroup(topGroupId);
-            this._bindDataToComboBoxGroupOptionsTopGroup(topGroupId);
-
-            this.textBoxGroupOptionsGroup.Text = row.Cells["itemGroupName"].Value.ToString();
-        }
-
         private void dataGridViewItems_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             this._clearItemControls();
-
             DataGridViewRow row = this.dataGridViewItems.CurrentRow;
-            int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
-            int groupId = Convert.ToInt32(row.Cells["itemGroupId"].Value);
+            this._setItemControls(row);
+        }
 
-            this._bindDataToComboBoxItemOptionsGroup(groupId);
-            this.textBoxItemOptionsItem.Text = row.Cells["itemName"].Value.ToString();
+        private void dataGridViewItemGroups_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            this._clearItemGroupControls();
+            DataGridViewRow row = this.dataGridViewItemGroups.CurrentRow;
+            this._setItemGroupControls(row);
+        }
 
-            if (row.Cells["itemNote"].Value != null)
-                this.textBoxItemOptionsNote.Text = row.Cells["itemNote"].Value.ToString();
+        private void checkBoxItemOptionsEdit_CheckedChanged(object sender, EventArgs e)
+        {
+            DataGridViewRow row = this.dataGridViewItems.CurrentRow;
+            int groupId = (row == null) ? -1 : Convert.ToInt32(row.Cells["itemGroupId"].Value);
+
+            if (checkBoxItemOptionsEdit.Checked)
+                this._bindDataToComboBoxItemOptionsGroup(0);
+            else
+                this._bindDataToComboBoxItemOptionsGroup(groupId);
+        }
+
+        private void checkBoxGroupOptionsEdit_CheckedChanged(object sender, EventArgs e)
+        {
+            DataGridViewRow row = this.dataGridViewItemGroups.CurrentRow;
+            int topGroupId = (row == null) ? -1 : Convert.ToInt32(row.Cells["itemTopGroupId"].Value);
+
+            if (checkBoxGroupOptionsEdit.Checked)
+                this._bindDataToComboBoxGroupOptionsTopGroup(0);
+            else
+                this._bindDataToComboBoxGroupOptionsTopGroup(topGroupId);
         }
 
         private void buttonNewItem_Click(object sender, EventArgs e)
@@ -216,41 +224,28 @@ namespace InvoiceManager_DBFirst
         {
             DataGridViewRow row = this.dataGridViewItems.CurrentRow;
 
-
-            /*
-             DataGridViewRow row = this.dataGridViewTactions.CurrentRow;
-
             if (row == null)
             {
                 MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
-            var taction = dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
+            int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
+            Item item = this.dbContext.Item.Where(r => r.id == itemId).FirstOrDefault();
+
+            dbContext.Item.Remove(item);
 
             try
             {
-                var details = taction.TactionDetails.ToList();
-                foreach (var detail in details)
-                {
-                    taction.TactionDetails.Remove(detail);
-                    dbContext.TactionDetails.Remove(detail);
-                }
-
-                dbContext.Taction.Remove(taction);
-                this.dbContext.SaveChanges();
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while deleting taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred while deleting item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            this._clearTactionControls();
-            this._clearDetailsControls();
-            this.dataGridViewTactionDetails.DataSource = null;
-
-            this._bindDataToGridViewTaction();
-            */
+            this._bindDataToComboBoxItemOptionsGroup(-1);
+            this._bindDataToGridViewItem();
+            this._clearItemControls();
         }
 
         private void buttonNewGroup_Click(object sender, EventArgs e)
@@ -323,7 +318,52 @@ namespace InvoiceManager_DBFirst
 
         private void buttonDeleteGroup_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewItemGroups.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            int groupId = Convert.ToInt32(row.Cells["itemGroupId"].Value);
+            ItemGroup itemGroup = this.dbContext.ItemGroup.Where(r => r.id == groupId).FirstOrDefault();
+
+            var itemsToUpdateQuery = from item in dbContext.Item
+                                     join itemgroup in dbContext.ItemGroup on item.GroupId equals itemGroup.id
+                                     where itemgroup.id == groupId
+                                     select item;
+
+            List<Item> itemsToUpdate = itemsToUpdateQuery.ToList();
+
+            if (itemsToUpdate.Count > 0)
+            {
+                string message = $"You should change or delete items associated with Item Group: {itemGroup.Name} first before deleting this item group.\n\nThis items are:\n";
+
+                foreach (Item item in itemsToUpdate) { 
+                    message += $"Item id: {item.id}  ";
+                    message += $"Item name: {item.Name}\n";
+                }
+                message = message.Remove(message.Length - 1, 1);
+
+                MessageBox.Show(message, "Unable to delete item group", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            dbContext.ItemGroup.Remove(itemGroup);
+
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting item group.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToComboBoxItemOptionsGroup(-1);
+            this._bindDataToComboBoxGroupOptionsTopGroup(-1);
+            this._bindDataToGridViewItemGroup();
+            this._clearItemGroupControls();
         }
 
         private void buttonNewTopGroup_Click(object sender, EventArgs e)
@@ -395,7 +435,42 @@ namespace InvoiceManager_DBFirst
 
         private void buttonDeleteTopGroup_Click(object sender, EventArgs e)
         {
+            if (this.comboBoxTopGroupOptionsTopGroup.SelectedItem == null)
+            {
+                MessageBox.Show("Item not selected.", "Select the top group item you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
+            ItemTopGroup itemTopGroup = (ItemTopGroup)this.comboBoxTopGroupOptionsTopGroup.SelectedItem;
+
+            var itemGroupToUpdateQuery = from itemGroup in dbContext.ItemGroup
+                                         join itemtopgroup in dbContext.ItemTopGroup on itemGroup.TopGroupId equals itemtopgroup.id
+                                         where itemtopgroup.id == itemTopGroup.id
+                                         select itemGroup;
+
+            var noTopGroupIdQuery = from itg in dbContext.ItemTopGroup
+                                 where itg.Name == "<NoGroup>"
+                                 select itg.id;
+
+            List<ItemGroup> itemGroupsToUpdate = itemGroupToUpdateQuery.ToList();
+            int noTopGroupId = (int)noTopGroupIdQuery.FirstOrDefault();
+
+            foreach (ItemGroup itemGroup in itemGroupsToUpdate)
+                itemGroup.TopGroupId = noTopGroupId;
+
+            dbContext.ItemTopGroup.Remove(itemTopGroup);
+
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting item top group.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToComboBoxGroupOptionsTopGroup(-1);
+            this._bindDataToGridViewItemGroup();
+            this._clearItemTopGroupControls();
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -478,6 +553,25 @@ namespace InvoiceManager_DBFirst
             }
 
             itemTopGroup.Name = ((ItemTopGroup)this.comboBoxTopGroupOptionsTopGroup.SelectedItem).Name;
+        }
+        private void _setItemControls(DataGridViewRow row)
+        {
+            int groupId = Convert.ToInt32(row.Cells["itemGroupId"].Value);
+
+            this.textBoxItemOptionsItem.Text = row.Cells["itemName"].Value.ToString();
+            if (row.Cells["itemNote"].Value != null)
+                this.textBoxItemOptionsNote.Text = row.Cells["itemNote"].Value.ToString();
+
+            this._bindDataToComboBoxItemOptionsGroup(groupId);
+        }
+
+        private void _setItemGroupControls(DataGridViewRow row)
+        {
+            int topGroupId = Convert.ToInt32(row.Cells["itemTopGroupId"].Value);
+            this.textBoxGroupOptionsGroup.Text = row.Cells["itemGroupName"].Value.ToString();
+
+            this._bindDataToComboBoxTopGroupOptionsTopGroup(topGroupId);
+            this._bindDataToComboBoxGroupOptionsTopGroup(topGroupId);
         }
 
         public static void _enableDataGridViewMultiSelect(DataGridView gridview, bool enable)
@@ -650,8 +744,8 @@ namespace InvoiceManager_DBFirst
             string columnName = this.dataGridViewItemGroups.Columns[e.ColumnIndex].HeaderText;
 
             var query = dbContext.ItemGroup.Join(dbContext.ItemTopGroup,
-                        itemGroup => itemGroup.TopGroupId, itemTopGroup => itemTopGroup.id, 
-                        (itemGroup, itemTopGroup) => 
+                        itemGroup => itemGroup.TopGroupId, itemTopGroup => itemTopGroup.id,
+                        (itemGroup, itemTopGroup) =>
                         new
                         {
                             itemGroupId = itemGroup.id,
@@ -670,6 +764,26 @@ namespace InvoiceManager_DBFirst
                     this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemTopGroupName).ToList() : query.OrderByDescending(r => r.itemTopGroupName).ToList();
                     this._sortOrdersDataGridViewItemGroups[1] = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
                     break;
+            }
+        }
+
+        private void dataGridViewItems_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewItems.Rows.Count > 0)
+            {
+                DataGridViewRow row = this.dataGridViewItems.Rows[0];
+                if (row != null)
+                    this._setItemControls(row);
+            }
+        }
+
+        private void dataGridViewItemGroups_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewItemGroups.Rows.Count > 0)
+            {
+                DataGridViewRow row = this.dataGridViewItemGroups.Rows[0];
+                if (row != null)
+                    this._setItemGroupControls(row);
             }
         }
     }
