@@ -54,6 +54,9 @@ namespace InvoiceManager_DBFirst
             this._bindDataToComboBoxPaymentMethod();
 
             this._mode = Mode.Display;
+            this.dateTimePickerTactionDate.Format = DateTimePickerFormat.Custom;
+            this.dateTimePickerTactionDate.ShowUpDown = true;
+            this.dateTimePickerTactionDate.CustomFormat = "dd.MM.yyyy dddd HH:mm";
         }
 
         private void DataGridViewTactions_DataSourceChanged(object sender, EventArgs e)

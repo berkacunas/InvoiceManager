@@ -80,8 +80,8 @@
             this.toolStripMenuItemItems = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemShops = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemPaymentMethods = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripMenuItemSeller = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactions)).BeginInit();
             this.groupBoxTactions.SuspendLayout();
             this.groupBoxTactionDetails.SuspendLayout();
@@ -581,21 +581,27 @@
             // toolStripMenuItemItems
             // 
             this.toolStripMenuItemItems.Name = "toolStripMenuItemItems";
-            this.toolStripMenuItemItems.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemItems.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuItemItems.Text = "Items";
             this.toolStripMenuItemItems.Click += new System.EventHandler(this.toolStripMenuItemItems_Click);
             // 
             // toolStripMenuItemShops
             // 
             this.toolStripMenuItemShops.Name = "toolStripMenuItemShops";
-            this.toolStripMenuItemShops.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemShops.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuItemShops.Text = "Shops";
             // 
             // toolStripMenuItemPaymentMethods
             // 
             this.toolStripMenuItemPaymentMethods.Name = "toolStripMenuItemPaymentMethods";
-            this.toolStripMenuItemPaymentMethods.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemPaymentMethods.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuItemPaymentMethods.Text = "Payment Methods";
+            // 
+            // toolStripMenuItemSeller
+            // 
+            this.toolStripMenuItemSeller.Name = "toolStripMenuItemSeller";
+            this.toolStripMenuItemSeller.Size = new System.Drawing.Size(171, 22);
+            this.toolStripMenuItemSeller.Text = "Sellers";
             // 
             // toolStrip1
             // 
@@ -604,12 +610,6 @@
             this.toolStrip1.Size = new System.Drawing.Size(1690, 25);
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripMenuItemSeller
-            // 
-            this.toolStripMenuItemSeller.Name = "toolStripMenuItemSeller";
-            this.toolStripMenuItemSeller.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuItemSeller.Text = "Sellers";
             // 
             // TactionForm
             // 

@@ -24,8 +24,8 @@ namespace InvoiceManager_DBFirst
         public string For { get; set; }
         public string Note { get; set; }
     
-        public virtual Person Person { get; set; }
         public virtual PaymentMethod PaymentMethod { get; set; }
+        public virtual Person Person { get; set; }
         public virtual Person Person1 { get; set; }
     }
 }

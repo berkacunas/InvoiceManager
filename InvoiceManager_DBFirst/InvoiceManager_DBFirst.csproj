@@ -239,46 +239,46 @@
   <ItemGroup>
     <Compile Include="BitmapResourceLoader.cs" />
     <Compile Include="CashTransfer.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CurrencyMovement.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InvoiceModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InvoiceModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InvoiceModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Item.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemGroup.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemSubType.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemTopGroup.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PaymentMethod.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Person.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RowComparer.cs" />
-    <Compile Include="Invoice,Model.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Invoice,Model.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Invoice,Model.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Invoice,Model.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Invoice,Model.edmx</DependentUpon>
-    </Compile>
     <Compile Include="ItemForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -297,22 +297,22 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Seller.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Shop.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ShopGroup.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ShopType.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Taction.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TactionDetails.cs">
-      <DependentUpon>Invoice,Model.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TactionForm.cs">
       <SubType>Form</SubType>
@@ -338,12 +338,12 @@
     <EmbeddedResource Include="TactionForm.resx">
       <DependentUpon>TactionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EntityDeploy Include="Invoice,Model.edmx">
+    <EntityDeploy Include="InvoiceModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Invoice,Model.Designer.cs</LastGenOutput>
+      <LastGenOutput>InvoiceModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Invoice,Model.edmx.diagram">
-      <DependentUpon>Invoice,Model.edmx</DependentUpon>
+    <None Include="InvoiceModel.edmx.diagram">
+      <DependentUpon>InvoiceModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -365,6 +365,16 @@
   <ItemGroup>
     <Content Include="assets\24-hours.png" />
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
+    <Content Include="InvoiceModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>InvoiceModel.edmx</DependentUpon>
+      <LastGenOutput>InvoiceModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="InvoiceModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>InvoiceModel.edmx</DependentUpon>
+      <LastGenOutput>InvoiceModel.cs</LastGenOutput>
+    </Content>
     <Content Include="todos.txt" />
     <EmbeddedResource Include="assets\item.png" />
     <Content Include="assets\convenience-store.png" />
@@ -374,16 +384,6 @@
     <EmbeddedResource Include="assets\seller.png" />
     <EmbeddedResource Include="assets\shop.png" />
     <Content Include="assets\stand.png" />
-    <Content Include="Invoice,Model.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Invoice,Model.edmx</DependentUpon>
-      <LastGenOutput>Invoice,Model.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Invoice,Model.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Invoice,Model.edmx</DependentUpon>
-      <LastGenOutput>Invoice,Model.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

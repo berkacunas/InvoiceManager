@@ -16,8 +16,8 @@
           <Property Name="Direction" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Val" Type="decimal" Precision="19" Scale="2" Nullable="false" />
           <Property Name="PaymentMethodId" Type="int" Nullable="false" />
-          <Property Name="For" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Note" Type="nvarchar" MaxLength="50" />
+          <Property Name="For" Type="nvarchar" MaxLength="50" />
+          <Property Name="Note" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="CurrencyMovement">
           <Key>
@@ -48,21 +48,21 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
-          <Property Name="TopGroupId" Type="int" />
+          <Property Name="TopGroupId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ItemSubType">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
         </EntityType>
         <EntityType Name="ItemTopGroup">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentMethod">
           <Key>
@@ -151,6 +151,18 @@
           <Property Name="DiscountedPrice" Type="decimal" Precision="19" Scale="2" />
           <Property Name="Note" Type="nvarchar(max)" />
         </EntityType>
+        <Association Name="FK_CashTransfer_PaymentMethodId">
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
+          <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CashTransfer">
+              <PropertyRef Name="PaymentMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CashTransferFrom_PersonId">
           <End Role="Person" Type="Self.Person" Multiplicity="1" />
           <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
@@ -160,18 +172,6 @@
             </Principal>
             <Dependent Role="CashTransfer">
               <PropertyRef Name="From" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CashTransferPaymentMethodId_PaymentMethodId">
-          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
-          <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PaymentMethod">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="CashTransfer">
-              <PropertyRef Name="PaymentMethodId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -187,7 +187,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ItemGroupId_ItemGroupId">
+        <Association Name="FK_Item_GroupId">
           <End Role="ItemGroup" Type="Self.ItemGroup" Multiplicity="1" />
           <End Role="Item" Type="Self.Item" Multiplicity="*" />
           <ReferentialConstraint>
@@ -199,15 +199,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ItemGroupTopGroupId_ItemTopGroupId">
-          <End Role="ItemTopGroup" Type="Self.ItemTopGroup" Multiplicity="0..1" />
-          <End Role="ItemGroup" Type="Self.ItemGroup" Multiplicity="*" />
+        <Association Name="FK_ItemGroup_TopGroupId">
+          <End Role="ItemGroup" Type="Self.ItemGroup" Multiplicity="1" />
+          <End Role="ItemGroup1" Type="Self.ItemGroup" Multiplicity="0..1" />
           <ReferentialConstraint>
-            <Principal Role="ItemTopGroup">
+            <Principal Role="ItemGroup">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="ItemGroup">
-              <PropertyRef Name="TopGroupId" />
+            <Dependent Role="ItemGroup1">
+              <PropertyRef Name="id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -259,43 +259,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TactionDetailsItemId_ItemId">
-          <End Role="Item" Type="Self.Item" Multiplicity="1" />
-          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Item">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="TactionDetails">
-              <PropertyRef Name="ItemId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TactionDetailsItemSubTypeId">
-          <End Role="ItemSubType" Type="Self.ItemSubType" Multiplicity="0..1" />
-          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ItemSubType">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="TactionDetails">
-              <PropertyRef Name="ItemSubTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TactionDetailsTactionId">
-          <End Role="Taction" Type="Self.Taction" Multiplicity="1" />
-          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Taction">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="TactionDetails">
-              <PropertyRef Name="TransactionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TactionPaymentMethodId">
+        <Association Name="FK_Taction_PaymentMethodId">
           <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
           <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
           <ReferentialConstraint>
@@ -307,7 +271,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TactionSellerId">
+        <Association Name="FK_Taction_SellerId">
           <End Role="Seller" Type="Self.Seller" Multiplicity="0..1" />
           <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
           <ReferentialConstraint>
@@ -319,7 +283,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TactionShopId">
+        <Association Name="FK_Taction_ShopId">
           <End Role="Shop" Type="Self.Shop" Multiplicity="1" />
           <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
           <ReferentialConstraint>
@@ -331,7 +295,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TactionWhoDid_PersonId">
+        <Association Name="FK_Taction_WhoDidIt">
           <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
           <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
           <ReferentialConstraint>
@@ -340,6 +304,42 @@
             </Principal>
             <Dependent Role="Taction">
               <PropertyRef Name="WhoDidIt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionDetails_ItemId">
+          <End Role="Item" Type="Self.Item" Multiplicity="1" />
+          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TactionDetails">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionDetails_ItemSubTypeId">
+          <End Role="ItemSubType" Type="Self.ItemSubType" Multiplicity="0..1" />
+          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemSubType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TactionDetails">
+              <PropertyRef Name="ItemSubTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TactionDetails_TactionId">
+          <End Role="Taction" Type="Self.Taction" Multiplicity="1" />
+          <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Taction">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TactionDetails">
+              <PropertyRef Name="TransactionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -358,25 +358,25 @@
           <EntitySet Name="ShopType" EntityType="Self.ShopType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Taction" EntityType="Self.Taction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TactionDetails" EntityType="Self.TactionDetails" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_CashTransferFrom_PersonId" Association="Self.FK_CashTransferFrom_PersonId">
-            <End Role="Person" EntitySet="Person" />
+          <AssociationSet Name="FK_CashTransfer_PaymentMethodId" Association="Self.FK_CashTransfer_PaymentMethodId">
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
             <End Role="CashTransfer" EntitySet="CashTransfer" />
           </AssociationSet>
-          <AssociationSet Name="FK_CashTransferPaymentMethodId_PaymentMethodId" Association="Self.FK_CashTransferPaymentMethodId_PaymentMethodId">
-            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+          <AssociationSet Name="FK_CashTransferFrom_PersonId" Association="Self.FK_CashTransferFrom_PersonId">
+            <End Role="Person" EntitySet="Person" />
             <End Role="CashTransfer" EntitySet="CashTransfer" />
           </AssociationSet>
           <AssociationSet Name="FK_CashTransferTo_PersonId" Association="Self.FK_CashTransferTo_PersonId">
             <End Role="Person" EntitySet="Person" />
             <End Role="CashTransfer" EntitySet="CashTransfer" />
           </AssociationSet>
-          <AssociationSet Name="FK_ItemGroupId_ItemGroupId" Association="Self.FK_ItemGroupId_ItemGroupId">
+          <AssociationSet Name="FK_Item_GroupId" Association="Self.FK_Item_GroupId">
             <End Role="ItemGroup" EntitySet="ItemGroup" />
             <End Role="Item" EntitySet="Item" />
           </AssociationSet>
-          <AssociationSet Name="FK_ItemGroupTopGroupId_ItemTopGroupId" Association="Self.FK_ItemGroupTopGroupId_ItemTopGroupId">
-            <End Role="ItemTopGroup" EntitySet="ItemTopGroup" />
+          <AssociationSet Name="FK_ItemGroup_TopGroupId" Association="Self.FK_ItemGroup_TopGroupId">
             <End Role="ItemGroup" EntitySet="ItemGroup" />
+            <End Role="ItemGroup1" EntitySet="ItemGroup" />
           </AssociationSet>
           <AssociationSet Name="FK_PaymentMethodPersonId_PersonId" Association="Self.FK_PaymentMethodPersonId_PersonId">
             <End Role="Person" EntitySet="Person" />
@@ -394,33 +394,33 @@
             <End Role="ShopType" EntitySet="ShopType" />
             <End Role="ShopGroup" EntitySet="ShopGroup" />
           </AssociationSet>
-          <AssociationSet Name="FK_TactionDetailsItemId_ItemId" Association="Self.FK_TactionDetailsItemId_ItemId">
-            <End Role="Item" EntitySet="Item" />
-            <End Role="TactionDetails" EntitySet="TactionDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TactionDetailsItemSubTypeId" Association="Self.FK_TactionDetailsItemSubTypeId">
-            <End Role="ItemSubType" EntitySet="ItemSubType" />
-            <End Role="TactionDetails" EntitySet="TactionDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TactionDetailsTactionId" Association="Self.FK_TactionDetailsTactionId">
-            <End Role="Taction" EntitySet="Taction" />
-            <End Role="TactionDetails" EntitySet="TactionDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TactionPaymentMethodId" Association="Self.FK_TactionPaymentMethodId">
+          <AssociationSet Name="FK_Taction_PaymentMethodId" Association="Self.FK_Taction_PaymentMethodId">
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
             <End Role="Taction" EntitySet="Taction" />
           </AssociationSet>
-          <AssociationSet Name="FK_TactionSellerId" Association="Self.FK_TactionSellerId">
+          <AssociationSet Name="FK_Taction_SellerId" Association="Self.FK_Taction_SellerId">
             <End Role="Seller" EntitySet="Seller" />
             <End Role="Taction" EntitySet="Taction" />
           </AssociationSet>
-          <AssociationSet Name="FK_TactionShopId" Association="Self.FK_TactionShopId">
+          <AssociationSet Name="FK_Taction_ShopId" Association="Self.FK_Taction_ShopId">
             <End Role="Shop" EntitySet="Shop" />
             <End Role="Taction" EntitySet="Taction" />
           </AssociationSet>
-          <AssociationSet Name="FK_TactionWhoDid_PersonId" Association="Self.FK_TactionWhoDid_PersonId">
+          <AssociationSet Name="FK_Taction_WhoDidIt" Association="Self.FK_Taction_WhoDidIt">
             <End Role="Person" EntitySet="Person" />
             <End Role="Taction" EntitySet="Taction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionDetails_ItemId" Association="Self.FK_TactionDetails_ItemId">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="TactionDetails" EntitySet="TactionDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionDetails_ItemSubTypeId" Association="Self.FK_TactionDetails_ItemSubTypeId">
+            <End Role="ItemSubType" EntitySet="ItemSubType" />
+            <End Role="TactionDetails" EntitySet="TactionDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TactionDetails_TactionId" Association="Self.FK_TactionDetails_TactionId">
+            <End Role="Taction" EntitySet="Taction" />
+            <End Role="TactionDetails" EntitySet="TactionDetails" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -439,10 +439,10 @@
           <Property Name="Direction" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Val" Type="Decimal" Precision="19" Scale="2" Nullable="false" />
           <Property Name="PaymentMethodId" Type="Int32" Nullable="false" />
-          <Property Name="For" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="For" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_CashTransfer_PaymentMethodId" FromRole="CashTransfer" ToRole="PaymentMethod" />
           <NavigationProperty Name="Person" Relationship="Self.FK_CashTransferFrom_PersonId" FromRole="CashTransfer" ToRole="Person" />
-          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_CashTransferPaymentMethodId_PaymentMethodId" FromRole="CashTransfer" ToRole="PaymentMethod" />
           <NavigationProperty Name="Person1" Relationship="Self.FK_CashTransferTo_PersonId" FromRole="CashTransfer" ToRole="Person" />
         </EntityType>
         <EntityType Name="CurrencyMovement">
@@ -467,8 +467,8 @@
           <Property Name="GroupId" Type="Int32" Nullable="false" />
           <Property Name="Size" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ItemGroup" Relationship="Self.FK_ItemGroupId_ItemGroupId" FromRole="Item" ToRole="ItemGroup" />
-          <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetailsItemId_ItemId" FromRole="Item" ToRole="TactionDetails" />
+          <NavigationProperty Name="ItemGroup" Relationship="Self.FK_Item_GroupId" FromRole="Item" ToRole="ItemGroup" />
+          <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetails_ItemId" FromRole="Item" ToRole="TactionDetails" />
         </EntityType>
         <EntityType Name="ItemGroup">
           <Key>
@@ -476,25 +476,25 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="TopGroupId" Type="Int32" Nullable="true" />
-          <NavigationProperty Name="Item" Relationship="Self.FK_ItemGroupId_ItemGroupId" FromRole="ItemGroup" ToRole="Item" />
-          <NavigationProperty Name="ItemTopGroup" Relationship="Self.FK_ItemGroupTopGroupId_ItemTopGroupId" FromRole="ItemGroup" ToRole="ItemTopGroup" />
+          <Property Name="TopGroupId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_Item_GroupId" FromRole="ItemGroup" ToRole="Item" />
+          <NavigationProperty Name="ItemGroup1" Relationship="Self.FK_ItemGroup_TopGroupId" FromRole="ItemGroup" ToRole="ItemGroup1" />
+          <NavigationProperty Name="ItemGroup2" Relationship="Self.FK_ItemGroup_TopGroupId" FromRole="ItemGroup1" ToRole="ItemGroup" />
         </EntityType>
         <EntityType Name="ItemSubType">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetailsItemSubTypeId" FromRole="ItemSubType" ToRole="TactionDetails" />
+          <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetails_ItemSubTypeId" FromRole="ItemSubType" ToRole="TactionDetails" />
         </EntityType>
         <EntityType Name="ItemTopGroup">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="ItemGroup" Relationship="Self.FK_ItemGroupTopGroupId_ItemTopGroupId" FromRole="ItemTopGroup" ToRole="ItemGroup" />
+          <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentMethod">
           <Key>
@@ -503,9 +503,9 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PersonId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="CashTransfer" Relationship="Self.FK_CashTransferPaymentMethodId_PaymentMethodId" FromRole="PaymentMethod" ToRole="CashTransfer" />
+          <NavigationProperty Name="CashTransfer" Relationship="Self.FK_CashTransfer_PaymentMethodId" FromRole="PaymentMethod" ToRole="CashTransfer" />
           <NavigationProperty Name="Person" Relationship="Self.FK_PaymentMethodPersonId_PersonId" FromRole="PaymentMethod" ToRole="Person" />
-          <NavigationProperty Name="Taction" Relationship="Self.FK_TactionPaymentMethodId" FromRole="PaymentMethod" ToRole="Taction" />
+          <NavigationProperty Name="Taction" Relationship="Self.FK_Taction_PaymentMethodId" FromRole="PaymentMethod" ToRole="Taction" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -517,7 +517,7 @@
           <NavigationProperty Name="CashTransfer" Relationship="Self.FK_CashTransferFrom_PersonId" FromRole="Person" ToRole="CashTransfer" />
           <NavigationProperty Name="CashTransfer1" Relationship="Self.FK_CashTransferTo_PersonId" FromRole="Person" ToRole="CashTransfer" />
           <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_PaymentMethodPersonId_PersonId" FromRole="Person" ToRole="PaymentMethod" />
-          <NavigationProperty Name="Taction" Relationship="Self.FK_TactionWhoDid_PersonId" FromRole="Person" ToRole="Taction" />
+          <NavigationProperty Name="Taction" Relationship="Self.FK_Taction_WhoDidIt" FromRole="Person" ToRole="Taction" />
         </EntityType>
         <EntityType Name="Seller">
           <Key>
@@ -530,7 +530,7 @@
           <Property Name="Web" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ShopGroup" Relationship="Self.FK_ShopGroupSellerId_SellerId" FromRole="Seller" ToRole="ShopGroup" />
-          <NavigationProperty Name="Taction" Relationship="Self.FK_TactionSellerId" FromRole="Seller" ToRole="Taction" />
+          <NavigationProperty Name="Taction" Relationship="Self.FK_Taction_SellerId" FromRole="Seller" ToRole="Taction" />
         </EntityType>
         <EntityType Name="Shop">
           <Key>
@@ -546,7 +546,7 @@
           <Property Name="Web" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ShopGroup" Relationship="Self.FK_ShopGroupId_ShopGroupId" FromRole="Shop" ToRole="ShopGroup" />
-          <NavigationProperty Name="Taction" Relationship="Self.FK_TactionShopId" FromRole="Shop" ToRole="Taction" />
+          <NavigationProperty Name="Taction" Relationship="Self.FK_Taction_ShopId" FromRole="Shop" ToRole="Taction" />
         </EntityType>
         <EntityType Name="ShopGroup">
           <Key>
@@ -582,11 +582,11 @@
           <Property Name="No" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SellerId" Type="Int32" />
           <Property Name="WhoDidIt" Type="Int32" />
-          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_TactionPaymentMethodId" FromRole="Taction" ToRole="PaymentMethod" />
-          <NavigationProperty Name="Person" Relationship="Self.FK_TactionWhoDid_PersonId" FromRole="Taction" ToRole="Person" />
-          <NavigationProperty Name="Seller" Relationship="Self.FK_TactionSellerId" FromRole="Taction" ToRole="Seller" />
-          <NavigationProperty Name="Shop" Relationship="Self.FK_TactionShopId" FromRole="Taction" ToRole="Shop" />
-          <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetailsTactionId" FromRole="Taction" ToRole="TactionDetails" />
+          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_Taction_PaymentMethodId" FromRole="Taction" ToRole="PaymentMethod" />
+          <NavigationProperty Name="Person" Relationship="Self.FK_Taction_WhoDidIt" FromRole="Taction" ToRole="Person" />
+          <NavigationProperty Name="Seller" Relationship="Self.FK_Taction_SellerId" FromRole="Taction" ToRole="Seller" />
+          <NavigationProperty Name="Shop" Relationship="Self.FK_Taction_ShopId" FromRole="Taction" ToRole="Shop" />
+          <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetails_TactionId" FromRole="Taction" ToRole="TactionDetails" />
         </EntityType>
         <EntityType Name="TactionDetails">
           <Key>
@@ -602,10 +602,22 @@
           <Property Name="DiscountRate" Type="Decimal" Precision="19" Scale="2" />
           <Property Name="DiscountedPrice" Type="Decimal" Precision="19" Scale="2" />
           <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Item" Relationship="Self.FK_TactionDetailsItemId_ItemId" FromRole="TactionDetails" ToRole="Item" />
-          <NavigationProperty Name="ItemSubType" Relationship="Self.FK_TactionDetailsItemSubTypeId" FromRole="TactionDetails" ToRole="ItemSubType" />
-          <NavigationProperty Name="Taction" Relationship="Self.FK_TactionDetailsTactionId" FromRole="TactionDetails" ToRole="Taction" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_TactionDetails_ItemId" FromRole="TactionDetails" ToRole="Item" />
+          <NavigationProperty Name="ItemSubType" Relationship="Self.FK_TactionDetails_ItemSubTypeId" FromRole="TactionDetails" ToRole="ItemSubType" />
+          <NavigationProperty Name="Taction" Relationship="Self.FK_TactionDetails_TactionId" FromRole="TactionDetails" ToRole="Taction" />
         </EntityType>
+        <Association Name="FK_CashTransfer_PaymentMethodId">
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
+          <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CashTransfer">
+              <PropertyRef Name="PaymentMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CashTransferFrom_PersonId">
           <End Role="Person" Type="Self.Person" Multiplicity="1" />
           <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
@@ -615,18 +627,6 @@
             </Principal>
             <Dependent Role="CashTransfer">
               <PropertyRef Name="From" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CashTransferPaymentMethodId_PaymentMethodId">
-          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
-          <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PaymentMethod">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="CashTransfer">
-              <PropertyRef Name="PaymentMethodId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -642,7 +642,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ItemGroupId_ItemGroupId">
+        <Association Name="FK_Item_GroupId">
           <End Role="ItemGroup" Type="Self.ItemGroup" Multiplicity="1" />
           <End Role="Item" Type="Self.Item" Multiplicity="*" />
           <ReferentialConstraint>
@@ -654,7 +654,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TactionDetailsItemId_ItemId">
+        <Association Name="FK_TactionDetails_ItemId">
           <End Role="Item" Type="Self.Item" Multiplicity="1" />
           <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -666,19 +666,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ItemGroupTopGroupId_ItemTopGroupId">
-          <End Role="ItemTopGroup" Type="Self.ItemTopGroup" Multiplicity="0..1" />
-          <End Role="ItemGroup" Type="Self.ItemGroup" Multiplicity="*" />
+        <Association Name="FK_ItemGroup_TopGroupId">
+          <End Role="ItemGroup" Type="Self.ItemGroup" Multiplicity="1" />
+          <End Role="ItemGroup1" Type="Self.ItemGroup" Multiplicity="0..1" />
           <ReferentialConstraint>
-            <Principal Role="ItemTopGroup">
+            <Principal Role="ItemGroup">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="ItemGroup">
-              <PropertyRef Name="TopGroupId" />
+            <Dependent Role="ItemGroup1">
+              <PropertyRef Name="id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TactionDetailsItemSubTypeId">
+        <Association Name="FK_TactionDetails_ItemSubTypeId">
           <End Role="ItemSubType" Type="Self.ItemSubType" Multiplicity="0..1" />
           <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -702,7 +702,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TactionPaymentMethodId">
+        <Association Name="FK_Taction_PaymentMethodId">
           <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
           <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
           <ReferentialConstraint>
@@ -714,7 +714,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TactionWhoDid_PersonId">
+        <Association Name="FK_Taction_WhoDidIt">
           <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
           <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
           <ReferentialConstraint>
@@ -738,7 +738,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TactionSellerId">
+        <Association Name="FK_Taction_SellerId">
           <End Role="Seller" Type="Self.Seller" Multiplicity="0..1" />
           <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
           <ReferentialConstraint>
@@ -762,7 +762,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TactionShopId">
+        <Association Name="FK_Taction_ShopId">
           <End Role="Shop" Type="Self.Shop" Multiplicity="1" />
           <End Role="Taction" Type="Self.Taction" Multiplicity="*" />
           <ReferentialConstraint>
@@ -786,7 +786,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TactionDetailsTactionId">
+        <Association Name="FK_TactionDetails_TactionId">
           <End Role="Taction" Type="Self.Taction" Multiplicity="1" />
           <End Role="TactionDetails" Type="Self.TactionDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -813,31 +813,31 @@
           <EntitySet Name="ShopType" EntityType="Self.ShopType" />
           <EntitySet Name="Taction" EntityType="Self.Taction" />
           <EntitySet Name="TactionDetails" EntityType="Self.TactionDetails" />
-          <AssociationSet Name="FK_CashTransferFrom_PersonId" Association="Self.FK_CashTransferFrom_PersonId">
-            <End Role="Person" EntitySet="Person" />
+          <AssociationSet Name="FK_CashTransfer_PaymentMethodId" Association="Self.FK_CashTransfer_PaymentMethodId">
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
             <End Role="CashTransfer" EntitySet="CashTransfer" />
           </AssociationSet>
-          <AssociationSet Name="FK_CashTransferPaymentMethodId_PaymentMethodId" Association="Self.FK_CashTransferPaymentMethodId_PaymentMethodId">
-            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+          <AssociationSet Name="FK_CashTransferFrom_PersonId" Association="Self.FK_CashTransferFrom_PersonId">
+            <End Role="Person" EntitySet="Person" />
             <End Role="CashTransfer" EntitySet="CashTransfer" />
           </AssociationSet>
           <AssociationSet Name="FK_CashTransferTo_PersonId" Association="Self.FK_CashTransferTo_PersonId">
             <End Role="Person" EntitySet="Person" />
             <End Role="CashTransfer" EntitySet="CashTransfer" />
           </AssociationSet>
-          <AssociationSet Name="FK_ItemGroupId_ItemGroupId" Association="Self.FK_ItemGroupId_ItemGroupId">
+          <AssociationSet Name="FK_Item_GroupId" Association="Self.FK_Item_GroupId">
             <End Role="ItemGroup" EntitySet="ItemGroup" />
             <End Role="Item" EntitySet="Item" />
           </AssociationSet>
-          <AssociationSet Name="FK_TactionDetailsItemId_ItemId" Association="Self.FK_TactionDetailsItemId_ItemId">
+          <AssociationSet Name="FK_TactionDetails_ItemId" Association="Self.FK_TactionDetails_ItemId">
             <End Role="Item" EntitySet="Item" />
             <End Role="TactionDetails" EntitySet="TactionDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_ItemGroupTopGroupId_ItemTopGroupId" Association="Self.FK_ItemGroupTopGroupId_ItemTopGroupId">
-            <End Role="ItemTopGroup" EntitySet="ItemTopGroup" />
+          <AssociationSet Name="FK_ItemGroup_TopGroupId" Association="Self.FK_ItemGroup_TopGroupId">
             <End Role="ItemGroup" EntitySet="ItemGroup" />
+            <End Role="ItemGroup1" EntitySet="ItemGroup" />
           </AssociationSet>
-          <AssociationSet Name="FK_TactionDetailsItemSubTypeId" Association="Self.FK_TactionDetailsItemSubTypeId">
+          <AssociationSet Name="FK_TactionDetails_ItemSubTypeId" Association="Self.FK_TactionDetails_ItemSubTypeId">
             <End Role="ItemSubType" EntitySet="ItemSubType" />
             <End Role="TactionDetails" EntitySet="TactionDetails" />
           </AssociationSet>
@@ -845,11 +845,11 @@
             <End Role="Person" EntitySet="Person" />
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
           </AssociationSet>
-          <AssociationSet Name="FK_TactionPaymentMethodId" Association="Self.FK_TactionPaymentMethodId">
+          <AssociationSet Name="FK_Taction_PaymentMethodId" Association="Self.FK_Taction_PaymentMethodId">
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
             <End Role="Taction" EntitySet="Taction" />
           </AssociationSet>
-          <AssociationSet Name="FK_TactionWhoDid_PersonId" Association="Self.FK_TactionWhoDid_PersonId">
+          <AssociationSet Name="FK_Taction_WhoDidIt" Association="Self.FK_Taction_WhoDidIt">
             <End Role="Person" EntitySet="Person" />
             <End Role="Taction" EntitySet="Taction" />
           </AssociationSet>
@@ -857,7 +857,7 @@
             <End Role="Seller" EntitySet="Seller" />
             <End Role="ShopGroup" EntitySet="ShopGroup" />
           </AssociationSet>
-          <AssociationSet Name="FK_TactionSellerId" Association="Self.FK_TactionSellerId">
+          <AssociationSet Name="FK_Taction_SellerId" Association="Self.FK_Taction_SellerId">
             <End Role="Seller" EntitySet="Seller" />
             <End Role="Taction" EntitySet="Taction" />
           </AssociationSet>
@@ -865,7 +865,7 @@
             <End Role="ShopGroup" EntitySet="ShopGroup" />
             <End Role="Shop" EntitySet="Shop" />
           </AssociationSet>
-          <AssociationSet Name="FK_TactionShopId" Association="Self.FK_TactionShopId">
+          <AssociationSet Name="FK_Taction_ShopId" Association="Self.FK_Taction_ShopId">
             <End Role="Shop" EntitySet="Shop" />
             <End Role="Taction" EntitySet="Taction" />
           </AssociationSet>
@@ -873,7 +873,7 @@
             <End Role="ShopType" EntitySet="ShopType" />
             <End Role="ShopGroup" EntitySet="ShopGroup" />
           </AssociationSet>
-          <AssociationSet Name="FK_TactionDetailsTactionId" Association="Self.FK_TactionDetailsTactionId">
+          <AssociationSet Name="FK_TactionDetails_TactionId" Association="Self.FK_TactionDetails_TactionId">
             <End Role="Taction" EntitySet="Taction" />
             <End Role="TactionDetails" EntitySet="TactionDetails" />
           </AssociationSet>

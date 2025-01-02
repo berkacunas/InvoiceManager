@@ -4,13 +4,13 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9bebc40d165f4547b830eb3bd1053147" Name="Diagram1">
+      <Diagram DiagramId="ad61aeeb04a943fd8721b3b26edd8c93" Name="Diagram1">
         <EntityTypeShape EntityType="InvoicesModel.CashTransfer" Width="1.5" PointX="5.25" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.CurrencyMovement" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.Item" Width="1.5" PointX="8.25" PointY="15.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.ItemGroup" Width="1.5" PointX="6" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.ItemGroup" Width="1.5" PointX="6" PointY="15.75" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.ItemSubType" Width="1.5" PointX="8.25" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.ItemTopGroup" Width="1.5" PointX="3.75" PointY="16" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.ItemTopGroup" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.PaymentMethod" Width="1.5" PointX="3" PointY="8" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.Person" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.Seller" Width="1.5" PointX="6" PointY="1.75" IsExpanded="true" />
@@ -19,22 +19,22 @@
         <EntityTypeShape EntityType="InvoicesModel.ShopType" Width="1.5" PointX="1.5" PointY="11.875" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.Taction" Width="1.5" PointX="8.25" PointY="5.25" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.TactionDetails" Width="1.5" PointX="10.5" PointY="5.25" IsExpanded="true" />
+        <AssociationConnector Association="InvoicesModel.FK_CashTransfer_PaymentMethodId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_CashTransferFrom_PersonId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_CashTransferPaymentMethodId_PaymentMethodId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_CashTransferTo_PersonId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_ItemGroupId_ItemGroupId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_TactionDetailsItemId_ItemId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_ItemGroupTopGroupId_ItemTopGroupId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_TactionDetailsItemSubTypeId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_Item_GroupId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_TactionDetails_ItemId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_ItemGroup_TopGroupId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_TactionDetails_ItemSubTypeId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_PaymentMethodPersonId_PersonId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_TactionPaymentMethodId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_TactionWhoDid_PersonId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_Taction_PaymentMethodId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_Taction_WhoDidIt" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_ShopGroupSellerId_SellerId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_TactionSellerId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_Taction_SellerId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_ShopGroupId_ShopGroupId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_TactionShopId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_Taction_ShopId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_ShopGroupTypeId_ShopTypeId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_TactionDetailsTactionId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_TactionDetails_TactionId" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

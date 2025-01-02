@@ -22,10 +22,11 @@ namespace InvoiceManager_DBFirst
     
         public int id { get; set; }
         public string Name { get; set; }
-        public Nullable<int> TopGroupId { get; set; }
+        public int TopGroupId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Item> Item { get; set; }
-        public virtual ItemTopGroup ItemTopGroup { get; set; }
+        public virtual ItemGroup ItemGroup1 { get; set; }
+        public virtual ItemGroup ItemGroup2 { get; set; }
     }
 }
