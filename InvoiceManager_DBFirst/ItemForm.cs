@@ -62,11 +62,11 @@ namespace InvoiceManager_DBFirst
         {
             this._setModes(Mode.Display);
 
-            _setDefaultGridViewStyles(this.dataGridViewItemGroups);
             _setDefaultGridViewStyles(this.dataGridViewItems);
+            _setDefaultGridViewStyles(this.dataGridViewItemGroups);
 
-            _enableDataGridViewMultiSelect(this.dataGridViewItemGroups, false);
             _enableDataGridViewMultiSelect(this.dataGridViewItems, false);
+            _enableDataGridViewMultiSelect(this.dataGridViewItemGroups, false);
 
             this._setEditableItems(false);
             this._setEditableItemGroups(false);
@@ -82,7 +82,7 @@ namespace InvoiceManager_DBFirst
         private void DataGridViewItemGroups_DataSourceChanged(object sender, EventArgs e)
         {
             if (this.dataGridViewItemGroups.DataSource == null)
-                return;
+                return; 
 
             string[] tactionsHeaderTexts = new string[] { "itemGroupId", "itemTopGroupId", "Group", "Top Group" };
             int[] tactionsColumnWidths = new int[] { 50, 50, 150, 150 };

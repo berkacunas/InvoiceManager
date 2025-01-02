@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceManager_DBFirst", "InvoiceManager_DBFirst\InvoiceManager_DBFirst.csproj", "{B37EDCC3-4004-48A3-AEC9-E34081D4D2EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseSync", "DatabaseSync\DatabaseSync.csproj", "{70B67E3A-4CED-41AC-BE86-32374ABD764C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B37EDCC3-4004-48A3-AEC9-E34081D4D2EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B37EDCC3-4004-48A3-AEC9-E34081D4D2EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B37EDCC3-4004-48A3-AEC9-E34081D4D2EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70B67E3A-4CED-41AC-BE86-32374ABD764C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70B67E3A-4CED-41AC-BE86-32374ABD764C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70B67E3A-4CED-41AC-BE86-32374ABD764C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70B67E3A-4CED-41AC-BE86-32374ABD764C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
