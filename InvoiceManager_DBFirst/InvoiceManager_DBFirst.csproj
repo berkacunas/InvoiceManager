@@ -385,6 +385,16 @@
     <EmbeddedResource Include="assets\shop.png" />
     <Content Include="assets\stand.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Maya.DatabaseSynchronization\Maya.DatabaseSynchronization.csproj">
+      <Project>{9795ae70-35f0-4f3b-94e7-0893570f9126}</Project>
+      <Name>Maya.DatabaseSynchronization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Maya.Redirection\Maya.Redirection.csproj">
+      <Project>{d4342fc4-6bf6-4134-817b-d79186e90c17}</Project>
+      <Name>Maya.Redirection</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

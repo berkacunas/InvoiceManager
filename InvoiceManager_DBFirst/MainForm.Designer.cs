@@ -28,30 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStripMain = new System.Windows.Forms.MenuStrip();
+            this.toolStripMenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_Transactions = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_Items = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1.SuspendLayout();
+            this.toolStripMenuItemSync = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemSyncWithSQLiteDatabase = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // menuStripMain
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
+            this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemFile,
             this.windowsToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStripMain.Location = new System.Drawing.Point(0, 0);
+            this.menuStripMain.Name = "menuStripMain";
+            this.menuStripMain.Size = new System.Drawing.Size(800, 24);
+            this.menuStripMain.TabIndex = 0;
+            this.menuStripMain.Text = "menuStrip1";
             // 
-            // fileToolStripMenuItem
+            // toolStripMenuItemFile
             // 
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "&File";
+            this.toolStripMenuItemFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemSync});
+            this.toolStripMenuItemFile.Name = "toolStripMenuItemFile";
+            this.toolStripMenuItemFile.Size = new System.Drawing.Size(37, 20);
+            this.toolStripMenuItemFile.Text = "&File";
             // 
             // windowsToolStripMenuItem
             // 
@@ -65,29 +69,44 @@
             // toolStripMenuItem_Transactions
             // 
             this.toolStripMenuItem_Transactions.Name = "toolStripMenuItem_Transactions";
-            this.toolStripMenuItem_Transactions.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem_Transactions.Size = new System.Drawing.Size(139, 22);
             this.toolStripMenuItem_Transactions.Text = "Transactions";
             this.toolStripMenuItem_Transactions.Click += new System.EventHandler(this.toolStripMenuItem_Transactions_Click);
             // 
             // toolStripMenuItem_Items
             // 
             this.toolStripMenuItem_Items.Name = "toolStripMenuItem_Items";
-            this.toolStripMenuItem_Items.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem_Items.Size = new System.Drawing.Size(139, 22);
             this.toolStripMenuItem_Items.Text = "Items";
             this.toolStripMenuItem_Items.Click += new System.EventHandler(this.toolStripMenuItem_Items_Click);
+            // 
+            // toolStripMenuItemSync
+            // 
+            this.toolStripMenuItemSync.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemSyncWithSQLiteDatabase});
+            this.toolStripMenuItemSync.Name = "toolStripMenuItemSync";
+            this.toolStripMenuItemSync.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemSync.Text = "Sync";
+            // 
+            // toolStripMenuItemSyncWithSQLiteDatabase
+            // 
+            this.toolStripMenuItemSyncWithSQLiteDatabase.Name = "toolStripMenuItemSyncWithSQLiteDatabase";
+            this.toolStripMenuItemSyncWithSQLiteDatabase.Size = new System.Drawing.Size(212, 22);
+            this.toolStripMenuItemSyncWithSQLiteDatabase.Text = "Sync with SQLite database";
+            this.toolStripMenuItemSyncWithSQLiteDatabase.Click += new System.EventHandler(this.toolStripMenuItemSyncWithSQLiteDatabase_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.menuStripMain);
+            this.MainMenuStrip = this.menuStripMain;
             this.Name = "MainForm";
             this.Text = "Invoice Manager";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menuStripMain.ResumeLayout(false);
+            this.menuStripMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -95,11 +114,13 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.MenuStrip menuStripMain;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFile;
         private System.Windows.Forms.ToolStripMenuItem windowsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Transactions;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Items;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSync;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSyncWithSQLiteDatabase;
     }
 }
 

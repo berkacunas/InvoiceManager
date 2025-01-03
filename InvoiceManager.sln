@@ -5,7 +5,9 @@ VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceManager_DBFirst", "InvoiceManager_DBFirst\InvoiceManager_DBFirst.csproj", "{B37EDCC3-4004-48A3-AEC9-E34081D4D2EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseSync", "DatabaseSync\DatabaseSync.csproj", "{70B67E3A-4CED-41AC-BE86-32374ABD764C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maya.DatabaseSynchronization", "Maya.DatabaseSynchronization\Maya.DatabaseSynchronization.csproj", "{9795AE70-35F0-4F3B-94E7-0893570F9126}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maya.Redirection", "Maya.Redirection\Maya.Redirection.csproj", "{D4342FC4-6BF6-4134-817B-D79186E90C17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +19,14 @@ Global
 		{B37EDCC3-4004-48A3-AEC9-E34081D4D2EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B37EDCC3-4004-48A3-AEC9-E34081D4D2EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B37EDCC3-4004-48A3-AEC9-E34081D4D2EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70B67E3A-4CED-41AC-BE86-32374ABD764C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70B67E3A-4CED-41AC-BE86-32374ABD764C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70B67E3A-4CED-41AC-BE86-32374ABD764C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70B67E3A-4CED-41AC-BE86-32374ABD764C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9795AE70-35F0-4F3B-94E7-0893570F9126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9795AE70-35F0-4F3B-94E7-0893570F9126}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9795AE70-35F0-4F3B-94E7-0893570F9126}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9795AE70-35F0-4F3B-94E7-0893570F9126}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4342FC4-6BF6-4134-817B-D79186E90C17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4342FC4-6BF6-4134-817B-D79186E90C17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4342FC4-6BF6-4134-817B-D79186E90C17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4342FC4-6BF6-4134-817B-D79186E90C17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

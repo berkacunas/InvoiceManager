@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
+
+using Maya.DatabaseSynchronization;
 
 namespace InvoiceManager_DBFirst
 {
@@ -20,6 +23,7 @@ namespace InvoiceManager_DBFirst
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
+
         }
 
         private void toolStripMenuItem_Transactions_Click(object sender, EventArgs e)
@@ -41,6 +45,12 @@ namespace InvoiceManager_DBFirst
 
             }
 
+        }
+
+        private void toolStripMenuItemSyncWithSQLiteDatabase_Click(object sender, EventArgs e)
+        {
+            DBSyncer dbsync = new DBSyncer();
+            dbsync.Run(DBSyncer.SyncType.BetweenSqlServerAndSQLite);
         }
     }
 }

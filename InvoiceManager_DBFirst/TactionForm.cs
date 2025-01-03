@@ -268,6 +268,7 @@ namespace InvoiceManager_DBFirst
             this._setTactionDetailsDataFromUiToObject(details);
             this._newTaction.TactionDetails.Add(details);
             this._addDetailsToDataGridView();
+            this._clearDetailsControls();
 
             textBoxTotalPrice.Text = _newTaction.TactionDetails.Sum(r => r.UnitPrice * r.Unit).ToString();
         }
