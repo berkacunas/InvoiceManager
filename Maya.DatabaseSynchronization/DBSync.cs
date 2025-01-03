@@ -20,7 +20,7 @@ namespace Maya.DatabaseSynchronization
             BetweenMySQLAndSQLite = 2
         }
 
-        public void Run(SyncType syncType)
+        public Task<SyncResult> Run(SyncType syncType)
         {
             SyncAgent agent;
             SqlSyncProvider sqlServerProvider;
@@ -40,11 +40,16 @@ namespace Maya.DatabaseSynchronization
                 default:
                     throw new Exception("Cannot find sync type !");
             }
-            
-            var setup = new SyncSetup(Config.SyncSetupTables);
-            var result = agent.SynchronizeAsync(setup);
-            Console.WriteLine(result.Result);
-        }
 
+            var setup = new SyncSetup(Config.SyncSetupTables);
+
+            var result = agent.SynchronizeAsync(setup);
+
+            return result;
+            //var result = agent.SynchronizeAsync(setup);
+            //Console.WriteLine(result.Result);
+
+
+        }
     }
 }

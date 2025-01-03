@@ -8,8 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-
+using Dotmim.Sync;
 using Maya.DatabaseSynchronization;
+using Maya.Redirection;
 
 namespace InvoiceManager_DBFirst
 {
@@ -49,8 +50,12 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemSyncWithSQLiteDatabase_Click(object sender, EventArgs e)
         {
-            DBSyncer dbsync = new DBSyncer();
-            dbsync.Run(DBSyncer.SyncType.BetweenSqlServerAndSQLite);
+            SyncWithSQLiteDatabaseForm form = new SyncWithSQLiteDatabaseForm();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+
         }
     }
 }
