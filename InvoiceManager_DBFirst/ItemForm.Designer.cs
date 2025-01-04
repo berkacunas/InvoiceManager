@@ -31,6 +31,7 @@
             this.groupBoxItems = new System.Windows.Forms.GroupBox();
             this.dataGridViewItems = new System.Windows.Forms.DataGridView();
             this.groupBoxItemOptions = new System.Windows.Forms.GroupBox();
+            this.checkBoxItemOptionsEdit = new System.Windows.Forms.CheckBox();
             this.buttonNewItem = new System.Windows.Forms.Button();
             this.buttonDeleteItem = new System.Windows.Forms.Button();
             this.buttonUpdateItem = new System.Windows.Forms.Button();
@@ -45,6 +46,7 @@
             this.groupBoxItemGroups = new System.Windows.Forms.GroupBox();
             this.dataGridViewItemGroups = new System.Windows.Forms.DataGridView();
             this.groupBoxItemGroupOptions = new System.Windows.Forms.GroupBox();
+            this.checkBoxGroupOptionsEdit = new System.Windows.Forms.CheckBox();
             this.comboBoxGroupOptionsTopGroup = new System.Windows.Forms.ComboBox();
             this.buttonNewGroup = new System.Windows.Forms.Button();
             this.textBoxGroupOptionsGroup = new System.Windows.Forms.TextBox();
@@ -60,8 +62,6 @@
             this.buttonDeleteTopGroup = new System.Windows.Forms.Button();
             this.buttonUpdateTopGroup = new System.Windows.Forms.Button();
             this.buttonSaveTopGroup = new System.Windows.Forms.Button();
-            this.checkBoxItemOptionsEdit = new System.Windows.Forms.CheckBox();
-            this.checkBoxGroupOptionsEdit = new System.Windows.Forms.CheckBox();
             this.groupBoxItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItems)).BeginInit();
             this.groupBoxItemOptions.SuspendLayout();
@@ -116,6 +116,17 @@
             this.groupBoxItemOptions.TabIndex = 4;
             this.groupBoxItemOptions.TabStop = false;
             this.groupBoxItemOptions.Text = "Item Options";
+            // 
+            // checkBoxItemOptionsEdit
+            // 
+            this.checkBoxItemOptionsEdit.AutoSize = true;
+            this.checkBoxItemOptionsEdit.Location = new System.Drawing.Point(6, 176);
+            this.checkBoxItemOptionsEdit.Name = "checkBoxItemOptionsEdit";
+            this.checkBoxItemOptionsEdit.Size = new System.Drawing.Size(47, 19);
+            this.checkBoxItemOptionsEdit.TabIndex = 10;
+            this.checkBoxItemOptionsEdit.Text = "Edit";
+            this.checkBoxItemOptionsEdit.UseVisualStyleBackColor = true;
+            this.checkBoxItemOptionsEdit.CheckedChanged += new System.EventHandler(this.checkBoxItemOptionsEdit_CheckedChanged);
             // 
             // buttonNewItem
             // 
@@ -261,6 +272,17 @@
             this.groupBoxItemGroupOptions.TabStop = false;
             this.groupBoxItemGroupOptions.Text = "Group Options";
             // 
+            // checkBoxGroupOptionsEdit
+            // 
+            this.checkBoxGroupOptionsEdit.AutoSize = true;
+            this.checkBoxGroupOptionsEdit.Location = new System.Drawing.Point(6, 96);
+            this.checkBoxGroupOptionsEdit.Name = "checkBoxGroupOptionsEdit";
+            this.checkBoxGroupOptionsEdit.Size = new System.Drawing.Size(47, 19);
+            this.checkBoxGroupOptionsEdit.TabIndex = 11;
+            this.checkBoxGroupOptionsEdit.Text = "Edit";
+            this.checkBoxGroupOptionsEdit.UseVisualStyleBackColor = true;
+            this.checkBoxGroupOptionsEdit.CheckedChanged += new System.EventHandler(this.checkBoxGroupOptionsEdit_CheckedChanged);
+            // 
             // comboBoxGroupOptionsTopGroup
             // 
             this.comboBoxGroupOptionsTopGroup.FormattingEnabled = true;
@@ -405,28 +427,6 @@
             this.buttonSaveTopGroup.Text = "Save";
             this.buttonSaveTopGroup.UseVisualStyleBackColor = true;
             this.buttonSaveTopGroup.Click += new System.EventHandler(this.buttonSaveTopGroup_Click);
-            // 
-            // checkBoxItemOptionsEdit
-            // 
-            this.checkBoxItemOptionsEdit.AutoSize = true;
-            this.checkBoxItemOptionsEdit.Location = new System.Drawing.Point(6, 176);
-            this.checkBoxItemOptionsEdit.Name = "checkBoxItemOptionsEdit";
-            this.checkBoxItemOptionsEdit.Size = new System.Drawing.Size(47, 19);
-            this.checkBoxItemOptionsEdit.TabIndex = 10;
-            this.checkBoxItemOptionsEdit.Text = "Edit";
-            this.checkBoxItemOptionsEdit.UseVisualStyleBackColor = true;
-            this.checkBoxItemOptionsEdit.CheckedChanged += new System.EventHandler(this.checkBoxItemOptionsEdit_CheckedChanged);
-            // 
-            // checkBoxGroupOptionsEdit
-            // 
-            this.checkBoxGroupOptionsEdit.AutoSize = true;
-            this.checkBoxGroupOptionsEdit.Location = new System.Drawing.Point(6, 96);
-            this.checkBoxGroupOptionsEdit.Name = "checkBoxGroupOptionsEdit";
-            this.checkBoxGroupOptionsEdit.Size = new System.Drawing.Size(47, 19);
-            this.checkBoxGroupOptionsEdit.TabIndex = 11;
-            this.checkBoxGroupOptionsEdit.Text = "Edit";
-            this.checkBoxGroupOptionsEdit.UseVisualStyleBackColor = true;
-            this.checkBoxGroupOptionsEdit.CheckedChanged += new System.EventHandler(this.checkBoxGroupOptionsEdit_CheckedChanged);
             // 
             // ItemForm
             // 

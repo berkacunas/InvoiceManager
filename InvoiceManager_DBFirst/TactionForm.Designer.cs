@@ -82,6 +82,8 @@
             this.toolStripMenuItemPaymentMethods = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSeller = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.labelOwner = new System.Windows.Forms.Label();
+            this.comboBoxOwner = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactions)).BeginInit();
             this.groupBoxTactions.SuspendLayout();
             this.groupBoxTactionDetails.SuspendLayout();
@@ -100,6 +102,7 @@
             this.dataGridViewTactions.Size = new System.Drawing.Size(721, 802);
             this.dataGridViewTactions.TabIndex = 0;
             this.dataGridViewTactions.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTactions_CellClick);
+            this.dataGridViewTactions.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewTactions_DataBindingComplete);
             // 
             // groupBoxTactions
             // 
@@ -133,6 +136,7 @@
             this.dataGridViewTactionDetails.Size = new System.Drawing.Size(915, 449);
             this.dataGridViewTactionDetails.TabIndex = 0;
             this.dataGridViewTactionDetails.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTactionDetails_CellClick);
+            this.dataGridViewTactionDetails.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewTactionDetails_DataBindingComplete);
             // 
             // textBoxSeller
             // 
@@ -477,6 +481,8 @@
             // 
             // groupBoxTactionOptions
             // 
+            this.groupBoxTactionOptions.Controls.Add(this.labelOwner);
+            this.groupBoxTactionOptions.Controls.Add(this.comboBoxOwner);
             this.groupBoxTactionOptions.Controls.Add(this.buttonCancelTaction);
             this.groupBoxTactionOptions.Controls.Add(this.checkBoxTactionsEditable);
             this.groupBoxTactionOptions.Controls.Add(this.textBoxSeller);
@@ -611,6 +617,23 @@
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // labelOwner
+            // 
+            this.labelOwner.AutoSize = true;
+            this.labelOwner.Location = new System.Drawing.Point(336, 93);
+            this.labelOwner.Name = "labelOwner";
+            this.labelOwner.Size = new System.Drawing.Size(43, 15);
+            this.labelOwner.TabIndex = 48;
+            this.labelOwner.Text = "Owner";
+            // 
+            // comboBoxOwner
+            // 
+            this.comboBoxOwner.FormattingEnabled = true;
+            this.comboBoxOwner.Location = new System.Drawing.Point(413, 89);
+            this.comboBoxOwner.Name = "comboBoxOwner";
+            this.comboBoxOwner.Size = new System.Drawing.Size(200, 23);
+            this.comboBoxOwner.TabIndex = 49;
+            // 
             // TactionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
@@ -699,5 +722,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPaymentMethods;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSeller;
+        private System.Windows.Forms.Label labelOwner;
+        private System.Windows.Forms.ComboBox comboBoxOwner;
     }
 }

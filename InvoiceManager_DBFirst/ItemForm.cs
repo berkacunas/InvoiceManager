@@ -786,5 +786,6 @@ namespace InvoiceManager_DBFirst
                     this._setItemGroupControls(row);
             }
         }
+
     }
 }

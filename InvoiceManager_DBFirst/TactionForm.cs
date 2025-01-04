@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Drawing;
+using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -52,6 +54,7 @@ namespace InvoiceManager_DBFirst
             this._setAutoCompleteTextBoxes();
             this._bindDataToGridViewTaction();
             this._bindDataToComboBoxPaymentMethod();
+            this._bindDataToComboBoxOwner();
 
             this._mode = Mode.Display;
             this.dateTimePickerTactionDate.Format = DateTimePickerFormat.Custom;
@@ -114,30 +117,37 @@ namespace InvoiceManager_DBFirst
             this._checkEditableCheckBoxes(false);
 
             DataGridViewRow row = this.dataGridViewTactions.CurrentRow;
-            int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
-
+            int tactionId = this._setTactionControls(row);
             this._bindDataToGridViewTactionDetails(tactionId);
-
-            this.dateTimePickerTactionDate.Value = DateTime.Parse(row.Cells["Date"].Value.ToString());
-            this.textBoxShop.Text = row.Cells["shopName"].Value.ToString();
-            this.comboBoxPaymentMethod.Text = row.Cells["paymentName"].Value.ToString();
-            this.textBoxTactionNo.Text = (row.Cells["tactionNo"].Value != null) ? row.Cells["tactionNo"].Value.ToString() : string.Empty;
-            this.textBoxTotalPrice.Text = row.Cells["totalPrice"].Value.ToString();
         }
 
         private void dataGridViewTactionDetails_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewRow row = this.dataGridViewTactionDetails.CurrentRow;
-            this.textBoxItemGroup.Text = row.Cells["itemGroup"].Value.ToString();
-            this.textBoxItem.Text = row.Cells["itemName"].Value.ToString();
-            this.textBoxItemSubType.Text = row.Cells["itemSubTypeId"].Value.ToString();
-            this.textBoxUnit.Text = row.Cells["unit"].Value.ToString();
-            this.textBoxUnitPrice.Text = row.Cells["unitPrice"].Value.ToString();
-            this.textBoxVat.Text = row.Cells["vat"].Value.ToString();
-            this.textBoxDiscountRate.Text = (row.Cells["discountRate"].Value != null) ? row.Cells["discountRate"].Value.ToString() : string.Empty;
-            this.textBoxDiscountedPrice.Text = (row.Cells["discountedPrice"].Value != null) ? row.Cells["discountedPrice"].Value.ToString() : string.Empty;
+            this._setTactionDetailsControls(row);
+        }
 
-            this.checkBoxDiscount.Checked = (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text) || !string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text));
+        private void dataGridViewTactions_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewTactions.Rows.Count > 0)
+            {
+                DataGridViewRow row = this.dataGridViewTactions.Rows[0];
+                if (row != null)
+                {
+                    int tactionId = this._setTactionControls(row);
+                    this._bindDataToGridViewTactionDetails(tactionId);
+                }
+            }
+        }
+
+        private void dataGridViewTactionDetails_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewTactionDetails.Rows.Count > 0)
+            {
+                DataGridViewRow row = this.dataGridViewTactionDetails.Rows[0];
+                if (row != null)
+                    this._setTactionDetailsControls(row);
+            }
         }
 
         private void buttonNewTaction_Click(object sender, EventArgs e)
@@ -155,6 +165,7 @@ namespace InvoiceManager_DBFirst
             this.dataGridViewTactionDetails.DataSource = null;
             this.dateTimePickerTactionDate.Value = DateTime.Now;
             this.comboBoxPaymentMethod.Text = string.Empty;
+            this.comboBoxOwner.Text = string.Empty;
         }
 
         private void buttonSaveTaction_Click(object sender, EventArgs e)
@@ -257,6 +268,7 @@ namespace InvoiceManager_DBFirst
             this._clearDetailsControls();
             this.dataGridViewTactionDetails.DataSource = null;
             this.comboBoxPaymentMethod.Text = string.Empty;
+            this.comboBoxOwner.Text = string.Empty;
 
             this._newTaction = null;
             this._mode = Mode.Display;
@@ -432,7 +444,7 @@ namespace InvoiceManager_DBFirst
                         from pjt in personJoinTable.DefaultIfEmpty()
                             //join person in dbContext.Person on taction.WhoDidIt equals person.id
 
-                        orderby taction.Dt ascending
+                        orderby taction.Dt descending
                         select new
                         {
                             tactionId = taction.id,
@@ -512,6 +524,17 @@ namespace InvoiceManager_DBFirst
             this.comboBoxPaymentMethod.DisplayMember = "Name";
             this.comboBoxPaymentMethod.ValueMember = "id";
         }
+
+        private void _bindDataToComboBoxOwner()
+        {
+            var query = from person in dbContext.Person
+                        select person;
+
+            this.comboBoxOwner.DataSource = query.ToList();
+            this.comboBoxOwner.DisplayMember = "Name";
+            this.comboBoxOwner.ValueMember = "id";
+        }
+
         private static void _setDefaultGridViewStyles(DataGridView gridview)
         {
             gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -598,6 +621,21 @@ namespace InvoiceManager_DBFirst
             this.textBoxItemSubType.AutoCompleteCustomSource = itemSubTypeNameCollection;
         }
 
+        private void _setEditableTactions(bool isEditable)
+        {
+            this.dataGridViewTactions.Enabled = !isEditable;
+            this.buttonSaveTaction.Enabled = isEditable;
+            this.buttonUpdateTaction.Enabled = isEditable;
+            this.buttonCancelTaction.Enabled = isEditable;
+            this.dateTimePickerTactionDate.Enabled = isEditable;
+            this.textBoxShop.ReadOnly = !isEditable;
+            this.comboBoxPaymentMethod.Enabled = isEditable;
+            this.comboBoxOwner.Enabled = isEditable;
+            this.checkBoxSeller.Enabled = isEditable;
+            this.textBoxSeller.ReadOnly = !isEditable;
+            this.textBoxTactionNo.ReadOnly = !isEditable;
+        }
+
         private void _setEditableDetails(bool isEditable)
         {
             this.buttonAddDetail.Enabled = isEditable;
@@ -613,20 +651,6 @@ namespace InvoiceManager_DBFirst
             this.textBoxDiscountRate.ReadOnly = !isEditable;
             this.textBoxDiscountedPrice.ReadOnly = !isEditable;
             this.textBoxDetailsNote.ReadOnly = !isEditable;
-        }
-
-        private void _setEditableTactions(bool isEditable)
-        {
-            this.dataGridViewTactions.Enabled = !isEditable;
-            this.buttonSaveTaction.Enabled = isEditable;
-            this.buttonUpdateTaction.Enabled = isEditable;
-            this.buttonCancelTaction.Enabled = isEditable;
-            this.dateTimePickerTactionDate.Enabled = isEditable;
-            this.textBoxShop.ReadOnly = !isEditable;
-            this.comboBoxPaymentMethod.Enabled = isEditable;
-            this.checkBoxSeller.Enabled = isEditable;
-            this.textBoxSeller.ReadOnly = !isEditable;
-            this.textBoxTactionNo.ReadOnly = !isEditable;
         }
 
         private void _setTactionDataFromUiToObject(Taction taction)
@@ -649,6 +673,12 @@ namespace InvoiceManager_DBFirst
                 return;
             }
 
+            if (string.IsNullOrEmpty(this.comboBoxOwner.Text))
+            {
+                MessageBox.Show("Missing value.", "You didn't select owner of this transaction.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (this.checkBoxSeller.Checked)
             {
                 if (string.IsNullOrEmpty(this.textBoxSeller.Text))
@@ -661,6 +691,7 @@ namespace InvoiceManager_DBFirst
             taction.Dt = this.dateTimePickerTactionDate.Value;
             taction.ShopId = dbContext.Shop.Where(r => r.Name == this.textBoxShop.Text).FirstOrDefault().id;
             taction.PaymentMethodId = dbContext.PaymentMethod.Where(r => r.Name == this.comboBoxPaymentMethod.Text).FirstOrDefault().id;
+            taction.WhoDidIt = dbContext.Person.Where(r => r.Name == this.comboBoxOwner.Text).FirstOrDefault().id;
 
             if (this.checkBoxSeller.Checked)
                 taction.SellerId = dbContext.Seller.Where(r => r.Name == this.textBoxSeller.Text).FirstOrDefault().id;
@@ -753,6 +784,34 @@ namespace InvoiceManager_DBFirst
             }
 
             details.Note = !string.IsNullOrEmpty(this.textBoxDetailsNote.Text) ? this.textBoxDetailsNote.Text : null;
+        }
+
+        private int _setTactionControls(DataGridViewRow row)
+        {
+            /* Returns TactionId */
+            int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+
+            this.dateTimePickerTactionDate.Value = DateTime.Parse(row.Cells["Date"].Value.ToString());
+            this.textBoxShop.Text = row.Cells["shopName"].Value.ToString();
+            this.comboBoxPaymentMethod.Text = row.Cells["paymentName"].Value.ToString();
+            this.comboBoxOwner.Text = row.Cells["personName"].Value.ToString();
+            this.textBoxTactionNo.Text = (row.Cells["tactionNo"].Value != null) ? row.Cells["tactionNo"].Value.ToString() : string.Empty;
+            this.textBoxTotalPrice.Text = row.Cells["totalPrice"].Value.ToString();
+
+            return tactionId;
+        }
+
+        private void _setTactionDetailsControls(DataGridViewRow row)
+        {
+            this.textBoxItemGroup.Text = row.Cells["itemGroup"].Value.ToString();
+            this.textBoxItem.Text = row.Cells["itemName"].Value.ToString();
+            this.textBoxItemSubType.Text = row.Cells["itemSubTypeId"].Value.ToString();
+            this.textBoxUnit.Text = row.Cells["unit"].Value.ToString();
+            this.textBoxUnitPrice.Text = row.Cells["unitPrice"].Value.ToString();
+            this.textBoxVat.Text = row.Cells["vat"].Value.ToString();
+            this.textBoxDiscountRate.Text = (row.Cells["discountRate"].Value != null) ? row.Cells["discountRate"].Value.ToString() : string.Empty;
+            this.textBoxDiscountedPrice.Text = (row.Cells["discountedPrice"].Value != null) ? row.Cells["discountedPrice"].Value.ToString() : string.Empty;
+            this.checkBoxDiscount.Checked = (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text) || !string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text));
         }
 
         private static void _limitTextBoxCharLength(TextBox textBox, int maxLength)
