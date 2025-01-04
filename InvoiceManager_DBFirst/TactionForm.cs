@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
@@ -19,6 +20,13 @@ namespace InvoiceManager_DBFirst
             Add,
             Edit,
             Search
+        }
+
+        enum BindType
+        {
+            Select,
+            Where,
+            Setnull
         }
 
         private InvoicesEntities dbContext;
@@ -50,11 +58,14 @@ namespace InvoiceManager_DBFirst
 
             _setDefaultGridViewStyles(this.dataGridViewTactions);
             _setDefaultGridViewStyles(this.dataGridViewTactionDetails);
-            
+
+            this.comboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.comboBoxOwner.DropDownStyle = ComboBoxStyle.DropDownList;
+
             this._setAutoCompleteTextBoxes();
             this._bindDataToGridViewTaction();
-            this._bindDataToComboBoxPaymentMethod();
-            this._bindDataToComboBoxOwner();
+            //this._bindDataToComboBoxPaymentMethod(BindType.Select);
+            //this._bindDataToComboBoxOwner(BindType.Select);
 
             this._mode = Mode.Display;
             this.dateTimePickerTactionDate.Format = DateTimePickerFormat.Custom;
@@ -67,9 +78,11 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewTactions.DataSource == null)
                 return;
 
-            string[] tactionsHeaderTexts = new string[] { "tactionId", "Date", "Shop", "Total Price", "Payment Type", "No", "Seller", "Who did it" };
-            int[] tactionsColumnWidths = new int[] { 50, 110, 200, 100, 120, 50, 100, 100 };
+            string[] tactionsHeaderTexts = new string[] { "tactionId", "paymentId", "ownerId", "Date", "Shop", "Total Price", "Payment Type", "No", "Seller", "Who did it" };
+            int[] tactionsColumnWidths = new int[] { 50, 50, 50, 110, 200, 100, 120, 50, 100, 100 };
             DataGridViewContentAlignment[] tactionsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleRight,
@@ -81,6 +94,8 @@ namespace InvoiceManager_DBFirst
             _setDefaultGridViewHeaderStyles(this.dataGridViewTactions, tactionsHeaderTexts, tactionsColumnWidths, tactionsColumnAlignments);
 
             this.dataGridViewTactions.Columns["tactionId"].Visible = false;
+            this.dataGridViewTactions.Columns["paymentId"].Visible = false;
+            this.dataGridViewTactions.Columns["ownerId"].Visible = false;
         }
 
         private void DataGridViewTactionDetails_DataSourceChanged(object sender, EventArgs e)
@@ -164,8 +179,9 @@ namespace InvoiceManager_DBFirst
             this._clearDetailsControls();
             this.dataGridViewTactionDetails.DataSource = null;
             this.dateTimePickerTactionDate.Value = DateTime.Now;
-            this.comboBoxPaymentMethod.Text = string.Empty;
-            this.comboBoxOwner.Text = string.Empty;
+
+            this._bindDataToComboBoxPaymentMethod(BindType.Select);
+            this._bindDataToComboBoxOwner(BindType.Select);
         }
 
         private void buttonSaveTaction_Click(object sender, EventArgs e)
@@ -267,8 +283,9 @@ namespace InvoiceManager_DBFirst
             this._clearTactionControls();
             this._clearDetailsControls();
             this.dataGridViewTactionDetails.DataSource = null;
-            this.comboBoxPaymentMethod.Text = string.Empty;
-            this.comboBoxOwner.Text = string.Empty;
+
+            this._bindDataToComboBoxPaymentMethod(BindType.Setnull);
+            this._bindDataToComboBoxOwner(BindType.Setnull);
 
             this._newTaction = null;
             this._mode = Mode.Display;
@@ -448,13 +465,15 @@ namespace InvoiceManager_DBFirst
                         select new
                         {
                             tactionId = taction.id,
+                            paymentId = payment.id,
+                            ownerId = pjt.id,
                             date = taction.Dt,
                             shopName = shop.Name,
                             totalPrice = taction.TotalPrice + " TL",
                             paymentName = payment.Name,
                             tactionNo = taction.No,
                             sellerName = sjt.Name,
-                            personName = pjt.Name + " " + pjt.Surname
+                            personName = pjt.Fullname
                         };
 
             this.dataGridViewTactions.DataSource = query.ToList();
@@ -515,24 +534,53 @@ namespace InvoiceManager_DBFirst
             this.dataGridViewTactionDetails.DataSource = query.ToList();
         }
 
-        private void _bindDataToComboBoxPaymentMethod()
+        private void _bindDataToComboBoxPaymentMethod(BindType bindType, int paymentMethodId = 0)
         {
-            var query = from payment in dbContext.PaymentMethod
-                        select payment;
+            IQueryable<PaymentMethod> query = null;
+
+            switch (bindType)
+            {
+                case BindType.Select:
+                    query = from payment in dbContext.PaymentMethod select payment;
+                    break;
+                case BindType.Where:
+                    query = from payment in dbContext.PaymentMethod where payment.id == paymentMethodId select payment;
+                    break;
+                case BindType.Setnull:
+                    this.comboBoxPaymentMethod.DataSource = null;
+                    return;
+            }
 
             this.comboBoxPaymentMethod.DataSource = query.ToList();
             this.comboBoxPaymentMethod.DisplayMember = "Name";
             this.comboBoxPaymentMethod.ValueMember = "id";
         }
 
-        private void _bindDataToComboBoxOwner()
+        private void _bindDataToComboBoxOwner(BindType bindType, int ownerId = 0)
         {
-            var query = from person in dbContext.Person
-                        select person;
+            IQueryable<Person> query = null;
+
+            switch (bindType)
+            {
+                case BindType.Select:
+                    query = from person in dbContext.Person select person;
+                    break;
+                case BindType.Where:
+                    query = from person in dbContext.Person where person.id == ownerId select person;
+                    break;
+                case BindType.Setnull:
+                    this.comboBoxOwner.DataSource = null;
+                    return;
+            }
 
             this.comboBoxOwner.DataSource = query.ToList();
-            this.comboBoxOwner.DisplayMember = "Name";
+            this.comboBoxOwner.DisplayMember = "Fullname";
             this.comboBoxOwner.ValueMember = "id";
+
+            if (bindType == BindType.Select)
+                this.comboBoxOwner.SelectedValue = 4;   // <No One>
+            else if (bindType == BindType.Where)
+                this.comboBoxOwner.SelectedValue = ownerId;
         }
 
         private static void _setDefaultGridViewStyles(DataGridView gridview)
@@ -690,9 +738,8 @@ namespace InvoiceManager_DBFirst
 
             taction.Dt = this.dateTimePickerTactionDate.Value;
             taction.ShopId = dbContext.Shop.Where(r => r.Name == this.textBoxShop.Text).FirstOrDefault().id;
-            taction.PaymentMethodId = dbContext.PaymentMethod.Where(r => r.Name == this.comboBoxPaymentMethod.Text).FirstOrDefault().id;
-            taction.WhoDidIt = dbContext.Person.Where(r => r.Name == this.comboBoxOwner.Text).FirstOrDefault().id;
-
+            taction.PaymentMethodId = ((PaymentMethod)this.comboBoxPaymentMethod.SelectedItem).id;
+            taction.WhoDidIt = ((Person)this.comboBoxOwner.SelectedItem).id;
             if (this.checkBoxSeller.Checked)
                 taction.SellerId = dbContext.Seller.Where(r => r.Name == this.textBoxSeller.Text).FirstOrDefault().id;
 
@@ -790,11 +837,18 @@ namespace InvoiceManager_DBFirst
         {
             /* Returns TactionId */
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+            int paymentId = Convert.ToInt32(row.Cells["paymentId"].Value);
 
             this.dateTimePickerTactionDate.Value = DateTime.Parse(row.Cells["Date"].Value.ToString());
             this.textBoxShop.Text = row.Cells["shopName"].Value.ToString();
-            this.comboBoxPaymentMethod.Text = row.Cells["paymentName"].Value.ToString();
-            this.comboBoxOwner.Text = row.Cells["personName"].Value.ToString();
+            this._bindDataToComboBoxPaymentMethod(BindType.Where, paymentId);
+
+            if (row.Cells["ownerId"].Value != null)
+            {
+                int ownerId = Convert.ToInt32(row.Cells["ownerId"].Value);
+                this._bindDataToComboBoxOwner(BindType.Where, ownerId);
+            }
+
             this.textBoxTactionNo.Text = (row.Cells["tactionNo"].Value != null) ? row.Cells["tactionNo"].Value.ToString() : string.Empty;
             this.textBoxTotalPrice.Text = row.Cells["totalPrice"].Value.ToString();
 

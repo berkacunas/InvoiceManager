@@ -35,6 +35,22 @@
         <AssociationConnector Association="InvoicesModel.FK_Taction_ShopId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_ShopGroupTypeId_ShopTypeId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_TactionDetails_TactionId" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="InvoicesModel.CashTransfer_tracking" Width="1.5" PointX="10.75" PointY="9.75" />
+        <EntityTypeShape EntityType="InvoicesModel.CurrencyMovement_tracking" Width="1.5" PointX="11.75" PointY="0.75" />
+        <EntityTypeShape EntityType="InvoicesModel.Item_tracking" Width="1.5" PointX="12.75" PointY="9.75" />
+        <EntityTypeShape EntityType="InvoicesModel.ItemGroup_tracking" Width="1.5" PointX="10.75" PointY="12.75" />
+        <EntityTypeShape EntityType="InvoicesModel.ItemSubType_tracking" Width="1.5" PointX="12.75" PointY="12.75" />
+        <EntityTypeShape EntityType="InvoicesModel.ItemTopGroup_tracking" Width="1.5" PointX="13.75" PointY="0.75" />
+        <EntityTypeShape EntityType="InvoicesModel.PaymentMethod_tracking" Width="1.5" PointX="13.75" PointY="3.75" />
+        <EntityTypeShape EntityType="InvoicesModel.Person_tracking" Width="1.5" PointX="13.75" PointY="6.75" />
+        <EntityTypeShape EntityType="InvoicesModel.scope_info" Width="1.5" PointX="0.75" PointY="14.75" />
+        <EntityTypeShape EntityType="InvoicesModel.scope_info_client" Width="1.5" PointX="2.75" PointY="14.75" />
+        <EntityTypeShape EntityType="InvoicesModel.Seller_tracking" Width="1.5" PointX="14.75" PointY="9.75" />
+        <EntityTypeShape EntityType="InvoicesModel.Shop_tracking" Width="1.5" PointX="14.75" PointY="12.75" />
+        <EntityTypeShape EntityType="InvoicesModel.ShopGroup_tracking" Width="1.5" PointX="15.75" PointY="0.75" />
+        <EntityTypeShape EntityType="InvoicesModel.ShopType_tracking" Width="1.5" PointX="15.75" PointY="3.75" />
+        <EntityTypeShape EntityType="InvoicesModel.Taction_tracking" Width="1.5" PointX="15.75" PointY="6.75" />
+        <EntityTypeShape EntityType="InvoicesModel.TactionDetails_tracking" Width="1.5" PointX="10.75" PointY="15.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

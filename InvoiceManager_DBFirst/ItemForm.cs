@@ -25,6 +25,13 @@ namespace InvoiceManager_DBFirst
             Search
         }
 
+        enum BindType
+        {
+            Select,
+            Where,
+            Setnull
+        }
+
         private enum SortOrder
         {
             ASC,
@@ -136,9 +143,9 @@ namespace InvoiceManager_DBFirst
             int groupId = (row == null) ? -1 : Convert.ToInt32(row.Cells["itemGroupId"].Value);
 
             if (checkBoxItemOptionsEdit.Checked)
-                this._bindDataToComboBoxItemOptionsGroup(0);
+                this._bindDataToComboBoxItemOptionsGroup(BindType.Select);
             else
-                this._bindDataToComboBoxItemOptionsGroup(groupId);
+                this._bindDataToComboBoxItemOptionsGroup(BindType.Where, groupId);
         }
 
         private void checkBoxGroupOptionsEdit_CheckedChanged(object sender, EventArgs e)
@@ -147,9 +154,9 @@ namespace InvoiceManager_DBFirst
             int topGroupId = (row == null) ? -1 : Convert.ToInt32(row.Cells["itemTopGroupId"].Value);
 
             if (checkBoxGroupOptionsEdit.Checked)
-                this._bindDataToComboBoxGroupOptionsTopGroup(0);
+                this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Select);
             else
-                this._bindDataToComboBoxGroupOptionsTopGroup(topGroupId);
+                this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Where, topGroupId);
         }
 
         private void buttonNewItem_Click(object sender, EventArgs e)
@@ -160,13 +167,13 @@ namespace InvoiceManager_DBFirst
 
             if (this._itemMode == Mode.Add)
             {
-                this._bindDataToComboBoxItemOptionsGroup(0);
+                this._bindDataToComboBoxItemOptionsGroup(BindType.Select);
                 this._setEditableItems(true);
                 this._newItem = new Item();
             }
             else
             {
-                this._bindDataToComboBoxItemOptionsGroup(-1);
+                this._bindDataToComboBoxItemOptionsGroup(BindType.Setnull);
                 this._setEditableItems(false);
             }
 
@@ -201,6 +208,7 @@ namespace InvoiceManager_DBFirst
             if (row == null)
             {
                 MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
@@ -227,6 +235,7 @@ namespace InvoiceManager_DBFirst
             if (row == null)
             {
                 MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
@@ -243,7 +252,7 @@ namespace InvoiceManager_DBFirst
                 MessageBox.Show("An error occurred while deleting item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            this._bindDataToComboBoxItemOptionsGroup(-1);
+            this._bindDataToComboBoxItemOptionsGroup(BindType.Setnull);
             this._bindDataToGridViewItem();
             this._clearItemControls();
         }
@@ -256,13 +265,13 @@ namespace InvoiceManager_DBFirst
 
             if (this._groupMode == Mode.Add)
             {
-                this._bindDataToComboBoxGroupOptionsTopGroup(0);
+                this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Select);
                 this._setEditableItemGroups(true);
                 this._newItemGroup = new ItemGroup();
             }
             else
             {
-                this._bindDataToComboBoxGroupOptionsTopGroup(-1);
+                this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Setnull);
                 this._setEditableItemGroups(false);
             }
 
@@ -297,6 +306,7 @@ namespace InvoiceManager_DBFirst
             if (row == null)
             {
                 MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             int groupId = Convert.ToInt32(row.Cells["itemGroupId"].Value);
@@ -323,6 +333,7 @@ namespace InvoiceManager_DBFirst
             if (row == null)
             {
                 MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             int groupId = Convert.ToInt32(row.Cells["itemGroupId"].Value);
@@ -360,8 +371,8 @@ namespace InvoiceManager_DBFirst
                 MessageBox.Show("An error occurred while deleting item group.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            this._bindDataToComboBoxItemOptionsGroup(-1);
-            this._bindDataToComboBoxGroupOptionsTopGroup(-1);
+            this._bindDataToComboBoxItemOptionsGroup(BindType.Setnull);
+            this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Setnull);
             this._bindDataToGridViewItemGroup();
             this._clearItemGroupControls();
         }
@@ -379,7 +390,7 @@ namespace InvoiceManager_DBFirst
             else
                 this._setEditableItemTopGroups(false);
 
-            this._bindDataToComboBoxGroupOptionsTopGroup(-1);
+            this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Setnull);
             this._clearItemTopGroupControls();
         }
 
@@ -403,7 +414,7 @@ namespace InvoiceManager_DBFirst
                 MessageBox.Show("An error occurred while adding item top group.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            this._bindDataToComboBoxTopGroupOptionsTopGroup(this._newItemTopGroup.id);
+            this._bindDataToComboBoxTopGroupOptionsTopGroup(BindType.Where, this._newItemTopGroup.id);
             this._clearItemTopGroupControls();
             this._setEditableItemTopGroups(false);
             this._newItemTopGroup = new ItemTopGroup();
@@ -416,6 +427,7 @@ namespace InvoiceManager_DBFirst
             if (this.comboBoxTopGroupOptionsTopGroup.SelectedItem == null)
             {
                 MessageBox.Show("Item not selected.", "Select the top group item you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             ItemTopGroup itemTopGroup = (ItemTopGroup)this.comboBoxTopGroupOptionsTopGroup.SelectedItem;
@@ -430,7 +442,7 @@ namespace InvoiceManager_DBFirst
                 MessageBox.Show("An error occurred while deleting item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            this._bindDataToComboBoxGroupOptionsTopGroup(itemTopGroup.id);
+            this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Where, itemTopGroup.id);
         }
 
         private void buttonDeleteTopGroup_Click(object sender, EventArgs e)
@@ -438,6 +450,7 @@ namespace InvoiceManager_DBFirst
             if (this.comboBoxTopGroupOptionsTopGroup.SelectedItem == null)
             {
                 MessageBox.Show("Item not selected.", "Select the top group item you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             ItemTopGroup itemTopGroup = (ItemTopGroup)this.comboBoxTopGroupOptionsTopGroup.SelectedItem;
@@ -468,7 +481,7 @@ namespace InvoiceManager_DBFirst
                 MessageBox.Show("An error occurred while deleting item top group.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            this._bindDataToComboBoxGroupOptionsTopGroup(-1);
+            this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Setnull);
             this._bindDataToGridViewItemGroup();
             this._clearItemTopGroupControls();
         }
@@ -562,7 +575,7 @@ namespace InvoiceManager_DBFirst
             if (row.Cells["itemNote"].Value != null)
                 this.textBoxItemOptionsNote.Text = row.Cells["itemNote"].Value.ToString();
 
-            this._bindDataToComboBoxItemOptionsGroup(groupId);
+            this._bindDataToComboBoxItemOptionsGroup(BindType.Where, groupId);
         }
 
         private void _setItemGroupControls(DataGridViewRow row)
@@ -570,8 +583,8 @@ namespace InvoiceManager_DBFirst
             int topGroupId = Convert.ToInt32(row.Cells["itemTopGroupId"].Value);
             this.textBoxGroupOptionsGroup.Text = row.Cells["itemGroupName"].Value.ToString();
 
-            this._bindDataToComboBoxTopGroupOptionsTopGroup(topGroupId);
-            this._bindDataToComboBoxGroupOptionsTopGroup(topGroupId);
+            this._bindDataToComboBoxTopGroupOptionsTopGroup(BindType.Where, topGroupId);
+            this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Where, topGroupId);
         }
 
         public static void _enableDataGridViewMultiSelect(DataGridView gridview, bool enable)
@@ -613,18 +626,22 @@ namespace InvoiceManager_DBFirst
             this.dataGridViewItems.DataSource = query.ToList();
         }
 
-        private void _bindDataToComboBoxItemOptionsGroup(int groupId)   // set groupId to 0 to fetch all data from db.
+        private void _bindDataToComboBoxItemOptionsGroup(BindType bindType, int groupId = 0) // When bindType is set to "Where", groupId must be passed.
         {
             IQueryable<ItemGroup> query = null;
 
-            if (groupId == 0)
-                query = from itemGroup in dbContext.ItemGroup orderby itemGroup.Name ascending select itemGroup;
-            else if (groupId > 0)
-                query = from itemGroup in dbContext.ItemGroup where itemGroup.id == groupId select itemGroup;
-            else if (groupId == -1)
+            switch (bindType)
             {
-                this.comboBoxItemOptionsGroup.DataSource = null;
-                return;
+                case BindType.Select:
+                    query = from itemGroup in dbContext.ItemGroup orderby itemGroup.Name ascending select itemGroup;
+                    break;
+                case BindType.Where:
+                    query = from itemGroup in dbContext.ItemGroup where itemGroup.id == groupId select itemGroup;
+                    break;
+                case BindType.Setnull:
+                    this.comboBoxItemOptionsGroup.DataSource = null;
+                    return;
+
             }
 
             this.comboBoxItemOptionsGroup.DataSource = query.ToList();
@@ -632,18 +649,21 @@ namespace InvoiceManager_DBFirst
             this.comboBoxItemOptionsGroup.ValueMember = "id";
         }
 
-        private void _bindDataToComboBoxGroupOptionsTopGroup(int topGroupId)
+        private void _bindDataToComboBoxGroupOptionsTopGroup(BindType bindType, int topGroupId = 0)
         {
             IQueryable<ItemTopGroup> query = null;
 
-            if (topGroupId == 0)
-                query = from itemTopGroup in dbContext.ItemTopGroup orderby itemTopGroup.Name ascending select itemTopGroup;
-            else if (topGroupId > 0)
-                query = from itemTopGroup in dbContext.ItemTopGroup where itemTopGroup.id == topGroupId select itemTopGroup;
-            else if (topGroupId == -1)
+            switch (bindType)
             {
-                this.comboBoxGroupOptionsTopGroup.DataSource = null;
-                return;
+                case BindType.Select:
+                    query = from itemTopGroup in dbContext.ItemTopGroup orderby itemTopGroup.Name ascending select itemTopGroup;
+                    break;
+                case BindType.Where:
+                    query = from itemTopGroup in dbContext.ItemTopGroup where itemTopGroup.id == topGroupId select itemTopGroup;
+                    break;
+                case BindType.Setnull:
+                    this.comboBoxGroupOptionsTopGroup.DataSource = null;
+                    return;
             }
 
             this.comboBoxGroupOptionsTopGroup.DataSource = query.ToList();
@@ -651,9 +671,20 @@ namespace InvoiceManager_DBFirst
             this.comboBoxGroupOptionsTopGroup.ValueMember = "id";
         }
 
-        private void _bindDataToComboBoxTopGroupOptionsTopGroup(int topGroupId)
+        private void _bindDataToComboBoxTopGroupOptionsTopGroup(BindType bindType, int topGroupId)
         {
-            var query = from itemTopGroup in dbContext.ItemTopGroup where itemTopGroup.id == topGroupId select itemTopGroup;
+            IQueryable<ItemTopGroup> query = null;
+
+            switch (bindType)
+            {
+                case BindType.Select:
+                    throw new NotImplementedException("This feature is unnecessary and is not implemented in this method.");
+                case BindType.Where:
+                    query = from itemTopGroup in dbContext.ItemTopGroup where itemTopGroup.id == topGroupId select itemTopGroup;
+                    break;
+                case BindType.Setnull:
+                    throw new NotImplementedException("This feature is unnecessary and is not implemented in this method.");
+            }
 
             this.comboBoxTopGroupOptionsTopGroup.DataSource = query.ToList();
             this.comboBoxTopGroupOptionsTopGroup.DisplayMember = "Name";

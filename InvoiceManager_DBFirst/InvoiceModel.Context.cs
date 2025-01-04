@@ -39,5 +39,21 @@ namespace InvoiceManager_DBFirst
         public virtual DbSet<ShopType> ShopType { get; set; }
         public virtual DbSet<Taction> Taction { get; set; }
         public virtual DbSet<TactionDetails> TactionDetails { get; set; }
+        public virtual DbSet<CashTransfer_tracking> CashTransfer_tracking { get; set; }
+        public virtual DbSet<CurrencyMovement_tracking> CurrencyMovement_tracking { get; set; }
+        public virtual DbSet<Item_tracking> Item_tracking { get; set; }
+        public virtual DbSet<ItemGroup_tracking> ItemGroup_tracking { get; set; }
+        public virtual DbSet<ItemSubType_tracking> ItemSubType_tracking { get; set; }
+        public virtual DbSet<ItemTopGroup_tracking> ItemTopGroup_tracking { get; set; }
+        public virtual DbSet<PaymentMethod_tracking> PaymentMethod_tracking { get; set; }
+        public virtual DbSet<Person_tracking> Person_tracking { get; set; }
+        public virtual DbSet<scope_info> scope_info { get; set; }
+        public virtual DbSet<scope_info_client> scope_info_client { get; set; }
+        public virtual DbSet<Seller_tracking> Seller_tracking { get; set; }
+        public virtual DbSet<Shop_tracking> Shop_tracking { get; set; }
+        public virtual DbSet<ShopGroup_tracking> ShopGroup_tracking { get; set; }
+        public virtual DbSet<ShopType_tracking> ShopType_tracking { get; set; }
+        public virtual DbSet<Taction_tracking> Taction_tracking { get; set; }
+        public virtual DbSet<TactionDetails_tracking> TactionDetails_tracking { get; set; }
     }
 }
