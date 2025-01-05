@@ -270,6 +270,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="ISynchronizeInvokeExtensions.cs" />
     <Compile Include="Item.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -340,6 +341,12 @@
     <Compile Include="Shop.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ShopForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShopForm.Designer.cs">
+      <DependentUpon>ShopForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ShopGroup.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -394,6 +401,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ShopForm.resx">
+      <DependentUpon>ShopForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SyncWithSQLiteDatabaseForm.resx">
       <DependentUpon>SyncWithSQLiteDatabaseForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -426,6 +436,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\24-hours.png" />
+    <EmbeddedResource Include="assets\transaction.png" />
+    <EmbeddedResource Include="assets\person.png" />
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
     <Content Include="InvoiceModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

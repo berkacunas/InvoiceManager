@@ -39,6 +39,25 @@ namespace InvoiceManager_DBFirst
             UNORDERED
         }
 
+        public event Notify ItemsLoaded;
+        public event Notify ItemSaved;
+        public event Notify ItemUpdated;
+        public event Notify ItemRemoved;
+
+        public event Notify ItemGroupsLoaded;
+        public event Notify ItemGroupSaved;
+        public event Notify ItemGroupUpdated;
+        public event Notify ItemGroupRemoved;
+
+        public event Notify ItemTopGroupsLoaded;
+        public event Notify ItemTopGroupSaved;
+        public event Notify ItemTopGroupUpdated;
+        public event Notify ItemTopGroupRemoved;
+
+        public event Notify ItemChanged;
+        public event Notify ItemFormOpened;
+        public event Notify ItemFormClosed;
+
         private InvoicesEntities dbContext;
 
         private Item _newItem;
@@ -68,6 +87,8 @@ namespace InvoiceManager_DBFirst
         private void ItemForm_Load(object sender, EventArgs e)
         {
             this._setModes(Mode.Display);
+
+            this.onItemFormOpened("Item Window opened", DateTime.Now);
 
             _setDefaultGridViewStyles(this.dataGridViewItems);
             _setDefaultGridViewStyles(this.dataGridViewItemGroups);
@@ -188,6 +209,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
+                this.onItemSaved("Item saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -219,6 +241,8 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
+                this.onItemUpdated("Item updated", DateTime.Now);
+
             }
             catch (Exception ex)
             {
@@ -246,6 +270,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 dbContext.SaveChanges();
+                this.onItemRemoved("Item removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -286,6 +311,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
+                this.onItemGroupSaved("ItemGroup saved.", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -317,6 +343,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
+                this.onItemGroupUpdated("ItemGroup updated", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -365,6 +392,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 dbContext.SaveChanges();
+                this.onItemGroupRemoved("ItemGroup removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -408,6 +436,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
+                this.onItemTopGroupSaved("ItemTopGroup saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -436,6 +465,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
+                this.onItemTopGroupUpdated("ItemTopGroup updated", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -475,6 +505,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 dbContext.SaveChanges();
+                this.onItemTopGroupRemoved("ItemTopGroup removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -607,6 +638,8 @@ namespace InvoiceManager_DBFirst
                         };
 
             this.dataGridViewItemGroups.DataSource = query.ToList();
+            this.onItemGroupsLoaded("ItemGroups Loaded", DateTime.Now);
+            this.onItemTopGroupsLoaded("ItemTopGroups Loaded", DateTime.Now);
         }
 
         private void _bindDataToGridViewItem()
@@ -624,6 +657,7 @@ namespace InvoiceManager_DBFirst
                         };
 
             this.dataGridViewItems.DataSource = query.ToList();
+            this.onItemsLoaded("Items Loaded", DateTime.Now);
         }
 
         private void _bindDataToComboBoxItemOptionsGroup(BindType bindType, int groupId = 0) // When bindType is set to "Where", groupId must be passed.
@@ -818,5 +852,118 @@ namespace InvoiceManager_DBFirst
             }
         }
 
+        protected virtual void onItemSaved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemSaved?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemUpdated(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemUpdated?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemsLoaded(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemsLoaded?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemRemoved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemRemoved?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemGroupSaved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemGroupSaved?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemGroupUpdated(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemGroupUpdated?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemGroupsLoaded(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemGroupsLoaded?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemGroupRemoved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemGroupRemoved?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemTopGroupSaved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemTopGroupSaved?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemTopGroupUpdated(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemTopGroupUpdated?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemTopGroupsLoaded(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemTopGroupsLoaded?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemTopGroupRemoved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemTopGroupRemoved?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
+        protected virtual void onItemChanged(string message, DateTime eventTime)
+        {
+            this.ItemChanged?.Invoke(message, eventTime);
+        }
+
+        protected virtual void onItemFormOpened(string message, DateTime eventTime)
+        {
+            this.ItemFormOpened?.Invoke(message, eventTime);
+        }
+
+        protected virtual void onItemFormClosed(string message, DateTime eventTime)
+        {
+            this.ItemFormClosed?.Invoke(message, eventTime);
+        }
+
+        private void ItemForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            switch (e.CloseReason)
+            {
+                case CloseReason.UserClosing:
+                    this.onItemFormClosed("Item Window closed by user", DateTime.Now);
+                    break;
+
+                case CloseReason.WindowsShutDown:
+                    this.onItemFormClosed("Item Window closed as a part of Windows Shutdown", DateTime.Now);
+                    break;
+
+                case CloseReason.TaskManagerClosing:
+                    this.onItemFormClosed("Item Window closed forcibly by Task Manager", DateTime.Now);
+                    break;
+
+                case CloseReason.FormOwnerClosing:
+                    this.onItemFormClosed("Item Window closed by Form Owner", DateTime.Now);
+                    break;
+
+                default:
+                    this.onItemFormClosed("Item Window closed with an unknown reasoun", DateTime.Now);
+                    break;
+
+            }
+        }
     }
 }

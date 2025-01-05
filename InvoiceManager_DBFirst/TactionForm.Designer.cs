@@ -72,25 +72,26 @@
             this.buttonDeleteTaction = new System.Windows.Forms.Button();
             this.buttonUpdateTaction = new System.Windows.Forms.Button();
             this.groupBoxTactionOptions = new System.Windows.Forms.GroupBox();
+            this.labelOwner = new System.Windows.Forms.Label();
+            this.comboBoxOwner = new System.Windows.Forms.ComboBox();
             this.buttonCancelTaction = new System.Windows.Forms.Button();
             this.checkBoxTactionsEditable = new System.Windows.Forms.CheckBox();
             this.groupBoxTactionDetailsOptions = new System.Windows.Forms.GroupBox();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuStripTaction = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItemActions = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemItems = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemShops = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemPaymentMethods = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSeller = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.labelOwner = new System.Windows.Forms.Label();
-            this.comboBoxOwner = new System.Windows.Forms.ComboBox();
+            this.toolStripTaction = new System.Windows.Forms.ToolStrip();
+            this.statusStripTaction = new System.Windows.Forms.StatusStrip();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactions)).BeginInit();
             this.groupBoxTactions.SuspendLayout();
             this.groupBoxTactionDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactionDetails)).BeginInit();
             this.groupBoxTactionOptions.SuspendLayout();
             this.groupBoxTactionDetailsOptions.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
+            this.menuStripTaction.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewTactions
@@ -509,6 +510,23 @@
             this.groupBoxTactionOptions.TabStop = false;
             this.groupBoxTactionOptions.Text = "Transaction Options";
             // 
+            // labelOwner
+            // 
+            this.labelOwner.AutoSize = true;
+            this.labelOwner.Location = new System.Drawing.Point(336, 93);
+            this.labelOwner.Name = "labelOwner";
+            this.labelOwner.Size = new System.Drawing.Size(43, 15);
+            this.labelOwner.TabIndex = 48;
+            this.labelOwner.Text = "Owner";
+            // 
+            // comboBoxOwner
+            // 
+            this.comboBoxOwner.FormattingEnabled = true;
+            this.comboBoxOwner.Location = new System.Drawing.Point(413, 89);
+            this.comboBoxOwner.Name = "comboBoxOwner";
+            this.comboBoxOwner.Size = new System.Drawing.Size(200, 23);
+            this.comboBoxOwner.TabIndex = 49;
+            // 
             // buttonCancelTaction
             // 
             this.buttonCancelTaction.Location = new System.Drawing.Point(364, 133);
@@ -563,15 +581,15 @@
             this.groupBoxTactionDetailsOptions.TabStop = false;
             this.groupBoxTactionDetailsOptions.Text = "Detail Options";
             // 
-            // menuStrip1
+            // menuStripTaction
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStripTaction.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemActions});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1690, 24);
-            this.menuStrip1.TabIndex = 5;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStripTaction.Location = new System.Drawing.Point(0, 0);
+            this.menuStripTaction.Name = "menuStripTaction";
+            this.menuStripTaction.Size = new System.Drawing.Size(1690, 24);
+            this.menuStripTaction.TabIndex = 5;
+            this.menuStripTaction.Text = "menuStrip1";
             // 
             // toolStripMenuItemActions
             // 
@@ -609,47 +627,40 @@
             this.toolStripMenuItemSeller.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuItemSeller.Text = "Sellers";
             // 
-            // toolStrip1
+            // toolStripTaction
             // 
-            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1690, 25);
-            this.toolStrip1.TabIndex = 6;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStripTaction.Location = new System.Drawing.Point(0, 24);
+            this.toolStripTaction.Name = "toolStripTaction";
+            this.toolStripTaction.Size = new System.Drawing.Size(1690, 25);
+            this.toolStripTaction.TabIndex = 6;
+            this.toolStripTaction.Text = "toolStrip1";
             // 
-            // labelOwner
+            // statusStripTaction
             // 
-            this.labelOwner.AutoSize = true;
-            this.labelOwner.Location = new System.Drawing.Point(336, 93);
-            this.labelOwner.Name = "labelOwner";
-            this.labelOwner.Size = new System.Drawing.Size(43, 15);
-            this.labelOwner.TabIndex = 48;
-            this.labelOwner.Text = "Owner";
-            // 
-            // comboBoxOwner
-            // 
-            this.comboBoxOwner.FormattingEnabled = true;
-            this.comboBoxOwner.Location = new System.Drawing.Point(413, 89);
-            this.comboBoxOwner.Name = "comboBoxOwner";
-            this.comboBoxOwner.Size = new System.Drawing.Size(200, 23);
-            this.comboBoxOwner.TabIndex = 49;
+            this.statusStripTaction.Location = new System.Drawing.Point(0, 885);
+            this.statusStripTaction.Name = "statusStripTaction";
+            this.statusStripTaction.Size = new System.Drawing.Size(1690, 22);
+            this.statusStripTaction.TabIndex = 7;
+            this.statusStripTaction.Text = "statusStrip1";
             // 
             // TactionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1690, 907);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.statusStripTaction);
+            this.Controls.Add(this.toolStripTaction);
             this.Controls.Add(this.groupBoxTactionOptions);
             this.Controls.Add(this.groupBoxTactionDetailsOptions);
             this.Controls.Add(this.groupBoxTactionDetails);
             this.Controls.Add(this.groupBoxTactions);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.menuStripTaction);
             this.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.Name = "TactionForm";
             this.Text = "Transactions";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TactionForm_FormClosing);
             this.Load += new System.EventHandler(this.TactionForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactions)).EndInit();
             this.groupBoxTactions.ResumeLayout(false);
@@ -659,8 +670,8 @@
             this.groupBoxTactionOptions.PerformLayout();
             this.groupBoxTactionDetailsOptions.ResumeLayout(false);
             this.groupBoxTactionDetailsOptions.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menuStripTaction.ResumeLayout(false);
+            this.menuStripTaction.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -715,14 +726,15 @@
         private System.Windows.Forms.CheckBox checkBoxTactionsEditable;
         private System.Windows.Forms.Button buttonCancelTaction;
         private System.Windows.Forms.GroupBox groupBoxTactionDetailsOptions;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStripTaction;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemActions;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemItems;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemShops;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPaymentMethods;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStripTaction;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSeller;
         private System.Windows.Forms.Label labelOwner;
         private System.Windows.Forms.ComboBox comboBoxOwner;
+        private System.Windows.Forms.StatusStrip statusStripTaction;
     }
 }

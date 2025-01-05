@@ -443,6 +443,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "ItemForm";
             this.Text = "Edit Items...";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ItemForm_FormClosing);
             this.Load += new System.EventHandler(this.ItemForm_Load);
             this.groupBoxItems.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItems)).EndInit();
