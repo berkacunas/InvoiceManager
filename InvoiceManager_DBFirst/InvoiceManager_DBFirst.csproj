@@ -35,6 +35,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>cash.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Win32Resource>
+    </Win32Resource>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="sqlitepclraw.bundle_e_sqlite3" Version="2.0.4" />
     <PackageReference Include="sqlitepclraw.ugly" Version="2.0.4" />
@@ -435,9 +442,11 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\24-hours.png" />
     <EmbeddedResource Include="assets\transaction.png" />
     <EmbeddedResource Include="assets\person.png" />
+    <EmbeddedResource Include="assets\cash.png" />
+    <EmbeddedResource Include="assets\cash.ico" />
+    <Content Include="cash.ico" />
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
     <Content Include="InvoiceModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -451,10 +460,8 @@
     </Content>
     <Content Include="todos.txt" />
     <EmbeddedResource Include="assets\item.png" />
-    <Content Include="assets\convenience-store.png" />
     <EmbeddedResource Include="assets\payment-method.png" />
     <Content Include="assets\packaging.png" />
-    <Content Include="assets\procurement.png" />
     <EmbeddedResource Include="assets\seller.png" />
     <EmbeddedResource Include="assets\shop.png" />
     <Content Include="assets\stand.png" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLitePCL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -50,11 +51,6 @@ namespace InvoiceManager_DBFirst
         public TactionForm()
         {
             InitializeComponent();
-
-            this.toolStripMenuItemItems.Image = BitmapResourceLoader.Item;
-            this.toolStripMenuItemShops.Image = BitmapResourceLoader.Shop;
-            this.toolStripMenuItemSeller.Image = BitmapResourceLoader.Seller;
-            this.toolStripMenuItemPaymentMethods.Image = BitmapResourceLoader.PaymentMethod;
 
             this.dbContext = new InvoicesEntities();
             this.dataGridViewTactions.DataSourceChanged += DataGridViewTactions_DataSourceChanged;
@@ -383,8 +379,16 @@ namespace InvoiceManager_DBFirst
 
         private void checkBoxTactionsEditable_CheckedChanged(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewTactions.CurrentRow;
+
+            //int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+            int paymentId = Convert.ToInt32(row.Cells["paymentId"].Value);
+            int ownerId = Convert.ToInt32(row.Cells["ownerId"].Value);
+
             this._setEditableTactions(this.checkBoxTactionsEditable.Checked);
             this._enableSellerField(this.checkBoxSeller.Checked);
+            this._bindDataToComboBoxPaymentMethod(BindType.Select, paymentId);
+            this._bindDataToComboBoxOwner(BindType.Select, ownerId);
         }
 
         private void checkBoxDiscount_CheckedChanged(object sender, EventArgs e)
@@ -574,6 +578,9 @@ namespace InvoiceManager_DBFirst
             this.comboBoxPaymentMethod.DataSource = query.ToList();
             this.comboBoxPaymentMethod.DisplayMember = "Name";
             this.comboBoxPaymentMethod.ValueMember = "id";
+
+            if (bindType == BindType.Select && paymentMethodId > 0)
+                this.comboBoxPaymentMethod.SelectedValue = paymentMethodId;
         }
 
         private void _bindDataToComboBoxOwner(BindType bindType, int ownerId = 0)
@@ -597,8 +604,10 @@ namespace InvoiceManager_DBFirst
             this.comboBoxOwner.DisplayMember = "Fullname";
             this.comboBoxOwner.ValueMember = "id";
 
-            if (bindType == BindType.Select)
+            if (bindType == BindType.Select && ownerId == 0)
                 this.comboBoxOwner.SelectedValue = 4;   // <No One>
+            else if (bindType == BindType.Select && ownerId > 0)
+                this.comboBoxOwner.SelectedValue = ownerId;
             else if (bindType == BindType.Where)
                 this.comboBoxOwner.SelectedValue = ownerId;
         }

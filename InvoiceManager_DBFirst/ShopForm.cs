@@ -43,6 +43,7 @@ namespace InvoiceManager_DBFirst
             this.dbContext = new InvoicesEntities();
 
             this.dataGridViewShops.DataSourceChanged += DataGridViewShops_DataSourceChanged;
+            this.dataGridViewShopGroups.DataSourceChanged += DataGridViewShopGroups_DataSourceChanged;
             this.dataGridViewShopTypes.DataSourceChanged += DataGridViewShopTypes_DataSourceChanged;
         }
 
@@ -51,13 +52,16 @@ namespace InvoiceManager_DBFirst
             //this.onShopFormOpened("Shop Window opened", DateTime.Now);
 
             _setDefaultGridViewStyles(this.dataGridViewShops);
+            _setDefaultGridViewStyles(this.dataGridViewShopGroups);
             _setDefaultGridViewStyles(this.dataGridViewShopTypes);
 
             _enableDataGridViewMultiSelect(this.dataGridViewShops, false);
+            _enableDataGridViewMultiSelect(this.dataGridViewShopGroups, false);
             _enableDataGridViewMultiSelect(this.dataGridViewShopTypes, false);
 
 
             this._bindDataToGridViewShop();
+            this._bindDataToGridViewShopGroups();
             this._bindDataToGridViewShopType();
 
         }
@@ -67,7 +71,7 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewShops.DataSource == null)
                 return;
 
-            string[] shopsHeaderTexts = new string[] { "shopId", "shopGroupId", "Shop", "Shop's Nickname", "Address", "Tel", "Web", "E-mail" };
+            string[] shopsHeaderTexts = new string[] { "shopId", "shopGroupId", "Shop", "Shop's Nickname", "Address", "Tel", "Web", "Email" };
 
             int[] shopsColumnWidths = new int[] { 50, 50, 230, 165, 500, 110, 195, 200 };
             DataGridViewContentAlignment[] shopsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
@@ -84,6 +88,28 @@ namespace InvoiceManager_DBFirst
             this.dataGridViewShops.Columns["shopId"].Visible = false;
             this.dataGridViewShops.Columns["shopGroupId"].Visible = false;
             this.dataGridViewShops.Columns["Address"].Visible = false;
+            this.dataGridViewShops.Columns["Web"].Visible = false;
+            this.dataGridViewShops.Columns["Email"].Visible = false;
+        }
+
+        private void DataGridViewShopGroups_DataSourceChanged(object sender, EventArgs e)
+        {
+            if (this.dataGridViewShopGroups.DataSource == null)
+                return;
+
+            string[] shopGroupsHeaderTexts = new string[] { "shopGroupId", "shopTypeId", "Shop Group", "Type", "Owner" };
+
+            int[] shopGroupsColumnWidths = new int[] { 50, 50, 230, 165, 165 };
+            DataGridViewContentAlignment[] shopGroupsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
+                                                                          DataGridViewContentAlignment.MiddleLeft,
+                                                                          DataGridViewContentAlignment.MiddleLeft,
+                                                                          DataGridViewContentAlignment.MiddleLeft,
+                                                                          DataGridViewContentAlignment.MiddleLeft };
+
+            _setDefaultGridViewHeaderStyles(this.dataGridViewShopGroups, shopGroupsHeaderTexts, shopGroupsColumnWidths, shopGroupsColumnAlignments);
+
+            this.dataGridViewShopGroups.Columns["shopGroupId"].Visible = false;
+            this.dataGridViewShopGroups.Columns["shopTypeId"].Visible = false;
         }
 
         private void DataGridViewShopTypes_DataSourceChanged(object sender, EventArgs e)
@@ -101,7 +127,6 @@ namespace InvoiceManager_DBFirst
 
             this.dataGridViewShopTypes.Columns["shopTypeId"].Visible = false;
         }
-
 
         private static void _setDefaultGridViewStyles(DataGridView gridview)
         {
@@ -156,6 +181,23 @@ namespace InvoiceManager_DBFirst
 
             this.dataGridViewShops.DataSource = query.ToList();
             //this.onShopsLoaded("Shops Loaded", DateTime.Now);
+        }
+
+        private void _bindDataToGridViewShopGroups()
+        {
+            var query = from shopGroup in dbContext.ShopGroup
+                        join shopType in dbContext.ShopType on shopGroup.TypeId equals shopType.id
+                        orderby shopGroup.Name ascending
+                        select new
+                        {
+                            shopGroupId = shopGroup.id,
+                            shopTypeId = shopType.id,
+                            shopGroupName = shopGroup.Name,
+                            shopTypeName = shopType.Name,
+                            shopGroupOwner = shopGroup.Owner
+                        };
+
+            this.dataGridViewShopGroups.DataSource = query.ToList();
         }
 
         private void _bindDataToGridViewShopType()
