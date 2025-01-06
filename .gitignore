@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /DatabaseSync/Config.cs
 /Maya.DatabaseSynchronization/Config.cs
+/InvoiceManager_DBFirst/todos.txt
