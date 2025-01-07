@@ -40,6 +40,13 @@
             this.buttonUpdateShopType = new System.Windows.Forms.Button();
             this.buttonSaveShopType = new System.Windows.Forms.Button();
             this.groupBoxShopOptions = new System.Windows.Forms.GroupBox();
+            this.buttonNewShop = new System.Windows.Forms.Button();
+            this.textBoxShopOptionsWeb = new System.Windows.Forms.TextBox();
+            this.labelShopOptionsWeb = new System.Windows.Forms.Label();
+            this.textBoxShopOptionsEmail = new System.Windows.Forms.TextBox();
+            this.labelShopOptionsEmail = new System.Windows.Forms.Label();
+            this.textBoxShopOptionsTel = new System.Windows.Forms.TextBox();
+            this.labelShopOptionsTel = new System.Windows.Forms.Label();
             this.textBoxShopOptionsNickName = new System.Windows.Forms.TextBox();
             this.labelShopOptionsShopName = new System.Windows.Forms.Label();
             this.textBoxShopOptionsShopName = new System.Windows.Forms.TextBox();
@@ -50,25 +57,18 @@
             this.buttonUpdateShop = new System.Windows.Forms.Button();
             this.buttonSaveShop = new System.Windows.Forms.Button();
             this.groupBoxShopGroupOptions = new System.Windows.Forms.GroupBox();
-            this.labelShopGroupOptionsGroupName = new System.Windows.Forms.Label();
-            this.labelShopGroupOptionsShopType = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.labelShopGroupOptionsOwner = new System.Windows.Forms.Label();
+            this.textBoxShopGroupOptionsGroupName = new System.Windows.Forms.TextBox();
+            this.labelShopGroupOptionsGroupName = new System.Windows.Forms.Label();
             this.comboBoxShopGroupOptionsShopType = new System.Windows.Forms.ComboBox();
             this.textBoxShopGroupOptionsOwner = new System.Windows.Forms.TextBox();
-            this.textBoxShopGroupOptionsGroupName = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.labelShopGroupOptionsShopType = new System.Windows.Forms.Label();
             this.groupBoxShopGroups = new System.Windows.Forms.GroupBox();
             this.dataGridViewShopGroups = new System.Windows.Forms.DataGridView();
             this.checkBoxSetRelational = new System.Windows.Forms.CheckBox();
-            this.textBoxShopOptionsTel = new System.Windows.Forms.TextBox();
-            this.labelShopOptionsTel = new System.Windows.Forms.Label();
-            this.textBoxShopOptionsEmail = new System.Windows.Forms.TextBox();
-            this.labelShopOptionsEmail = new System.Windows.Forms.Label();
-            this.textBoxShopOptionsWeb = new System.Windows.Forms.TextBox();
-            this.labelShopOptionsWeb = new System.Windows.Forms.Label();
-            this.buttonNewShop = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
             this.groupBoxShops.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewShops)).BeginInit();
@@ -104,6 +104,8 @@
             this.dataGridViewShops.Name = "dataGridViewShops";
             this.dataGridViewShops.Size = new System.Drawing.Size(546, 530);
             this.dataGridViewShops.TabIndex = 0;
+            this.dataGridViewShops.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewShops_CellClick);
+            this.dataGridViewShops.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewShops_DataBindingComplete);
             // 
             // groupBoxShopTypes
             // 
@@ -130,6 +132,8 @@
             this.dataGridViewShopTypes.Name = "dataGridViewShopTypes";
             this.dataGridViewShopTypes.Size = new System.Drawing.Size(193, 747);
             this.dataGridViewShopTypes.TabIndex = 0;
+            this.dataGridViewShopTypes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewShopTypes_CellClick);
+            this.dataGridViewShopTypes.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewShopTypes_DataBindingComplete);
             // 
             // groupBoxItemTopGroupOptions
             // 
@@ -235,6 +239,71 @@
             this.groupBoxShopOptions.TabStop = false;
             this.groupBoxShopOptions.Text = "Shop Options";
             // 
+            // buttonNewShop
+            // 
+            this.buttonNewShop.Location = new System.Drawing.Point(164, 162);
+            this.buttonNewShop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.buttonNewShop.Name = "buttonNewShop";
+            this.buttonNewShop.Size = new System.Drawing.Size(88, 27);
+            this.buttonNewShop.TabIndex = 34;
+            this.buttonNewShop.Text = "New";
+            this.buttonNewShop.UseVisualStyleBackColor = true;
+            this.buttonNewShop.Click += new System.EventHandler(this.buttonNewShop_Click);
+            // 
+            // textBoxShopOptionsWeb
+            // 
+            this.textBoxShopOptionsWeb.Location = new System.Drawing.Point(377, 125);
+            this.textBoxShopOptionsWeb.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.textBoxShopOptionsWeb.Name = "textBoxShopOptionsWeb";
+            this.textBoxShopOptionsWeb.Size = new System.Drawing.Size(165, 23);
+            this.textBoxShopOptionsWeb.TabIndex = 33;
+            // 
+            // labelShopOptionsWeb
+            // 
+            this.labelShopOptionsWeb.AutoSize = true;
+            this.labelShopOptionsWeb.Location = new System.Drawing.Point(329, 130);
+            this.labelShopOptionsWeb.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelShopOptionsWeb.Name = "labelShopOptionsWeb";
+            this.labelShopOptionsWeb.Size = new System.Drawing.Size(32, 15);
+            this.labelShopOptionsWeb.TabIndex = 32;
+            this.labelShopOptionsWeb.Text = "Web";
+            // 
+            // textBoxShopOptionsEmail
+            // 
+            this.textBoxShopOptionsEmail.Location = new System.Drawing.Point(377, 92);
+            this.textBoxShopOptionsEmail.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.textBoxShopOptionsEmail.Name = "textBoxShopOptionsEmail";
+            this.textBoxShopOptionsEmail.Size = new System.Drawing.Size(165, 23);
+            this.textBoxShopOptionsEmail.TabIndex = 31;
+            // 
+            // labelShopOptionsEmail
+            // 
+            this.labelShopOptionsEmail.AutoSize = true;
+            this.labelShopOptionsEmail.Location = new System.Drawing.Point(319, 97);
+            this.labelShopOptionsEmail.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelShopOptionsEmail.Name = "labelShopOptionsEmail";
+            this.labelShopOptionsEmail.Size = new System.Drawing.Size(42, 15);
+            this.labelShopOptionsEmail.TabIndex = 30;
+            this.labelShopOptionsEmail.Text = "E-mail";
+            // 
+            // textBoxShopOptionsTel
+            // 
+            this.textBoxShopOptionsTel.Location = new System.Drawing.Point(377, 59);
+            this.textBoxShopOptionsTel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.textBoxShopOptionsTel.Name = "textBoxShopOptionsTel";
+            this.textBoxShopOptionsTel.Size = new System.Drawing.Size(165, 23);
+            this.textBoxShopOptionsTel.TabIndex = 29;
+            // 
+            // labelShopOptionsTel
+            // 
+            this.labelShopOptionsTel.AutoSize = true;
+            this.labelShopOptionsTel.Location = new System.Drawing.Point(339, 64);
+            this.labelShopOptionsTel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelShopOptionsTel.Name = "labelShopOptionsTel";
+            this.labelShopOptionsTel.Size = new System.Drawing.Size(22, 15);
+            this.labelShopOptionsTel.TabIndex = 28;
+            this.labelShopOptionsTel.Text = "Tel";
+            // 
             // textBoxShopOptionsNickName
             // 
             this.textBoxShopOptionsNickName.Location = new System.Drawing.Point(377, 27);
@@ -299,6 +368,7 @@
             this.buttonDeleteShop.TabIndex = 27;
             this.buttonDeleteShop.Text = "Delete";
             this.buttonDeleteShop.UseVisualStyleBackColor = true;
+            this.buttonDeleteShop.Click += new System.EventHandler(this.buttonDeleteShop_Click);
             // 
             // buttonUpdateShop
             // 
@@ -309,6 +379,7 @@
             this.buttonUpdateShop.TabIndex = 26;
             this.buttonUpdateShop.Text = "Update";
             this.buttonUpdateShop.UseVisualStyleBackColor = true;
+            this.buttonUpdateShop.Click += new System.EventHandler(this.buttonUpdateShop_Click);
             // 
             // buttonSaveShop
             // 
@@ -319,6 +390,7 @@
             this.buttonSaveShop.TabIndex = 25;
             this.buttonSaveShop.Text = "Save";
             this.buttonSaveShop.UseVisualStyleBackColor = true;
+            this.buttonSaveShop.Click += new System.EventHandler(this.buttonSaveShop_Click);
             // 
             // groupBoxShopGroupOptions
             // 
@@ -340,25 +412,35 @@
             this.groupBoxShopGroupOptions.TabStop = false;
             this.groupBoxShopGroupOptions.Text = "Shop Group Options";
             // 
-            // labelShopGroupOptionsGroupName
+            // button3
             // 
-            this.labelShopGroupOptionsGroupName.AutoSize = true;
-            this.labelShopGroupOptionsGroupName.Location = new System.Drawing.Point(7, 29);
-            this.labelShopGroupOptionsGroupName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelShopGroupOptionsGroupName.Name = "labelShopGroupOptionsGroupName";
-            this.labelShopGroupOptionsGroupName.Size = new System.Drawing.Size(41, 15);
-            this.labelShopGroupOptionsGroupName.TabIndex = 32;
-            this.labelShopGroupOptionsGroupName.Text = "Group";
+            this.button3.Location = new System.Drawing.Point(509, 21);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(88, 27);
+            this.button3.TabIndex = 32;
+            this.button3.Text = "Add";
+            this.button3.UseVisualStyleBackColor = true;
             // 
-            // labelShopGroupOptionsShopType
+            // button2
             // 
-            this.labelShopGroupOptionsShopType.AutoSize = true;
-            this.labelShopGroupOptionsShopType.Location = new System.Drawing.Point(17, 96);
-            this.labelShopGroupOptionsShopType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelShopGroupOptionsShopType.Name = "labelShopGroupOptionsShopType";
-            this.labelShopGroupOptionsShopType.Size = new System.Drawing.Size(31, 15);
-            this.labelShopGroupOptionsShopType.TabIndex = 34;
-            this.labelShopGroupOptionsShopType.Text = "Type";
+            this.button2.Location = new System.Drawing.Point(509, 54);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(88, 27);
+            this.button2.TabIndex = 33;
+            this.button2.Text = "Update";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(509, 87);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(88, 27);
+            this.button1.TabIndex = 34;
+            this.button1.Text = "Delete";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // labelShopGroupOptionsOwner
             // 
@@ -369,6 +451,24 @@
             this.labelShopGroupOptionsOwner.Size = new System.Drawing.Size(43, 15);
             this.labelShopGroupOptionsOwner.TabIndex = 32;
             this.labelShopGroupOptionsOwner.Text = "Owner";
+            // 
+            // textBoxShopGroupOptionsGroupName
+            // 
+            this.textBoxShopGroupOptionsGroupName.Location = new System.Drawing.Point(56, 23);
+            this.textBoxShopGroupOptionsGroupName.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.textBoxShopGroupOptionsGroupName.Name = "textBoxShopGroupOptionsGroupName";
+            this.textBoxShopGroupOptionsGroupName.Size = new System.Drawing.Size(434, 23);
+            this.textBoxShopGroupOptionsGroupName.TabIndex = 33;
+            // 
+            // labelShopGroupOptionsGroupName
+            // 
+            this.labelShopGroupOptionsGroupName.AutoSize = true;
+            this.labelShopGroupOptionsGroupName.Location = new System.Drawing.Point(7, 29);
+            this.labelShopGroupOptionsGroupName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelShopGroupOptionsGroupName.Name = "labelShopGroupOptionsGroupName";
+            this.labelShopGroupOptionsGroupName.Size = new System.Drawing.Size(41, 15);
+            this.labelShopGroupOptionsGroupName.TabIndex = 32;
+            this.labelShopGroupOptionsGroupName.Text = "Group";
             // 
             // comboBoxShopGroupOptionsShopType
             // 
@@ -387,43 +487,15 @@
             this.textBoxShopGroupOptionsOwner.Size = new System.Drawing.Size(206, 23);
             this.textBoxShopGroupOptionsOwner.TabIndex = 33;
             // 
-            // textBoxShopGroupOptionsGroupName
+            // labelShopGroupOptionsShopType
             // 
-            this.textBoxShopGroupOptionsGroupName.Location = new System.Drawing.Point(56, 23);
-            this.textBoxShopGroupOptionsGroupName.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBoxShopGroupOptionsGroupName.Name = "textBoxShopGroupOptionsGroupName";
-            this.textBoxShopGroupOptionsGroupName.Size = new System.Drawing.Size(434, 23);
-            this.textBoxShopGroupOptionsGroupName.TabIndex = 33;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(509, 87);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(88, 27);
-            this.button1.TabIndex = 34;
-            this.button1.Text = "Delete";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(509, 54);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(88, 27);
-            this.button2.TabIndex = 33;
-            this.button2.Text = "Update";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(509, 21);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(88, 27);
-            this.button3.TabIndex = 32;
-            this.button3.Text = "Add";
-            this.button3.UseVisualStyleBackColor = true;
+            this.labelShopGroupOptionsShopType.AutoSize = true;
+            this.labelShopGroupOptionsShopType.Location = new System.Drawing.Point(17, 96);
+            this.labelShopGroupOptionsShopType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelShopGroupOptionsShopType.Name = "labelShopGroupOptionsShopType";
+            this.labelShopGroupOptionsShopType.Size = new System.Drawing.Size(31, 15);
+            this.labelShopGroupOptionsShopType.TabIndex = 34;
+            this.labelShopGroupOptionsShopType.Text = "Type";
             // 
             // groupBoxShopGroups
             // 
@@ -448,6 +520,8 @@
             this.dataGridViewShopGroups.Name = "dataGridViewShopGroups";
             this.dataGridViewShopGroups.Size = new System.Drawing.Size(602, 530);
             this.dataGridViewShopGroups.TabIndex = 0;
+            this.dataGridViewShopGroups.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewShopGroups_CellClick);
+            this.dataGridViewShopGroups.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewShopGroups_DataBindingComplete);
             // 
             // checkBoxSetRelational
             // 
@@ -458,70 +532,6 @@
             this.checkBoxSetRelational.TabIndex = 16;
             this.checkBoxSetRelational.Text = "Set Relational";
             this.checkBoxSetRelational.UseVisualStyleBackColor = true;
-            // 
-            // textBoxShopOptionsTel
-            // 
-            this.textBoxShopOptionsTel.Location = new System.Drawing.Point(377, 59);
-            this.textBoxShopOptionsTel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBoxShopOptionsTel.Name = "textBoxShopOptionsTel";
-            this.textBoxShopOptionsTel.Size = new System.Drawing.Size(165, 23);
-            this.textBoxShopOptionsTel.TabIndex = 29;
-            // 
-            // labelShopOptionsTel
-            // 
-            this.labelShopOptionsTel.AutoSize = true;
-            this.labelShopOptionsTel.Location = new System.Drawing.Point(339, 64);
-            this.labelShopOptionsTel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelShopOptionsTel.Name = "labelShopOptionsTel";
-            this.labelShopOptionsTel.Size = new System.Drawing.Size(22, 15);
-            this.labelShopOptionsTel.TabIndex = 28;
-            this.labelShopOptionsTel.Text = "Tel";
-            // 
-            // textBoxShopOptionsEmail
-            // 
-            this.textBoxShopOptionsEmail.Location = new System.Drawing.Point(377, 92);
-            this.textBoxShopOptionsEmail.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBoxShopOptionsEmail.Name = "textBoxShopOptionsEmail";
-            this.textBoxShopOptionsEmail.Size = new System.Drawing.Size(165, 23);
-            this.textBoxShopOptionsEmail.TabIndex = 31;
-            // 
-            // labelShopOptionsEmail
-            // 
-            this.labelShopOptionsEmail.AutoSize = true;
-            this.labelShopOptionsEmail.Location = new System.Drawing.Point(319, 97);
-            this.labelShopOptionsEmail.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelShopOptionsEmail.Name = "labelShopOptionsEmail";
-            this.labelShopOptionsEmail.Size = new System.Drawing.Size(42, 15);
-            this.labelShopOptionsEmail.TabIndex = 30;
-            this.labelShopOptionsEmail.Text = "E-mail";
-            // 
-            // textBoxShopOptionsWeb
-            // 
-            this.textBoxShopOptionsWeb.Location = new System.Drawing.Point(377, 125);
-            this.textBoxShopOptionsWeb.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBoxShopOptionsWeb.Name = "textBoxShopOptionsWeb";
-            this.textBoxShopOptionsWeb.Size = new System.Drawing.Size(165, 23);
-            this.textBoxShopOptionsWeb.TabIndex = 33;
-            // 
-            // labelShopOptionsWeb
-            // 
-            this.labelShopOptionsWeb.AutoSize = true;
-            this.labelShopOptionsWeb.Location = new System.Drawing.Point(329, 130);
-            this.labelShopOptionsWeb.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelShopOptionsWeb.Name = "labelShopOptionsWeb";
-            this.labelShopOptionsWeb.Size = new System.Drawing.Size(32, 15);
-            this.labelShopOptionsWeb.TabIndex = 32;
-            this.labelShopOptionsWeb.Text = "Web";
-            // 
-            // buttonNewShop
-            // 
-            this.buttonNewShop.Location = new System.Drawing.Point(164, 162);
-            this.buttonNewShop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonNewShop.Name = "buttonNewShop";
-            this.buttonNewShop.Size = new System.Drawing.Size(88, 27);
-            this.buttonNewShop.TabIndex = 34;
-            this.buttonNewShop.Text = "New";
-            this.buttonNewShop.UseVisualStyleBackColor = true;
             // 
             // buttonClose
             // 

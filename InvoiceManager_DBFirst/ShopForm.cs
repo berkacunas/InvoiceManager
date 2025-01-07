@@ -33,6 +33,10 @@ namespace InvoiceManager_DBFirst
         private ShopGroup _newShopGroup;
         private ShopType _newShopType;
 
+        private Mode _shopMode;
+        private Mode _shopGroupMode;
+        private Mode _shopTypeMode;
+
 
         public ShopForm()
         {
@@ -49,6 +53,8 @@ namespace InvoiceManager_DBFirst
 
         private void ShopForm_Load(object sender, EventArgs e)
         {
+            this._setModes(Mode.Display);
+
             //this.onShopFormOpened("Shop Window opened", DateTime.Now);
 
             _setDefaultGridViewStyles(this.dataGridViewShops);
@@ -59,11 +65,12 @@ namespace InvoiceManager_DBFirst
             _enableDataGridViewMultiSelect(this.dataGridViewShopGroups, false);
             _enableDataGridViewMultiSelect(this.dataGridViewShopTypes, false);
 
+            this.comboBoxShopTypeOptionsShopType.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.comboBoxShopGroupOptionsShopType.DropDownStyle = ComboBoxStyle.DropDownList;
 
             this._bindDataToGridViewShop();
             this._bindDataToGridViewShopGroups();
             this._bindDataToGridViewShopType();
-
         }
 
         private void DataGridViewShops_DataSourceChanged(object sender, EventArgs e)
@@ -71,7 +78,7 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewShops.DataSource == null)
                 return;
 
-            string[] shopsHeaderTexts = new string[] { "shopId", "shopGroupId", "Shop", "Shop's Nickname", "Address", "Tel", "Web", "Email" };
+            string[] shopsHeaderTexts = new string[] { "shopId", "shopGroupId", "Shop", "Nickname", "Address", "Tel", "Web", "Email" };
 
             int[] shopsColumnWidths = new int[] { 50, 50, 230, 165, 500, 110, 195, 200 };
             DataGridViewContentAlignment[] shopsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
@@ -97,7 +104,7 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewShopGroups.DataSource == null)
                 return;
 
-            string[] shopGroupsHeaderTexts = new string[] { "shopGroupId", "shopTypeId", "Shop Group", "Type", "Owner" };
+            string[] shopGroupsHeaderTexts = new string[] { "shopGroupId", "shopTypeId", "Group", "Type", "Owner" };
 
             int[] shopGroupsColumnWidths = new int[] { 50, 50, 230, 165, 165 };
             DataGridViewContentAlignment[] shopGroupsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
@@ -126,6 +133,57 @@ namespace InvoiceManager_DBFirst
             _setDefaultGridViewHeaderStyles(this.dataGridViewShopTypes, shopTypesHeaderTexts, shopTypesColumnWidths, shopTypesColumnAlignments);
 
             this.dataGridViewShopTypes.Columns["shopTypeId"].Visible = false;
+        }
+
+        private void dataGridViewShops_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewShops.Rows.Count > 0)
+            {
+                DataGridViewRow row = this.dataGridViewShops.Rows[0];
+                if (row != null)
+                    this._setShopControls(row);
+            }
+        }
+
+        private void dataGridViewShopGroups_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewShopGroups.Rows.Count > 0)
+            {
+                DataGridViewRow row = this.dataGridViewShopGroups.Rows[0];
+                if (row != null)
+                    this._setShopGroupControls(row);
+            }
+        }
+
+        private void dataGridViewShopTypes_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewShopTypes.Rows.Count > 0)
+            {
+                DataGridViewRow row = this.dataGridViewShopTypes.Rows[0];
+                if (row != null)
+                    this._setShopTypeControls(row);
+            }
+        }
+
+        private void dataGridViewShops_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            this._clearShopControls();
+            DataGridViewRow row = this.dataGridViewShops.CurrentRow;
+            this._setShopControls(row);
+        }
+
+        private void dataGridViewShopGroups_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            this._clearShopGroupControls();
+            DataGridViewRow row = this.dataGridViewShopGroups.CurrentRow;
+            this._setShopGroupControls(row);
+        }
+
+        private void dataGridViewShopTypes_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            this._clearShopTypeControls();
+            DataGridViewRow row = this.dataGridViewShopTypes.CurrentRow;
+            this._setShopTypeControls(row);
         }
 
         private static void _setDefaultGridViewStyles(DataGridView gridview)
@@ -198,6 +256,7 @@ namespace InvoiceManager_DBFirst
                         };
 
             this.dataGridViewShopGroups.DataSource = query.ToList();
+            //this.onShopGroupsLoaded("ShopGroups Loaded", DateTime.Now);
         }
 
         private void _bindDataToGridViewShopType()
@@ -212,8 +271,134 @@ namespace InvoiceManager_DBFirst
 
             this.dataGridViewShopTypes.DataSource = query.ToList();
             //this.onShopTypesLoaded("ShopTypes Loaded", DateTime.Now);
+        }
+
+        private void _bindDataToComboBoxShopGroupOptionsShopType(BindType bindType, int shopTypeId = 0) // When bindType is set to "Where", shopTypeId must be passed.
+        {
+            IQueryable<ShopType> query = null;
+
+            switch (bindType)
+            {
+                case BindType.Select:
+                    query = from shopType in dbContext.ShopType orderby shopType.Name ascending select shopType;
+                    break;
+                case BindType.Where:
+                    query = from shopType in dbContext.ShopType where shopType.id == shopTypeId select shopType;
+                    break;
+                case BindType.Setnull:
+                    this.comboBoxShopGroupOptionsShopType.DataSource = null;
+                    return;
+
+            }
+
+            this.comboBoxShopGroupOptionsShopType.DataSource = query.ToList();
+            this.comboBoxShopGroupOptionsShopType.DisplayMember = "Name";
+            this.comboBoxShopGroupOptionsShopType.ValueMember = "id";
+        }
+
+        private void _bindDataToComboBoxShopTypeOptionsShopType(BindType bindType, int shopTypeId = 0) // When bindType is set to "Where", shopTypeId must be passed.
+        {
+            IQueryable<ShopType> query = null;
+
+            switch (bindType)
+            {
+                case BindType.Select:
+                    query = from shopType in dbContext.ShopType orderby shopType.Name ascending select shopType;
+                    break;
+                case BindType.Where:
+                    query = from shopType in dbContext.ShopType where shopType.id == shopTypeId select shopType;
+                    break;
+                case BindType.Setnull:
+                    this.comboBoxShopTypeOptionsShopType.DataSource = null;
+                    return;
+
+            }
+
+            this.comboBoxShopTypeOptionsShopType.DataSource = query.ToList();
+            this.comboBoxShopTypeOptionsShopType.DisplayMember = "Name";
+            this.comboBoxShopTypeOptionsShopType.ValueMember = "id";
+        }
+
+        private void _setShopControls(DataGridViewRow row)
+        {
+            int shopId = Convert.ToInt32(row.Cells["shopId"].Value);
+            int shopGroupId = Convert.ToInt32(row.Cells["shopGroupId"].Value);
+
+            this.textBoxShopOptionsShopName.Text = row.Cells["shopName"].Value.ToString();
+            this.textBoxShopOptionsNickName.Text = (row.Cells["nickname"].Value != null) ? row.Cells["nickname"].Value.ToString() : string.Empty;
+            this.textBoxShopOptionsAddress.Text = (row.Cells["address"].Value != null) ? row.Cells["address"].Value.ToString() : string.Empty;
+            this.textBoxShopOptionsTel.Text = (row.Cells["tel"].Value != null) ? row.Cells["tel"].Value.ToString() : string.Empty;
+            this.textBoxShopOptionsWeb.Text = (row.Cells["web"].Value != null) ? row.Cells["web"].Value.ToString() : string.Empty;
+            this.textBoxShopOptionsEmail.Text = (row.Cells["email"].Value != null) ? row.Cells["email"].Value.ToString() : string.Empty;
+
+            // group için combo ekle: this._bindDataToComboBoxShopGroup(BindType.Where, shopGroupId);
+        }
+
+        private void _setShopGroupControls(DataGridViewRow row)
+        {
+            int shopTypeId = Convert.ToInt32(row.Cells["shopTypeId"].Value);
+
+            this.textBoxShopGroupOptionsGroupName.Text = row.Cells["shopGroupName"].Value.ToString();
+            this.textBoxShopGroupOptionsOwner.Text = (row.Cells["shopGroupOwner"].Value != null) ? row.Cells["shopGroupOwner"].Value.ToString() : string.Empty;
+
+            this._bindDataToComboBoxShopGroupOptionsShopType(BindType.Where, shopTypeId);
+        }
+
+        private void _setShopTypeControls(DataGridViewRow row)
+        {
+            int shopTypeId = Convert.ToInt32(row.Cells["shopTypeId"].Value);
+            this._bindDataToComboBoxShopGroupOptionsShopType(BindType.Where, shopTypeId);
+        }
+
+
+        private void _clearShopControls()
+        {
+            foreach (Control c in this.groupBoxShopOptions.Controls)
+                if (c is TextBox)
+                    ((TextBox)c).Clear();
+        }
+
+        private void _clearShopGroupControls()
+        {
+            foreach (Control c in this.groupBoxShopGroupOptions.Controls)
+            {
+                if (c is TextBox)
+                    ((TextBox)c).Clear();
+            }
+         
+            this._bindDataToComboBoxShopGroupOptionsShopType(BindType.Setnull);
+        }
+
+        private void _clearShopTypeControls()
+        {
+            this._bindDataToComboBoxShopTypeOptionsShopType(BindType.Setnull);
+        }
+
+        private void _setModes(Mode mode)
+        {
+            this._shopMode = mode;
+            this._shopGroupMode = mode;
+            this._shopTypeMode = mode;
+        }
+
+        private void buttonNewShop_Click(object sender, EventArgs e)
+        {
 
         }
 
+        private void buttonSaveShop_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonUpdateShop_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonDeleteShop_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
