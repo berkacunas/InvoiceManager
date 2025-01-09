@@ -83,37 +83,31 @@ namespace InvoiceManager_DBFirst
 
         private void TactionForm_TransactionFormOpened(string message, DateTime eventTime)
         {
-            this._addDataToListBoxLog(message, eventTime);
             this._addDataToListViewLog(message, eventTime);
         }
 
         private void TactionForm_TransactionChanged(string message, DateTime eventTime)
         {
-            this._addDataToListBoxLog(message, eventTime);
             this._addDataToListViewLog(message, eventTime);
         }
 
         private void TactionForm_TransactionFormClosed(string message, DateTime eventTime)
         {
-            this._addDataToListBoxLog(message, eventTime);
             this._addDataToListViewLog(message, eventTime);
         }
 
         private void İtemForm_ItemFormOpened(string message, DateTime eventTime)
         {
-            this._addDataToListBoxLog(message, eventTime);
             this._addDataToListViewLog(message, eventTime);
         }
 
         private void İtemForm_ItemFormClosed(string message, DateTime eventTime)
         {
-            this._addDataToListBoxLog(message, eventTime);
             this._addDataToListViewLog(message, eventTime);
         }
 
         private void İtemForm_ItemChanged(string message, DateTime eventTime)
         {
-            this._addDataToListBoxLog(message, eventTime);
             this._addDataToListViewLog(message, eventTime);
         }
 
@@ -125,11 +119,6 @@ namespace InvoiceManager_DBFirst
             this.toolStripMenuItemPaymentMethods.Image = BitmapResourceLoader.PaymentMethod;
             this.toolStripMenuItemPersons.Image = BitmapResourceLoader.Person;
             this.toolStripMenuItemSellers.Image = BitmapResourceLoader.Seller;
-        }
-
-        private void _addDataToListBoxLog(string message, DateTime eventTime)
-        {
-            this.listBoxLog.Items.Add($"{message}: {eventTime.ToString(_eventTimeFormat)}");
         }
 
         private void _addDataToListViewLog(string message, DateTime eventTime)

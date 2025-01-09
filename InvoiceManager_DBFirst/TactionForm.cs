@@ -12,6 +12,8 @@ using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Windows.Forms;
+using static System.Reflection.Metadata.BlobBuilder;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace InvoiceManager_DBFirst
@@ -115,17 +117,18 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewTactionDetails.DataSource == null)
                 return;
 
-            string[] detailsHeaderTexts = new string[] { "detailsId", "tactionId", "Group", "Item", "Sub Type", "Unit", "Unit Price", "Vat", "Price", "(*) Rate", "(*) Price", "Note" };
-            int[] detailsColumnWidths = new int[] { 50, 110, 115, 220, 115, 70, 85, 50, 70, 80, 80, 80 };
+            string[] detailsHeaderTexts = new string[] { "detailsId", "tactionId", "itemId", "Group", "Item", "Sub Type", "Unit", "Unit Price", "Vat", "Price", "(*) Rate", "(*) Price", "Note" };
+            int[] detailsColumnWidths = new int[] { 50, 110, 50, 115, 220, 115, 70, 85, 50, 70, 80, 80, 80 };
             DataGridViewContentAlignment[] detailsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
-                                                                DataGridViewContentAlignment.MiddleRight,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleRight,
-                                                                DataGridViewContentAlignment.MiddleLeft,
-                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleRight,
+                                                                DataGridViewContentAlignment.MiddleRight,
+                                                                DataGridViewContentAlignment.MiddleRight,
+                                                                DataGridViewContentAlignment.MiddleRight,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft };
@@ -134,6 +137,7 @@ namespace InvoiceManager_DBFirst
 
             this.dataGridViewTactionDetails.Columns["detailsId"].Visible = false;
             this.dataGridViewTactionDetails.Columns["tactionId"].Visible = false;
+            this.dataGridViewTactionDetails.Columns["itemId"].Visible = false;
             this.dataGridViewTactionDetails.Columns["note"].Visible = false;
         }
 
@@ -225,6 +229,7 @@ namespace InvoiceManager_DBFirst
             if (row == null)
             {
                 MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
@@ -258,6 +263,7 @@ namespace InvoiceManager_DBFirst
             if (row == null)
             {
                 MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
@@ -311,9 +317,13 @@ namespace InvoiceManager_DBFirst
             TactionDetails details = new TactionDetails();
             this._setTactionDetailsDataFromUiToObject(details);
             this._newTaction.TactionDetails.Add(details);
-            this._addDetailsToDataGridView();
+            this._updateDataGridViewTactionDetails();
             this._clearDetailsControls();
+            this._setTactionTotalPrice();
+        }
 
+        private void _setTactionTotalPrice()
+        {
             textBoxTotalPrice.Text = _newTaction.TactionDetails.Sum(r => r.UnitPrice * r.Unit).ToString();
         }
 
@@ -324,24 +334,33 @@ namespace InvoiceManager_DBFirst
             if (row == null)
             {
                 MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             int detailsId = Convert.ToInt32(row.Cells["detailsId"].Value);
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+            int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
 
-            var details = dbContext.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
-            this._setTactionDetailsDataFromUiToObject(details);
+            decimal unit = Convert.ToDecimal(row.Cells["unit"].Value);
+            decimal unitPrice = Convert.ToDecimal(row.Cells["unitPrice"].Value);
+            decimal vat = Convert.ToDecimal(row.Cells["vat"].Value);
 
-            try
+            TactionDetails details = null;
+
+            if (this.dbContext.TactionDetails.Count(r => r.id == detailsId) > 0)
             {
-                dbContext.SaveChanges();
+                details = this.dbContext.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
+                this._setTactionDetailsDataFromUiToObject(details);
+                this.dbContext.SaveChanges();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("An error occurred while removing detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                details = this._newTaction.TactionDetails.Where(r => r.ItemId == itemId && r.Unit == unit && r.UnitPrice == unitPrice && r.Vat == vat).FirstOrDefault();
+                this._setTactionDetailsDataFromUiToObject(details);
             }
 
-            this._bindDataToGridViewTactionDetails(tactionId);
+            this._updateDataGridViewTactionDetails();
+            this._setTactionTotalPrice();
         }
 
         private void buttonRemoveDetail_Click(object sender, EventArgs e)
@@ -351,6 +370,7 @@ namespace InvoiceManager_DBFirst
             if (row == null)
             {
                 MessageBox.Show("Row not selected.", "Select the row you want to remove first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             int detailsId = Convert.ToInt32(row.Cells["detailsId"].Value);
@@ -516,6 +536,7 @@ namespace InvoiceManager_DBFirst
                         {
                             detailsId = details.id,
                             tactionId = details.TransactionId,
+                            itemId = item.id,
                             itemGroup = itemGroup.Name,
                             itemName = item.Name,
                             itemSubTypeId = jt != null ? jt.Name : "",
@@ -531,29 +552,30 @@ namespace InvoiceManager_DBFirst
             this.dataGridViewTactionDetails.DataSource = query.ToList();
         }
 
-        private void _addDetailsToDataGridView()
+        private void _updateDataGridViewTactionDetails()
         {
             var query = from details in _newTaction.TactionDetails.ToList()
-                                                         join item in dbContext.Item on details.ItemId equals item.id
-                                                         join itemGroup in dbContext.ItemGroup on item.GroupId equals itemGroup.id
-                                                         join itemSubType in dbContext.ItemSubType on details.ItemSubTypeId equals itemSubType.id into joinTable
-                                                         from jt in joinTable.DefaultIfEmpty()
-                                                         orderby details.UnitPrice * details.Unit descending
-                                                         select new
-                                                         {
-                                                             detailsId = details.id,
-                                                             tactionId = details.TransactionId,
-                                                             itemGroup = itemGroup.Name,
-                                                             itemName = item.Name,
-                                                             itemSubTypeId = jt != null ? jt.Name : "",
-                                                             unit = details.Unit,
-                                                             unitPrice = details.UnitPrice,
-                                                             vat = details.Vat,
-                                                             price = details.Unit * details.UnitPrice,
-                                                             discountRate = details.DiscountRate,
-                                                             discountedPrice = details.DiscountedPrice,
-                                                             note = details.Note
-                                                         };
+                        join item in dbContext.Item on details.ItemId equals item.id
+                        join itemGroup in dbContext.ItemGroup on item.GroupId equals itemGroup.id
+                        join itemSubType in dbContext.ItemSubType on details.ItemSubTypeId equals itemSubType.id into joinTable
+                        from jt in joinTable.DefaultIfEmpty()
+                        orderby details.UnitPrice * details.Unit descending
+                        select new
+                        {
+                            detailsId = details.id,
+                            tactionId = details.TransactionId,
+                            itemId = item.id,
+                            itemGroup = itemGroup.Name,
+                            itemName = item.Name,
+                            itemSubTypeId = jt != null ? jt.Name : "",
+                            unit = details.Unit,
+                            unitPrice = details.UnitPrice,
+                            vat = details.Vat,
+                            price = details.Unit * details.UnitPrice,
+                            discountRate = details.DiscountRate,
+                            discountedPrice = details.DiscountedPrice,
+                            note = details.Note
+                        };
 
             this.dataGridViewTactionDetails.DataSource = query.ToList();
         }
@@ -830,7 +852,7 @@ namespace InvoiceManager_DBFirst
             {
                 DataGridViewRow row = this.dataGridViewTactions.CurrentRow;
                 int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
-                this._newTaction = dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
+                this._newTaction = dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();    
             }
 
             details.Taction = this._newTaction;

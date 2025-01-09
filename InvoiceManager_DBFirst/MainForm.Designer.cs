@@ -41,19 +41,15 @@
             this.toolStripMenuItemSellers = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelLiveDateTime = new System.Windows.Forms.ToolStripStatusLabel();
-            this.listBoxLog = new System.Windows.Forms.ListBox();
-            this.groupBoxWithListBox = new System.Windows.Forms.GroupBox();
             this.groupBoxWithListView = new System.Windows.Forms.GroupBox();
             this.listViewLog = new System.Windows.Forms.ListView();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.menuStripMain.SuspendLayout();
             this.statusStripMain.SuspendLayout();
-            this.groupBoxWithListBox.SuspendLayout();
             this.groupBoxWithListView.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
+            this.splitContainerMain.Panel2.SuspendLayout();
+            this.splitContainerMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripMain
@@ -81,7 +77,7 @@
             this.toolStripMenuItemSync.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemSyncWithSQLiteDatabase});
             this.toolStripMenuItemSync.Name = "toolStripMenuItemSync";
-            this.toolStripMenuItemSync.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemSync.Size = new System.Drawing.Size(99, 22);
             this.toolStripMenuItemSync.Text = "Sync";
             // 
             // toolStripMenuItemSyncWithSQLiteDatabase
@@ -107,40 +103,40 @@
             // toolStripMenuItemTransactions
             // 
             this.toolStripMenuItemTransactions.Name = "toolStripMenuItemTransactions";
-            this.toolStripMenuItemTransactions.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemTransactions.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuItemTransactions.Text = "Transactions";
             this.toolStripMenuItemTransactions.Click += new System.EventHandler(this.toolStripMenuItemTransactions_Click);
             // 
             // toolStripMenuItemItems
             // 
             this.toolStripMenuItemItems.Name = "toolStripMenuItemItems";
-            this.toolStripMenuItemItems.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemItems.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuItemItems.Text = "Items";
             this.toolStripMenuItemItems.Click += new System.EventHandler(this.toolStripMenuItem_Items_Click);
             // 
             // toolStripMenuItemShops
             // 
             this.toolStripMenuItemShops.Name = "toolStripMenuItemShops";
-            this.toolStripMenuItemShops.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemShops.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuItemShops.Text = "Shops";
             this.toolStripMenuItemShops.Click += new System.EventHandler(this.toolStripMenuItemShops_Click);
             // 
             // toolStripMenuItemPaymentMethods
             // 
             this.toolStripMenuItemPaymentMethods.Name = "toolStripMenuItemPaymentMethods";
-            this.toolStripMenuItemPaymentMethods.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemPaymentMethods.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuItemPaymentMethods.Text = "Payment Methods";
             // 
             // toolStripMenuItemPersons
             // 
             this.toolStripMenuItemPersons.Name = "toolStripMenuItemPersons";
-            this.toolStripMenuItemPersons.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemPersons.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuItemPersons.Text = "Persons";
             // 
             // toolStripMenuItemSellers
             // 
             this.toolStripMenuItemSellers.Name = "toolStripMenuItemSellers";
-            this.toolStripMenuItemSellers.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemSellers.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuItemSellers.Text = "Sellers";
             // 
             // statusStripMain
@@ -159,30 +155,6 @@
             this.toolStripStatusLabelLiveDateTime.Name = "toolStripStatusLabelLiveDateTime";
             this.toolStripStatusLabelLiveDateTime.Size = new System.Drawing.Size(0, 17);
             // 
-            // listBoxLog
-            // 
-            this.listBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxLog.FormattingEnabled = true;
-            this.listBoxLog.ItemHeight = 15;
-            this.listBoxLog.Location = new System.Drawing.Point(4, 19);
-            this.listBoxLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.listBoxLog.Name = "listBoxLog";
-            this.listBoxLog.Size = new System.Drawing.Size(512, 622);
-            this.listBoxLog.TabIndex = 2;
-            // 
-            // groupBoxWithListBox
-            // 
-            this.groupBoxWithListBox.Controls.Add(this.listBoxLog);
-            this.groupBoxWithListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxWithListBox.Location = new System.Drawing.Point(0, 0);
-            this.groupBoxWithListBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxWithListBox.Name = "groupBoxWithListBox";
-            this.groupBoxWithListBox.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxWithListBox.Size = new System.Drawing.Size(520, 644);
-            this.groupBoxWithListBox.TabIndex = 3;
-            this.groupBoxWithListBox.TabStop = false;
-            this.groupBoxWithListBox.Text = "With ListBox";
-            // 
             // groupBoxWithListView
             // 
             this.groupBoxWithListView.Controls.Add(this.listViewLog);
@@ -191,10 +163,10 @@
             this.groupBoxWithListView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxWithListView.Name = "groupBoxWithListView";
             this.groupBoxWithListView.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxWithListView.Size = new System.Drawing.Size(705, 644);
+            this.groupBoxWithListView.Size = new System.Drawing.Size(1033, 644);
             this.groupBoxWithListView.TabIndex = 4;
             this.groupBoxWithListView.TabStop = false;
-            this.groupBoxWithListView.Text = "With ListView";
+            this.groupBoxWithListView.Text = "Application Log";
             // 
             // listViewLog
             // 
@@ -203,33 +175,29 @@
             this.listViewLog.Location = new System.Drawing.Point(4, 19);
             this.listViewLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.listViewLog.Name = "listViewLog";
-            this.listViewLog.Size = new System.Drawing.Size(697, 622);
+            this.listViewLog.Size = new System.Drawing.Size(1025, 622);
             this.listViewLog.TabIndex = 0;
             this.listViewLog.UseCompatibleStateImageBehavior = false;
             // 
-            // splitContainer1
+            // splitContainerMain
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 24);
-            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerMain.Location = new System.Drawing.Point(0, 24);
+            this.splitContainerMain.Name = "splitContainerMain";
             // 
-            // splitContainer1.Panel1
+            // splitContainerMain.Panel2
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.groupBoxWithListBox);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.groupBoxWithListView);
-            this.splitContainer1.Size = new System.Drawing.Size(1229, 644);
-            this.splitContainer1.SplitterDistance = 520;
-            this.splitContainer1.TabIndex = 5;
+            this.splitContainerMain.Panel2.Controls.Add(this.groupBoxWithListView);
+            this.splitContainerMain.Size = new System.Drawing.Size(1229, 644);
+            this.splitContainerMain.SplitterDistance = 192;
+            this.splitContainerMain.TabIndex = 5;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1229, 690);
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.splitContainerMain);
             this.Controls.Add(this.statusStripMain);
             this.Controls.Add(this.menuStripMain);
             this.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -242,12 +210,10 @@
             this.menuStripMain.PerformLayout();
             this.statusStripMain.ResumeLayout(false);
             this.statusStripMain.PerformLayout();
-            this.groupBoxWithListBox.ResumeLayout(false);
             this.groupBoxWithListView.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.splitContainerMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
+            this.splitContainerMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -268,11 +234,9 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSellers;
         private System.Windows.Forms.StatusStrip statusStripMain;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelLiveDateTime;
-        private System.Windows.Forms.ListBox listBoxLog;
-        private System.Windows.Forms.GroupBox groupBoxWithListBox;
         private System.Windows.Forms.GroupBox groupBoxWithListView;
         private System.Windows.Forms.ListView listViewLog;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitContainerMain;
     }
 }
 

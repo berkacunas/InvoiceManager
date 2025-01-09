@@ -72,6 +72,8 @@
             this.buttonDeleteTaction = new System.Windows.Forms.Button();
             this.buttonUpdateTaction = new System.Windows.Forms.Button();
             this.groupBoxTactionOptions = new System.Windows.Forms.GroupBox();
+            this.textBoxTotalVatPrice = new System.Windows.Forms.TextBox();
+            this.labelTotalVatPrice = new System.Windows.Forms.Label();
             this.labelOwner = new System.Windows.Forms.Label();
             this.comboBoxOwner = new System.Windows.Forms.ComboBox();
             this.buttonCancelTaction = new System.Windows.Forms.Button();
@@ -475,6 +477,8 @@
             // 
             // groupBoxTactionOptions
             // 
+            this.groupBoxTactionOptions.Controls.Add(this.textBoxTotalVatPrice);
+            this.groupBoxTactionOptions.Controls.Add(this.labelTotalVatPrice);
             this.groupBoxTactionOptions.Controls.Add(this.labelOwner);
             this.groupBoxTactionOptions.Controls.Add(this.comboBoxOwner);
             this.groupBoxTactionOptions.Controls.Add(this.buttonCancelTaction);
@@ -502,6 +506,22 @@
             this.groupBoxTactionOptions.TabIndex = 4;
             this.groupBoxTactionOptions.TabStop = false;
             this.groupBoxTactionOptions.Text = "Transaction Options";
+            // 
+            // textBoxTotalVatPrice
+            // 
+            this.textBoxTotalVatPrice.Location = new System.Drawing.Point(749, 58);
+            this.textBoxTotalVatPrice.Name = "textBoxTotalVatPrice";
+            this.textBoxTotalVatPrice.Size = new System.Drawing.Size(118, 23);
+            this.textBoxTotalVatPrice.TabIndex = 51;
+            // 
+            // labelTotalVatPrice
+            // 
+            this.labelTotalVatPrice.AutoSize = true;
+            this.labelTotalVatPrice.Location = new System.Drawing.Point(678, 62);
+            this.labelTotalVatPrice.Name = "labelTotalVatPrice";
+            this.labelTotalVatPrice.Size = new System.Drawing.Size(54, 15);
+            this.labelTotalVatPrice.TabIndex = 50;
+            this.labelTotalVatPrice.Text = "Total Vat";
             // 
             // labelOwner
             // 
@@ -674,5 +694,7 @@
         private System.Windows.Forms.Label labelOwner;
         private System.Windows.Forms.ComboBox comboBoxOwner;
         private System.Windows.Forms.StatusStrip statusStripTaction;
+        private System.Windows.Forms.TextBox textBoxTotalVatPrice;
+        private System.Windows.Forms.Label labelTotalVatPrice;
     }
 }
