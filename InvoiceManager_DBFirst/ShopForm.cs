@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLitePCL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -35,8 +36,8 @@ namespace InvoiceManager_DBFirst
         private ShopType _newShopType;
 
         private Mode _shopMode;
-        private Mode _shopGroupMode;
-        private Mode _shopTypeMode;
+        private Mode _groupMode;
+        private Mode _typeMode;
 
 
         public ShopForm()
@@ -71,7 +72,7 @@ namespace InvoiceManager_DBFirst
             this.comboBoxShopGroupOptionsShopType.DropDownStyle = ComboBoxStyle.DropDownList;
 
             this._bindDataToGridViewShop();
-            this._bindDataToGridViewShopGroups();
+            this._bindDataToGridViewShopGroup();
             this._bindDataToGridViewShopType();
         }
 
@@ -179,6 +180,7 @@ namespace InvoiceManager_DBFirst
             this._clearShopGroupControls();
             DataGridViewRow row = this.dataGridViewShopGroups.CurrentRow;
             this._setShopGroupControls(row);
+            this._checkEditableCheckBoxes(false);
         }
 
         private void dataGridViewShopTypes_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -237,7 +239,7 @@ namespace InvoiceManager_DBFirst
 
             if (row == null)
             {
-                MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -266,7 +268,7 @@ namespace InvoiceManager_DBFirst
 
             if (row == null)
             {
-                MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Select the row you want to delete first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -292,20 +294,148 @@ namespace InvoiceManager_DBFirst
 
         private void buttonNewShopGroup_Click(object sender, EventArgs e)
         {
+            this._groupMode = (this._groupMode == Mode.Add) ? Mode.Display : Mode.Add;
+            this.buttonNewShopGroup.Text = (this._groupMode == Mode.Add) ? "Cancel" : "New";
+            this.dataGridViewShopGroups.Enabled = (this._groupMode != Mode.Add);
+            this._checkEditableCheckBoxes(this._groupMode == Mode.Add);
 
+            if (this._groupMode == Mode.Add)
+            {
+                this._bindDataToComboBoxShopGroupOptionsShopType(BindType.Select);
+                this._setEditableShopGroups(true);
+                this._newShopGroup = new ShopGroup();
+            }
+            else
+            {
+                this._bindDataToComboBoxShopGroupOptionsShopType(BindType.Setnull);
+                this._setEditableShopGroups(false);
+            }
+
+            this._clearShopGroupControls();
         }
 
         private void buttonSaveShopGroup_Click(object sender, EventArgs e)
         {
+            this._setShopGroupDataFromUiToObject(this._newShopGroup);
+            this.dbContext.ShopGroup.Add(this._newShopGroup);
 
+            try
+            {
+                this.dbContext.SaveChanges();
+                //this.onShopGroupSaved("ShopGroup saved.", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while adding item group.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._clearShopGroupControls();
+            this._setEditableShopGroups(false);
+            this._bindDataToGridViewShopGroup();
+            this._newShopGroup = new ShopGroup();
+            this._groupMode = Mode.Display;
         }
 
         private void buttonUpdateShopGroup_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewShopGroups.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int groupId = Convert.ToInt32(row.Cells["shopGroupId"].Value);
+            ShopGroup shopGroup = dbContext.ShopGroup.Where(r => r.id == groupId).FirstOrDefault();
+
+            this._setShopGroupDataFromUiToObject(shopGroup);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+                //this.onShopGroupUpdated("ShopGroup updated", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting shop.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToGridViewShopGroup();
+            this._checkEditableCheckBoxes(false);
         }
 
         private void buttonDeleteShopGroup_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow row = this.dataGridViewShopGroups.CurrentRow;
+
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to delete first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int groupId = Convert.ToInt32(row.Cells["shopGroupId"].Value);
+            ShopGroup shopGroup = this.dbContext.ShopGroup.Where(r => r.id == groupId).FirstOrDefault();
+
+            var shopsToUpdateQuery = from shop in dbContext.Shop
+                                     join shopgroup in dbContext.ShopGroup on shop.GroupId equals shopgroup.id
+                                     where shopgroup.id == groupId
+                                     select shop;
+
+            List<Shop> shopsToUpdate = shopsToUpdateQuery.ToList();
+
+
+
+            if (shopsToUpdate.Count > 0)
+            {
+                string message = $"You should change or delete shops associated with Shop Group: {shopGroup.Name} first before deleting this shop group.\n\nThis shops are:\n";
+
+                foreach (Shop shop in shopsToUpdate)
+                {
+                    message += $"Shop id: {shop.id}  ";
+                    message += $"Shop name: {shop.Name}\n";
+                }
+                message = message.Remove(message.Length - 1, 1);
+
+                MessageBox.Show(message, "Unable to delete shop group", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            dbContext.ShopGroup.Remove(shopGroup);
+
+            try
+            {
+                dbContext.SaveChanges();
+                //this.onShopGroupRemoved("ShopGroup removed", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting shop group.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToComboBoxShopOptionsShopGroup(BindType.Setnull);
+            //this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Setnull);
+            this._bindDataToGridViewShopGroup();
+            this._clearShopGroupControls();
+        }
+
+        private void buttonNewShopType_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonSaveShopType_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonUpdateShopType_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonDeleteShopType_Click(object sender, EventArgs e)
         {
 
         }
@@ -313,6 +443,17 @@ namespace InvoiceManager_DBFirst
         private void buttonClose_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void checkBoxShopGroupOptionsEdit_CheckedChanged(object sender, EventArgs e)
+        {
+            DataGridViewRow row = this.dataGridViewShopGroups.CurrentRow;
+            int groupId = (row == null) ? -1 : Convert.ToInt32(row.Cells["shopGroupId"].Value);
+
+            if (checkBoxShopGroupOptionsEdit.Checked)
+                this._bindDataToComboBoxShopGroupOptionsShopType(BindType.Select);
+            else
+                this._bindDataToComboBoxShopGroupOptionsShopType(BindType.Where, groupId);
         }
 
         private static void _setDefaultGridViewStyles(DataGridView gridview)
@@ -370,7 +511,7 @@ namespace InvoiceManager_DBFirst
             //this.onShopsLoaded("Shops Loaded", DateTime.Now);
         }
 
-        private void _bindDataToGridViewShopGroups()
+        private void _bindDataToGridViewShopGroup()
         {
             var query = from shopGroup in dbContext.ShopGroup
                         join shopType in dbContext.ShopType on shopGroup.TypeId equals shopType.id
@@ -526,6 +667,30 @@ namespace InvoiceManager_DBFirst
             shop.Email = this.textBoxShopOptionsEmail.Text;
         }
 
+        private void _setShopGroupDataFromUiToObject(ShopGroup shopGroup)
+        {
+            if (string.IsNullOrEmpty(this.textBoxShopGroupOptionsGroupName.Text))
+            {
+                MessageBox.Show("Missing value.", "You didn't enter group.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(this.textBoxShopGroupOptionsOwner.Text))
+            {
+                MessageBox.Show("Missing value.", "You didn't enter owner.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (this.comboBoxShopGroupOptionsShopType.SelectedItem == null)
+            {
+                MessageBox.Show("Missing value.", "You didn't select shop type.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            shopGroup.Name = this.textBoxShopGroupOptionsGroupName.Text;
+            shopGroup.Owner = this.textBoxShopGroupOptionsOwner.Text;
+            shopGroup.TypeId = ((ShopType)this.comboBoxShopGroupOptionsShopType.SelectedItem).id;
+        }
 
         private void _clearShopControls()
         {
@@ -541,8 +706,6 @@ namespace InvoiceManager_DBFirst
                 if (c is TextBox)
                     ((TextBox)c).Clear();
             }
-         
-            this._bindDataToComboBoxShopGroupOptionsShopType(BindType.Setnull);
         }
 
         private void _clearShopTypeControls()
@@ -557,11 +720,23 @@ namespace InvoiceManager_DBFirst
             this.buttonDeleteShop.Enabled = !isEditable;
         }
 
+        private void _setEditableShopGroups(bool isEditable)
+        {
+            this.buttonSaveShopGroup.Enabled = isEditable;
+            this.buttonUpdateShopGroup.Enabled = !isEditable;
+            this.buttonDeleteShopGroup.Enabled = !isEditable;
+        }
+
         private void _setModes(Mode mode)
         {
             this._shopMode = mode;
-            this._shopGroupMode = mode;
-            this._shopTypeMode = mode;
+            this._groupMode = mode;
+            this._typeMode = mode;
+        }
+
+        private void _checkEditableCheckBoxes(bool check)
+        {
+            this.checkBoxShopGroupOptionsEdit.Checked = check;
         }
     }
 }

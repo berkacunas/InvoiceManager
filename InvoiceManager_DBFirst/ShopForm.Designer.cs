@@ -59,6 +59,8 @@
             this.buttonUpdateShop = new System.Windows.Forms.Button();
             this.buttonSaveShop = new System.Windows.Forms.Button();
             this.groupBoxShopGroupOptions = new System.Windows.Forms.GroupBox();
+            this.checkBoxShopGroupOptionsEdit = new System.Windows.Forms.CheckBox();
+            this.buttonNewShopGroup = new System.Windows.Forms.Button();
             this.buttonSaveShopGroup = new System.Windows.Forms.Button();
             this.buttonUpdateShopGroup = new System.Windows.Forms.Button();
             this.buttonDeleteShopGroup = new System.Windows.Forms.Button();
@@ -72,7 +74,6 @@
             this.dataGridViewShopGroups = new System.Windows.Forms.DataGridView();
             this.checkBoxSetRelational = new System.Windows.Forms.CheckBox();
             this.buttonClose = new System.Windows.Forms.Button();
-            this.buttonNewShopGroup = new System.Windows.Forms.Button();
             this.groupBoxShops.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewShops)).BeginInit();
             this.groupBoxShopTypes.SuspendLayout();
@@ -173,6 +174,7 @@
             this.buttonNewShopType.TabIndex = 11;
             this.buttonNewShopType.Text = "New";
             this.buttonNewShopType.UseVisualStyleBackColor = true;
+            this.buttonNewShopType.Click += new System.EventHandler(this.buttonNewShopType_Click);
             // 
             // labelShopTypeOptionsShopType
             // 
@@ -193,6 +195,7 @@
             this.buttonDeleteShopType.TabIndex = 8;
             this.buttonDeleteShopType.Text = "Delete";
             this.buttonDeleteShopType.UseVisualStyleBackColor = true;
+            this.buttonDeleteShopType.Click += new System.EventHandler(this.buttonDeleteShopType_Click);
             // 
             // buttonUpdateShopType
             // 
@@ -203,6 +206,7 @@
             this.buttonUpdateShopType.TabIndex = 7;
             this.buttonUpdateShopType.Text = "Update";
             this.buttonUpdateShopType.UseVisualStyleBackColor = true;
+            this.buttonUpdateShopType.Click += new System.EventHandler(this.buttonUpdateShopType_Click);
             // 
             // buttonSaveShopType
             // 
@@ -213,6 +217,7 @@
             this.buttonSaveShopType.TabIndex = 6;
             this.buttonSaveShopType.Text = "Save";
             this.buttonSaveShopType.UseVisualStyleBackColor = true;
+            this.buttonSaveShopType.Click += new System.EventHandler(this.buttonSaveShopType_Click);
             // 
             // groupBoxShopOptions
             // 
@@ -417,6 +422,7 @@
             // 
             // groupBoxShopGroupOptions
             // 
+            this.groupBoxShopGroupOptions.Controls.Add(this.checkBoxShopGroupOptionsEdit);
             this.groupBoxShopGroupOptions.Controls.Add(this.buttonNewShopGroup);
             this.groupBoxShopGroupOptions.Controls.Add(this.buttonSaveShopGroup);
             this.groupBoxShopGroupOptions.Controls.Add(this.buttonUpdateShopGroup);
@@ -431,10 +437,32 @@
             this.groupBoxShopGroupOptions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxShopGroupOptions.Name = "groupBoxShopGroupOptions";
             this.groupBoxShopGroupOptions.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxShopGroupOptions.Size = new System.Drawing.Size(330, 172);
+            this.groupBoxShopGroupOptions.Size = new System.Drawing.Size(330, 201);
             this.groupBoxShopGroupOptions.TabIndex = 15;
             this.groupBoxShopGroupOptions.TabStop = false;
             this.groupBoxShopGroupOptions.Text = "Shop Group Options";
+            // 
+            // checkBoxShopGroupOptionsEdit
+            // 
+            this.checkBoxShopGroupOptionsEdit.AutoSize = true;
+            this.checkBoxShopGroupOptionsEdit.Location = new System.Drawing.Point(239, 169);
+            this.checkBoxShopGroupOptionsEdit.Name = "checkBoxShopGroupOptionsEdit";
+            this.checkBoxShopGroupOptionsEdit.Size = new System.Drawing.Size(71, 19);
+            this.checkBoxShopGroupOptionsEdit.TabIndex = 36;
+            this.checkBoxShopGroupOptionsEdit.Text = "Editable";
+            this.checkBoxShopGroupOptionsEdit.UseVisualStyleBackColor = true;
+            this.checkBoxShopGroupOptionsEdit.CheckedChanged += new System.EventHandler(this.checkBoxShopGroupOptionsEdit_CheckedChanged);
+            // 
+            // buttonNewShopGroup
+            // 
+            this.buttonNewShopGroup.Location = new System.Drawing.Point(24, 130);
+            this.buttonNewShopGroup.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.buttonNewShopGroup.Name = "buttonNewShopGroup";
+            this.buttonNewShopGroup.Size = new System.Drawing.Size(64, 27);
+            this.buttonNewShopGroup.TabIndex = 35;
+            this.buttonNewShopGroup.Text = "New";
+            this.buttonNewShopGroup.UseVisualStyleBackColor = true;
+            this.buttonNewShopGroup.Click += new System.EventHandler(this.buttonNewShopGroup_Click);
             // 
             // buttonSaveShopGroup
             // 
@@ -571,17 +599,6 @@
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
-            // buttonNewShopGroup
-            // 
-            this.buttonNewShopGroup.Location = new System.Drawing.Point(24, 130);
-            this.buttonNewShopGroup.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonNewShopGroup.Name = "buttonNewShopGroup";
-            this.buttonNewShopGroup.Size = new System.Drawing.Size(64, 27);
-            this.buttonNewShopGroup.TabIndex = 35;
-            this.buttonNewShopGroup.Text = "New";
-            this.buttonNewShopGroup.UseVisualStyleBackColor = true;
-            this.buttonNewShopGroup.Click += new System.EventHandler(this.buttonNewShopGroup_Click);
-            // 
             // ShopForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -666,5 +683,6 @@
         private System.Windows.Forms.ComboBox comboBoxShopOptionsShopGroup;
         private System.Windows.Forms.Label labelShopOptionsShopGroup;
         private System.Windows.Forms.Button buttonNewShopGroup;
+        private System.Windows.Forms.CheckBox checkBoxShopGroupOptionsEdit;
     }
 }

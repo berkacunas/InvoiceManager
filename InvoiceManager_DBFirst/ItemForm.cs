@@ -158,6 +158,84 @@ namespace InvoiceManager_DBFirst
             this._setItemGroupControls(row);
         }
 
+        private void dataGridViewItems_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            string columnName = this.dataGridViewItems.Columns[e.ColumnIndex].HeaderText;
+
+            var query = dbContext.Item.Join(dbContext.ItemGroup,
+                        item => item.GroupId, itemGroup => itemGroup.id,
+                        (item, itemGroup) =>
+                        new
+                        {
+                            itemId = item.id,
+                            itemGroupId = itemGroup.id,
+                            itemName = item.Name,
+                            itemGroupName = itemGroup.Name,
+                            itemNote = item.Note
+                        });
+
+            switch (columnName)
+            {
+                case "Item":
+                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? query.OrderBy(r => r.itemName).ToList() : query.OrderByDescending(r => r.itemName).ToList();
+                    this._sortOrdersDataGridViewItems[0] = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    break;
+
+                case "Group":
+                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
+                    this._sortOrdersDataGridViewItems[1] = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    break;
+            }
+        }
+
+        private void dataGridViewItemGroups_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            string columnName = this.dataGridViewItemGroups.Columns[e.ColumnIndex].HeaderText;
+
+            var query = dbContext.ItemGroup.Join(dbContext.ItemTopGroup,
+                        itemGroup => itemGroup.TopGroupId, itemTopGroup => itemTopGroup.id,
+                        (itemGroup, itemTopGroup) =>
+                        new
+                        {
+                            itemGroupId = itemGroup.id,
+                            itemTopGroupId = itemTopGroup.id,
+                            itemGroupName = itemGroup.Name,
+                            itemTopGroupName = itemTopGroup.Name
+                        });
+
+            switch (columnName)
+            {
+                case "Group":
+                    this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[0] == SortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
+                    this._sortOrdersDataGridViewItemGroups[0] = (this._sortOrdersDataGridViewItemGroups[0] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    break;
+                case "Top Group":
+                    this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemTopGroupName).ToList() : query.OrderByDescending(r => r.itemTopGroupName).ToList();
+                    this._sortOrdersDataGridViewItemGroups[1] = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    break;
+            }
+        }
+
+        private void dataGridViewItems_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewItems.Rows.Count > 0)
+            {
+                DataGridViewRow row = this.dataGridViewItems.Rows[0];
+                if (row != null)
+                    this._setItemControls(row);
+            }
+        }
+
+        private void dataGridViewItemGroups_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewItemGroups.Rows.Count > 0)
+            {
+                DataGridViewRow row = this.dataGridViewItemGroups.Rows[0];
+                if (row != null)
+                    this._setItemGroupControls(row);
+            }
+        }
+
         private void checkBoxItemOptionsEdit_CheckedChanged(object sender, EventArgs e)
         {
             DataGridViewRow row = this.dataGridViewItems.CurrentRow;
@@ -772,84 +850,6 @@ namespace InvoiceManager_DBFirst
             foreach (Control c in this.groupBoxItemTopGroupOptions.Controls)
                 if (c is ComboBox)
                     ((ComboBox)c).DataSource = null;
-        }
-
-        private void dataGridViewItems_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            string columnName = this.dataGridViewItems.Columns[e.ColumnIndex].HeaderText;
-
-            var query = dbContext.Item.Join(dbContext.ItemGroup,
-                        item => item.GroupId, itemGroup => itemGroup.id,
-                        (item, itemGroup) =>
-                        new
-                        {
-                            itemId = item.id,
-                            itemGroupId = itemGroup.id,
-                            itemName = item.Name,
-                            itemGroupName = itemGroup.Name,
-                            itemNote = item.Note
-                        });
-
-            switch (columnName)
-            {
-                case "Item":
-                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? query.OrderBy(r => r.itemName).ToList() : query.OrderByDescending(r => r.itemName).ToList();
-                    this._sortOrdersDataGridViewItems[0] = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
-                    break;
-                
-                case "Group":
-                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
-                    this._sortOrdersDataGridViewItems[1] = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
-                    break;
-            }
-        }
-
-        private void dataGridViewItemGroups_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            string columnName = this.dataGridViewItemGroups.Columns[e.ColumnIndex].HeaderText;
-
-            var query = dbContext.ItemGroup.Join(dbContext.ItemTopGroup,
-                        itemGroup => itemGroup.TopGroupId, itemTopGroup => itemTopGroup.id,
-                        (itemGroup, itemTopGroup) =>
-                        new
-                        {
-                            itemGroupId = itemGroup.id,
-                            itemTopGroupId = itemTopGroup.id,
-                            itemGroupName = itemGroup.Name,
-                            itemTopGroupName = itemTopGroup.Name
-                        });
-
-            switch (columnName)
-            {
-                case "Group":
-                    this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[0] == SortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
-                    this._sortOrdersDataGridViewItemGroups[0] = (this._sortOrdersDataGridViewItemGroups[0] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
-                    break;
-                case "Top Group":
-                    this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemTopGroupName).ToList() : query.OrderByDescending(r => r.itemTopGroupName).ToList();
-                    this._sortOrdersDataGridViewItemGroups[1] = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
-                    break;
-            }
-        }
-
-        private void dataGridViewItems_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewItems.Rows.Count > 0)
-            {
-                DataGridViewRow row = this.dataGridViewItems.Rows[0];
-                if (row != null)
-                    this._setItemControls(row);
-            }
-        }
-
-        private void dataGridViewItemGroups_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewItemGroups.Rows.Count > 0)
-            {
-                DataGridViewRow row = this.dataGridViewItemGroups.Rows[0];
-                if (row != null)
-                    this._setItemGroupControls(row);
-            }
         }
 
         protected virtual void onItemSaved(string message, DateTime eventTime) //protected virtual method
