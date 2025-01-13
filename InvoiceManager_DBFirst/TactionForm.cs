@@ -795,7 +795,10 @@ namespace InvoiceManager_DBFirst
                 taction.SellerId = dbContext.Seller.Where(r => r.Name == this.textBoxSeller.Text).FirstOrDefault().id;
 
             taction.No = this.textBoxTactionNo.Text;
-            taction.TotalPrice = taction.TactionDetails.Sum(r => r.UnitPrice * r.Unit);
+
+            foreach (TactionDetails details in taction.TactionDetails)
+                taction.TotalPrice += (details.DiscountedPrice == null) ? (details.UnitPrice * details.Unit) : (details.DiscountedPrice.Value);
+            // taction.TotalPrice += taction.TactionDetails.Sum(r => r.UnitPrice * r.Unit);
         }
 
         private void _setTactionDetailsDataFromUiToObject(TactionDetails details)
@@ -869,7 +872,7 @@ namespace InvoiceManager_DBFirst
                 {
                     details.DiscountRate = Convert.ToDecimal(this.textBoxDiscountRate.Text);
 
-                    details.DiscountedPrice = (1 - details.DiscountRate) * details.UnitPrice;
+                    details.DiscountedPrice = (1 - details.DiscountRate / 100 ) * details.UnitPrice * details.Unit;
                     this.textBoxDiscountedPrice.Text = details.DiscountedPrice.ToString();
                 }
                 else if (!string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))

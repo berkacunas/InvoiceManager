@@ -385,11 +385,9 @@ namespace InvoiceManager_DBFirst
 
             List<Shop> shopsToUpdate = shopsToUpdateQuery.ToList();
 
-
-
             if (shopsToUpdate.Count > 0)
             {
-                string message = $"You should change or delete shops associated with Shop Group: {shopGroup.Name} first before deleting this shop group.\n\nThis shops are:\n";
+                string message = $"You should change or delete shops associated with Shop Groups first before deleting this shop group.\n\nThis shops are:\n";
 
                 foreach (Shop shop in shopsToUpdate)
                 {
