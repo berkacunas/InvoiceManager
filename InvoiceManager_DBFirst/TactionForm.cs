@@ -796,6 +796,7 @@ namespace InvoiceManager_DBFirst
 
             taction.No = this.textBoxTactionNo.Text;
 
+            taction.TotalPrice = 0;
             foreach (TactionDetails details in taction.TactionDetails)
                 taction.TotalPrice += (details.DiscountedPrice == null) ? (details.UnitPrice * details.Unit) : (details.DiscountedPrice.Value);
             // taction.TotalPrice += taction.TactionDetails.Sum(r => r.UnitPrice * r.Unit);

@@ -673,12 +673,6 @@ namespace InvoiceManager_DBFirst
                 return;
             }
 
-            if (string.IsNullOrEmpty(this.textBoxShopGroupOptionsOwner.Text))
-            {
-                MessageBox.Show("Missing value.", "You didn't enter owner.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             if (this.comboBoxShopGroupOptionsShopType.SelectedItem == null)
             {
                 MessageBox.Show("Missing value.", "You didn't select shop type.", MessageBoxButtons.OK, MessageBoxIcon.Error);
