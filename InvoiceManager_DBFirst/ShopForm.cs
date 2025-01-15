@@ -7,8 +7,10 @@ using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace InvoiceManager_DBFirst
 {
@@ -68,8 +70,8 @@ namespace InvoiceManager_DBFirst
             _enableDataGridViewMultiSelect(this.dataGridViewShopTypes, false);
 
             this.comboBoxShopOptionsShopGroup.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.comboBoxShopTypeOptionsShopType.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxShopGroupOptionsShopType.DropDownStyle = ComboBoxStyle.DropDownList;
+            // this.comboBoxShopTypeOptionsShopType.DropDownStyle = ComboBoxStyle.DropDownList;  // Must be editable.
 
             this._bindDataToGridViewShop();
             this._bindDataToGridViewShopGroup();
@@ -420,22 +422,140 @@ namespace InvoiceManager_DBFirst
 
         private void buttonNewShopType_Click(object sender, EventArgs e)
         {
+            this._typeMode = (this._typeMode == Mode.Add) ? Mode.Display : Mode.Add;
+            this.buttonNewShopType.Text = (this._typeMode == Mode.Add) ? "Cancel" : "New";
 
+            if (this._typeMode == Mode.Add)
+            {
+                this._setEditableShopTypes(true);
+                this._bindDataToComboBoxShopTypeOptionsShopType(BindType.Setnull);
+                this._newShopType = new ShopType();
+            }
+            else
+            {
+                this._setEditableShopTypes(false);
+                this._bindDataToComboBoxShopTypeOptionsShopType(BindType.Select);
+            }
+
+            this._clearShopTypeControls();
         }
 
         private void buttonSaveShopType_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(this.comboBoxShopTypeOptionsShopType.Text))
+            {
+                MessageBox.Show("Text not entered.", "Enter shop type name first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
+            this._newShopType.Name = this.comboBoxShopTypeOptionsShopType.Text;
+            this._newShopType = this.dbContext.ShopType.Add(this._newShopType);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+                //this.onShopTypeSaved("ShopType saved", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while adding shop type.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToComboBoxShopTypeOptionsShopType(BindType.Where, this._newShopType.id);
+            this._bindDataToGridViewShopType();
+            this._clearShopTypeControls();
+            this._setEditableShopTypes(false);
+            this._newShopType = new ShopType();
+            this._typeMode = Mode.Display;
         }
 
         private void buttonUpdateShopType_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewShopTypes.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(this.comboBoxShopTypeOptionsShopType.Text))
+            {
+                MessageBox.Show("Item not selected.", "Select the shop type you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int shopTypeId = Convert.ToInt32(row.Cells["shopTypeId"].Value);
+            string shopTypeName = row.Cells["shopTypeName"].Value.ToString();
+
+            ShopType shopType = this.dbContext.ShopType.Where(r => r.id == shopTypeId).FirstOrDefault();
+            this._setShopTypeDataFromUiToObject(shopType);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+                //this.onShopTypeUpdated("ShopType updated", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while updating shop type.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToComboBoxShopTypeOptionsShopType(BindType.Where, shopType.id);
+            this._bindDataToGridViewShopType();
         }
 
         private void buttonDeleteShopType_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewShopTypes.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int shopTypeId = Convert.ToInt32(row.Cells["shopTypeId"].Value);
+            ShopType shopType = this.dbContext.ShopType.Where(r => r.id == shopTypeId).FirstOrDefault();
+
+            var shopGroupsToUpdateQuery = from shopGroup in dbContext.ShopGroup
+                                          join shoptype in dbContext.ShopType on shopGroup.TypeId equals shoptype.id
+                                          where shopGroup.TypeId == shopTypeId
+                                          select shopGroup;
+
+            List<ShopGroup> shopGroupsToUpdate = shopGroupsToUpdateQuery.ToList();
+
+            if (shopGroupsToUpdate.Count > 0)
+            {
+                string message = $"You should change or delete shop groups associated with Shop Type first before deleting this shop type.\n\nThis shop groups are:\n";
+
+                foreach (ShopGroup shopGroup in shopGroupsToUpdate)
+                {
+                    message += $"Item id: {shopGroup.id}  ";
+                    message += $"Item name: {shopGroup.Name}\n";
+                }
+                message = message.Remove(message.Length - 1, 1);
+
+                MessageBox.Show(message, "Unable to delete shop type", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            dbContext.ShopType.Remove(shopType);
+
+            try
+            {
+                dbContext.SaveChanges();
+                //this.onShopTypeRemoved("ShopType removed", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting shop Type.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToComboBoxShopGroupOptionsShopType(BindType.Setnull);
+            this._bindDataToComboBoxShopTypeOptionsShopType(BindType.Setnull);
+            this._bindDataToGridViewShopGroup();
+            this._bindDataToGridViewShopType();
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -669,19 +789,30 @@ namespace InvoiceManager_DBFirst
         {
             if (string.IsNullOrEmpty(this.textBoxShopGroupOptionsGroupName.Text))
             {
-                MessageBox.Show("Missing value.", "You didn't enter group.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("You didn't enter group.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (this.comboBoxShopGroupOptionsShopType.SelectedItem == null)
             {
-                MessageBox.Show("Missing value.", "You didn't select shop type.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("You didn't select shop type.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             shopGroup.Name = this.textBoxShopGroupOptionsGroupName.Text;
             shopGroup.Owner = this.textBoxShopGroupOptionsOwner.Text;
             shopGroup.TypeId = ((ShopType)this.comboBoxShopGroupOptionsShopType.SelectedItem).id;
+        }
+
+        private void _setShopTypeDataFromUiToObject(ShopType shopType)
+        {
+            if (string.IsNullOrEmpty(this.comboBoxShopTypeOptionsShopType.Text))
+            {
+                MessageBox.Show("You didn't select shop type.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            shopType.Name = this.comboBoxShopTypeOptionsShopType.Text;
         }
 
         private void _clearShopControls()
@@ -702,7 +833,7 @@ namespace InvoiceManager_DBFirst
 
         private void _clearShopTypeControls()
         {
-            this._bindDataToComboBoxShopTypeOptionsShopType(BindType.Setnull);
+            // ShopType controls don't have any textboxes.
         }
 
         private void _setEditableShops(bool isEditable)
@@ -717,6 +848,13 @@ namespace InvoiceManager_DBFirst
             this.buttonSaveShopGroup.Enabled = isEditable;
             this.buttonUpdateShopGroup.Enabled = !isEditable;
             this.buttonDeleteShopGroup.Enabled = !isEditable;
+        }
+
+        private void _setEditableShopTypes(bool isEditable)
+        {
+            this.buttonSaveShopType.Enabled = isEditable;
+            this.buttonUpdateShopType.Enabled = isEditable;
+            this.buttonDeleteShopType.Enabled = isEditable;
         }
 
         private void _setModes(Mode mode)

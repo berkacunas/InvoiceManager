@@ -530,7 +530,6 @@ namespace InvoiceManager_DBFirst
 
         private void buttonUpdateTopGroup_Click(object sender, EventArgs e)
         {
-
             if (this.comboBoxTopGroupOptionsTopGroup.SelectedItem == null)
             {
                 MessageBox.Show("Item not selected.", "Select the top group item you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
