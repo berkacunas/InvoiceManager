@@ -324,7 +324,21 @@ namespace InvoiceManager_DBFirst
 
         private void _setTactionTotalPrice()
         {
+            //textBoxTotalPrice.Text = string.Empty;
+            //decimal totalPrice = 0;
+
+            //foreach (TactionDetails details in _newTaction.TactionDetails)
+            //{
+            //    if (details.DiscountRate != null)
+            //        totalPrice += _calculateDiscountedUnitPrice(details.DiscountRate.Value, details.UnitPrice, details.Unit);
+            //    else if (details.DiscountedPrice != null)
+            //        totalPrice += details.DiscountedPrice.Value * details.Unit;
+            //    else
+            //        totalPrice += details.UnitPrice * details.Unit;
+            //}
+
             textBoxTotalPrice.Text = _newTaction.TactionDetails.Sum(r => r.UnitPrice * r.Unit).ToString();
+            //textBoxTotalPrice.Text = totalPrice.ToString();
         }
 
         private void buttonUpdateDetail_Click(object sender, EventArgs e)
@@ -872,20 +886,33 @@ namespace InvoiceManager_DBFirst
                 if (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text))
                 {
                     details.DiscountRate = Convert.ToDecimal(this.textBoxDiscountRate.Text);
+                    details.DiscountedPrice = _calculateDiscountedUnitPrice(details.DiscountRate.Value, details.UnitPrice, details.Unit);
 
-                    details.DiscountedPrice = (1 - details.DiscountRate / 100 ) * details.UnitPrice * details.Unit;
                     this.textBoxDiscountedPrice.Text = details.DiscountedPrice.ToString();
                 }
                 else if (!string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
                 {
-                    details.DiscountedPrice = Convert.ToDecimal(this.textBoxDiscountedPrice.Text);
+                    // details.DiscountedPrice is total discounted price per item. It's not discounted unit price.
+                    details.DiscountedPrice = Convert.ToDecimal(this.textBoxDiscountedPrice.Text) * details.Unit;
+                    details.DiscountRate = _calculateDiscountRate(Convert.ToDecimal(this.textBoxDiscountedPrice.Text), details.UnitPrice);
 
-                    details.DiscountRate = 1 - details.DiscountedPrice / details.UnitPrice;
                     this.textBoxDiscountRate.Text = Math.Round(Convert.ToDouble(details.DiscountRate), 2).ToString();
                 }
             }
 
             details.Note = !string.IsNullOrEmpty(this.textBoxDetailsNote.Text) ? this.textBoxDetailsNote.Text : null;
+        }
+
+        private static decimal _calculateDiscountedUnitPrice(decimal rate, decimal unitPrice, decimal unit)
+        {
+            /* (1 - details.DiscountRate / 100) * details.UnitPrice * details.Unit; */
+            return ((1 - rate) / 100) * unitPrice * unit;      
+        }
+
+        private static decimal _calculateDiscountRate(decimal discountedUnitPrice, decimal unitPrice)
+        {
+            /* 1 - Convert.ToDecimal(this.textBoxDiscountedPrice.Text) / details.UnitPrice; */
+            return 1 - discountedUnitPrice / unitPrice;
         }
 
         private int _setTactionControls(DataGridViewRow row)

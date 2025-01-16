@@ -103,40 +103,41 @@
             // toolStripMenuItemTransactions
             // 
             this.toolStripMenuItemTransactions.Name = "toolStripMenuItemTransactions";
-            this.toolStripMenuItemTransactions.Size = new System.Drawing.Size(171, 22);
+            this.toolStripMenuItemTransactions.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemTransactions.Text = "Transactions";
             this.toolStripMenuItemTransactions.Click += new System.EventHandler(this.toolStripMenuItemTransactions_Click);
             // 
             // toolStripMenuItemItems
             // 
             this.toolStripMenuItemItems.Name = "toolStripMenuItemItems";
-            this.toolStripMenuItemItems.Size = new System.Drawing.Size(171, 22);
+            this.toolStripMenuItemItems.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemItems.Text = "Items";
             this.toolStripMenuItemItems.Click += new System.EventHandler(this.toolStripMenuItem_Items_Click);
             // 
             // toolStripMenuItemShops
             // 
             this.toolStripMenuItemShops.Name = "toolStripMenuItemShops";
-            this.toolStripMenuItemShops.Size = new System.Drawing.Size(171, 22);
+            this.toolStripMenuItemShops.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemShops.Text = "Shops";
             this.toolStripMenuItemShops.Click += new System.EventHandler(this.toolStripMenuItemShops_Click);
             // 
             // toolStripMenuItemPaymentMethods
             // 
             this.toolStripMenuItemPaymentMethods.Name = "toolStripMenuItemPaymentMethods";
-            this.toolStripMenuItemPaymentMethods.Size = new System.Drawing.Size(171, 22);
+            this.toolStripMenuItemPaymentMethods.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemPaymentMethods.Text = "Payment Methods";
+            this.toolStripMenuItemPaymentMethods.Click += new System.EventHandler(this.toolStripMenuItemPaymentMethods_Click);
             // 
             // toolStripMenuItemPersons
             // 
             this.toolStripMenuItemPersons.Name = "toolStripMenuItemPersons";
-            this.toolStripMenuItemPersons.Size = new System.Drawing.Size(171, 22);
+            this.toolStripMenuItemPersons.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemPersons.Text = "Persons";
             // 
             // toolStripMenuItemSellers
             // 
             this.toolStripMenuItemSellers.Name = "toolStripMenuItemSellers";
-            this.toolStripMenuItemSellers.Size = new System.Drawing.Size(171, 22);
+            this.toolStripMenuItemSellers.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSellers.Text = "Sellers";
             // 
             // statusStripMain

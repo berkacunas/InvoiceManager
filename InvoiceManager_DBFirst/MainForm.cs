@@ -132,5 +132,10 @@ namespace InvoiceManager_DBFirst
             shopForm.Show();
 
         }
+
+        private void toolStripMenuItemPaymentMethods_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
