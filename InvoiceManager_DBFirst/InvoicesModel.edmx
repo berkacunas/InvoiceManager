@@ -4,7 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="InvoicesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="InvoicesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BankCard">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Type" Type="nchar" MaxLength="10" />
+        </EntityType>
         <EntityType Name="CashTransfer">
           <Key>
             <PropertyRef Name="id" />
@@ -137,6 +145,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PersonId" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="BankCardId" Type="int" />
         </EntityType>
         <EntityType Name="PaymentMethod_tracking">
           <Key>
@@ -394,6 +403,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PaymentMethod_BankCardId">
+          <End Role="BankCard" Type="Self.BankCard" Multiplicity="0..1" />
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankCard">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PaymentMethod">
+              <PropertyRef Name="BankCardId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PaymentMethodPersonId_PersonId">
           <End Role="Person" Type="Self.Person" Multiplicity="1" />
           <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="*" />
@@ -527,6 +548,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="InvoicesModelStoreContainer">
+          <EntitySet Name="BankCard" EntityType="Self.BankCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CashTransfer" EntityType="Self.CashTransfer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CashTransfer_tracking" EntityType="Self.CashTransfer_tracking" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CurrencyMovement" EntityType="Self.CurrencyMovement" Schema="dbo" store:Type="Tables" />
@@ -577,6 +599,10 @@
             <End Role="ItemGroup" EntitySet="ItemGroup" />
             <End Role="ItemGroup1" EntitySet="ItemGroup" />
           </AssociationSet>
+          <AssociationSet Name="FK_PaymentMethod_BankCardId" Association="Self.FK_PaymentMethod_BankCardId">
+            <End Role="BankCard" EntitySet="BankCard" />
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+          </AssociationSet>
           <AssociationSet Name="FK_PaymentMethodPersonId_PersonId" Association="Self.FK_PaymentMethodPersonId_PersonId">
             <End Role="Person" EntitySet="Person" />
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
@@ -622,10 +648,20 @@
             <End Role="TactionDetails" EntitySet="TactionDetails" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="InvoicesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BankCard">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_PaymentMethod_BankCardId" FromRole="BankCard" ToRole="PaymentMethod" />
+        </EntityType>
         <EntityType Name="CashTransfer">
           <Key>
             <PropertyRef Name="id" />
@@ -643,6 +679,17 @@
           <NavigationProperty Name="Person" Relationship="Self.FK_CashTransferFrom_PersonId" FromRole="CashTransfer" ToRole="Person" />
           <NavigationProperty Name="Person1" Relationship="Self.FK_CashTransferTo_PersonId" FromRole="CashTransfer" ToRole="Person" />
         </EntityType>
+        <EntityType Name="CashTransfer_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="CurrencyMovement">
           <Key>
             <PropertyRef Name="id" />
@@ -656,6 +703,17 @@
           <Property Name="AmountTo" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="Rate" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
         </EntityType>
+        <EntityType Name="CurrencyMovement_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="Item">
           <Key>
             <PropertyRef Name="id" />
@@ -668,6 +726,17 @@
           <NavigationProperty Name="ItemGroup" Relationship="Self.FK_Item_GroupId" FromRole="Item" ToRole="ItemGroup" />
           <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetails_ItemId" FromRole="Item" ToRole="TactionDetails" />
         </EntityType>
+        <EntityType Name="Item_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="ItemGroup">
           <Key>
             <PropertyRef Name="id" />
@@ -679,6 +748,17 @@
           <NavigationProperty Name="ItemGroup1" Relationship="Self.FK_ItemGroup_TopGroupId" FromRole="ItemGroup" ToRole="ItemGroup1" />
           <NavigationProperty Name="ItemGroup2" Relationship="Self.FK_ItemGroup_TopGroupId" FromRole="ItemGroup1" ToRole="ItemGroup" />
         </EntityType>
+        <EntityType Name="ItemGroup_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="ItemSubType">
           <Key>
             <PropertyRef Name="id" />
@@ -687,12 +767,34 @@
           <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetails_ItemSubTypeId" FromRole="ItemSubType" ToRole="TactionDetails" />
         </EntityType>
+        <EntityType Name="ItemSubType_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="ItemTopGroup">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ItemTopGroup_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="PaymentMethod">
           <Key>
@@ -701,9 +803,22 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PersonId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BankCardId" Type="Int32" />
+          <NavigationProperty Name="BankCard" Relationship="Self.FK_PaymentMethod_BankCardId" FromRole="PaymentMethod" ToRole="BankCard" />
           <NavigationProperty Name="CashTransfer" Relationship="Self.FK_CashTransfer_PaymentMethodId" FromRole="PaymentMethod" ToRole="CashTransfer" />
           <NavigationProperty Name="Person" Relationship="Self.FK_PaymentMethodPersonId_PersonId" FromRole="PaymentMethod" ToRole="Person" />
           <NavigationProperty Name="Taction" Relationship="Self.FK_Taction_PaymentMethodId" FromRole="PaymentMethod" ToRole="Taction" />
+        </EntityType>
+        <EntityType Name="PaymentMethod_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -712,11 +827,50 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Surname" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Fullname" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CashTransfer" Relationship="Self.FK_CashTransferFrom_PersonId" FromRole="Person" ToRole="CashTransfer" />
           <NavigationProperty Name="CashTransfer1" Relationship="Self.FK_CashTransferTo_PersonId" FromRole="Person" ToRole="CashTransfer" />
           <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_PaymentMethodPersonId_PersonId" FromRole="Person" ToRole="PaymentMethod" />
           <NavigationProperty Name="Taction" Relationship="Self.FK_Taction_WhoDidIt" FromRole="Person" ToRole="Taction" />
-          <Property Name="Fullname" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Person_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="scope_info">
+          <Key>
+            <PropertyRef Name="sync_scope_name" />
+          </Key>
+          <Property Name="sync_scope_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sync_scope_schema" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="sync_scope_setup" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="sync_scope_version" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="sync_scope_last_clean_timestamp" Type="Int64" />
+          <Property Name="sync_scope_properties" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="scope_info_client">
+          <Key>
+            <PropertyRef Name="sync_scope_id" />
+            <PropertyRef Name="sync_scope_name" />
+            <PropertyRef Name="sync_scope_hash" />
+          </Key>
+          <Property Name="sync_scope_id" Type="Guid" Nullable="false" />
+          <Property Name="sync_scope_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sync_scope_hash" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sync_scope_parameters" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="scope_last_sync_timestamp" Type="Int64" />
+          <Property Name="scope_last_server_sync_timestamp" Type="Int64" />
+          <Property Name="scope_last_sync_duration" Type="Int64" />
+          <Property Name="scope_last_sync" Type="DateTime" Precision="3" />
+          <Property Name="sync_scope_errors" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="sync_scope_properties" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Seller">
           <Key>
@@ -730,6 +884,17 @@
           <Property Name="Email" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ShopGroup" Relationship="Self.FK_ShopGroupSellerId_SellerId" FromRole="Seller" ToRole="ShopGroup" />
           <NavigationProperty Name="Taction" Relationship="Self.FK_Taction_SellerId" FromRole="Seller" ToRole="Taction" />
+        </EntityType>
+        <EntityType Name="Seller_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Shop">
           <Key>
@@ -747,6 +912,17 @@
           <NavigationProperty Name="ShopGroup" Relationship="Self.FK_ShopGroupId_ShopGroupId" FromRole="Shop" ToRole="ShopGroup" />
           <NavigationProperty Name="Taction" Relationship="Self.FK_Taction_ShopId" FromRole="Shop" ToRole="Taction" />
         </EntityType>
+        <EntityType Name="Shop_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="ShopGroup">
           <Key>
             <PropertyRef Name="id" />
@@ -761,6 +937,17 @@
           <NavigationProperty Name="Shop" Relationship="Self.FK_ShopGroupId_ShopGroupId" FromRole="ShopGroup" ToRole="Shop" />
           <NavigationProperty Name="ShopType" Relationship="Self.FK_ShopGroupTypeId_ShopTypeId" FromRole="ShopGroup" ToRole="ShopType" />
         </EntityType>
+        <EntityType Name="ShopGroup_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="ShopType">
           <Key>
             <PropertyRef Name="id" />
@@ -768,6 +955,17 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="ShopGroup" Relationship="Self.FK_ShopGroupTypeId_ShopTypeId" FromRole="ShopType" ToRole="ShopGroup" />
+        </EntityType>
+        <EntityType Name="ShopType_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Taction">
           <Key>
@@ -787,6 +985,17 @@
           <NavigationProperty Name="Shop" Relationship="Self.FK_Taction_ShopId" FromRole="Taction" ToRole="Shop" />
           <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetails_TactionId" FromRole="Taction" ToRole="TactionDetails" />
         </EntityType>
+        <EntityType Name="Taction_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="TactionDetails">
           <Key>
             <PropertyRef Name="id" />
@@ -805,6 +1014,29 @@
           <NavigationProperty Name="ItemSubType" Relationship="Self.FK_TactionDetails_ItemSubTypeId" FromRole="TactionDetails" ToRole="ItemSubType" />
           <NavigationProperty Name="Taction" Relationship="Self.FK_TactionDetails_TactionId" FromRole="TactionDetails" ToRole="Taction" />
         </EntityType>
+        <EntityType Name="TactionDetails_tracking">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="update_scope_id" Type="Guid" />
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
+          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_PaymentMethod_BankCardId">
+          <End Role="BankCard" Type="Self.BankCard" Multiplicity="0..1" />
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankCard">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PaymentMethod">
+              <PropertyRef Name="BankCardId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CashTransfer_PaymentMethodId">
           <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
           <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
@@ -998,20 +1230,41 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="InvoicesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BankCard" EntityType="Self.BankCard" />
           <EntitySet Name="CashTransfer" EntityType="Self.CashTransfer" />
+          <EntitySet Name="CashTransfer_tracking" EntityType="Self.CashTransfer_tracking" />
           <EntitySet Name="CurrencyMovement" EntityType="Self.CurrencyMovement" />
+          <EntitySet Name="CurrencyMovement_tracking" EntityType="Self.CurrencyMovement_tracking" />
           <EntitySet Name="Item" EntityType="Self.Item" />
+          <EntitySet Name="Item_tracking" EntityType="Self.Item_tracking" />
           <EntitySet Name="ItemGroup" EntityType="Self.ItemGroup" />
+          <EntitySet Name="ItemGroup_tracking" EntityType="Self.ItemGroup_tracking" />
           <EntitySet Name="ItemSubType" EntityType="Self.ItemSubType" />
+          <EntitySet Name="ItemSubType_tracking" EntityType="Self.ItemSubType_tracking" />
           <EntitySet Name="ItemTopGroup" EntityType="Self.ItemTopGroup" />
+          <EntitySet Name="ItemTopGroup_tracking" EntityType="Self.ItemTopGroup_tracking" />
           <EntitySet Name="PaymentMethod" EntityType="Self.PaymentMethod" />
+          <EntitySet Name="PaymentMethod_tracking" EntityType="Self.PaymentMethod_tracking" />
           <EntitySet Name="Person" EntityType="Self.Person" />
+          <EntitySet Name="Person_tracking" EntityType="Self.Person_tracking" />
+          <EntitySet Name="scope_info" EntityType="Self.scope_info" />
+          <EntitySet Name="scope_info_client" EntityType="Self.scope_info_client" />
           <EntitySet Name="Seller" EntityType="Self.Seller" />
+          <EntitySet Name="Seller_tracking" EntityType="Self.Seller_tracking" />
           <EntitySet Name="Shop" EntityType="Self.Shop" />
+          <EntitySet Name="Shop_tracking" EntityType="Self.Shop_tracking" />
           <EntitySet Name="ShopGroup" EntityType="Self.ShopGroup" />
+          <EntitySet Name="ShopGroup_tracking" EntityType="Self.ShopGroup_tracking" />
           <EntitySet Name="ShopType" EntityType="Self.ShopType" />
+          <EntitySet Name="ShopType_tracking" EntityType="Self.ShopType_tracking" />
           <EntitySet Name="Taction" EntityType="Self.Taction" />
+          <EntitySet Name="Taction_tracking" EntityType="Self.Taction_tracking" />
           <EntitySet Name="TactionDetails" EntityType="Self.TactionDetails" />
+          <EntitySet Name="TactionDetails_tracking" EntityType="Self.TactionDetails_tracking" />
+          <AssociationSet Name="FK_PaymentMethod_BankCardId" Association="Self.FK_PaymentMethod_BankCardId">
+            <End Role="BankCard" EntitySet="BankCard" />
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+          </AssociationSet>
           <AssociationSet Name="FK_CashTransfer_PaymentMethodId" Association="Self.FK_CashTransfer_PaymentMethodId">
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
             <End Role="CashTransfer" EntitySet="CashTransfer" />
@@ -1076,211 +1329,22 @@
             <End Role="Taction" EntitySet="Taction" />
             <End Role="TactionDetails" EntitySet="TactionDetails" />
           </AssociationSet>
-          <EntitySet Name="CashTransfer_tracking" EntityType="InvoicesModel.CashTransfer_tracking" />
-          <EntitySet Name="CurrencyMovement_tracking" EntityType="InvoicesModel.CurrencyMovement_tracking" />
-          <EntitySet Name="Item_tracking" EntityType="InvoicesModel.Item_tracking" />
-          <EntitySet Name="ItemGroup_tracking" EntityType="InvoicesModel.ItemGroup_tracking" />
-          <EntitySet Name="ItemSubType_tracking" EntityType="InvoicesModel.ItemSubType_tracking" />
-          <EntitySet Name="ItemTopGroup_tracking" EntityType="InvoicesModel.ItemTopGroup_tracking" />
-          <EntitySet Name="PaymentMethod_tracking" EntityType="InvoicesModel.PaymentMethod_tracking" />
-          <EntitySet Name="Person_tracking" EntityType="InvoicesModel.Person_tracking" />
-          <EntitySet Name="scope_info" EntityType="InvoicesModel.scope_info" />
-          <EntitySet Name="scope_info_client" EntityType="InvoicesModel.scope_info_client" />
-          <EntitySet Name="Seller_tracking" EntityType="InvoicesModel.Seller_tracking" />
-          <EntitySet Name="Shop_tracking" EntityType="InvoicesModel.Shop_tracking" />
-          <EntitySet Name="ShopGroup_tracking" EntityType="InvoicesModel.ShopGroup_tracking" />
-          <EntitySet Name="ShopType_tracking" EntityType="InvoicesModel.ShopType_tracking" />
-          <EntitySet Name="Taction_tracking" EntityType="InvoicesModel.Taction_tracking" />
-          <EntitySet Name="TactionDetails_tracking" EntityType="InvoicesModel.TactionDetails_tracking" />
         </EntityContainer>
-        <EntityType Name="CashTransfer_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="CurrencyMovement_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="Item_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="ItemGroup_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="ItemSubType_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="ItemTopGroup_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="PaymentMethod_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="Person_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="scope_info">
-          <Key>
-            <PropertyRef Name="sync_scope_name" />
-          </Key>
-          <Property Name="sync_scope_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="sync_scope_schema" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="sync_scope_setup" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="sync_scope_version" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="sync_scope_last_clean_timestamp" Type="Int64" />
-          <Property Name="sync_scope_properties" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="scope_info_client">
-          <Key>
-            <PropertyRef Name="sync_scope_id" />
-            <PropertyRef Name="sync_scope_name" />
-            <PropertyRef Name="sync_scope_hash" />
-          </Key>
-          <Property Name="sync_scope_id" Type="Guid" Nullable="false" />
-          <Property Name="sync_scope_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="sync_scope_hash" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="sync_scope_parameters" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="scope_last_sync_timestamp" Type="Int64" />
-          <Property Name="scope_last_server_sync_timestamp" Type="Int64" />
-          <Property Name="scope_last_sync_duration" Type="Int64" />
-          <Property Name="scope_last_sync" Type="DateTime" Precision="3" />
-          <Property Name="sync_scope_errors" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="sync_scope_properties" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Seller_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="Shop_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="ShopGroup_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="ShopType_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="Taction_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="TactionDetails_tracking">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="update_scope_id" Type="Guid" />
-          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="timestamp_bigint" Type="Int64" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="sync_row_is_tombstone" Type="Boolean" Nullable="false" />
-          <Property Name="last_change_datetime" Type="DateTime" Precision="3" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="InvoicesModelStoreContainer" CdmEntityContainer="InvoicesEntities">
+          <EntitySetMapping Name="BankCard">
+            <EntityTypeMapping TypeName="InvoicesModel.BankCard">
+              <MappingFragment StoreEntitySet="BankCard">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CashTransfer">
             <EntityTypeMapping TypeName="InvoicesModel.CashTransfer">
               <MappingFragment StoreEntitySet="CashTransfer">
@@ -1293,6 +1357,18 @@
                 <ScalarProperty Name="PaymentMethodId" ColumnName="PaymentMethodId" />
                 <ScalarProperty Name="For" ColumnName="For" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CashTransfer_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.CashTransfer_tracking">
+              <MappingFragment StoreEntitySet="CashTransfer_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1310,6 +1386,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CurrencyMovement_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.CurrencyMovement_tracking">
+              <MappingFragment StoreEntitySet="CurrencyMovement_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Item">
             <EntityTypeMapping TypeName="InvoicesModel.Item">
               <MappingFragment StoreEntitySet="Item">
@@ -1318,6 +1406,18 @@
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
                 <ScalarProperty Name="Size" ColumnName="Size" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Item_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.Item_tracking">
+              <MappingFragment StoreEntitySet="Item_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1330,11 +1430,35 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ItemGroup_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.ItemGroup_tracking">
+              <MappingFragment StoreEntitySet="ItemGroup_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ItemSubType">
             <EntityTypeMapping TypeName="InvoicesModel.ItemSubType">
               <MappingFragment StoreEntitySet="ItemSubType">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemSubType_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.ItemSubType_tracking">
+              <MappingFragment StoreEntitySet="ItemSubType_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1346,22 +1470,87 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ItemTopGroup_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.ItemTopGroup_tracking">
+              <MappingFragment StoreEntitySet="ItemTopGroup_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="PaymentMethod">
             <EntityTypeMapping TypeName="InvoicesModel.PaymentMethod">
               <MappingFragment StoreEntitySet="PaymentMethod">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="PersonId" ColumnName="PersonId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BankCardId" ColumnName="BankCardId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentMethod_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.PaymentMethod_tracking">
+              <MappingFragment StoreEntitySet="PaymentMethod_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Person">
             <EntityTypeMapping TypeName="InvoicesModel.Person">
               <MappingFragment StoreEntitySet="Person">
-                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Person_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.Person_tracking">
+              <MappingFragment StoreEntitySet="Person_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="scope_info">
+            <EntityTypeMapping TypeName="InvoicesModel.scope_info">
+              <MappingFragment StoreEntitySet="scope_info">
+                <ScalarProperty Name="sync_scope_name" ColumnName="sync_scope_name" />
+                <ScalarProperty Name="sync_scope_schema" ColumnName="sync_scope_schema" />
+                <ScalarProperty Name="sync_scope_setup" ColumnName="sync_scope_setup" />
+                <ScalarProperty Name="sync_scope_version" ColumnName="sync_scope_version" />
+                <ScalarProperty Name="sync_scope_last_clean_timestamp" ColumnName="sync_scope_last_clean_timestamp" />
+                <ScalarProperty Name="sync_scope_properties" ColumnName="sync_scope_properties" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="scope_info_client">
+            <EntityTypeMapping TypeName="InvoicesModel.scope_info_client">
+              <MappingFragment StoreEntitySet="scope_info_client">
+                <ScalarProperty Name="sync_scope_id" ColumnName="sync_scope_id" />
+                <ScalarProperty Name="sync_scope_name" ColumnName="sync_scope_name" />
+                <ScalarProperty Name="sync_scope_hash" ColumnName="sync_scope_hash" />
+                <ScalarProperty Name="sync_scope_parameters" ColumnName="sync_scope_parameters" />
+                <ScalarProperty Name="scope_last_sync_timestamp" ColumnName="scope_last_sync_timestamp" />
+                <ScalarProperty Name="scope_last_server_sync_timestamp" ColumnName="scope_last_server_sync_timestamp" />
+                <ScalarProperty Name="scope_last_sync_duration" ColumnName="scope_last_sync_duration" />
+                <ScalarProperty Name="scope_last_sync" ColumnName="scope_last_sync" />
+                <ScalarProperty Name="sync_scope_errors" ColumnName="sync_scope_errors" />
+                <ScalarProperty Name="sync_scope_properties" ColumnName="sync_scope_properties" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1374,6 +1563,18 @@
                 <ScalarProperty Name="Tel" ColumnName="Tel" />
                 <ScalarProperty Name="Web" ColumnName="Web" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Seller_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.Seller_tracking">
+              <MappingFragment StoreEntitySet="Seller_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1392,6 +1593,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Shop_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.Shop_tracking">
+              <MappingFragment StoreEntitySet="Shop_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ShopGroup">
             <EntityTypeMapping TypeName="InvoicesModel.ShopGroup">
               <MappingFragment StoreEntitySet="ShopGroup">
@@ -1404,11 +1617,35 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ShopGroup_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.ShopGroup_tracking">
+              <MappingFragment StoreEntitySet="ShopGroup_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ShopType">
             <EntityTypeMapping TypeName="InvoicesModel.ShopType">
               <MappingFragment StoreEntitySet="ShopType">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShopType_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.ShopType_tracking">
+              <MappingFragment StoreEntitySet="ShopType_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1423,6 +1660,18 @@
                 <ScalarProperty Name="No" ColumnName="No" />
                 <ScalarProperty Name="SellerId" ColumnName="SellerId" />
                 <ScalarProperty Name="WhoDidIt" ColumnName="WhoDidIt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Taction_tracking">
+            <EntityTypeMapping TypeName="InvoicesModel.Taction_tracking">
+              <MappingFragment StoreEntitySet="Taction_tracking">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1442,199 +1691,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CashTransfer_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.CashTransfer_tracking">
-              <MappingFragment StoreEntitySet="CashTransfer_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CurrencyMovement_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.CurrencyMovement_tracking">
-              <MappingFragment StoreEntitySet="CurrencyMovement_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Item_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.Item_tracking">
-              <MappingFragment StoreEntitySet="Item_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ItemGroup_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.ItemGroup_tracking">
-              <MappingFragment StoreEntitySet="ItemGroup_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ItemSubType_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.ItemSubType_tracking">
-              <MappingFragment StoreEntitySet="ItemSubType_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ItemTopGroup_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.ItemTopGroup_tracking">
-              <MappingFragment StoreEntitySet="ItemTopGroup_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PaymentMethod_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.PaymentMethod_tracking">
-              <MappingFragment StoreEntitySet="PaymentMethod_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Person_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.Person_tracking">
-              <MappingFragment StoreEntitySet="Person_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="scope_info">
-            <EntityTypeMapping TypeName="InvoicesModel.scope_info">
-              <MappingFragment StoreEntitySet="scope_info">
-                <ScalarProperty Name="sync_scope_properties" ColumnName="sync_scope_properties" />
-                <ScalarProperty Name="sync_scope_last_clean_timestamp" ColumnName="sync_scope_last_clean_timestamp" />
-                <ScalarProperty Name="sync_scope_version" ColumnName="sync_scope_version" />
-                <ScalarProperty Name="sync_scope_setup" ColumnName="sync_scope_setup" />
-                <ScalarProperty Name="sync_scope_schema" ColumnName="sync_scope_schema" />
-                <ScalarProperty Name="sync_scope_name" ColumnName="sync_scope_name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="scope_info_client">
-            <EntityTypeMapping TypeName="InvoicesModel.scope_info_client">
-              <MappingFragment StoreEntitySet="scope_info_client">
-                <ScalarProperty Name="sync_scope_properties" ColumnName="sync_scope_properties" />
-                <ScalarProperty Name="sync_scope_errors" ColumnName="sync_scope_errors" />
-                <ScalarProperty Name="scope_last_sync" ColumnName="scope_last_sync" />
-                <ScalarProperty Name="scope_last_sync_duration" ColumnName="scope_last_sync_duration" />
-                <ScalarProperty Name="scope_last_server_sync_timestamp" ColumnName="scope_last_server_sync_timestamp" />
-                <ScalarProperty Name="scope_last_sync_timestamp" ColumnName="scope_last_sync_timestamp" />
-                <ScalarProperty Name="sync_scope_parameters" ColumnName="sync_scope_parameters" />
-                <ScalarProperty Name="sync_scope_hash" ColumnName="sync_scope_hash" />
-                <ScalarProperty Name="sync_scope_name" ColumnName="sync_scope_name" />
-                <ScalarProperty Name="sync_scope_id" ColumnName="sync_scope_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Seller_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.Seller_tracking">
-              <MappingFragment StoreEntitySet="Seller_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Shop_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.Shop_tracking">
-              <MappingFragment StoreEntitySet="Shop_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ShopGroup_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.ShopGroup_tracking">
-              <MappingFragment StoreEntitySet="ShopGroup_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ShopType_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.ShopType_tracking">
-              <MappingFragment StoreEntitySet="ShopType_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Taction_tracking">
-            <EntityTypeMapping TypeName="InvoicesModel.Taction_tracking">
-              <MappingFragment StoreEntitySet="Taction_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="TactionDetails_tracking">
             <EntityTypeMapping TypeName="InvoicesModel.TactionDetails_tracking">
               <MappingFragment StoreEntitySet="TactionDetails_tracking">
-                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
-                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
-                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="update_scope_id" ColumnName="update_scope_id" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="timestamp_bigint" ColumnName="timestamp_bigint" />
+                <ScalarProperty Name="sync_row_is_tombstone" ColumnName="sync_row_is_tombstone" />
+                <ScalarProperty Name="last_change_datetime" ColumnName="last_change_datetime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

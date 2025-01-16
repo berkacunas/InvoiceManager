@@ -135,7 +135,8 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemPaymentMethods_Click(object sender, EventArgs e)
         {
-
+            PaymentMethodForm paymentMethodForm = new PaymentMethodForm();
+            paymentMethodForm.Show();
         }
     }
 }

@@ -12,25 +12,19 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class PaymentMethod
+    public partial class BankCard
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PaymentMethod()
+        public BankCard()
         {
-            this.CashTransfer = new HashSet<CashTransfer>();
-            this.Taction = new HashSet<Taction>();
+            this.PaymentMethod = new HashSet<PaymentMethod>();
         }
     
         public int id { get; set; }
-        public int PersonId { get; set; }
         public string Name { get; set; }
-        public Nullable<int> BankCardId { get; set; }
+        public string Type { get; set; }
     
-        public virtual BankCard BankCard { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CashTransfer> CashTransfer { get; set; }
-        public virtual Person Person { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Taction> Taction { get; set; }
+        public virtual ICollection<PaymentMethod> PaymentMethod { get; set; }
     }
 }
