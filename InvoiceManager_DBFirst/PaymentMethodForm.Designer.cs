@@ -290,6 +290,7 @@
             this.buttonNewPaymentMethod.TabIndex = 9;
             this.buttonNewPaymentMethod.Text = "New";
             this.buttonNewPaymentMethod.UseVisualStyleBackColor = true;
+            this.buttonNewPaymentMethod.Click += new System.EventHandler(this.buttonNewPaymentMethod_Click);
             // 
             // buttonDeletePaymentMethod
             // 
@@ -299,6 +300,7 @@
             this.buttonDeletePaymentMethod.TabIndex = 8;
             this.buttonDeletePaymentMethod.Text = "Delete";
             this.buttonDeletePaymentMethod.UseVisualStyleBackColor = true;
+            this.buttonDeletePaymentMethod.Click += new System.EventHandler(this.buttonDeletePaymentMethod_Click);
             // 
             // buttonUpdatePaymentMethod
             // 
@@ -308,6 +310,7 @@
             this.buttonUpdatePaymentMethod.TabIndex = 7;
             this.buttonUpdatePaymentMethod.Text = "Update";
             this.buttonUpdatePaymentMethod.UseVisualStyleBackColor = true;
+            this.buttonUpdatePaymentMethod.Click += new System.EventHandler(this.buttonUpdatePaymentMethod_Click);
             // 
             // buttonSavePaymentMethod
             // 
@@ -317,6 +320,7 @@
             this.buttonSavePaymentMethod.TabIndex = 6;
             this.buttonSavePaymentMethod.Text = "Save";
             this.buttonSavePaymentMethod.UseVisualStyleBackColor = true;
+            this.buttonSavePaymentMethod.Click += new System.EventHandler(this.buttonSavePaymentMethod_Click);
             // 
             // labelPaymentMethodOptionsPaymentMethod
             // 

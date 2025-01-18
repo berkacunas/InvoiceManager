@@ -41,7 +41,7 @@ namespace InvoiceManager_DBFirst
         private PaymentMethod _newPaymentMethod;
 
         private Mode _bankCardMode;
-        private Mode _paymentMethodMode;
+        private Mode _paymentMode;
 
         private SortOrder[] _sortOrdersDataGridViewItemGroups = { SortOrder.ASC, SortOrder.UNORDERED };
         private SortOrder[] _sortOrdersDataGridViewItems = { SortOrder.ASC, SortOrder.UNORDERED };
@@ -161,20 +161,144 @@ namespace InvoiceManager_DBFirst
 
         private void buttonNewCard_Click(object sender, EventArgs e)
         {
+            this._bankCardMode = (this._bankCardMode == Mode.Add) ? Mode.Display : Mode.Add;
+            this.buttonNewCard.Text = (this._bankCardMode == Mode.Add) ? "Cancel" : "New";
+            this.dataGridViewBankCards.Enabled = (this._bankCardMode != Mode.Add);
 
+            if (this._bankCardMode == Mode.Add)
+            {
+                this._bindDataToComboBoxCardOptionsCardType(BindType.Select);
+                this._setEditableBankCards(true);
+                this._newBankCard = new BankCard();
+            }
+            else
+            {
+                this._bindDataToComboBoxCardOptionsCardType(BindType.Setnull);
+                this._setEditableBankCards(false);
+            }
+
+            this._clearBankCardControls();
         }
 
         private void buttonSaveCard_Click(object sender, EventArgs e)
         {
+            this._setBankCardDataFromUiToObject(this._newBankCard);
+            this.dbContext.BankCard.Add(this._newBankCard);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+                //this.onBankCardSaved($"Item {_newBankCard.Name} saved", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while adding bank card.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._clearBankCardControls();
+            this._setEditableBankCards(false);
+            this._bindDataToGridViewBankCard();
+            this._newBankCard = new BankCard();
+            this._bankCardMode = Mode.Display;
 
         }
 
         private void buttonUpdateCard_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewBankCards.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int bankCardId = Convert.ToInt32(row.Cells["bankCardId"].Value);
+            BankCard bankCard = dbContext.BankCard.Where(r => r.id == bankCardId).FirstOrDefault();
+
+            this._setBankCardDataFromUiToObject(bankCard);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+                //this.onBankCardUpdated($"BankCard {bankCard.Name} updated", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while updating bank card.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToGridViewBankCard();
         }
 
         private void buttonDeleteCard_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow row = this.dataGridViewBankCards.CurrentRow;
+
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to delete first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int bankCardId = Convert.ToInt32(row.Cells["bankCardId"].Value);
+            BankCard bankCard = dbContext.BankCard.Where(r => r.id == bankCardId).FirstOrDefault();
+
+            dbContext.BankCard.Remove(bankCard);
+
+            try
+            {
+                dbContext.SaveChanges();
+                //this.onBankCardRemoved($"BankCard card {bankCard.Name} removed", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting bank card.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToComboBoxCardOptionsCardType(BindType.Setnull);
+            this._bindDataToGridViewBankCard();
+            this._clearBankCardControls();
+        }
+
+        private void buttonNewPaymentMethod_Click(object sender, EventArgs e)
+        {
+            this._paymentMode = (this._paymentMode == Mode.Add) ? Mode.Display : Mode.Add;
+            this.buttonNewPaymentMethod.Text = (this._paymentMode == Mode.Add) ? "Cancel" : "New";
+            this.dataGridViewPaymentMethods.Enabled = (this._paymentMode != Mode.Add);
+
+            if (this._paymentMode == Mode.Add)
+            {
+                this._bindDataToComboBoxPaymentMethodOptionsCard(BindType.Select);
+                this._bindDataToComboBoxPaymentMethodOptionsCardType(BindType.Select);
+                this._bindDataToComboBoxPaymentMethodOptionsPerson(BindType.Select);
+
+                this._setEditablePaymentMethods(true);
+                this._newPaymentMethod = new PaymentMethod();
+            }
+            else
+            {
+                this._bindDataToComboBoxPaymentMethodOptionsCard(BindType.Setnull);
+                this._bindDataToComboBoxPaymentMethodOptionsCardType(BindType.Setnull);
+                this._bindDataToComboBoxPaymentMethodOptionsPerson(BindType.Setnull);
+
+                this._setEditablePaymentMethods(false);
+            }
+
+            this._clearPaymentMethodControls();
+        }
+
+        private void buttonSavePaymentMethod_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonUpdatePaymentMethod_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonDeletePaymentMethod_Click(object sender, EventArgs e)
         {
 
         }
@@ -220,7 +344,7 @@ namespace InvoiceManager_DBFirst
             //this.onPaymentMethodsLoaded("Payment Methods Loaded", DateTime.Now);
         }
 
-        private void _bindDataToComboBoxBankCardOptionsCardType(BindType bindType, int bankCardId)
+        private void _bindDataToComboBoxCardOptionsCardType(BindType bindType, int bankCardId = 0)
         {
             IQueryable<BankCard> query = null;
 
@@ -243,7 +367,7 @@ namespace InvoiceManager_DBFirst
             this.comboBoxCardOptionsCardType.ValueMember = "id";
         }
 
-        private void _bindDataToComboBoxPaymentMethodOptionsCard(BindType bindType, int bankCardId)
+        private void _bindDataToComboBoxPaymentMethodOptionsCard(BindType bindType, int bankCardId = 0)
         {
             IQueryable<BankCard> query = null;
 
@@ -266,7 +390,7 @@ namespace InvoiceManager_DBFirst
             this.comboBoxPaymentMethodOptionsCard.ValueMember = "id";
         }
 
-        private void _bindDataToComboBoxPaymentMethodOptionsCardType(BindType bindType, int bankCardId)
+        private void _bindDataToComboBoxPaymentMethodOptionsCardType(BindType bindType, int bankCardId = 0)
         {
             IQueryable<BankCard> query = null;
 
@@ -289,7 +413,7 @@ namespace InvoiceManager_DBFirst
             this.comboBoxPaymentMethodOptionsCardType.ValueMember = "id";
         }
 
-        private void _bindDataToComboBoxPaymentMethodOptionsPerson(BindType bindType, int personId)
+        private void _bindDataToComboBoxPaymentMethodOptionsPerson(BindType bindType, int personId = 0)
         {
             IQueryable<Person> query = null;
 
@@ -316,7 +440,7 @@ namespace InvoiceManager_DBFirst
         {
             int bankCardId = Convert.ToInt32(row.Cells["bankCardId"].Value);
             this.textBoxCardOptionsCard.Text = row.Cells["bankCardName"].Value.ToString();
-            this._bindDataToComboBoxBankCardOptionsCardType(BindType.Where, bankCardId);
+            this._bindDataToComboBoxCardOptionsCardType(BindType.Where, bankCardId);
         }
 
         private void _setPaymentMethodControls(DataGridViewRow row)
@@ -328,6 +452,20 @@ namespace InvoiceManager_DBFirst
             this._bindDataToComboBoxPaymentMethodOptionsCard(BindType.Where, bankCardId);
             this._bindDataToComboBoxPaymentMethodOptionsCardType(BindType.Where, bankCardId);
             this._bindDataToComboBoxPaymentMethodOptionsPerson(BindType.Where, personId);
+        }
+
+        private void _setBankCardDataFromUiToObject(BankCard bankCard)
+        {
+            if (string.IsNullOrEmpty(this.textBoxCardOptionsCard.Text))
+            {
+                MessageBox.Show("\"You didn't enter card name.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            bankCard.Name = textBoxCardOptionsCard.Text;
+
+            if (!string.IsNullOrEmpty(this.comboBoxCardOptionsCardType.Text))
+                bankCard.Type = this.comboBoxCardOptionsCardType.Text;
         }
 
         private static void _setDefaultGridViewStyles(DataGridView gridview)
@@ -395,7 +533,9 @@ namespace InvoiceManager_DBFirst
         private void _setModes(Mode mode)
         {
             this._bankCardMode = mode;
-            this._paymentMethodMode = mode;
+            this._paymentMode = mode;
         }
+
+        
     }
 }
