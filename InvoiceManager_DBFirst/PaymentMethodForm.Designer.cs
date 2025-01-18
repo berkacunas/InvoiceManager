@@ -56,6 +56,7 @@
             this.labelPaymentMethodOptionsPaymentMethod = new System.Windows.Forms.Label();
             this.textBoxPaymentMethodOptionsPaymentMethod = new System.Windows.Forms.TextBox();
             this.labelPaymentMethodOptionsCard = new System.Windows.Forms.Label();
+            this.buttonClose = new System.Windows.Forms.Button();
             this.groupBoxBankCards.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBankCards)).BeginInit();
             this.groupBoxPaymentMethods.SuspendLayout();
@@ -71,7 +72,7 @@
             this.groupBoxBankCards.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxBankCards.Name = "groupBoxBankCards";
             this.groupBoxBankCards.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxBankCards.Size = new System.Drawing.Size(415, 782);
+            this.groupBoxBankCards.Size = new System.Drawing.Size(338, 782);
             this.groupBoxBankCards.TabIndex = 0;
             this.groupBoxBankCards.TabStop = false;
             this.groupBoxBankCards.Text = "Cards";
@@ -82,17 +83,17 @@
             this.dataGridViewBankCards.Location = new System.Drawing.Point(7, 22);
             this.dataGridViewBankCards.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridViewBankCards.Name = "dataGridViewBankCards";
-            this.dataGridViewBankCards.Size = new System.Drawing.Size(401, 754);
+            this.dataGridViewBankCards.Size = new System.Drawing.Size(323, 754);
             this.dataGridViewBankCards.TabIndex = 0;
             // 
             // groupBoxPaymentMethods
             // 
             this.groupBoxPaymentMethods.Controls.Add(this.dataGridViewPaymentMethods);
-            this.groupBoxPaymentMethods.Location = new System.Drawing.Point(436, 12);
+            this.groupBoxPaymentMethods.Location = new System.Drawing.Point(359, 12);
             this.groupBoxPaymentMethods.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxPaymentMethods.Name = "groupBoxPaymentMethods";
             this.groupBoxPaymentMethods.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxPaymentMethods.Size = new System.Drawing.Size(415, 782);
+            this.groupBoxPaymentMethods.Size = new System.Drawing.Size(675, 782);
             this.groupBoxPaymentMethods.TabIndex = 1;
             this.groupBoxPaymentMethods.TabStop = false;
             this.groupBoxPaymentMethods.Text = "Payment Methods";
@@ -103,7 +104,7 @@
             this.dataGridViewPaymentMethods.Location = new System.Drawing.Point(4, 18);
             this.dataGridViewPaymentMethods.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridViewPaymentMethods.Name = "dataGridViewPaymentMethods";
-            this.dataGridViewPaymentMethods.Size = new System.Drawing.Size(405, 758);
+            this.dataGridViewPaymentMethods.Size = new System.Drawing.Size(663, 758);
             this.dataGridViewPaymentMethods.TabIndex = 0;
             // 
             // groupBoxBankCardOptions
@@ -117,7 +118,7 @@
             this.groupBoxBankCardOptions.Controls.Add(this.buttonUpdateCard);
             this.groupBoxBankCardOptions.Controls.Add(this.buttonSaveCard);
             this.groupBoxBankCardOptions.Controls.Add(this.labelCardOptionsCard);
-            this.groupBoxBankCardOptions.Location = new System.Drawing.Point(858, 12);
+            this.groupBoxBankCardOptions.Location = new System.Drawing.Point(1041, 12);
             this.groupBoxBankCardOptions.Name = "groupBoxBankCardOptions";
             this.groupBoxBankCardOptions.Size = new System.Drawing.Size(385, 125);
             this.groupBoxBankCardOptions.TabIndex = 11;
@@ -157,6 +158,7 @@
             this.buttonNewCard.TabIndex = 11;
             this.buttonNewCard.Text = "New";
             this.buttonNewCard.UseVisualStyleBackColor = true;
+            this.buttonNewCard.Click += new System.EventHandler(this.buttonNewCard_Click);
             // 
             // labelCardOptionsCardType
             // 
@@ -175,6 +177,7 @@
             this.buttonDeleteCard.TabIndex = 8;
             this.buttonDeleteCard.Text = "Delete";
             this.buttonDeleteCard.UseVisualStyleBackColor = true;
+            this.buttonDeleteCard.Click += new System.EventHandler(this.buttonDeleteCard_Click);
             // 
             // buttonUpdateCard
             // 
@@ -184,6 +187,7 @@
             this.buttonUpdateCard.TabIndex = 7;
             this.buttonUpdateCard.Text = "Update";
             this.buttonUpdateCard.UseVisualStyleBackColor = true;
+            this.buttonUpdateCard.Click += new System.EventHandler(this.buttonUpdateCard_Click);
             // 
             // buttonSaveCard
             // 
@@ -193,6 +197,7 @@
             this.buttonSaveCard.TabIndex = 6;
             this.buttonSaveCard.Text = "Save";
             this.buttonSaveCard.UseVisualStyleBackColor = true;
+            this.buttonSaveCard.Click += new System.EventHandler(this.buttonSaveCard_Click);
             // 
             // labelCardOptionsCard
             // 
@@ -218,7 +223,7 @@
             this.groupBoxItemOptions.Controls.Add(this.labelPaymentMethodOptionsPaymentMethod);
             this.groupBoxItemOptions.Controls.Add(this.textBoxPaymentMethodOptionsPaymentMethod);
             this.groupBoxItemOptions.Controls.Add(this.labelPaymentMethodOptionsCard);
-            this.groupBoxItemOptions.Location = new System.Drawing.Point(858, 143);
+            this.groupBoxItemOptions.Location = new System.Drawing.Point(1041, 143);
             this.groupBoxItemOptions.Name = "groupBoxItemOptions";
             this.groupBoxItemOptions.Size = new System.Drawing.Size(385, 191);
             this.groupBoxItemOptions.TabIndex = 10;
@@ -338,11 +343,22 @@
             this.labelPaymentMethodOptionsCard.TabIndex = 0;
             this.labelPaymentMethodOptionsCard.Text = "Card";
             // 
+            // buttonClose
+            // 
+            this.buttonClose.Location = new System.Drawing.Point(1351, 765);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(75, 23);
+            this.buttonClose.TabIndex = 12;
+            this.buttonClose.Text = "Close";
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            // 
             // PaymentMethodForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1262, 806);
+            this.ClientSize = new System.Drawing.Size(1434, 798);
+            this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.groupBoxBankCardOptions);
             this.Controls.Add(this.groupBoxItemOptions);
             this.Controls.Add(this.groupBoxPaymentMethods);
@@ -395,5 +411,6 @@
         private System.Windows.Forms.Label labelPaymentMethodOptionsPerson;
         private System.Windows.Forms.ComboBox comboBoxPaymentMethodOptionsCardType;
         private System.Windows.Forms.Label labelPaymentMethodOptionsCardType;
+        private System.Windows.Forms.Button buttonClose;
     }
 }

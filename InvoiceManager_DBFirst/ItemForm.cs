@@ -287,7 +287,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemSaved("Item saved", DateTime.Now);
+                this.onItemSaved($"Item {_newItem.Name} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -319,7 +319,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemUpdated("Item updated", DateTime.Now);
+                this.onItemUpdated($"Item {item.Name} updated", DateTime.Now);
 
             }
             catch (Exception ex)
@@ -348,7 +348,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 dbContext.SaveChanges();
-                this.onItemRemoved("Item removed", DateTime.Now);
+                this.onItemRemoved($"Item {item.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -389,7 +389,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemGroupSaved("ItemGroup saved.", DateTime.Now);
+                this.onItemGroupSaved($"ItemGroup {this._newItemGroup.Name} saved.", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -421,7 +421,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemGroupUpdated("ItemGroup updated", DateTime.Now);
+                this.onItemGroupUpdated($"ItemGroup {itemGroup.Name} updated", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -470,7 +470,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 dbContext.SaveChanges();
-                this.onItemGroupRemoved("ItemGroup removed", DateTime.Now);
+                this.onItemGroupRemoved($"ItemGroup {itemGroup.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -514,7 +514,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemTopGroupSaved("ItemTopGroup saved", DateTime.Now);
+                this.onItemTopGroupSaved($"ItemTopGroup {this._newItemTopGroup.Name} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -542,7 +542,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemTopGroupUpdated("ItemTopGroup updated", DateTime.Now);
+                this.onItemTopGroupUpdated($"ItemTopGroup {itemTopGroup.Name} updated", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -582,7 +582,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 dbContext.SaveChanges();
-                this.onItemTopGroupRemoved("ItemTopGroup removed", DateTime.Now);
+                this.onItemTopGroupRemoved($"ItemTopGroup {itemTopGroup.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -851,6 +851,12 @@ namespace InvoiceManager_DBFirst
                     ((ComboBox)c).DataSource = null;
         }
 
+        protected virtual void onItemsLoaded(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ItemsLoaded?.Invoke(message, eventTime);
+            this.onItemChanged(message, eventTime);
+        }
+
         protected virtual void onItemSaved(string message, DateTime eventTime) //protected virtual method
         {
             this.ItemSaved?.Invoke(message, eventTime);
@@ -860,12 +866,6 @@ namespace InvoiceManager_DBFirst
         protected virtual void onItemUpdated(string message, DateTime eventTime) //protected virtual method
         {
             this.ItemUpdated?.Invoke(message, eventTime);
-            this.onItemChanged(message, eventTime);
-        }
-
-        protected virtual void onItemsLoaded(string message, DateTime eventTime) //protected virtual method
-        {
-            this.ItemsLoaded?.Invoke(message, eventTime);
             this.onItemChanged(message, eventTime);
         }
 

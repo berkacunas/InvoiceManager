@@ -92,7 +92,7 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewBankCards.DataSource == null)
                 return;
 
-            string[] headerTexts = new string[] { "bankCardId", "Card", "Type" };
+            string[] headerTexts = new string[] { "bankCardId", "Bank", "Type" };
             int[] columnWidths = new int[] { 50, 150, 150 };
             DataGridViewContentAlignment[] columnAlignments = { DataGridViewContentAlignment.MiddleLeft,
                                                                         DataGridViewContentAlignment.MiddleLeft,
@@ -108,7 +108,7 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewPaymentMethods.DataSource == null)
                 return;
 
-            string[] headerTexts = new string[] { "paymentMethodId", "bankCardId", "personId", "Payment Method", "Card", "Card Type", "Person" };
+            string[] headerTexts = new string[] { "paymentMethodId", "bankCardId", "personId", "Method", "Bank", "Card Type", "Person" };
             int[] columnWidths = new int[] { 50, 50, 50, 200, 160, 120, 160 };
             DataGridViewContentAlignment[] columnAlignments = { DataGridViewContentAlignment.MiddleLeft,
                                                                         DataGridViewContentAlignment.MiddleLeft,
@@ -157,6 +157,31 @@ namespace InvoiceManager_DBFirst
             this._clearPaymentMethodControls();
             DataGridViewRow row = this.dataGridViewPaymentMethods.CurrentRow;
             this._setPaymentMethodControls(row);
+        }
+
+        private void buttonNewCard_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonSaveCard_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonUpdateCard_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonDeleteCard_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void _bindDataToGridViewBankCard()

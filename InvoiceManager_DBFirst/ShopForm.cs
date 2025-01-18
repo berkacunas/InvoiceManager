@@ -31,6 +31,32 @@ namespace InvoiceManager_DBFirst
             Setnull
         }
 
+        private enum SortOrder
+        {
+            ASC,
+            DESC,
+            UNORDERED
+        }
+
+        public event Notify ShopsLoaded;
+        public event Notify ShopSaved;
+        public event Notify ShopUpdated;
+        public event Notify ShopRemoved;
+
+        public event Notify ShopGroupsLoaded;
+        public event Notify ShopGroupSaved;
+        public event Notify ShopGroupUpdated;
+        public event Notify ShopGroupRemoved;
+
+        public event Notify ShopTypesLoaded;
+        public event Notify ShopTypeSaved;
+        public event Notify ShopTypeUpdated;
+        public event Notify ShopTypeRemoved;
+
+        public event Notify ShopChanged;
+        public event Notify ShopFormOpened;
+        public event Notify ShopFormClosed;
+
         private InvoicesEntities dbContext;
 
         private Shop _newShop;
@@ -41,6 +67,11 @@ namespace InvoiceManager_DBFirst
         private Mode _groupMode;
         private Mode _typeMode;
 
+        private SortOrder[] _sortOrdersDataGridViewItemGroups = { SortOrder.ASC, SortOrder.UNORDERED };
+        private SortOrder[] _sortOrdersDataGridViewItems = { SortOrder.ASC, SortOrder.UNORDERED };
+
+
+
 
         public ShopForm()
         {
@@ -50,6 +81,7 @@ namespace InvoiceManager_DBFirst
 
             this.dbContext = new InvoicesEntities();
 
+            this.FormClosing += ShopForm_FormClosing;
             this.dataGridViewShops.DataSourceChanged += DataGridViewShops_DataSourceChanged;
             this.dataGridViewShopGroups.DataSourceChanged += DataGridViewShopGroups_DataSourceChanged;
             this.dataGridViewShopTypes.DataSourceChanged += DataGridViewShopTypes_DataSourceChanged;
@@ -574,6 +606,33 @@ namespace InvoiceManager_DBFirst
                 this._bindDataToComboBoxShopGroupOptionsShopType(BindType.Where, groupId);
         }
 
+        private void ShopForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            switch (e.CloseReason)
+            {
+                case CloseReason.UserClosing:
+                    this.onShopFormClosed("Shop Window closed by user", DateTime.Now);
+                    break;
+
+                case CloseReason.WindowsShutDown:
+                    this.onShopFormClosed("Shop Window closed as a part of Windows Shutdown", DateTime.Now);
+                    break;
+
+                case CloseReason.TaskManagerClosing:
+                    this.onShopFormClosed("Shop Window closed forcibly by Task Manager", DateTime.Now);
+                    break;
+
+                case CloseReason.FormOwnerClosing:
+                    this.onShopFormClosed("Shop Window closed by Form Owner", DateTime.Now);
+                    break;
+
+                default:
+                    this.onShopFormClosed("Shop Window closed with an unknown reasoun", DateTime.Now);
+                    break;
+
+            }
+        }
+
         private static void _setDefaultGridViewStyles(DataGridView gridview)
         {
             gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -867,6 +926,93 @@ namespace InvoiceManager_DBFirst
         private void _checkEditableCheckBoxes(bool check)
         {
             this.checkBoxShopGroupOptionsEdit.Checked = check;
+        }
+
+        protected virtual void onShopsLoaded(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopsLoaded?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopSaved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopSaved?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopUpdated(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopUpdated?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopRemoved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopRemoved?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopGroupSaved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopGroupSaved?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopGroupUpdated(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopGroupUpdated?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopGroupsLoaded(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopGroupsLoaded?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopGroupRemoved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopGroupRemoved?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopTypeSaved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopTypeSaved?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopTypeUpdated(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopTypeUpdated?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopTypesLoaded(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopTypesLoaded?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopTypeRemoved(string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopTypeRemoved?.Invoke(message, eventTime);
+            this.onShopChanged(message, eventTime);
+        }
+
+        protected virtual void onShopChanged(string message, DateTime eventTime)
+        {
+            this.ShopChanged?.Invoke(message, eventTime);
+        }
+
+        protected virtual void onShopFormOpened(string message, DateTime eventTime)
+        {
+            this.ShopFormOpened?.Invoke(message, eventTime);
+        }
+
+        protected virtual void onShopFormClosed(string message, DateTime eventTime)
+        {
+            this.ShopFormClosed?.Invoke(message, eventTime);
         }
     }
 }
