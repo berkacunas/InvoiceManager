@@ -22,7 +22,7 @@ namespace InvoiceManager_DBFirst
         }
     
         public int id { get; set; }
-        public int PersonId { get; set; }
+        public int CardOwnerId { get; set; }
         public string Name { get; set; }
         public Nullable<int> BankCardId { get; set; }
     

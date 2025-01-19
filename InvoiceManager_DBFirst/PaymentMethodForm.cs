@@ -81,7 +81,7 @@ namespace InvoiceManager_DBFirst
             
             this.comboBoxPaymentMethodOptionsCard.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxPaymentMethodOptionsCardType.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.comboBoxPaymentMethodOptionsPerson.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.comboBoxPaymentMethodOptionsCardOwner.DropDownStyle = ComboBoxStyle.DropDownList;
 
             this._bindDataToGridViewBankCard();
             this._bindDataToGridViewPaymentMethod();
@@ -108,7 +108,7 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewPaymentMethods.DataSource == null)
                 return;
 
-            string[] headerTexts = new string[] { "paymentMethodId", "bankCardId", "personId", "Method", "Bank", "Card Type", "Person" };
+            string[] headerTexts = new string[] { "paymentMethodId", "bankCardId", "cardOwnerId", "Method", "Bank", "Card Type", "Card Owner" };
             int[] columnWidths = new int[] { 50, 50, 50, 200, 160, 120, 160 };
             DataGridViewContentAlignment[] columnAlignments = { DataGridViewContentAlignment.MiddleLeft,
                                                                         DataGridViewContentAlignment.MiddleLeft,
@@ -122,7 +122,7 @@ namespace InvoiceManager_DBFirst
 
             this.dataGridViewPaymentMethods.Columns["paymentMethodId"].Visible = false;
             this.dataGridViewPaymentMethods.Columns["bankCardId"].Visible = false;
-            this.dataGridViewPaymentMethods.Columns["personId"].Visible = false;
+            this.dataGridViewPaymentMethods.Columns["cardOwnerId"].Visible = false;
         }
 
         private void DataGridViewBankCards_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -270,17 +270,16 @@ namespace InvoiceManager_DBFirst
             if (this._paymentMode == Mode.Add)
             {
                 this._bindDataToComboBoxPaymentMethodOptionsCard(BindType.Select);
-                this._bindDataToComboBoxPaymentMethodOptionsCardType(BindType.Select);
-                this._bindDataToComboBoxPaymentMethodOptionsPerson(BindType.Select);
+                this._bindDataToComboBoxPaymentMethodOptionsCardOwner(BindType.Select);
 
+                this._clearPaymentMethodControls();
                 this._setEditablePaymentMethods(true);
                 this._newPaymentMethod = new PaymentMethod();
             }
             else
             {
                 this._bindDataToComboBoxPaymentMethodOptionsCard(BindType.Setnull);
-                this._bindDataToComboBoxPaymentMethodOptionsCardType(BindType.Setnull);
-                this._bindDataToComboBoxPaymentMethodOptionsPerson(BindType.Setnull);
+                this._bindDataToComboBoxPaymentMethodOptionsCardOwner(BindType.Setnull);
 
                 this._setEditablePaymentMethods(false);
             }
@@ -290,7 +289,24 @@ namespace InvoiceManager_DBFirst
 
         private void buttonSavePaymentMethod_Click(object sender, EventArgs e)
         {
+            this._setPaymentMethodDataFromUiToObject(this._newPaymentMethod);
+            this.dbContext.PaymentMethod.Add(this._newPaymentMethod);
 
+            try
+            {
+                this.dbContext.SaveChanges();
+                //this.onPaymentMethodSaved($"Item {this._newPaymentMethod.Name} saved", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while adding payment method.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._clearPaymentMethodControls();
+            this._setEditablePaymentMethods(false);
+            this._bindDataToGridViewPaymentMethod();
+            this._newPaymentMethod = new PaymentMethod();
+            this._paymentMode = Mode.Display;
         }
 
         private void buttonUpdatePaymentMethod_Click(object sender, EventArgs e)
@@ -327,13 +343,13 @@ namespace InvoiceManager_DBFirst
         {
             var query = from paymentMethod in dbContext.PaymentMethod
                         join bankCard in dbContext.BankCard on paymentMethod.BankCardId equals bankCard.id
-                        join person in dbContext.Person on paymentMethod.PersonId equals person.id
+                        join person in dbContext.Person on paymentMethod.CardOwnerId equals person.id
                         orderby paymentMethod.Name ascending
                         select new
                         {
                             paymentMethodId = paymentMethod.id,
                             bankCardId = bankCard.id,
-                            personId = person.id,
+                            cardOwnerId = person.id,
                             paymentMethodName = paymentMethod.Name,
                             bankCardName = bankCard.Name,
                             bankCardType = bankCard.Type,
@@ -367,37 +383,38 @@ namespace InvoiceManager_DBFirst
             this.comboBoxCardOptionsCardType.ValueMember = "id";
         }
 
-        private void _bindDataToComboBoxPaymentMethodOptionsCard(BindType bindType, int bankCardId = 0)
+        private void _bindDataToComboBoxPaymentMethodOptionsCard(BindType bindType, string bankCardName = null, string bankCardType = null)
         {
-            IQueryable<BankCard> query = null;
-
             switch (bindType)
             {
                 case BindType.Select:
-                    query = from bankCard in dbContext.BankCard orderby bankCard.Name ascending select bankCard;
+                    var querySelect = from bankCard in dbContext.BankCard group bankCard by bankCard.Name into g orderby g.Key select new { Name = g.Key };
+
+                    this.comboBoxPaymentMethodOptionsCard.DataSource = querySelect.ToList();
+                    this.comboBoxPaymentMethodOptionsCard.DisplayMember = "Name";
+                    //this.comboBoxPaymentMethodOptionsCard.ValueMember = "Name";
                     break;
                 case BindType.Where:
-                    query = from bankCard in dbContext.BankCard where bankCard.id == bankCardId select bankCard;
+                    var queryWhere = from bankCard in dbContext.BankCard where bankCard.Name == bankCardName && bankCard.Type == bankCardType select bankCard;
+
+                    this.comboBoxPaymentMethodOptionsCard.DataSource = queryWhere.ToList();
+                    this.comboBoxPaymentMethodOptionsCard.DisplayMember = "Name";
+                    //this.comboBoxPaymentMethodOptionsCard.ValueMember = "Name";
                     break;
                 case BindType.Setnull:
                     this.comboBoxCardOptionsCardType.DataSource = null;
-                    return;
-
+                    break;
             }
-
-            this.comboBoxPaymentMethodOptionsCard.DataSource = query.ToList();
-            this.comboBoxPaymentMethodOptionsCard.DisplayMember = "Name";
-            this.comboBoxPaymentMethodOptionsCard.ValueMember = "id";
         }
 
-        private void _bindDataToComboBoxPaymentMethodOptionsCardType(BindType bindType, int bankCardId = 0)
+        private void _bindDataToComboBoxPaymentMethodOptionsCardType(BindType bindType, string bankCardName, int bankCardId = 0)
         {
             IQueryable<BankCard> query = null;
 
             switch (bindType)
             {
                 case BindType.Select:
-                    query = from bankCard in dbContext.BankCard orderby bankCard.Name ascending select bankCard;
+                    query = from bankCard in dbContext.BankCard where bankCard.Name == bankCardName orderby bankCard.Name ascending select bankCard;
                     break;
                 case BindType.Where:
                     query = from bankCard in dbContext.BankCard where bankCard.id == bankCardId select bankCard;
@@ -410,10 +427,10 @@ namespace InvoiceManager_DBFirst
 
             this.comboBoxPaymentMethodOptionsCardType.DataSource = query.ToList();
             this.comboBoxPaymentMethodOptionsCardType.DisplayMember = "Type";
-            this.comboBoxPaymentMethodOptionsCardType.ValueMember = "id";
+            this.comboBoxPaymentMethodOptionsCardType.ValueMember = "Type";
         }
 
-        private void _bindDataToComboBoxPaymentMethodOptionsPerson(BindType bindType, int personId = 0)
+        private void _bindDataToComboBoxPaymentMethodOptionsCardOwner(BindType bindType, int personId = 0)
         {
             IQueryable<Person> query = null;
 
@@ -426,14 +443,14 @@ namespace InvoiceManager_DBFirst
                     query = from person in dbContext.Person where person.id == personId select person;
                     break;
                 case BindType.Setnull:
-                    this.comboBoxPaymentMethodOptionsPerson.DataSource = null;
+                    this.comboBoxPaymentMethodOptionsCardOwner.DataSource = null;
                     return;
 
             }
 
-            this.comboBoxPaymentMethodOptionsPerson.DataSource = query.ToList();
-            this.comboBoxPaymentMethodOptionsPerson.DisplayMember = "Name";
-            this.comboBoxPaymentMethodOptionsPerson.ValueMember = "id";
+            this.comboBoxPaymentMethodOptionsCardOwner.DataSource = query.ToList();
+            this.comboBoxPaymentMethodOptionsCardOwner.DisplayMember = "Name";
+            this.comboBoxPaymentMethodOptionsCardOwner.ValueMember = "id";
         }
 
         private void _setBankCardControls(DataGridViewRow row)
@@ -445,13 +462,17 @@ namespace InvoiceManager_DBFirst
 
         private void _setPaymentMethodControls(DataGridViewRow row)
         {
-            int bankCardId = Convert.ToInt32(row.Cells["bankCardId"].Value);
-            int personId = Convert.ToInt32(row.Cells["personId"].Value);
+            string bankCardName = row.Cells["bankCardName"].Value.ToString();
+            
+            string bankCardType = null;
+            if (row.Cells["bankCardType"].Value != null)
+                bankCardType = row.Cells["bankCardType"].Value.ToString();
+
+            int cardOwnerId = Convert.ToInt32(row.Cells["cardOwnerId"].Value);
 
             this.textBoxPaymentMethodOptionsPaymentMethod.Text = row.Cells["paymentMethodName"].Value.ToString();
-            this._bindDataToComboBoxPaymentMethodOptionsCard(BindType.Where, bankCardId);
-            this._bindDataToComboBoxPaymentMethodOptionsCardType(BindType.Where, bankCardId);
-            this._bindDataToComboBoxPaymentMethodOptionsPerson(BindType.Where, personId);
+            this._bindDataToComboBoxPaymentMethodOptionsCard(BindType.Where, bankCardName, bankCardType);
+            this._bindDataToComboBoxPaymentMethodOptionsCardOwner(BindType.Where, cardOwnerId);
         }
 
         private void _setBankCardDataFromUiToObject(BankCard bankCard)
@@ -466,6 +487,41 @@ namespace InvoiceManager_DBFirst
 
             if (!string.IsNullOrEmpty(this.comboBoxCardOptionsCardType.Text))
                 bankCard.Type = this.comboBoxCardOptionsCardType.Text;
+        }
+
+        private void _setPaymentMethodDataFromUiToObject(PaymentMethod paymentMethod)
+        {
+            if (string.IsNullOrEmpty(this.textBoxPaymentMethodOptionsPaymentMethod.Text))
+            {
+                MessageBox.Show("You didn't enter payment method name.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (this.comboBoxPaymentMethodOptionsCard.SelectedItem == null)
+            {
+                MessageBox.Show("You didn't select bank card.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (this.comboBoxPaymentMethodOptionsCardOwner.SelectedItem == null)
+            {
+                MessageBox.Show("You didn't select card owner.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            paymentMethod.Name = this.textBoxPaymentMethodOptionsPaymentMethod.Text;
+
+            int cardId = Convert.ToInt32(this.comboBoxPaymentMethodOptionsCard.SelectedValue);
+            int cardTypeId = 0;
+
+            //paymentMethod.BankCardId =
+
+            if (this.comboBoxPaymentMethodOptionsCardType.SelectedItem == null)
+                cardTypeId = Convert.ToInt32(this.comboBoxPaymentMethodOptionsCardType.SelectedValue);
+
+
+
+            paymentMethod.CardOwnerId = Convert.ToInt32(this.comboBoxPaymentMethodOptionsCardOwner.SelectedValue);
         }
 
         private static void _setDefaultGridViewStyles(DataGridView gridview)
@@ -525,7 +581,7 @@ namespace InvoiceManager_DBFirst
 
         private void _clearPaymentMethodControls()
         {
-            foreach (Control c in this.groupBoxPaymentMethods.Controls)
+            foreach (Control c in this.groupBoxPaymentMethodOptions.Controls)
                 if (c is TextBox)
                     ((TextBox)c).Clear();
         }
@@ -536,6 +592,11 @@ namespace InvoiceManager_DBFirst
             this._paymentMode = mode;
         }
 
-        
+        private void comboBoxPaymentMethodOptionsCard_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string bankCardName = this.comboBoxPaymentMethodOptionsCard.Text;
+
+            this._bindDataToComboBoxPaymentMethodOptionsCardType(BindType.Select, bankCardName);
+        }
     }
 }

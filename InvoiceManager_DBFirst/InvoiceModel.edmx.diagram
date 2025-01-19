@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="da786fd0077a47b68f747408c2389103" Name="Diagram1">
+      <Diagram DiagramId="bdb47e9e767f453f89f6db36e72c79f9" Name="Diagram1">
         <EntityTypeShape EntityType="InvoicesModel.BankCard" Width="1.5" PointX="3.75" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.CashTransfer" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.CashTransfer_tracking" Width="1.5" PointX="10.75" PointY="8.75" IsExpanded="true" />
@@ -44,7 +44,7 @@
         <AssociationConnector Association="InvoicesModel.FK_TactionDetails_ItemId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_ItemGroup_TopGroupId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_TactionDetails_ItemSubTypeId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_PaymentMethodPersonId_PersonId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_PaymentMethodCardOwnerId_PersonId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_Taction_PaymentMethodId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_Taction_WhoDidIt" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_ShopGroupSellerId_SellerId" ManuallyRouted="false" />

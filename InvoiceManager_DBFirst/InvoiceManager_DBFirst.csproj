@@ -253,63 +253,63 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BankCard.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="BitmapResourceLoader.cs" />
     <Compile Include="CashTransfer.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CashTransfer_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CurrencyMovement.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CurrencyMovement_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="InvoicesModel.Context.cs">
+    <Compile Include="InvoiceModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InvoicesModel.Context.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="InvoicesModel.cs">
+    <Compile Include="InvoiceModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="InvoicesModel.Designer.cs">
+    <Compile Include="InvoiceModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InvoicesModel.edmx</DependentUpon>
+      <DependentUpon>InvoiceModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="ISynchronizeInvokeExtensions.cs" />
     <Compile Include="Item.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemGroup.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemGroup_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemSubType.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemSubType_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemTopGroup.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemTopGroup_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Item_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PaymentMethod.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PaymentMethodForm.cs">
       <SubType>Form</SubType>
@@ -318,13 +318,13 @@
       <DependentUpon>PaymentMethodForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PaymentMethod_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Person.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Person_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RowComparer.cs" />
@@ -346,19 +346,19 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="scope_info.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="scope_info_client.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Seller.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Seller_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Shop.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ShopForm.cs">
       <SubType>Form</SubType>
@@ -367,19 +367,19 @@
       <DependentUpon>ShopForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ShopGroup.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ShopGroup_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ShopType.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ShopType_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Shop_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SyncWithSQLiteDatabaseForm.cs">
       <SubType>Form</SubType>
@@ -388,13 +388,13 @@
       <DependentUpon>SyncWithSQLiteDatabaseForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Taction.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TactionDetails.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TactionDetails_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TactionForm.cs">
       <SubType>Form</SubType>
@@ -403,7 +403,7 @@
       <DependentUpon>TactionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Taction_tracking.cs">
-      <DependentUpon>InvoicesModel.tt</DependentUpon>
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <EmbeddedResource Include="ItemForm.resx">
       <DependentUpon>ItemForm.cs</DependentUpon>
@@ -432,12 +432,12 @@
     <EmbeddedResource Include="TactionForm.resx">
       <DependentUpon>TactionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EntityDeploy Include="InvoicesModel.edmx">
+    <EntityDeploy Include="InvoiceModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>InvoicesModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>InvoiceModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="InvoicesModel.edmx.diagram">
-      <DependentUpon>InvoicesModel.edmx</DependentUpon>
+    <None Include="InvoiceModel.edmx.diagram">
+      <DependentUpon>InvoiceModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -463,15 +463,15 @@
     <EmbeddedResource Include="assets\cash.ico" />
     <Content Include="cash.ico" />
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
-    <Content Include="InvoicesModel.Context.tt">
+    <Content Include="InvoiceModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>InvoicesModel.edmx</DependentUpon>
-      <LastGenOutput>InvoicesModel.Context.cs</LastGenOutput>
+      <DependentUpon>InvoiceModel.edmx</DependentUpon>
+      <LastGenOutput>InvoiceModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="InvoicesModel.tt">
+    <Content Include="InvoiceModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>InvoicesModel.edmx</DependentUpon>
-      <LastGenOutput>InvoicesModel.cs</LastGenOutput>
+      <DependentUpon>InvoiceModel.edmx</DependentUpon>
+      <LastGenOutput>InvoiceModel.cs</LastGenOutput>
     </Content>
     <Content Include="todos.txt" />
     <EmbeddedResource Include="assets\item.png" />
