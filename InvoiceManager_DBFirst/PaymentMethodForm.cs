@@ -6,6 +6,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.IdentityModel.Tokens;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -349,7 +350,47 @@ namespace InvoiceManager_DBFirst
 
         private void buttonDeletePaymentMethod_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewPaymentMethods.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to remove first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int paymentMethodId = Convert.ToInt32(row.Cells["paymentMethodId"].Value);
+
+            var paymentMethod = dbContext.PaymentMethod.Where(r => r.id == paymentMethodId).FirstOrDefault();
+
+
+
+
+            var tactionConflictionsQuery = from taction in dbContext.Taction
+                                           join paymentmethod in dbContext.PaymentMethod on taction.PaymentMethodId equals paymentmethod.id
+                                           where paymentmethod.id == paymentMethodId
+                                           select taction;
+
+            List<Taction> tactionsToConflict = tactionConflictionsQuery.ToList();
+
+            if (tactionsToConflict.Count > 0)
+            {
+                string message = $"You can't delete this payment method. There are {tactionsToConflict.Count} tactions associated with this payment method.\nIf you are serious about deleting this payment method, you have to delete all these taction before deleting this payment method.";
+                MessageBox.Show(message, "Unable to delete item group", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            dbContext.PaymentMethod.Remove(paymentMethod);
+
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while removing payment method.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToGridViewPaymentMethod();
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
