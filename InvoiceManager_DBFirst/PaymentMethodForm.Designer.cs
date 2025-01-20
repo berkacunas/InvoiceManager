@@ -283,7 +283,7 @@
             this.checkBoxPaymentOptionsEdit.TabIndex = 10;
             this.checkBoxPaymentOptionsEdit.Text = "Edit";
             this.checkBoxPaymentOptionsEdit.UseVisualStyleBackColor = true;
-            this.checkBoxPaymentOptionsEdit.CheckedChanged += new System.EventHandler(this.checkBoxItemOptionsEdit_CheckedChanged);
+            this.checkBoxPaymentOptionsEdit.CheckedChanged += new System.EventHandler(this.checkBoxPaymentMethodOptionsEdit_CheckedChanged);
             // 
             // buttonNewPaymentMethod
             // 

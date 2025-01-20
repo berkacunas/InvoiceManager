@@ -359,8 +359,8 @@ namespace InvoiceManager_DBFirst
 
         private void comboBoxPaymentMethodOptionsCard_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string bankCardName = this.comboBoxPaymentMethodOptionsCard.Text;
-            //this._bindDataToComboBoxPaymentMethodOptionsCardType(BindType.Select, bankCardName);
+            string bankCardName = this.comboBoxPaymentMethodOptionsCard.Text;
+            this._bindDataToComboBoxPaymentMethodOptionsCardType(BindType.Select, bankCardName);
         }
 
         private void checkBoxCardOptionsEdit_CheckedChanged(object sender, EventArgs e)
@@ -387,7 +387,7 @@ namespace InvoiceManager_DBFirst
                 this._bindDataToComboBoxCardOptionsCardType(BindType.Where, bankCardId);
         }
 
-        private void checkBoxItemOptionsEdit_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxPaymentMethodOptionsEdit_CheckedChanged(object sender, EventArgs e)
         {
             DataGridViewRow row = this.dataGridViewPaymentMethods.CurrentRow;
 
