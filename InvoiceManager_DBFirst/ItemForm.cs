@@ -239,6 +239,13 @@ namespace InvoiceManager_DBFirst
         private void checkBoxItemOptionsEdit_CheckedChanged(object sender, EventArgs e)
         {
             DataGridViewRow row = this.dataGridViewItems.CurrentRow;
+
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             int groupId = (row == null) ? -1 : Convert.ToInt32(row.Cells["itemGroupId"].Value);
 
             if (checkBoxItemOptionsEdit.Checked)
@@ -250,6 +257,13 @@ namespace InvoiceManager_DBFirst
         private void checkBoxGroupOptionsEdit_CheckedChanged(object sender, EventArgs e)
         {
             DataGridViewRow row = this.dataGridViewItemGroups.CurrentRow;
+
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             int topGroupId = (row == null) ? -1 : Convert.ToInt32(row.Cells["itemTopGroupId"].Value);
 
             if (checkBoxGroupOptionsEdit.Checked)
