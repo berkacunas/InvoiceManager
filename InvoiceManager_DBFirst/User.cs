@@ -12,15 +12,16 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class Person
+    public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Person()
+        public User()
         {
             this.CashTransfer = new HashSet<CashTransfer>();
             this.CashTransfer1 = new HashSet<CashTransfer>();
             this.PaymentMethod = new HashSet<PaymentMethod>();
             this.Taction = new HashSet<Taction>();
+            this.UserImage = new HashSet<UserImage>();
         }
     
         public int id { get; set; }
@@ -36,5 +37,7 @@ namespace InvoiceManager_DBFirst
         public virtual ICollection<PaymentMethod> PaymentMethod { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Taction> Taction { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserImage> UserImage { get; set; }
     }
 }

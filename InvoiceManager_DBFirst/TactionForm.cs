@@ -63,8 +63,6 @@ namespace InvoiceManager_DBFirst
         {
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            this.onTransactionFormOpened("Transactions", "Window opened", DateTime.Now);
-
             this._setEditableTactions(false);
             this._setEditableDetails(false);
             this._setReadOnlyTotalPriceField();
@@ -85,6 +83,8 @@ namespace InvoiceManager_DBFirst
             this.dateTimePickerTactionDate.Format = DateTimePickerFormat.Custom;
             this.dateTimePickerTactionDate.ShowUpDown = true;
             this.dateTimePickerTactionDate.CustomFormat = "dd.MM.yyyy dddd HH:mm";
+
+            this.onTransactionFormOpened("Transactions", "Window opened", DateTime.Now);
         }
 
         private void DataGridViewTactions_DataSourceChanged(object sender, EventArgs e)
@@ -514,9 +514,9 @@ namespace InvoiceManager_DBFirst
                         from sjt in sellerJoinTable.DefaultIfEmpty()
                             //join seller in dbContext.Seller on taction.SellerId equals seller.id
 
-                        join person in dbContext.Person on taction.WhoDidIt equals person.id into personJoinTable
+                        join user in dbContext.User on taction.WhoDidIt equals user.id into personJoinTable
                         from pjt in personJoinTable.DefaultIfEmpty()
-                            //join person in dbContext.Person on taction.WhoDidIt equals person.id
+                            //join user in dbContext.User on taction.WhoDidIt equals user.id
 
                         orderby taction.Dt descending
                         select new
@@ -621,15 +621,15 @@ namespace InvoiceManager_DBFirst
 
         private void _bindDataToComboBoxOwner(BindType bindType, int ownerId = 0)
         {
-            IQueryable<Person> query = null;
+            IQueryable<User> query = null;
 
             switch (bindType)
             {
                 case BindType.Select:
-                    query = from person in dbContext.Person select person;
+                    query = from user in dbContext.User select user;
                     break;
                 case BindType.Where:
-                    query = from person in dbContext.Person where person.id == ownerId select person;
+                    query = from user in dbContext.User where user.id == ownerId select user;
                     break;
                 case BindType.Setnull:
                     this.comboBoxOwner.DataSource = null;
@@ -804,7 +804,7 @@ namespace InvoiceManager_DBFirst
             taction.Dt = this.dateTimePickerTactionDate.Value;
             taction.ShopId = dbContext.Shop.Where(r => r.Name == this.textBoxShop.Text).FirstOrDefault().id;
             taction.PaymentMethodId = ((PaymentMethod)this.comboBoxPaymentMethod.SelectedItem).id;
-            taction.WhoDidIt = ((Person)this.comboBoxOwner.SelectedItem).id;
+            taction.WhoDidIt = ((User)this.comboBoxOwner.SelectedItem).id;
             if (this.checkBoxSeller.Checked)
                 taction.SellerId = dbContext.Seller.Where(r => r.Name == this.textBoxSeller.Text).FirstOrDefault().id;
 

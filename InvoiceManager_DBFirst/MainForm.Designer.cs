@@ -37,7 +37,7 @@
             this.toolStripMenuItemItems = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemShops = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemPaymentMethods = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemPersons = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemUsers = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSellers = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelLiveDateTime = new System.Windows.Forms.ToolStripStatusLabel();
@@ -94,7 +94,7 @@
             this.toolStripMenuItemItems,
             this.toolStripMenuItemShops,
             this.toolStripMenuItemPaymentMethods,
-            this.toolStripMenuItemPersons,
+            this.toolStripMenuItemUsers,
             this.toolStripMenuItemSellers});
             this.windowsToolStripMenuItem.Name = "windowsToolStripMenuItem";
             this.windowsToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
@@ -128,11 +128,12 @@
             this.toolStripMenuItemPaymentMethods.Text = "Payment Methods";
             this.toolStripMenuItemPaymentMethods.Click += new System.EventHandler(this.toolStripMenuItemPaymentMethods_Click);
             // 
-            // toolStripMenuItemPersons
+            // toolStripMenuItemUsers
             // 
-            this.toolStripMenuItemPersons.Name = "toolStripMenuItemPersons";
-            this.toolStripMenuItemPersons.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuItemPersons.Text = "Persons";
+            this.toolStripMenuItemUsers.Name = "toolStripMenuItemUsers";
+            this.toolStripMenuItemUsers.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemUsers.Text = "Users";
+            this.toolStripMenuItemUsers.Click += new System.EventHandler(this.toolStripMenuItemUsers_Click);
             // 
             // toolStripMenuItemSellers
             // 
@@ -231,7 +232,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSyncWithSQLiteDatabase;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemShops;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPaymentMethods;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPersons;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUsers;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSellers;
         private System.Windows.Forms.StatusStrip statusStripMain;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelLiveDateTime;

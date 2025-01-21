@@ -12,13 +12,12 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class Item_tracking
+    public partial class UserImage
     {
         public int id { get; set; }
-        public Nullable<System.Guid> update_scope_id { get; set; }
-        public byte[] timestamp { get; set; }
-        public Nullable<long> timestamp_bigint { get; set; }
-        public bool sync_row_is_tombstone { get; set; }
-        public Nullable<System.DateTime> last_change_datetime { get; set; }
+        public int userId { get; set; }
+        public byte[] imageData { get; set; }
+    
+        public virtual User User { get; set; }
     }
 }

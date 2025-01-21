@@ -30,9 +30,9 @@ namespace InvoiceManager_DBFirst
         public Nullable<int> WhoDidIt { get; set; }
     
         public virtual PaymentMethod PaymentMethod { get; set; }
-        public virtual Person Person { get; set; }
         public virtual Seller Seller { get; set; }
         public virtual Shop Shop { get; set; }
+        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TactionDetails> TactionDetails { get; set; }
     }

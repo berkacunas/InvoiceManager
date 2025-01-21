@@ -29,7 +29,7 @@ namespace InvoiceManager_DBFirst
         public virtual BankCard BankCard { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CashTransfer> CashTransfer { get; set; }
-        public virtual Person Person { get; set; }
+        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Taction> Taction { get; set; }
     }

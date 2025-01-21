@@ -25,6 +25,8 @@ namespace InvoiceManager_DBFirst
         public MainForm()
         {
             InitializeComponent();
+
+            this.Icon = Icon.FromHandle(BitmapResourceLoader.AppIcon.GetHicon());
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -34,8 +36,8 @@ namespace InvoiceManager_DBFirst
 
             this.listViewLog.View = View.Details;
 
-            string[] listViewLogColumns = new string[] { "Action Type", "Message", "Action Time" };
-            int[] listViewLogColumnWidths = new int[] { 300, 400, 250 };
+            string[] listViewLogColumns = new string[] { "Message", "Action Type", "Action Time" };
+            int[] listViewLogColumnWidths = new int[] { 400, 300, 250 };
             HorizontalAlignment[] listViewLogColumnAlignments = { HorizontalAlignment.Left, HorizontalAlignment.Left, HorizontalAlignment.Left };
 
             _setListViewColumnStyles(this.listViewLog, listViewLogColumns, listViewLogColumnWidths, listViewLogColumnAlignments);
@@ -46,6 +48,15 @@ namespace InvoiceManager_DBFirst
         {
             for (int i = 0; i < columnNames.Length; ++i)
                 listView.Columns.Add(columnNames[i], columnWidths[i], alignments[i]);
+        }
+
+        private void toolStripMenuItemSyncWithSQLiteDatabase_Click(object sender, EventArgs e)
+        {
+            SyncWithSQLiteDatabaseForm form = new SyncWithSQLiteDatabaseForm();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+
+            }
         }
 
         private void toolStripMenuItemTransactions_Click(object sender, EventArgs e)
@@ -66,14 +77,25 @@ namespace InvoiceManager_DBFirst
             itemForm.Show();
         }
 
-        private void toolStripMenuItemSyncWithSQLiteDatabase_Click(object sender, EventArgs e)
+        private void toolStripMenuItemShops_Click(object sender, EventArgs e)
         {
-            SyncWithSQLiteDatabaseForm form = new SyncWithSQLiteDatabaseForm();
-            if (form.ShowDialog() == DialogResult.OK)
-            {
+            ShopForm shopForm = new ShopForm();
+            shopForm.ShopFormOpened += ShopForm_ShopFormOpened;
+            shopForm.ShopChanged += ShopForm_ShopChanged;
+            shopForm.ShopFormClosed += ShopForm_ShopFormClosed;
+            shopForm.Show();
+        }
 
-            }
+        private void toolStripMenuItemPaymentMethods_Click(object sender, EventArgs e)
+        {
+            PaymentMethodForm paymentMethodForm = new PaymentMethodForm();
+            paymentMethodForm.Show();
+        }
 
+        private void toolStripMenuItemUsers_Click(object sender, EventArgs e)
+        {
+            UserForm userForm = new UserForm();
+            userForm.Show();
         }
 
         private void timer_callback(object state)
@@ -111,32 +133,34 @@ namespace InvoiceManager_DBFirst
             this._addDataToListViewLog(actionType, message, eventTime);
         }
 
+        private void ShopForm_ShopFormOpened(string actionType, string message, DateTime eventTime)
+        {
+            this.listViewLog.Items.Add(new ListViewItem(new string[] { message, actionType, eventTime.ToString(_eventTimeFormat) }));
+        }
+
+        private void ShopForm_ShopChanged(string actionType, string message, DateTime eventTime)
+        {
+            this.listViewLog.Items.Add(new ListViewItem(new string[] { message, actionType, eventTime.ToString(_eventTimeFormat) }));
+        }
+
+        private void ShopForm_ShopFormClosed(string actionType, string message, DateTime eventTime)
+        {
+            this.listViewLog.Items.Add(new ListViewItem(new string[] { message, actionType, eventTime.ToString(_eventTimeFormat) }));
+        }
+
         private void _loadToolStripMenuItemIcons()
         {
             this.toolStripMenuItemTransactions.Image = BitmapResourceLoader.Transaction;
             this.toolStripMenuItemItems.Image = BitmapResourceLoader.Item;
             this.toolStripMenuItemShops.Image = BitmapResourceLoader.Shop;
             this.toolStripMenuItemPaymentMethods.Image = BitmapResourceLoader.PaymentMethod;
-            this.toolStripMenuItemPersons.Image = BitmapResourceLoader.Person;
+            this.toolStripMenuItemUsers.Image = BitmapResourceLoader.User;
             this.toolStripMenuItemSellers.Image = BitmapResourceLoader.Seller;
         }
 
         private void _addDataToListViewLog(string actionType, string message, DateTime eventTime)
         {
-            this.listViewLog.Items.Add(new ListViewItem(new string[] { actionType, message, eventTime.ToString(_eventTimeFormat) }));
-        }
-
-        private void toolStripMenuItemShops_Click(object sender, EventArgs e)
-        {
-            ShopForm shopForm = new ShopForm();
-            shopForm.Show();
-
-        }
-
-        private void toolStripMenuItemPaymentMethods_Click(object sender, EventArgs e)
-        {
-            PaymentMethodForm paymentMethodForm = new PaymentMethodForm();
-            paymentMethodForm.Show();
+            this.listViewLog.Items.Add(new ListViewItem(new string[] { message, actionType, eventTime.ToString(_eventTimeFormat) }));
         }
     }
 }

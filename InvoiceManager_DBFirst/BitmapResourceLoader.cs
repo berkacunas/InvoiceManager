@@ -17,6 +17,11 @@ namespace InvoiceManager_DBFirst
         private static Assembly _assembly;
         private static string _resourceStreamPrefix = "InvoiceManager_DBFirst.assets";
 
+        public static Bitmap AppIcon
+        {
+            get { return _getBitmap("appicon.png"); }
+        }
+
         public static Bitmap Transaction
         {
             get { return _getBitmap("transaction.png"); }
@@ -42,9 +47,14 @@ namespace InvoiceManager_DBFirst
             get { return _getBitmap("shop.png"); }
         }
 
-        public static Bitmap Person
+        public static Bitmap User
         {
-            get { return _getBitmap("person.png"); }
+            get { return _getBitmap("user.png"); }
+        }
+
+        public static Bitmap DefaultUser
+        {
+            get { return _getBitmap("empty-image.png"); }
         }
 
         static BitmapResourceLoader() 

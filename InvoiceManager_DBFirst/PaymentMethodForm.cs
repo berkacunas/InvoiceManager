@@ -476,17 +476,17 @@ namespace InvoiceManager_DBFirst
         {
             var query = from paymentMethod in dbContext.PaymentMethod
                         join bankCard in dbContext.BankCard on paymentMethod.BankCardId equals bankCard.id
-                        join person in dbContext.Person on paymentMethod.CardOwnerId equals person.id
+                        join user in dbContext.User on paymentMethod.CardOwnerId equals user.id
                         orderby paymentMethod.Name ascending
                         select new
                         {
                             paymentMethodId = paymentMethod.id,
                             bankCardId = bankCard.id,
-                            cardOwnerId = person.id,
+                            cardOwnerId = user.id,
                             paymentMethodName = paymentMethod.Name,
                             bankCardName = bankCard.Name,
                             bankCardType = bankCard.Type,
-                            personName = person.Name
+                            personName = user.Name
                         };
 
             this.dataGridViewPaymentMethods.DataSource = query.ToList();
@@ -574,15 +574,15 @@ namespace InvoiceManager_DBFirst
 
         private void _bindDataToComboBoxPaymentMethodOptionsCardOwner(BindType bindType, int cardOwnerId = 0)
         {
-            IQueryable<Person> query = null;
+            IQueryable<User> query = null;
 
             switch (bindType)
             {
                 case BindType.Select:
-                    query = from person in dbContext.Person orderby person.Name ascending select person;
+                    query = from user in dbContext.User orderby user.Name ascending select user;
                     break;
                 case BindType.Where:
-                    query = from person in dbContext.Person where person.id == cardOwnerId select person;
+                    query = from user in dbContext.User where user.id == cardOwnerId select user;
                     break;
                 case BindType.Setnull:
                     this.comboBoxPaymentMethodOptionsCardOwner.DataSource = null;
