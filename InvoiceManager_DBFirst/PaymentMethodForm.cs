@@ -359,11 +359,7 @@ namespace InvoiceManager_DBFirst
             }
 
             int paymentMethodId = Convert.ToInt32(row.Cells["paymentMethodId"].Value);
-
             var paymentMethod = dbContext.PaymentMethod.Where(r => r.id == paymentMethodId).FirstOrDefault();
-
-
-
 
             var tactionConflictionsQuery = from taction in dbContext.Taction
                                            join paymentmethod in dbContext.PaymentMethod on taction.PaymentMethodId equals paymentmethod.id

@@ -18,7 +18,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace InvoiceManager_DBFirst
 {
-    public delegate void Notify(string message, DateTime eventTime);
+    public delegate void Notify(string actionType, string message, DateTime eventTime);
 
     public partial class TactionForm : Form
     {
@@ -63,7 +63,7 @@ namespace InvoiceManager_DBFirst
         {
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            this.onTransactionFormOpened("Transaction Window opened", DateTime.Now);
+            this.onTransactionFormOpened("Transactions", "Window opened", DateTime.Now);
 
             this._setEditableTactions(false);
             this._setEditableDetails(false);
@@ -208,7 +208,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onTransactionSaved($"Transaction {this._newTaction.id} saved", DateTime.Now);
+                this.onTransactionSaved("Transactions", $"New transaction id {this._newTaction.id} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -246,7 +246,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onTransactionUpdated($"Transaction {taction.id} updated", DateTime.Now);
+                this.onTransactionUpdated("Transactions", $"Transaction id {taction.id} updated", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -280,7 +280,7 @@ namespace InvoiceManager_DBFirst
 
                 dbContext.Taction.Remove(taction);
                 this.dbContext.SaveChanges();
-                this.onTransactionRemoved($"Transaction {taction.id} removed", DateTime.Now);
+                this.onTransactionRemoved("Transactions", $"Transaction id {taction.id} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -534,7 +534,7 @@ namespace InvoiceManager_DBFirst
                         };
 
             this.dataGridViewTactions.DataSource = query.ToList();
-            this.onTransactionsLoaded("Transactions Loaded", DateTime.Now);
+            this.onTransactionsLoaded("Transactions", "Transaction data Loaded", DateTime.Now);
         }
 
         private void _bindDataToGridViewTactionDetails(int tactionId)
@@ -1030,43 +1030,43 @@ namespace InvoiceManager_DBFirst
             }
         }
 
-        protected virtual void onTransactionSaved(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onTransactionSaved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.TransactionSaved?.Invoke(message, eventTime);
-            this.onTransactionChanged(message, eventTime);
+            this.TransactionSaved?.Invoke(actionType, message, eventTime);
+            this.onTransactionChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onTransactionUpdated(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onTransactionUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.TransactionUpdated?.Invoke(message, eventTime);
-            this.onTransactionChanged(message, eventTime);
+            this.TransactionUpdated?.Invoke(actionType, message, eventTime);
+            this.onTransactionChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onTransactionsLoaded(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onTransactionsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.TransactionsLoaded?.Invoke(message, eventTime);
-            this.onTransactionChanged(message, eventTime);
+            this.TransactionsLoaded?.Invoke(actionType, message, eventTime);
+            this.onTransactionChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onTransactionRemoved(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onTransactionRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.TransactionRemoved?.Invoke(message, eventTime);
-            this.onTransactionChanged(message, eventTime);
+            this.TransactionRemoved?.Invoke(actionType, message, eventTime);
+            this.onTransactionChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onTransactionChanged(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onTransactionChanged(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.TransactionChanged?.Invoke(message, eventTime);
+            this.TransactionChanged?.Invoke(actionType, message, eventTime);
         }
 
-        protected virtual void onTransactionFormOpened(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onTransactionFormOpened(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.TransactionFormOpened?.Invoke(message, eventTime);
+            this.TransactionFormOpened?.Invoke(actionType, message, eventTime);
         }
 
-        protected virtual void onTransactionFormClosed(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onTransactionFormClosed(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.TransactionFormClosed?.Invoke(message, eventTime);
+            this.TransactionFormClosed?.Invoke(actionType, message, eventTime);
         }
 
         private void TactionForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -1074,23 +1074,23 @@ namespace InvoiceManager_DBFirst
             switch (e.CloseReason)
             {
                 case CloseReason.UserClosing:
-                    this.onTransactionFormClosed("Transaction Window closed by user", DateTime.Now);
+                    this.onTransactionFormClosed("Transactions", "Window closed by user", DateTime.Now);
                     break;
 
                 case CloseReason.WindowsShutDown:
-                    this.onTransactionFormClosed("Transaction Window closed as a part of Windows Shutdown", DateTime.Now);
+                    this.onTransactionFormClosed("Transactions", "Window closed as a part of Windows Shutdown", DateTime.Now);
                     break;
 
                 case CloseReason.TaskManagerClosing:
-                    this.onTransactionFormClosed("Transaction Window closed forcibly by Task Manager", DateTime.Now);
+                    this.onTransactionFormClosed("Transactions", "Window closed forcibly by Task Manager", DateTime.Now);
                     break;
 
                 case CloseReason.FormOwnerClosing:
-                    this.onTransactionFormClosed("Transaction Window closed by Form Owner", DateTime.Now);
+                    this.onTransactionFormClosed("Transactions", "Window closed by Form Owner", DateTime.Now);
                     break;
 
                 default:
-                    this.onTransactionFormClosed("Transaction Window closed with an unknown reasoun", DateTime.Now);
+                    this.onTransactionFormClosed("Transactions", "Window closed with an unknown reasoun", DateTime.Now);
                     break;
             }
         }

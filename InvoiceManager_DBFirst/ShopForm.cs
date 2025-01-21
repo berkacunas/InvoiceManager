@@ -82,6 +82,7 @@ namespace InvoiceManager_DBFirst
             this.dbContext = new InvoicesEntities();
 
             this.FormClosing += ShopForm_FormClosing;
+
             this.dataGridViewShops.DataSourceChanged += DataGridViewShops_DataSourceChanged;
             this.dataGridViewShopGroups.DataSourceChanged += DataGridViewShopGroups_DataSourceChanged;
             this.dataGridViewShopTypes.DataSourceChanged += DataGridViewShopTypes_DataSourceChanged;
@@ -606,33 +607,6 @@ namespace InvoiceManager_DBFirst
                 this._bindDataToComboBoxShopGroupOptionsShopType(BindType.Where, groupId);
         }
 
-        private void ShopForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            switch (e.CloseReason)
-            {
-                case CloseReason.UserClosing:
-                    this.onShopFormClosed("Shop Window closed by user", DateTime.Now);
-                    break;
-
-                case CloseReason.WindowsShutDown:
-                    this.onShopFormClosed("Shop Window closed as a part of Windows Shutdown", DateTime.Now);
-                    break;
-
-                case CloseReason.TaskManagerClosing:
-                    this.onShopFormClosed("Shop Window closed forcibly by Task Manager", DateTime.Now);
-                    break;
-
-                case CloseReason.FormOwnerClosing:
-                    this.onShopFormClosed("Shop Window closed by Form Owner", DateTime.Now);
-                    break;
-
-                default:
-                    this.onShopFormClosed("Shop Window closed with an unknown reasoun", DateTime.Now);
-                    break;
-
-            }
-        }
-
         private static void _setDefaultGridViewStyles(DataGridView gridview)
         {
             gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -928,91 +902,118 @@ namespace InvoiceManager_DBFirst
             this.checkBoxShopGroupOptionsEdit.Checked = check;
         }
 
-        protected virtual void onShopsLoaded(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopsLoaded?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopsLoaded?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopSaved(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopSaved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopSaved?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopSaved?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopUpdated(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopUpdated?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopUpdated?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopRemoved(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopRemoved?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopRemoved?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopGroupSaved(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopGroupSaved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopGroupSaved?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopGroupSaved?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopGroupUpdated(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopGroupUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopGroupUpdated?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopGroupUpdated?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopGroupsLoaded(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopGroupsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopGroupsLoaded?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopGroupsLoaded?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopGroupRemoved(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopGroupRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopGroupRemoved?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopGroupRemoved?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopTypeSaved(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopTypeSaved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopTypeSaved?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopTypeSaved?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopTypeUpdated(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopTypeUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopTypeUpdated?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopTypeUpdated?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopTypesLoaded(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopTypesLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopTypesLoaded?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopTypesLoaded?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopTypeRemoved(string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopTypeRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ShopTypeRemoved?.Invoke(message, eventTime);
-            this.onShopChanged(message, eventTime);
+            this.ShopTypeRemoved?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopChanged(string message, DateTime eventTime)
+        protected virtual void onShopChanged(string actionType, string message, DateTime eventTime)
         {
-            this.ShopChanged?.Invoke(message, eventTime);
+            this.ShopChanged?.Invoke(actionType, message, eventTime);
         }
 
-        protected virtual void onShopFormOpened(string message, DateTime eventTime)
+        protected virtual void onShopFormOpened(string actionType, string message, DateTime eventTime)
         {
-            this.ShopFormOpened?.Invoke(message, eventTime);
+            this.ShopFormOpened?.Invoke(actionType, message, eventTime);
         }
 
-        protected virtual void onShopFormClosed(string message, DateTime eventTime)
+        protected virtual void onShopFormClosed(string actionType, string message, DateTime eventTime)
         {
-            this.ShopFormClosed?.Invoke(message, eventTime);
+            this.ShopFormClosed?.Invoke(actionType, message, eventTime);
+        }
+
+        private void ShopForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            switch (e.CloseReason)
+            {
+                case CloseReason.UserClosing:
+                    this.onShopFormClosed("Shops", "Window closed by user", DateTime.Now);
+                    break;
+
+                case CloseReason.WindowsShutDown:
+                    this.onShopFormClosed("Shops", "Window closed as a part of Windows Shutdown", DateTime.Now);
+                    break;
+
+                case CloseReason.TaskManagerClosing:
+                    this.onShopFormClosed("Shops", "Window closed forcibly by Task Manager", DateTime.Now);
+                    break;
+
+                case CloseReason.FormOwnerClosing:
+                    this.onShopFormClosed("Shops", "Window closed by Form Owner", DateTime.Now);
+                    break;
+
+                default:
+                    this.onShopFormClosed("Shops", "Window closed with an unknown reasoun", DateTime.Now);
+                    break;
+
+            }
         }
     }
 }

@@ -34,9 +34,9 @@ namespace InvoiceManager_DBFirst
 
             this.listViewLog.View = View.Details;
 
-            string[] listViewLogColumns = new string[] { "Message", "Event Time" };
-            int[] listViewLogColumnWidths = new int[] { 400, 250 };
-            HorizontalAlignment[] listViewLogColumnAlignments = { HorizontalAlignment.Left, HorizontalAlignment.Left };
+            string[] listViewLogColumns = new string[] { "Action Type", "Message", "Action Time" };
+            int[] listViewLogColumnWidths = new int[] { 300, 400, 250 };
+            HorizontalAlignment[] listViewLogColumnAlignments = { HorizontalAlignment.Left, HorizontalAlignment.Left, HorizontalAlignment.Left };
 
             _setListViewColumnStyles(this.listViewLog, listViewLogColumns, listViewLogColumnWidths, listViewLogColumnAlignments);
             this._loadToolStripMenuItemIcons();
@@ -81,34 +81,34 @@ namespace InvoiceManager_DBFirst
             this.InvokeEx(f => f.toolStripStatusLabelLiveDateTime.Text = DateTime.Now.ToString("d MMMM yyyy dddd HH:mm:ss"));
         }
 
-        private void TactionForm_TransactionFormOpened(string message, DateTime eventTime)
+        private void TactionForm_TransactionFormOpened(string actionType, string message, DateTime eventTime)
         {
-            this._addDataToListViewLog(message, eventTime);
+            this._addDataToListViewLog(actionType, message, eventTime);
         }
 
-        private void TactionForm_TransactionChanged(string message, DateTime eventTime)
+        private void TactionForm_TransactionChanged(string actionType, string message, DateTime eventTime)
         {
-            this._addDataToListViewLog(message, eventTime);
+            this._addDataToListViewLog(actionType, message, eventTime);
         }
 
-        private void TactionForm_TransactionFormClosed(string message, DateTime eventTime)
+        private void TactionForm_TransactionFormClosed(string actionType, string message, DateTime eventTime)
         {
-            this._addDataToListViewLog(message, eventTime);
+            this._addDataToListViewLog(actionType, message, eventTime);
         }
 
-        private void İtemForm_ItemFormOpened(string message, DateTime eventTime)
+        private void İtemForm_ItemFormOpened(string actionType, string message, DateTime eventTime)
         {
-            this._addDataToListViewLog(message, eventTime);
+            this._addDataToListViewLog(actionType, message, eventTime);
         }
 
-        private void İtemForm_ItemFormClosed(string message, DateTime eventTime)
+        private void İtemForm_ItemFormClosed(string actionType, string message, DateTime eventTime)
         {
-            this._addDataToListViewLog(message, eventTime);
+            this._addDataToListViewLog(actionType, message, eventTime);
         }
 
-        private void İtemForm_ItemChanged(string message, DateTime eventTime)
+        private void İtemForm_ItemChanged(string actionType, string message, DateTime eventTime)
         {
-            this._addDataToListViewLog(message, eventTime);
+            this._addDataToListViewLog(actionType, message, eventTime);
         }
 
         private void _loadToolStripMenuItemIcons()
@@ -121,9 +121,9 @@ namespace InvoiceManager_DBFirst
             this.toolStripMenuItemSellers.Image = BitmapResourceLoader.Seller;
         }
 
-        private void _addDataToListViewLog(string message, DateTime eventTime)
+        private void _addDataToListViewLog(string actionType, string message, DateTime eventTime)
         {
-            this.listViewLog.Items.Add(new ListViewItem(new string[] { message, eventTime.ToString(_eventTimeFormat) }));
+            this.listViewLog.Items.Add(new ListViewItem(new string[] { actionType, message, eventTime.ToString(_eventTimeFormat) }));
         }
 
         private void toolStripMenuItemShops_Click(object sender, EventArgs e)
