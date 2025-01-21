@@ -296,12 +296,10 @@ namespace InvoiceManager_DBFirst
             if (e.ColumnIndex == 1 && e.Value != null)
             {
                 byte[] data = (byte[])e.Value;
-                Bitmap bmp;
 
                 using (var ms = new MemoryStream(data))
                 {
-                    bmp = new Bitmap(ms);
-                    Image img = ResizeImage(bmp, new Size(16, 16));
+                    Image img = ResizeImage(new Bitmap(ms), new Size(16, 16));
                     e.Value = GetBytesOfImage(img);
                 }
             }
@@ -326,7 +324,8 @@ namespace InvoiceManager_DBFirst
             int destHeight = (int)(sourceHeight * nPercent);
 
             Bitmap b = new Bitmap(destWidth, destHeight);
-            Graphics g = Graphics.FromImage((System.Drawing.Image)b);
+
+            Graphics g = Graphics.FromImage((Image)b);
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
             // Draw image with new width and height
