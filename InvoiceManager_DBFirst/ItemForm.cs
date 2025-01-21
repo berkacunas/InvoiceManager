@@ -88,8 +88,6 @@ namespace InvoiceManager_DBFirst
         {
             this._setModes(Mode.Display);
 
-            this.onItemFormOpened("Items", "Window opened", DateTime.Now);
-
             _setDefaultGridViewStyles(this.dataGridViewItems);
             _setDefaultGridViewStyles(this.dataGridViewItemGroups);
 
@@ -105,6 +103,8 @@ namespace InvoiceManager_DBFirst
 
             this._bindDataToGridViewItem();
             this._bindDataToGridViewItemGroup();
+
+            this.onItemFormOpened("Items", "Window opened", DateTime.Now);
         }
 
         private void DataGridViewItemGroups_DataSourceChanged(object sender, EventArgs e)
@@ -301,7 +301,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemSaved("Items", $"New id {_newItem.Name} saved", DateTime.Now);
+                this.onItemSaved("Items", $"New id {_newItem.id} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -333,7 +333,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemUpdated("Items", $"Id {item.Name} updated", DateTime.Now);
+                this.onItemUpdated("Items", $"Id {item.id} updated", DateTime.Now);
 
             }
             catch (Exception ex)
@@ -730,7 +730,7 @@ namespace InvoiceManager_DBFirst
 
             this.dataGridViewItemGroups.DataSource = query.ToList();
             this.onItemGroupsLoaded("ItemGroups", "ItemGroup data loaded", DateTime.Now);
-            this.onItemTopGroupsLoaded("ItemTopGroups", "ItemTopGroup data Loaded", DateTime.Now);
+            this.onItemTopGroupsLoaded("ItemTopGroups", "ItemTopGroup data loaded", DateTime.Now);
         }
 
         private void _bindDataToGridViewItem()

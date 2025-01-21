@@ -70,9 +70,6 @@ namespace InvoiceManager_DBFirst
         private SortOrder[] _sortOrdersDataGridViewItemGroups = { SortOrder.ASC, SortOrder.UNORDERED };
         private SortOrder[] _sortOrdersDataGridViewItems = { SortOrder.ASC, SortOrder.UNORDERED };
 
-
-
-
         public ShopForm()
         {
             InitializeComponent();
@@ -92,8 +89,6 @@ namespace InvoiceManager_DBFirst
         {
             this._setModes(Mode.Display);
 
-            //this.onShopFormOpened("Shop Window opened", DateTime.Now);
-
             _setDefaultGridViewStyles(this.dataGridViewShops);
             _setDefaultGridViewStyles(this.dataGridViewShopGroups);
             _setDefaultGridViewStyles(this.dataGridViewShopTypes);
@@ -109,6 +104,8 @@ namespace InvoiceManager_DBFirst
             this._bindDataToGridViewShop();
             this._bindDataToGridViewShopGroup();
             this._bindDataToGridViewShopType();
+
+            this.onShopFormOpened("Shops", "Window opened", DateTime.Now);
         }
 
         private void DataGridViewShops_DataSourceChanged(object sender, EventArgs e)
@@ -254,7 +251,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onShopSaved("Shop saved", DateTime.Now);
+                this.onShopSaved("Shops", $"New id {_newShop.Name} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -286,8 +283,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onShopUpdated("Shop updated", DateTime.Now);
-
+                this.onShopUpdated("Shops", $"Id {shop.id} updated", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -315,7 +311,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onShopRemoved("Shop removed", DateTime.Now);
+                this.onShopRemoved("Shops", $"Id {shop.id} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -357,7 +353,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onShopGroupSaved("ShopGroup saved.", DateTime.Now);
+                this.onShopGroupSaved("ShopGroups", $"New id {this._newShopGroup.Name} saved.", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -389,7 +385,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onShopGroupUpdated("ShopGroup updated", DateTime.Now);
+                this.onShopGroupUpdated("ShopGroups", $"Id {shopGroup.id} updated", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -440,7 +436,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 dbContext.SaveChanges();
-                //this.onShopGroupRemoved("ShopGroup removed", DateTime.Now);
+                this.onShopGroupRemoved("ShopGroups", $"Id {shopGroup.id} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -487,7 +483,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onShopTypeSaved("ShopType saved", DateTime.Now);
+                this.onShopTypeSaved("ShopTypes", $"New id {this._newShopType.id} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -527,7 +523,8 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onShopTypeUpdated("ShopType updated", DateTime.Now);
+                this.onShopTypeUpdated("ShopTypes", $"Id {shopType.id} updated", DateTime.Now);
+
             }
             catch (Exception ex)
             {
@@ -578,7 +575,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 dbContext.SaveChanges();
-                //this.onShopTypeRemoved("ShopType removed", DateTime.Now);
+                this.onShopTypeRemoved("ShopTypes", $"Id {shopType.id} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -659,7 +656,8 @@ namespace InvoiceManager_DBFirst
                         };
 
             this.dataGridViewShops.DataSource = query.ToList();
-            //this.onShopsLoaded("Shops Loaded", DateTime.Now);
+            this.onShopsLoaded("Shops", "Shop data loaded", DateTime.Now);
+
         }
 
         private void _bindDataToGridViewShopGroup()
@@ -677,7 +675,7 @@ namespace InvoiceManager_DBFirst
                         };
 
             this.dataGridViewShopGroups.DataSource = query.ToList();
-            //this.onShopGroupsLoaded("ShopGroups Loaded", DateTime.Now);
+            this.onShopGroupsLoaded("ShopGroups", "ShopGroup data loaded", DateTime.Now);
         }
 
         private void _bindDataToGridViewShopType()
@@ -692,6 +690,8 @@ namespace InvoiceManager_DBFirst
 
             this.dataGridViewShopTypes.DataSource = query.ToList();
             //this.onShopTypesLoaded("ShopTypes Loaded", DateTime.Now);
+            this.onShopTypesLoaded("ShopTypes", "ShopType data loaded", DateTime.Now);
+
         }
 
         private void _bindDataToComboBoxShopOptionsShopGroup(BindType bindType, int shopGroupId = 0)
