@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IdentityModel.Tokens;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace InvoiceManager_DBFirst
 {
@@ -48,13 +50,18 @@ namespace InvoiceManager_DBFirst
 
             this.dbContext = new InvoicesEntities();
 
+            this.dataGridViewUsers.CellClick += DataGridViewUsers_CellClick;
             this.dataGridViewUsers.DataSourceChanged += DataGridViewUsers_DataSourceChanged;
+            this.dataGridViewUsers.DataBindingComplete += DataGridViewUsers_DataBindingComplete;
+
+            this.textBoxUserOptionsName.Leave += TextBoxUserOptionsName_Leave;
+            this.textBoxUserOptionsSurname.Leave += TextBoxUserOptionsSurname_Leave;
         }
 
         private void UserForm_Load(object sender, EventArgs e)
         {
             this.textBoxUserOptionsFullname.ReadOnly = true;
-            this.pictureBoxUser.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.pictureBoxUser.SizeMode = PictureBoxSizeMode.Zoom;
             this.pictureBoxUser.Image = BitmapResourceLoader.DefaultUser;
 
             this._setModes(Mode.Display);
@@ -74,7 +81,7 @@ namespace InvoiceManager_DBFirst
                 return;
 
             string[] headerTexts = new string[] { "userId", "imageData", "Name", "Surname", "Full name" };
-            int[] columnWidths = new int[] { 50, 100, 150, 150, 150 };
+            int[] columnWidths = new int[] { 50, 100, 150, 150, 175 };
             DataGridViewContentAlignment[] columnAlignments = { DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleCenter,
                                                                 DataGridViewContentAlignment.MiddleLeft,
@@ -84,6 +91,47 @@ namespace InvoiceManager_DBFirst
             _setDefaultGridViewHeaderStyles(this.dataGridViewUsers, headerTexts, columnWidths, columnAlignments);
 
             this.dataGridViewUsers.Columns["userId"].Visible = false;
+        }
+
+        private void DataGridViewUsers_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            this._clearUserControls();
+            DataGridViewRow row = this.dataGridViewUsers.CurrentRow;
+            this._setUserControls(row);
+        }
+
+        private void DataGridViewUsers_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewUsers.Rows.Count > 0)
+            {
+                DataGridViewRow row = this.dataGridViewUsers.Rows[0];
+                if (row != null)
+                    this._setUserControls(row);
+            }
+        }
+
+        private void dataGridViewUsers_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex == 1 && e.Value != null)
+            {
+                byte[] data = (byte[])e.Value;
+
+                using (var ms = new MemoryStream(data))
+                {
+                    Image img = ResizeImage(new Bitmap(ms), new Size(16, 16));
+                    e.Value = GetBytesOfImage(img);
+                }
+            }
+        }
+
+        private void TextBoxUserOptionsName_Leave(object sender, EventArgs e)
+        {
+            this._setFullnameField();
+        }
+
+        private void TextBoxUserOptionsSurname_Leave(object sender, EventArgs e)
+        {
+            this._setFullnameField();
         }
 
         private void buttonNewUser_Click(object sender, EventArgs e)
@@ -129,7 +177,31 @@ namespace InvoiceManager_DBFirst
 
         private void buttonUpdateUser_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewUsers.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int userId = Convert.ToInt32(row.Cells["userId"].Value);
+            User user = dbContext.User.Where(r => r.id == userId).FirstOrDefault();
+
+            this._setUserDataFromUiToObject(user);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+                //this.onUserUpdated("Items", $"Id {user.id} updated", DateTime.Now);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while updating item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToGridViewUser();
         }
 
         private void buttonDeleteUser_Click(object sender, EventArgs e)
@@ -153,27 +225,32 @@ namespace InvoiceManager_DBFirst
             this._setUserImageDataFromUiToObject(this._newUserImage);
             this.dbContext.UserImage.Add(this._newUserImage);
 
-            //try
-            //{
-            //    this.dbContext.SaveChanges();
-            //    //this.onUserImageSaved("Items", $"New id {_newUserImage.id} saved", DateTime.Now);
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("An error occurred while adding item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+            try
+            {
+                this.dbContext.SaveChanges();
+                //this.onUserImageSaved("Items", $"New id {_newUserImage.id} saved", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while adding item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
-            //this._bindDataToGridViewUser();
+            this._bindDataToGridViewUser();
             this._newUserImage = new UserImage();
             this._userImageMode = Mode.Display;
         }
 
-        private byte[] _saveImage()
+        private void buttonDeleteImage_Click(object sender, EventArgs e)
         {
-            MemoryStream ms = new MemoryStream();
-            this.pictureBoxUser.Image.Save(ms, this.pictureBoxUser.Image.RawFormat);
 
-            return ms.GetBuffer();
+
+
+
+        }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void _bindDataToGridViewUser()
@@ -209,8 +286,38 @@ namespace InvoiceManager_DBFirst
                 return;
             }
 
+            if (this._newUser == null)   // Edit mode: taction exists in db, we get this taction object from database.
+            {
+                DataGridViewRow row = this.dataGridViewUsers.CurrentRow;
+                int userid = Convert.ToInt32(row.Cells["userId"].Value);
+                this._newUser = dbContext.User.Where(r => r.id == userid).FirstOrDefault();
+            }
+
+            userImage.User = this._newUser;
             userImage.imageData = this._saveImage();
-            userImage.User = _newUser;
+        }
+
+        private void _setUserControls(DataGridViewRow row)
+        {
+            int userId = Convert.ToInt32(row.Cells["userId"].Value);
+
+            this.textBoxUserOptionsName.Text = row.Cells["userName"].Value.ToString();
+            this.textBoxUserOptionsSurname.Text = row.Cells["userSurname"].Value.ToString();
+            this.textBoxUserOptionsFullname.Text = row.Cells["userFullname"].Value.ToString();
+
+            UserImage userImage = dbContext.UserImage.Where(r => r.userId == userId).FirstOrDefault();
+
+            if (userImage != null)
+            {
+                this.pictureBoxUser.Image = GetImageFromBytes(userImage.imageData);
+                this.pictureBoxUser.SizeMode = PictureBoxSizeMode.Zoom;
+            }
+        }
+
+        private void _setFullnameField()
+        {
+            if (!string.IsNullOrEmpty(this.textBoxUserOptionsName.Text) && !string.IsNullOrEmpty(this.textBoxUserOptionsSurname.Text))
+                this.textBoxUserOptionsFullname.Text = $"{this.textBoxUserOptionsName.Text} {this.textBoxUserOptionsSurname.Text}";
         }
 
         private void _setEditableUsers(bool isEditable)
@@ -256,6 +363,8 @@ namespace InvoiceManager_DBFirst
 
         private void _clearUserControls()
         {
+            this.pictureBoxUser.Image = null;
+
             foreach (Control c in this.groupBoxUserOptions.Controls)
                 if (c is TextBox)
                     ((TextBox)c).Clear();
@@ -291,18 +400,12 @@ namespace InvoiceManager_DBFirst
             this.dataGridViewUsers.Refresh();
         }
 
-        private void dataGridViewUsers_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private byte[] _saveImage()
         {
-            if (e.ColumnIndex == 1 && e.Value != null)
-            {
-                byte[] data = (byte[])e.Value;
+            MemoryStream ms = new MemoryStream();
+            this.pictureBoxUser.Image.Save(ms, this.pictureBoxUser.Image.RawFormat);
 
-                using (var ms = new MemoryStream(data))
-                {
-                    Image img = ResizeImage(new Bitmap(ms), new Size(16, 16));
-                    e.Value = GetBytesOfImage(img);
-                }
-            }
+            return ms.GetBuffer();
         }
 
         private static Image ResizeImage(Image imgToResize, Size size)
@@ -339,6 +442,12 @@ namespace InvoiceManager_DBFirst
         {
             ImageConverter converter = new ImageConverter();
             return (byte[])converter.ConvertTo(img, typeof(byte[]));
+        }
+
+        public static Image GetImageFromBytes(byte[] imageData)
+        {
+            MemoryStream ms = new MemoryStream(imageData);
+            return new Bitmap(ms);
         }
     }
 }
