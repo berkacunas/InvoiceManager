@@ -206,7 +206,46 @@ namespace InvoiceManager_DBFirst
 
         private void buttonDeleteUser_Click(object sender, EventArgs e)
         {
+            DataGridViewRow row = this.dataGridViewUsers.CurrentRow;
 
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to delete first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int userId = Convert.ToInt32(row.Cells["userId"].Value);
+            User user = dbContext.User.Where(r => r.id == userId).FirstOrDefault();
+
+            int whoDidItCount = dbContext.Taction.Where(r => r.WhoDidIt == user.id).Count();
+
+            if (whoDidItCount > 0)
+            {
+                MessageBox.Show($"Cannot delete this user.\nThere are {whoDidItCount} tactions done with this user.", "Unable to delete user.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                var userImages = user.UserImage.ToList();
+
+                foreach (var userImage in userImages)
+                {
+                    user.UserImage.Remove(userImage);
+                    dbContext.UserImage.Remove(userImage);
+                }
+
+                dbContext.User.Remove(user);
+                dbContext.SaveChanges();
+                //this.onUserRemoved("Users", $"User id {user.id} removed", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting user.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._clearUserControls();
+            this._bindDataToGridViewUser();
         }
 
         private void buttonAddImage_Click(object sender, EventArgs e)
@@ -242,9 +281,7 @@ namespace InvoiceManager_DBFirst
 
         private void buttonDeleteImage_Click(object sender, EventArgs e)
         {
-
-
-
+            
 
         }
 

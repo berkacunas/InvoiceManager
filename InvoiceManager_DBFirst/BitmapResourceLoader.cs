@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace InvoiceManager_DBFirst
 {
@@ -50,6 +51,41 @@ namespace InvoiceManager_DBFirst
         public static Bitmap User
         {
             get { return _getBitmap("user.png"); }
+        }
+
+        public static Bitmap Sqlite
+        {
+            get { return _getBitmap("sqlite.png"); }
+        }
+
+        public static Bitmap Sync
+        {
+            get { return _getBitmap("sync.png"); }
+        }
+
+        public static Bitmap Loop
+        {
+            get { return _getBitmap("loop.png"); }
+        }
+
+        public static Bitmap Exit
+        {
+            get { return _getBitmap("exit.png"); }
+        }
+
+        public static Bitmap PowerOff
+        {
+            get { return _getBitmap("power-off.png"); }
+        }
+
+        public static Bitmap ShoppingBag
+        {
+            get { return _getBitmap("shopping-bag.png"); }
+        }
+
+        public static Bitmap Groceries
+        {
+            get { return _getBitmap("groceries.png"); }
         }
 
         public static Bitmap DefaultUser

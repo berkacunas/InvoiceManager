@@ -13,11 +13,13 @@ using System.Windows.Forms;
 
 namespace InvoiceManager_DBFirst
 {
-    public partial class SyncWithSQLiteDatabaseForm : Form
+    public partial class SyncSqliteForm : Form
     {
-        public SyncWithSQLiteDatabaseForm()
+        public SyncSqliteForm()
         {
             InitializeComponent();
+
+            this.Icon = Icon.FromHandle(BitmapResourceLoader.Sqlite.GetHicon());
         }
 
         private void buttonSync_Click(object sender, EventArgs e)

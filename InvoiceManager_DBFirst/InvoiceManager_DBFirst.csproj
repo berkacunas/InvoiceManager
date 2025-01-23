@@ -336,11 +336,11 @@
     <Compile Include="ShopType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="SyncWithSQLiteDatabaseForm.cs">
+    <Compile Include="SyncSqliteForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SyncWithSQLiteDatabaseForm.Designer.cs">
-      <DependentUpon>SyncWithSQLiteDatabaseForm.cs</DependentUpon>
+    <Compile Include="SyncSqliteForm.Designer.cs">
+      <DependentUpon>SyncSqliteForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Taction.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
@@ -387,8 +387,8 @@
     <EmbeddedResource Include="ShopForm.resx">
       <DependentUpon>ShopForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SyncWithSQLiteDatabaseForm.resx">
-      <DependentUpon>SyncWithSQLiteDatabaseForm.cs</DependentUpon>
+    <EmbeddedResource Include="SyncSqliteForm.resx">
+      <DependentUpon>SyncSqliteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TactionForm.resx">
       <DependentUpon>TactionForm.cs</DependentUpon>
@@ -426,6 +426,13 @@
     <EmbeddedResource Include="assets\appicon.png" />
     <EmbeddedResource Include="assets\cash.ico" />
     <EmbeddedResource Include="assets\empty-image.png" />
+    <EmbeddedResource Include="assets\sqlite.png" />
+    <EmbeddedResource Include="assets\sync.png" />
+    <EmbeddedResource Include="assets\loop.png" />
+    <EmbeddedResource Include="assets\exit.png" />
+    <EmbeddedResource Include="assets\power-off.png" />
+    <EmbeddedResource Include="assets\groceries.png" />
+    <EmbeddedResource Include="assets\shopping-bag.png" />
     <Content Include="cash.ico" />
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
     <Content Include="InvoiceModel.Context.tt">

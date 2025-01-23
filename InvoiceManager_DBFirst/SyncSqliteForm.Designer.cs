@@ -1,6 +1,6 @@
 ﻿namespace InvoiceManager_DBFirst
 {
-    partial class SyncWithSQLiteDatabaseForm
+    partial class SyncSqliteForm
     {
         /// <summary>
         /// Required designer variable.
