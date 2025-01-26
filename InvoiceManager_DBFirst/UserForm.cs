@@ -1,17 +1,14 @@
-﻿using System;
+﻿using SQLitePCL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IdentityModel.Tokens;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace InvoiceManager_DBFirst
 {
@@ -95,9 +92,13 @@ namespace InvoiceManager_DBFirst
 
         private void DataGridViewUsers_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            this._clearUserControls();
             DataGridViewRow row = this.dataGridViewUsers.CurrentRow;
+
+            this._clearUserControls();
             this._setUserControls(row);
+
+            int userId = Convert.ToInt32(row.Cells["userId"].Value);
+            _setPictureBoxImage(userId);
         }
 
         private void DataGridViewUsers_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -264,10 +265,11 @@ namespace InvoiceManager_DBFirst
             _newUserImage = new UserImage();
 
             Image image = new Bitmap(ofd.FileName);
-
             this.pictureBoxUser.Image = image;
 
+
             this._setUserImageDataFromUiToObject(this._newUserImage);
+
             this.dbContext.UserImage.Add(this._newUserImage);
 
             if (this._newUserImage.isDefault)
@@ -283,7 +285,25 @@ namespace InvoiceManager_DBFirst
                 MessageBox.Show("An error occurred while adding item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            this.pictureBoxUser.Tag = this._newUserImage.id;
+
             this._bindDataToGridViewUser();
+
+
+            int rowIndex = -1;
+            if (this.dataGridViewUsers.CurrentRow != null)
+            {
+                rowIndex = this.dataGridViewUsers.CurrentRow.Index;
+                int userId = Convert.ToInt32(this.dataGridViewUsers.Rows[rowIndex].Cells["userId"].Value);
+                this.dataGridViewUsers.CurrentCell = this.dataGridViewUsers.Rows[rowIndex].Cells[1]; // Cell[0] is a hidden column.
+
+                if (this._currentImageIndexDict.ContainsKey(userId))
+                    this._currentImageIndexDict[userId] += 1;
+
+                this._setPictureBoxImage(userId);
+
+            }
+
             this._newUser = null;
             this._newUserImage = null;
             this._userImageMode = Mode.Display;
@@ -309,10 +329,61 @@ namespace InvoiceManager_DBFirst
             }
         }
 
+        private void _removeThumbnail(User user)
+        {
+            user.Thumbnail = null;
+        }
+
         private void buttonDeleteImage_Click(object sender, EventArgs e)
         {
-            
+            if (this.pictureBoxUser.Tag == null)
+                return;
 
+            DataGridViewRow row = this.dataGridViewUsers.CurrentRow;
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int userImageId = Convert.ToInt32(this.pictureBoxUser.Tag);
+
+            int userId = Convert.ToInt32(row.Cells["userId"].Value);
+            User user = dbContext.User.Where(r => r.id == userId).SingleOrDefault();
+
+            UserImage userImage = user.UserImage.Where(r => r.id == userImageId).SingleOrDefault();
+
+            if (userImage.isDefault) 
+                this._removeThumbnail(user);
+
+            user.UserImage.Remove(userImage);
+            this.dbContext.UserImage.Remove(userImage);
+
+            if (this._currentImageIndexDict[userId] > 0)
+            {
+                this._currentImageIndexDict[userId] -= 1;
+
+                int rowIndex = this.dataGridViewUsers.CurrentRow.Index;
+                this.dataGridViewUsers.CurrentCell = this.dataGridViewUsers.Rows[rowIndex].Cells[1]; // Cell[0] is a hidden column.
+                this._setPictureBoxImage(userId);
+
+            }
+            else
+                this._currentImageIndexDict.Remove(userId);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+                // this.onUserThumbnailRemoved("Users", $"New id {_newUser.id} saved", DateTime.Now);
+                // this.onUserImageRemoved("Users", $"New id {_newUserImage.id} saved", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while adding item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToGridViewUser();
+            this._userImageMode = Mode.Display;
         }
 
         private void buttonPreviousImage_Click(object sender, EventArgs e)
@@ -421,10 +492,10 @@ namespace InvoiceManager_DBFirst
             this.textBoxUserOptionsSurname.Text = row.Cells["userSurname"].Value.ToString();
             this.textBoxUserOptionsFullname.Text = row.Cells["userFullname"].Value.ToString();
 
-            this._setPictureBoxImage(userId);
+            //this._setPictureBoxImage(userId);
         }
 
-        private void _setPictureBoxImage(int userId)
+        private void _setPictureBoxImage(int userId = 0)
         {
             List<UserImage> userImages = dbContext.UserImage.Where(r => r.userId == userId).ToList();
 
@@ -435,11 +506,13 @@ namespace InvoiceManager_DBFirst
 
                 UserImage userImage = userImages[this._currentImageIndexDict[userId]];
                 this.pictureBoxUser.Image = (userImage != null) ? GetImageFromBytes(userImage.imageData) : BitmapResourceLoader.DefaultUser;
+                this.pictureBoxUser.Tag = userImage.id;
                 this._checkCheckBoxDefault(userImage.isDefault);
             }
             else
             {
                 this.pictureBoxUser.Image = BitmapResourceLoader.DefaultUser;
+                this.pictureBoxUser.Tag = null;
                 this._checkCheckBoxDefault(false);
             }
 
@@ -496,6 +569,7 @@ namespace InvoiceManager_DBFirst
         private void _clearUserControls()
         {
             this.pictureBoxUser.Image = null;
+            this.pictureBoxUser.Tag = null;
 
             foreach (Control c in this.groupBoxUserOptions.Controls)
                 if (c is TextBox)
