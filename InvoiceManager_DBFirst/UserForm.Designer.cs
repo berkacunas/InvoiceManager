@@ -258,7 +258,6 @@
             this.checkBoxDefaultUserImage.TabIndex = 16;
             this.checkBoxDefaultUserImage.Text = "Default";
             this.checkBoxDefaultUserImage.UseVisualStyleBackColor = true;
-            this.checkBoxDefaultUserImage.CheckedChanged += new System.EventHandler(this.checkBoxDefaultUserImage_CheckedChanged);
             // 
             // UserForm
             // 

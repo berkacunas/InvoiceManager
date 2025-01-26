@@ -284,7 +284,8 @@ namespace InvoiceManager_DBFirst
             }
 
             this._bindDataToGridViewUser();
-            this._newUserImage = new UserImage();
+            this._newUser = null;
+            this._newUserImage = null;
             this._userImageMode = Mode.Display;
         }
 
@@ -349,10 +350,11 @@ namespace InvoiceManager_DBFirst
 
             if (this._currentImageIndexDict.ContainsKey(userId))
             {
-                if (this._currentImageIndexDict[userId] < dbContext.UserImage.Where(r => r.userId == userId).Count())
+                if (this._currentImageIndexDict[userId] < dbContext.UserImage.Where(r => r.userId == userId).Count() - 1)
+                {
                     ++this._currentImageIndexDict[userId];
-
-                this._setPictureBoxImage(userId);
+                    this._setPictureBoxImage(userId);
+                }
             }
         }
         private void buttonClose_Click(object sender, EventArgs e)
@@ -387,18 +389,21 @@ namespace InvoiceManager_DBFirst
 
         private void _setUserImageDataFromUiToObject(UserImage userImage)
         {
-            if (this.dataGridViewUsers.CurrentRow == null)
-                return;
-
             if (this.pictureBoxUser.Image == null)
             {
                 MessageBox.Show("You didn't select a picture.", "Missing picture.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (this._newUser == null)   // Edit mode: taction exists in db, we get this taction object from database.
+            if (this._newUser == null)   // Edit mode: user exists in db, we get this user object from database.
             {
                 DataGridViewRow row = this.dataGridViewUsers.CurrentRow;
+                if (row == null)
+                {
+                    MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 int userid = Convert.ToInt32(row.Cells["userId"].Value);
                 this._newUser = dbContext.User.Where(r => r.id == userid).FirstOrDefault();
             }
@@ -575,9 +580,5 @@ namespace InvoiceManager_DBFirst
             return new Bitmap(ms);
         }
 
-        private void checkBoxDefaultUserImage_CheckedChanged(object sender, EventArgs e)
-        {
-            
-        }
     }
 }
