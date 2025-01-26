@@ -33,6 +33,7 @@ namespace InvoiceManager_DBFirst
         }
 
         private InvoicesEntities dbContext;
+        private IDictionary<int, int> _currentImageIndexDict;
 
         private User _newUser;
         private UserImage _newUserImage;
@@ -45,6 +46,8 @@ namespace InvoiceManager_DBFirst
         public UserForm()
         {
             InitializeComponent();
+
+            this._currentImageIndexDict = new Dictionary<int, int>();
 
             this.Icon = Icon.FromHandle(BitmapResourceLoader.User.GetHicon());
 
@@ -61,8 +64,6 @@ namespace InvoiceManager_DBFirst
         private void UserForm_Load(object sender, EventArgs e)
         {
             this.textBoxUserOptionsFullname.ReadOnly = true;
-            this.pictureBoxUser.SizeMode = PictureBoxSizeMode.Zoom;
-            this.pictureBoxUser.Image = BitmapResourceLoader.DefaultUser;
 
             this._setModes(Mode.Display);
 
@@ -71,7 +72,6 @@ namespace InvoiceManager_DBFirst
 
             this._setEditableUsers(false);
             this._bindDataToGridViewUser();
-
             //this.onUserFormOpened("Users", "Window opened", DateTime.Now);
         }
 
@@ -80,7 +80,7 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewUsers.DataSource == null)
                 return;
 
-            string[] headerTexts = new string[] { "userId", "imageData", "Name", "Surname", "Full name" };
+            string[] headerTexts = new string[] { "userId", "thumbnail", "Name", "Surname", "Full name" };
             int[] columnWidths = new int[] { 50, 100, 150, 150, 175 };
             DataGridViewContentAlignment[] columnAlignments = { DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleCenter,
@@ -146,9 +146,7 @@ namespace InvoiceManager_DBFirst
                 this._newUser = new User();
             }
             else
-            {
                 this._setEditableUsers(false);
-            }
 
             this._clearUserControls();
         }
@@ -255,14 +253,25 @@ namespace InvoiceManager_DBFirst
             ofd.Multiselect = false;
             ofd.Filter = " (*.jpg;*.png;*.jpeg) | *.jpg;*.png;*.jpeg";
 
+            bool isCheckedDefault = this.checkBoxDefaultUserImage.Checked;
+            this._checkCheckBoxDefault(false);
             if (ofd.ShowDialog() != DialogResult.OK)
+            {
+                this._checkCheckBoxDefault(isCheckedDefault);
                 return;
+            }
 
             _newUserImage = new UserImage();
-            this.pictureBoxUser.Image = new Bitmap(ofd.FileName);
+
+            Image image = new Bitmap(ofd.FileName);
+
+            this.pictureBoxUser.Image = image;
 
             this._setUserImageDataFromUiToObject(this._newUserImage);
             this.dbContext.UserImage.Add(this._newUserImage);
+
+            if (this._newUserImage.isDefault)
+                this._saveAsThumbnail(_newUser, image);
 
             try
             {
@@ -279,12 +288,73 @@ namespace InvoiceManager_DBFirst
             this._userImageMode = Mode.Display;
         }
 
+        private void _checkCheckBoxDefault(bool check)
+        {
+            this.checkBoxDefaultUserImage.Checked = check;
+        }
+
+        private void _saveAsThumbnail(User user, Image image)
+        {
+            Image tempImage = ResizeImage(image, new Size(24, 24));
+            user.Thumbnail = GetBytesOfImage(tempImage);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while saving thumbnail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void buttonDeleteImage_Click(object sender, EventArgs e)
         {
             
 
         }
 
+        private void buttonPreviousImage_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow row = this.dataGridViewUsers.CurrentRow;
+
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int userId = Convert.ToInt32(row.Cells["userId"].Value);
+
+            if (this._currentImageIndexDict.ContainsKey(userId))
+            {
+                if (this._currentImageIndexDict[userId] > 0)
+                    --this._currentImageIndexDict[userId];
+
+                this._setPictureBoxImage(userId);
+            }
+        }
+
+        private void buttonNextImage_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow row = this.dataGridViewUsers.CurrentRow;
+
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int userId = Convert.ToInt32(row.Cells["userId"].Value);
+
+            if (this._currentImageIndexDict.ContainsKey(userId))
+            {
+                if (this._currentImageIndexDict[userId] < dbContext.UserImage.Where(r => r.userId == userId).Count())
+                    ++this._currentImageIndexDict[userId];
+
+                this._setPictureBoxImage(userId);
+            }
+        }
         private void buttonClose_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -317,6 +387,9 @@ namespace InvoiceManager_DBFirst
 
         private void _setUserImageDataFromUiToObject(UserImage userImage)
         {
+            if (this.dataGridViewUsers.CurrentRow == null)
+                return;
+
             if (this.pictureBoxUser.Image == null)
             {
                 MessageBox.Show("You didn't select a picture.", "Missing picture.", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -332,6 +405,7 @@ namespace InvoiceManager_DBFirst
 
             userImage.User = this._newUser;
             userImage.imageData = this._saveImage();
+            userImage.isDefault = (dbContext.UserImage.Where(r => r.userId == this._newUser.id).Any()) ? this.checkBoxDefaultUserImage.Checked : true;
         }
 
         private void _setUserControls(DataGridViewRow row)
@@ -342,13 +416,29 @@ namespace InvoiceManager_DBFirst
             this.textBoxUserOptionsSurname.Text = row.Cells["userSurname"].Value.ToString();
             this.textBoxUserOptionsFullname.Text = row.Cells["userFullname"].Value.ToString();
 
-            UserImage userImage = dbContext.UserImage.Where(r => r.userId == userId).FirstOrDefault();
+            this._setPictureBoxImage(userId);
+        }
 
-            if (userImage != null)
+        private void _setPictureBoxImage(int userId)
+        {
+            List<UserImage> userImages = dbContext.UserImage.Where(r => r.userId == userId).ToList();
+
+            if (userImages.Count > 0)
             {
-                this.pictureBoxUser.Image = GetImageFromBytes(userImage.imageData);
-                this.pictureBoxUser.SizeMode = PictureBoxSizeMode.Zoom;
+                if (!this._currentImageIndexDict.ContainsKey(userId))
+                    this._currentImageIndexDict.Add(userId, 0);
+
+                UserImage userImage = userImages[this._currentImageIndexDict[userId]];
+                this.pictureBoxUser.Image = (userImage != null) ? GetImageFromBytes(userImage.imageData) : BitmapResourceLoader.DefaultUser;
+                this._checkCheckBoxDefault(userImage.isDefault);
             }
+            else
+            {
+                this.pictureBoxUser.Image = BitmapResourceLoader.DefaultUser;
+                this._checkCheckBoxDefault(false);
+            }
+
+            this.pictureBoxUser.SizeMode = PictureBoxSizeMode.Zoom;
         }
 
         private void _setFullnameField()
@@ -419,13 +509,11 @@ namespace InvoiceManager_DBFirst
             BindingSource bs = new BindingSource();
 
             var query = from user in dbContext.User
-                        join userImage in dbContext.UserImage on user.id equals userImage.userId into joinTable
-                        from jt in joinTable.DefaultIfEmpty()
                         orderby user.Name ascending
                         select new
                         {
                             userId = user.id,
-                            userImageData = jt.imageData,
+                            thumbnail = user.Thumbnail,
                             userName = user.Name,
                             userSurname = user.Surname,
                             userFullname = user.Fullname
@@ -485,6 +573,11 @@ namespace InvoiceManager_DBFirst
         {
             MemoryStream ms = new MemoryStream(imageData);
             return new Bitmap(ms);
+        }
+
+        private void checkBoxDefaultUserImage_CheckedChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }

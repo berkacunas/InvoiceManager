@@ -905,13 +905,11 @@ namespace InvoiceManager_DBFirst
 
         private static decimal _calculateDiscountedUnitPrice(decimal rate, decimal unitPrice, decimal unit)
         {
-            /* (1 - details.DiscountRate / 100) * details.UnitPrice * details.Unit; */
-            return ((1 - rate) / 100) * unitPrice * unit;      
+            return (1 - (rate / 100)) * unitPrice * unit;      
         }
 
         private static decimal _calculateDiscountRate(decimal discountedUnitPrice, decimal unitPrice)
         {
-            /* 1 - Convert.ToDecimal(this.textBoxDiscountedPrice.Text) / details.UnitPrice; */
             return 1 - discountedUnitPrice / unitPrice;
         }
 

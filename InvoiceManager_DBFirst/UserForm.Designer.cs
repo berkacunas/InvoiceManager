@@ -47,6 +47,7 @@
             this.groupBoxUsers = new System.Windows.Forms.GroupBox();
             this.dataGridViewUsers = new System.Windows.Forms.DataGridView();
             this.buttonClose = new System.Windows.Forms.Button();
+            this.checkBoxDefaultUserImage = new System.Windows.Forms.CheckBox();
             this.groupBoxUserOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).BeginInit();
             this.groupBoxUsers.SuspendLayout();
@@ -55,6 +56,7 @@
             // 
             // groupBoxUserOptions
             // 
+            this.groupBoxUserOptions.Controls.Add(this.checkBoxDefaultUserImage);
             this.groupBoxUserOptions.Controls.Add(this.textBoxUserOptionsName);
             this.groupBoxUserOptions.Controls.Add(this.textBoxUserOptionsSurname);
             this.groupBoxUserOptions.Controls.Add(this.buttonPreviousImage);
@@ -99,6 +101,7 @@
             this.buttonPreviousImage.TabIndex = 10;
             this.buttonPreviousImage.Text = "<";
             this.buttonPreviousImage.UseVisualStyleBackColor = true;
+            this.buttonPreviousImage.Click += new System.EventHandler(this.buttonPreviousImage_Click);
             // 
             // buttonNextImage
             // 
@@ -108,6 +111,7 @@
             this.buttonNextImage.TabIndex = 11;
             this.buttonNextImage.Text = ">";
             this.buttonNextImage.UseVisualStyleBackColor = true;
+            this.buttonNextImage.Click += new System.EventHandler(this.buttonNextImage_Click);
             // 
             // buttonAddImage
             // 
@@ -245,6 +249,17 @@
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
+            // checkBoxDefaultUserImage
+            // 
+            this.checkBoxDefaultUserImage.AutoSize = true;
+            this.checkBoxDefaultUserImage.Location = new System.Drawing.Point(160, 167);
+            this.checkBoxDefaultUserImage.Name = "checkBoxDefaultUserImage";
+            this.checkBoxDefaultUserImage.Size = new System.Drawing.Size(60, 17);
+            this.checkBoxDefaultUserImage.TabIndex = 16;
+            this.checkBoxDefaultUserImage.Text = "Default";
+            this.checkBoxDefaultUserImage.UseVisualStyleBackColor = true;
+            this.checkBoxDefaultUserImage.CheckedChanged += new System.EventHandler(this.checkBoxDefaultUserImage_CheckedChanged);
+            // 
             // UserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -287,5 +302,6 @@
         private System.Windows.Forms.TextBox textBoxUserOptionsSurname;
         private System.Windows.Forms.TextBox textBoxUserOptionsFullname;
         private System.Windows.Forms.Button buttonClose;
+        private System.Windows.Forms.CheckBox checkBoxDefaultUserImage;
     }
 }

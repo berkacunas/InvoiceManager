@@ -17,6 +17,7 @@ namespace InvoiceManager_DBFirst
         public int id { get; set; }
         public int userId { get; set; }
         public byte[] imageData { get; set; }
+        public bool isDefault { get; set; }
     
         public virtual User User { get; set; }
     }

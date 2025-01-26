@@ -321,7 +321,7 @@ namespace InvoiceManager_DBFirst
 
             if (row == null)
             {
-                MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -350,7 +350,7 @@ namespace InvoiceManager_DBFirst
 
             if (row == null)
             {
-                MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -423,7 +423,7 @@ namespace InvoiceManager_DBFirst
 
             if (row == null)
             {
-                MessageBox.Show("Row not selected.", "Select the row you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -451,7 +451,7 @@ namespace InvoiceManager_DBFirst
 
             if (row == null)
             {
-                MessageBox.Show("Row not selected.", "Select the row you want to delete first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -518,7 +518,7 @@ namespace InvoiceManager_DBFirst
         {
             if (string.IsNullOrEmpty(this.comboBoxTopGroupOptionsTopGroup.Text))
             {
-                MessageBox.Show("Text not entered.", "Enter top group item name first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Enter top group item name first.", "Text not entered.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -546,7 +546,7 @@ namespace InvoiceManager_DBFirst
         {
             if (this.comboBoxTopGroupOptionsTopGroup.SelectedItem == null)
             {
-                MessageBox.Show("Item not selected.", "Select the top group item you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Select the top group item you want to update first.", "Item not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -570,7 +570,7 @@ namespace InvoiceManager_DBFirst
         {
             if (this.comboBoxTopGroupOptionsTopGroup.SelectedItem == null)
             {
-                MessageBox.Show("Item not selected.", "Select the top group item you want to update first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Select the top group item you want to update first.", "Item not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -646,13 +646,13 @@ namespace InvoiceManager_DBFirst
         {
             if (string.IsNullOrEmpty(this.textBoxItemOptionsItem.Text))
             {
-                MessageBox.Show("Missing value.", "You didn't enter item.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("You didn't enter item.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (this.comboBoxItemOptionsGroup.SelectedItem == null)
             {
-                MessageBox.Show("Missing value.", "You didn't select item group.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("You didn't select item group.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -665,13 +665,13 @@ namespace InvoiceManager_DBFirst
         {
             if (string.IsNullOrEmpty(this.textBoxGroupOptionsGroup.Text))
             {
-                MessageBox.Show("Missing value.", "You didn't enter item group.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("You didn't enter item group.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (this.comboBoxGroupOptionsTopGroup.SelectedItem == null)
             {
-                MessageBox.Show("Missing value.", "You didn't select item top group.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("You didn't select item top group.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -683,7 +683,7 @@ namespace InvoiceManager_DBFirst
         {
             if (this.comboBoxTopGroupOptionsTopGroup.SelectedItem == null)
             {
-                MessageBox.Show("Missing value.", "You didn't select item top group.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("You didn't select item top group.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

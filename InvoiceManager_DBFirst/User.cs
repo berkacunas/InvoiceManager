@@ -28,6 +28,7 @@ namespace InvoiceManager_DBFirst
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Fullname { get; set; }
+        public byte[] Thumbnail { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CashTransfer> CashTransfer { get; set; }

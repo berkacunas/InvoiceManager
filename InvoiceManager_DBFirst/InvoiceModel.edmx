@@ -160,6 +160,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Surname" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Fullname" Type="nvarchar" MaxLength="128" />
+          <Property Name="Thumbnail" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="UserImage">
           <Key>
@@ -168,6 +169,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="userId" Type="int" Nullable="false" />
           <Property Name="imageData" Type="varbinary(max)" Nullable="false" />
+          <Property Name="isDefault" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_CashTransfer_PaymentMethodId">
           <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
@@ -669,6 +671,7 @@
           <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_PaymentMethodCardOwnerId_PersonId" FromRole="User" ToRole="PaymentMethod" />
           <NavigationProperty Name="Taction" Relationship="Self.FK_Taction_WhoDidIt" FromRole="User" ToRole="Taction" />
           <NavigationProperty Name="UserImage" Relationship="Self.FK_UserImage_UserId" FromRole="User" ToRole="UserImage" />
+          <Property Name="Thumbnail" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="UserImage">
           <Key>
@@ -678,6 +681,7 @@
           <Property Name="userId" Type="Int32" Nullable="false" />
           <Property Name="imageData" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Self.FK_UserImage_UserId" FromRole="UserImage" ToRole="User" />
+          <Property Name="isDefault" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_PaymentMethod_BankCardId">
           <End Role="BankCard" Type="Self.BankCard" Multiplicity="0..1" />
@@ -1155,6 +1159,7 @@
           <EntitySetMapping Name="User">
             <EntityTypeMapping TypeName="InvoicesModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Thumbnail" ColumnName="Thumbnail" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
@@ -1165,6 +1170,7 @@
           <EntitySetMapping Name="UserImage">
             <EntityTypeMapping TypeName="InvoicesModel.UserImage">
               <MappingFragment StoreEntitySet="UserImage">
+                <ScalarProperty Name="isDefault" ColumnName="isDefault" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="imageData" ColumnName="imageData" />
