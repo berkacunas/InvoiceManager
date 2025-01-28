@@ -84,7 +84,7 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemSellers_Click(object sender, EventArgs e)
         {
-
+            this._initializeSellerForm();
         }
 
         private void ToolStripButtonTactions_Click(object sender, EventArgs e)
@@ -114,7 +114,7 @@ namespace InvoiceManager_DBFirst
 
         private void ToolStripButtonSellers_Click(object sender, EventArgs e)
         {
-            
+            this._initializeSellerForm();
         }
 
         private void timer_callback(object state)
@@ -270,5 +270,10 @@ namespace InvoiceManager_DBFirst
             userForm.Show();
         }
 
+        private void _initializeSellerForm()
+        {
+            SellerForm sellerForm = new SellerForm();
+            sellerForm.Show();
+        }
     }
 }

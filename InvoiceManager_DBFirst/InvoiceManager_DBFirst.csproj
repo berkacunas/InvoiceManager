@@ -321,6 +321,12 @@
     <Compile Include="Seller.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="SellerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SellerForm.Designer.cs">
+      <DependentUpon>SellerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shop.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -384,6 +390,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SellerForm.resx">
+      <DependentUpon>SellerForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ShopForm.resx">
       <DependentUpon>ShopForm.cs</DependentUpon>
     </EmbeddedResource>

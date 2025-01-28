@@ -67,8 +67,8 @@ namespace InvoiceManager_DBFirst
         private Mode _groupMode;
         private Mode _typeMode;
 
-        private SortOrder[] _sortOrdersDataGridViewItemGroups = { SortOrder.ASC, SortOrder.UNORDERED };
-        private SortOrder[] _sortOrdersDataGridViewItems = { SortOrder.ASC, SortOrder.UNORDERED };
+        private SortOrder[] _sortOrdersDataGridViewShopGroups = { SortOrder.ASC, SortOrder.UNORDERED };
+        private SortOrder[] _sortOrdersDataGridViewShops = { SortOrder.ASC, SortOrder.UNORDERED };
 
         public ShopForm()
         {
