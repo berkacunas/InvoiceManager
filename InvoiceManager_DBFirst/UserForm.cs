@@ -30,6 +30,8 @@ namespace InvoiceManager_DBFirst
         }
 
         private InvoicesEntities dbContext;
+
+        private bool _isInitialized;
         private IDictionary<int, int> _currentImageIndexDict;
 
         private User _newUser;
@@ -44,6 +46,7 @@ namespace InvoiceManager_DBFirst
         {
             InitializeComponent();
 
+            this._isInitialized = false;
             this._currentImageIndexDict = new Dictionary<int, int>();
 
             this.Icon = Icon.FromHandle(BitmapResourceLoader.User.GetHicon());
@@ -96,9 +99,7 @@ namespace InvoiceManager_DBFirst
 
             this._clearUserControls();
             this._setUserControls(row);
-
-            int userId = Convert.ToInt32(row.Cells["userId"].Value);
-            _setPictureBoxImage(userId);
+            this._setPictureBoxImage(row);
         }
 
         private void DataGridViewUsers_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -107,8 +108,14 @@ namespace InvoiceManager_DBFirst
             {
                 DataGridViewRow row = this.dataGridViewUsers.Rows[0];
                 if (row != null)
+                {
                     this._setUserControls(row);
+                    if (!this._isInitialized) 
+                        this._setPictureBoxImage(row);
+                }
             }
+
+            //this._isInitialized = true;
         }
 
         private void dataGridViewUsers_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -283,26 +290,27 @@ namespace InvoiceManager_DBFirst
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while adding item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             this.pictureBoxUser.Tag = this._newUserImage.id;
-
-            this._bindDataToGridViewUser();
-
 
             int rowIndex = -1;
             if (this.dataGridViewUsers.CurrentRow != null)
             {
                 rowIndex = this.dataGridViewUsers.CurrentRow.Index;
                 int userId = Convert.ToInt32(this.dataGridViewUsers.Rows[rowIndex].Cells["userId"].Value);
-                this.dataGridViewUsers.CurrentCell = this.dataGridViewUsers.Rows[rowIndex].Cells[1]; // Cell[0] is a hidden column.
 
-                if (this._currentImageIndexDict.ContainsKey(userId))
+                if (!this._currentImageIndexDict.ContainsKey(userId))
+                    this._currentImageIndexDict.Add(userId, 0);
+                else
                     this._currentImageIndexDict[userId] += 1;
 
-                this._setPictureBoxImage(userId);
+                this._setPictureBoxImage(this.dataGridViewUsers.Rows[rowIndex]);
 
             }
+
+            this._bindDataToGridViewUser();
 
             this._newUser = null;
             this._newUserImage = null;
@@ -364,8 +372,8 @@ namespace InvoiceManager_DBFirst
                 this._currentImageIndexDict[userId] -= 1;
 
                 int rowIndex = this.dataGridViewUsers.CurrentRow.Index;
-                this.dataGridViewUsers.CurrentCell = this.dataGridViewUsers.Rows[rowIndex].Cells[1]; // Cell[0] is a hidden column.
-                this._setPictureBoxImage(userId);
+                //this.dataGridViewUsers.CurrentCell = this.dataGridViewUsers.Rows[rowIndex].Cells[1]; // Cell[0] is a hidden column.
+                this._setPictureBoxImage(this.dataGridViewUsers.Rows[rowIndex]);
 
             }
             else
@@ -403,7 +411,7 @@ namespace InvoiceManager_DBFirst
                 if (this._currentImageIndexDict[userId] > 0)
                     --this._currentImageIndexDict[userId];
 
-                this._setPictureBoxImage(userId);
+                this._setPictureBoxImage(row);
             }
         }
 
@@ -424,7 +432,7 @@ namespace InvoiceManager_DBFirst
                 if (this._currentImageIndexDict[userId] < dbContext.UserImage.Where(r => r.userId == userId).Count() - 1)
                 {
                     ++this._currentImageIndexDict[userId];
-                    this._setPictureBoxImage(userId);
+                    this._setPictureBoxImage(row);
                 }
             }
         }
@@ -491,12 +499,12 @@ namespace InvoiceManager_DBFirst
             this.textBoxUserOptionsName.Text = row.Cells["userName"].Value.ToString();
             this.textBoxUserOptionsSurname.Text = row.Cells["userSurname"].Value.ToString();
             this.textBoxUserOptionsFullname.Text = row.Cells["userFullname"].Value.ToString();
-
-            //this._setPictureBoxImage(userId);
         }
 
-        private void _setPictureBoxImage(int userId = 0)
+        private void _setPictureBoxImage(DataGridViewRow row)
         {
+            int userId = Convert.ToInt32(row.Cells["userId"].Value);
+
             List<UserImage> userImages = dbContext.UserImage.Where(r => r.userId == userId).ToList();
 
             if (userImages.Count > 0)
