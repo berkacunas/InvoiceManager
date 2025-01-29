@@ -88,6 +88,11 @@ namespace InvoiceManager_DBFirst
             get { return _getBitmap("groceries.png"); }
         }
 
+        public static Bitmap Settings
+        {
+            get { return _getBitmap("settings.png"); }
+        }
+
         public static Bitmap DefaultUser
         {
             get { return _getBitmap("empty-image.png"); }

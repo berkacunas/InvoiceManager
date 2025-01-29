@@ -27,7 +27,7 @@ namespace InvoiceManager_DBFirst
         {
             InitializeComponent();
 
-            this._createToolStripMenuItems();
+            this._createToolStripButtons();
 
             this.Icon = Icon.FromHandle(BitmapResourceLoader.AppIcon.GetHicon());
         }
@@ -47,6 +47,12 @@ namespace InvoiceManager_DBFirst
             this._loadToolStripMenuItemIcons();
         }
 
+        private void timer_callback(object state)
+        {
+            this.InvokeEx(f => f.toolStripStatusLabelLiveDateTime.Text = DateTime.Now.ToString("d MMMM yyyy dddd HH:mm:ss"));
+        }
+
+        #region ToolStripMenuItem Events
         private void toolStripMenuItemSyncSqlite_Click(object sender, EventArgs e)
         {
             SyncSqliteForm syncSqliteForm = new SyncSqliteForm();
@@ -87,6 +93,23 @@ namespace InvoiceManager_DBFirst
             this._initializeSellerForm();
         }
 
+        private void toolStripMenuItemSettings_Click(object sender, EventArgs e)
+        {
+            this._initializeSettingsForm();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (System.Windows.Forms.Application.MessageLoop)
+                System.Windows.Forms.Application.Exit();    // WinForms app
+            else
+                System.Environment.Exit(1);     // Console app
+        }
+
+        #endregion
+
+        #region ToolStripButton Events
+
         private void ToolStripButtonTactions_Click(object sender, EventArgs e)
         {
             this._initializeTactionForm();
@@ -117,11 +140,14 @@ namespace InvoiceManager_DBFirst
             this._initializeSellerForm();
         }
 
-        private void timer_callback(object state)
+        private void ToolStripButtonSettings_Click(object sender, EventArgs e)
         {
-            this.InvokeEx(f => f.toolStripStatusLabelLiveDateTime.Text = DateTime.Now.ToString("d MMMM yyyy dddd HH:mm:ss"));
+            this._initializeSettingsForm();
         }
 
+        #endregion
+
+        #region User-Defined Form Events
         private void TactionForm_TransactionFormOpened(string actionType, string message, DateTime eventTime)
         {
             this._addDataToListViewLog(actionType, message, eventTime);
@@ -167,6 +193,9 @@ namespace InvoiceManager_DBFirst
             this.listViewLog.Items.Add(new ListViewItem(new string[] { message, actionType, eventTime.ToString(_eventTimeFormat) }));
         }
 
+        #endregion
+
+        #region Private Functions
         private void _loadToolStripMenuItemIcons()
         {
             this.toolStripMenuItemSync.Image = BitmapResourceLoader.Loop;
@@ -180,10 +209,12 @@ namespace InvoiceManager_DBFirst
             this.toolStripMenuItemPaymentMethods.Image = BitmapResourceLoader.PaymentMethod;
             this.toolStripMenuItemUsers.Image = BitmapResourceLoader.User;
             this.toolStripMenuItemSellers.Image = BitmapResourceLoader.Seller;
+            this.toolStripMenuItemSettings.Image = BitmapResourceLoader.Settings;
         }
 
-        private void _createToolStripMenuItems()
+        private void _createToolStripButtons()
         {
+
             ToolStripButton toolStripButtonSyncSqlite = new ToolStripButton();
             ToolStripSeparator separator1 = new ToolStripSeparator();
             ToolStripButton toolStripButtonTactions = new ToolStripButton();
@@ -192,8 +223,12 @@ namespace InvoiceManager_DBFirst
             ToolStripButton toolStripButtonPaymentMethods = new ToolStripButton();
             ToolStripButton toolStripButtonUsers = new ToolStripButton();
             ToolStripButton toolStripButtonSellers = new ToolStripButton();
+            ToolStripSeparator separator2 = new ToolStripSeparator();
+            ToolStripButton toolStripButtonSettings = new ToolStripButton();
 
-            separator1.Margin = new Padding(4, 0, 4, 0);
+            Padding padding = new Padding(4, 0, 4, 0);
+            separator1.Margin = padding;
+            separator2.Margin = padding;
 
             toolStripButtonSyncSqlite.Image = BitmapResourceLoader.Sqlite;
             toolStripButtonTactions.Image = BitmapResourceLoader.Transaction;
@@ -202,12 +237,14 @@ namespace InvoiceManager_DBFirst
             toolStripButtonPaymentMethods.Image = BitmapResourceLoader.PaymentMethod;
             toolStripButtonUsers.Image = BitmapResourceLoader.User;
             toolStripButtonSellers.Image = BitmapResourceLoader.Seller;
+            toolStripButtonSettings.Image = BitmapResourceLoader.Settings;
 
             toolStripMain.Items.AddRange(new ToolStripItem[] { 
                 toolStripButtonSyncSqlite, separator1,
                 toolStripButtonTactions, toolStripButtonItems, 
                 toolStripButtonShops, toolStripButtonPaymentMethods, 
-                toolStripButtonUsers, toolStripButtonSellers
+                toolStripButtonUsers, toolStripButtonSellers,
+                separator2, toolStripButtonSettings
             });
 
 
@@ -217,7 +254,7 @@ namespace InvoiceManager_DBFirst
             toolStripButtonPaymentMethods.Click += ToolStripButtonPaymentMethods_Click;
             toolStripButtonUsers.Click += ToolStripButtonUsers_Click;
             toolStripButtonSellers.Click += ToolStripButtonSellers_Click;
-
+            toolStripButtonSettings.Click += ToolStripButtonSettings_Click;
         }
 
         private void _addDataToListViewLog(string actionType, string message, DateTime eventTime)
@@ -231,6 +268,9 @@ namespace InvoiceManager_DBFirst
                 listView.Columns.Add(columnNames[i], columnWidths[i], alignments[i]);
         }
 
+        #endregion
+
+        #region Initialize Forms
         private void _initializeTactionForm()
         {
             TactionForm tactionForm = new TactionForm();
@@ -275,5 +315,15 @@ namespace InvoiceManager_DBFirst
             SellerForm sellerForm = new SellerForm();
             sellerForm.Show();
         }
+
+        private void _initializeSettingsForm()
+        {
+            SettingsForm settingsForm = new SettingsForm();
+            settingsForm.ShowDialog();
+        }
+
+        #endregion
+
+
     }
 }

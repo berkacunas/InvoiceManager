@@ -327,6 +327,12 @@
     <Compile Include="SellerForm.Designer.cs">
       <DependentUpon>SellerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shop.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -393,6 +399,9 @@
     <EmbeddedResource Include="SellerForm.resx">
       <DependentUpon>SellerForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ShopForm.resx">
       <DependentUpon>ShopForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -442,6 +451,7 @@
     <EmbeddedResource Include="assets\power-off.png" />
     <EmbeddedResource Include="assets\groceries.png" />
     <EmbeddedResource Include="assets\shopping-bag.png" />
+    <EmbeddedResource Include="assets\settings.png" />
     <Content Include="cash.ico" />
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
     <Content Include="InvoiceModel.Context.tt">
