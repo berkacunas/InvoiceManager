@@ -385,8 +385,8 @@ namespace InvoiceManager_DBFirst
 
             var tactionsToUpdateQuery = from taction in dbContext.Taction
                                      join s in dbContext.Seller on taction.SellerId equals s.id
-                                     where s.id == taction.SellerId
-                                     select taction;
+                                     where s.id == sellerId
+                                        select taction;
 
             List<Taction> tactionsToUpdate = tactionsToUpdateQuery.ToList();
 
@@ -416,7 +416,6 @@ namespace InvoiceManager_DBFirst
             }
 
             this._bindDataToGridViewSellers();
-            this._clearSellerControls();
         }
     }
 }
