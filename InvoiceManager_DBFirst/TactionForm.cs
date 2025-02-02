@@ -315,7 +315,9 @@ namespace InvoiceManager_DBFirst
         private void buttonAddDetail_Click(object sender, EventArgs e)
         {
             TactionDetails details = new TactionDetails();
-            this._setTactionDetailsDataFromUiToObject(details);
+            if (!this._setTactionDetailsDataFromUiToObject(details))
+                return;
+            
             this._newTaction.TactionDetails.Add(details);
             this._updateDataGridViewTactionDetails();
             this._clearDetailsControls();
@@ -364,13 +366,16 @@ namespace InvoiceManager_DBFirst
             if (this.dbContext.TactionDetails.Count(r => r.id == detailsId) > 0)
             {
                 details = this.dbContext.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
-                this._setTactionDetailsDataFromUiToObject(details);
+                if (!this._setTactionDetailsDataFromUiToObject(details))
+                    return;
+
                 this.dbContext.SaveChanges();
             }
             else
             {
                 details = this._newTaction.TactionDetails.Where(r => r.ItemId == itemId && r.Unit == unit && r.UnitPrice == unitPrice && r.Vat == vat).FirstOrDefault();
-                this._setTactionDetailsDataFromUiToObject(details);
+                if (!this._setTactionDetailsDataFromUiToObject(details))
+                    return;
             }
 
             this._updateDataGridViewTactionDetails();
@@ -816,36 +821,36 @@ namespace InvoiceManager_DBFirst
             // taction.TotalPrice += taction.TactionDetails.Sum(r => r.UnitPrice * r.Unit);
         }
 
-        private void _setTactionDetailsDataFromUiToObject(TactionDetails details)
+        private bool _setTactionDetailsDataFromUiToObject(TactionDetails details)
         {
             if (!dbContext.Item.Any(r => r.Name == this.textBoxItem.Text))
             {
                 MessageBox.Show("Input doesn't exist.", "The item you entered does not exist in database. Please first save this item to item table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
 
             if (!string.IsNullOrEmpty(this.textBoxItemSubType.Text) && !dbContext.ItemSubType.Any(r => r.Name == this.textBoxItemSubType.Text))
             {
                 MessageBox.Show("Input doesn't exist.", "The itemsubtype you entered does not exist in database. Please first save this itemsubtype into itemsubtype table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
 
             if (string.IsNullOrEmpty(this.textBoxUnit.Text))
             {
                 MessageBox.Show("Missing value.", "You didn't enter unit.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
 
             if (string.IsNullOrEmpty(this.textBoxUnitPrice.Text))
             {
                 MessageBox.Show("Missing value.", "You didn't enter unit price.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
 
             if (string.IsNullOrEmpty(this.textBoxVat.Text))
             {
                 MessageBox.Show("Missing value.", "You didn't enter vat.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
 
             if (this.checkBoxDiscount.Checked)
@@ -853,7 +858,7 @@ namespace InvoiceManager_DBFirst
                 if (string.IsNullOrEmpty(this.textBoxDiscountRate.Text) && string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
                 {
                     MessageBox.Show("Missing discount value.", "You didn't enter discounted price or discount rate.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    return false;
                 }
             }
 
@@ -862,7 +867,7 @@ namespace InvoiceManager_DBFirst
                 if (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text) && !string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
                 {
                     MessageBox.Show("Too many values.", "You entered discounted price and discount rate, together. Enter only one of them.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    return false;
                 }
             }
 
@@ -901,6 +906,8 @@ namespace InvoiceManager_DBFirst
             }
 
             details.Note = !string.IsNullOrEmpty(this.textBoxDetailsNote.Text) ? this.textBoxDetailsNote.Text : null;
+
+            return true;
         }
 
         private static decimal _calculateDiscountedUnitPrice(decimal rate, decimal unitPrice, decimal unit)
