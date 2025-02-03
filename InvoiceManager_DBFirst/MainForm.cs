@@ -38,6 +38,8 @@ namespace InvoiceManager_DBFirst
             this._timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
 
             this.listViewLog.View = View.Details;
+            this.listViewLog.FullRowSelect = true;
+            this.listViewLog.MultiSelect = false;
 
             string[] listViewLogColumns = new string[] { "Message", "Action Type", "Action Time" };
             int[] listViewLogColumnWidths = new int[] { 400, 300, 250 };
