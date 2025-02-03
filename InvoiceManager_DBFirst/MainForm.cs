@@ -37,17 +37,15 @@ namespace InvoiceManager_DBFirst
             this.WindowState = FormWindowState.Maximized;
             this._timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
 
-            this.listViewLog.View = View.Details;
-            this.listViewLog.FullRowSelect = true;
-            this.listViewLog.MultiSelect = false;
-
             string[] listViewLogColumns = new string[] { "Message", "Action Type", "Action Time" };
             int[] listViewLogColumnWidths = new int[] { 400, 300, 250 };
             HorizontalAlignment[] listViewLogColumnAlignments = { HorizontalAlignment.Left, HorizontalAlignment.Left, HorizontalAlignment.Left };
 
+            _setListViewRowStyles(this.listViewLog, View.Details, true, false);
             _setListViewColumnStyles(this.listViewLog, listViewLogColumns, listViewLogColumnWidths, listViewLogColumnAlignments);
             this._loadToolStripMenuItemIcons();
         }
+
 
         private void timer_callback(object state)
         {
@@ -264,6 +262,12 @@ namespace InvoiceManager_DBFirst
             this.listViewLog.Items.Add(new ListViewItem(new string[] { message, actionType, eventTime.ToString(_eventTimeFormat) }));
         }
 
+        private static void _setListViewRowStyles(ListView listView, View view, bool fullRowSelect, bool multiSelect)
+        {
+            listView.View = view;
+            listView.FullRowSelect = fullRowSelect;
+            listView.MultiSelect = multiSelect;
+        }
         private static void _setListViewColumnStyles(ListView listView, string[] columnNames, int[] columnWidths, HorizontalAlignment[] alignments)
         {
             for (int i = 0; i < columnNames.Length; ++i)
