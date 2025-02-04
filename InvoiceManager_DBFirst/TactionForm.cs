@@ -340,7 +340,12 @@ namespace InvoiceManager_DBFirst
             //}
 
             textBoxTotalPrice.Text = _newTaction.TactionDetails.Sum(r => r.UnitPrice * r.Unit).ToString();
-            //textBoxTotalPrice.Text = totalPrice.ToString();
+
+            decimal totalPrice = 0;
+            foreach (TactionDetails details in _newTaction.TactionDetails)
+                totalPrice += (details.DiscountedPrice == null) ? (details.UnitPrice * details.Unit) : (details.DiscountedPrice.Value);
+
+            textBoxTotalPrice.Text = totalPrice.ToString();
         }
 
         private void buttonUpdateDetail_Click(object sender, EventArgs e)
