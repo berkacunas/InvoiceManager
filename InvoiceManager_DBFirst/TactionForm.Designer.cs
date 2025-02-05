@@ -81,6 +81,7 @@
             this.groupBoxTactionDetailsOptions = new System.Windows.Forms.GroupBox();
             this.toolStripTaction = new System.Windows.Forms.ToolStrip();
             this.statusStripTaction = new System.Windows.Forms.StatusStrip();
+            this.labelVatPercantage = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactions)).BeginInit();
             this.groupBoxTactions.SuspendLayout();
             this.groupBoxTactionDetails.SuspendLayout();
@@ -345,7 +346,7 @@
             // labelVat
             // 
             this.labelVat.AutoSize = true;
-            this.labelVat.Location = new System.Drawing.Point(330, 91);
+            this.labelVat.Location = new System.Drawing.Point(330, 90);
             this.labelVat.Name = "labelVat";
             this.labelVat.Size = new System.Drawing.Size(24, 15);
             this.labelVat.TabIndex = 13;
@@ -563,6 +564,7 @@
             // 
             // groupBoxTactionDetailsOptions
             // 
+            this.groupBoxTactionDetailsOptions.Controls.Add(this.labelVatPercantage);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.textBoxItem);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.labelItemGroup);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.textBoxItemGroup);
@@ -609,6 +611,15 @@
             this.statusStripTaction.Size = new System.Drawing.Size(1690, 22);
             this.statusStripTaction.TabIndex = 7;
             this.statusStripTaction.Text = "statusStrip1";
+            // 
+            // labelVatPercantage
+            // 
+            this.labelVatPercantage.Location = new System.Drawing.Point(355, 90);
+            this.labelVatPercantage.Name = "labelVatPercantage";
+            this.labelVatPercantage.Size = new System.Drawing.Size(12, 15);
+            this.labelVatPercantage.TabIndex = 32;
+            this.labelVatPercantage.Text = "%";
+            this.labelVatPercantage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // TactionForm
             // 
@@ -696,5 +707,6 @@
         private System.Windows.Forms.StatusStrip statusStripTaction;
         private System.Windows.Forms.TextBox textBoxTotalVatPrice;
         private System.Windows.Forms.Label labelTotalVatPrice;
+        private System.Windows.Forms.Label labelVatPercantage;
     }
 }

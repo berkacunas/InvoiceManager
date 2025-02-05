@@ -66,6 +66,7 @@ namespace InvoiceManager_DBFirst
             this._setEditableTactions(false);
             this._setEditableDetails(false);
             this._setReadOnlyTotalPriceField();
+            this._setReadOnlyTotalVatPriceField();
             _limitTextBoxCharLength(this.textBoxVat, 2);
 
             _setDefaultGridViewStyles(this.dataGridViewTactions);
@@ -321,31 +322,30 @@ namespace InvoiceManager_DBFirst
             this._newTaction.TactionDetails.Add(details);
             this._updateDataGridViewTactionDetails();
             this._clearDetailsControls();
-            this._setTactionTotalPrice();
+            this._setTactionTotalPrice(this._newTaction);
         }
 
-        private void _setTactionTotalPrice()
+        private Tuple<decimal, decimal> _calculateTotalPriceAndVatPrice(Taction taction)
         {
-            //textBoxTotalPrice.Text = string.Empty;
-            //decimal totalPrice = 0;
-
-            //foreach (TactionDetails details in _newTaction.TactionDetails)
-            //{
-            //    if (details.DiscountRate != null)
-            //        totalPrice += _calculateDiscountedUnitPrice(details.DiscountRate.Value, details.UnitPrice, details.Unit);
-            //    else if (details.DiscountedPrice != null)
-            //        totalPrice += details.DiscountedPrice.Value * details.Unit;
-            //    else
-            //        totalPrice += details.UnitPrice * details.Unit;
-            //}
-
-            textBoxTotalPrice.Text = _newTaction.TactionDetails.Sum(r => r.UnitPrice * r.Unit).ToString();
-
             decimal totalPrice = 0;
-            foreach (TactionDetails details in _newTaction.TactionDetails)
-                totalPrice += (details.DiscountedPrice == null) ? (details.UnitPrice * details.Unit) : (details.DiscountedPrice.Value);
+            decimal totalVatPrice = 0;
+            foreach (TactionDetails details in taction.TactionDetails)
+            {
+                decimal itemPrice = this._calculateItemPrice(details.UnitPrice, details.Unit, details.DiscountedPrice);
 
-            textBoxTotalPrice.Text = totalPrice.ToString();
+                totalVatPrice += this._calculateItemVatPrice(itemPrice, details.Vat);
+                totalPrice += itemPrice;
+            }
+
+            return new Tuple<decimal, decimal>(totalPrice, totalVatPrice);
+        }
+
+
+        private void _setTactionTotalPrice(Taction taction)
+        {
+            Tuple<decimal, decimal> totalPriceAndVatPrice = this._calculateTotalPriceAndVatPrice(taction);
+            textBoxTotalPrice.Text = totalPriceAndVatPrice.Item1.ToString();
+            textBoxTotalVatPrice.Text = totalPriceAndVatPrice.Item2.ToString();
         }
 
         private void buttonUpdateDetail_Click(object sender, EventArgs e)
@@ -384,7 +384,7 @@ namespace InvoiceManager_DBFirst
             }
 
             this._updateDataGridViewTactionDetails();
-            this._setTactionTotalPrice();
+            this._setTactionTotalPrice(_newTaction);
         }
 
         private void buttonRemoveDetail_Click(object sender, EventArgs e)
@@ -925,6 +925,18 @@ namespace InvoiceManager_DBFirst
             return 1 - discountedUnitPrice / unitPrice;
         }
 
+        private decimal _calculateItemPrice(decimal unitPrice, decimal unit, decimal? discountedPrice = null)
+        {
+            // return (details.DiscountedPrice == null) ? (details.UnitPrice * details.Unit) : (details.DiscountedPrice.Value);
+
+            return (discountedPrice == null) ? unitPrice * unit : discountedPrice.Value;
+        }
+
+        private decimal _calculateItemVatPrice(decimal itemPrice, int vat)
+        {
+            return itemPrice * vat / 100;
+        }
+
         private int _setTactionControls(DataGridViewRow row)
         {
             /* Returns TactionId */
@@ -942,7 +954,10 @@ namespace InvoiceManager_DBFirst
             }
 
             this.textBoxTactionNo.Text = (row.Cells["tactionNo"].Value != null) ? row.Cells["tactionNo"].Value.ToString() : string.Empty;
-            this.textBoxTotalPrice.Text = row.Cells["totalPrice"].Value.ToString();
+
+            Taction taction = dbContext.Taction.Where(r => r.id ==  tactionId).FirstOrDefault();
+            _setTactionTotalPrice(taction);
+            //this.textBoxTotalPrice.Text = row.Cells["totalPrice"].Value.ToString();
 
             return tactionId;
         }
@@ -1003,6 +1018,11 @@ namespace InvoiceManager_DBFirst
         private void _setReadOnlyTotalPriceField()
         {
             this.textBoxTotalPrice.ReadOnly = true;
+        }
+
+        private void _setReadOnlyTotalVatPriceField()
+        {
+            this.textBoxTotalVatPrice.ReadOnly = true;
         }
 
         private void _formatCurrencyTextBox(object sender, KeyPressEventArgs e)
