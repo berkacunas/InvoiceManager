@@ -6,10 +6,13 @@ using System.Data;
 using System.Data.Entity;
 using System.Drawing;
 using System.IdentityModel.Tokens;
+using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.LinkLabel;
 
 namespace InvoiceManager_DBFirst
 {
@@ -24,6 +27,7 @@ namespace InvoiceManager_DBFirst
         }
 
         private List<Taction> _selectedTactions;
+        List<ItemsReport> _items;
 
         private List<KeyValuePair<ReportType, string>> _reportTypes;
 
@@ -39,6 +43,7 @@ namespace InvoiceManager_DBFirst
 
             this.dataGridViewTactionReport.DataSourceChanged += DataGridViewTactionReport_DataSourceChanged;
 
+            this._items = new List<ItemsReport>();
             this._reportTypes = new List<KeyValuePair<ReportType, string>>() { new KeyValuePair<ReportType, string>(ReportType.ItemCount, "Report by item count"),
                                                                                new KeyValuePair<ReportType, string>(ReportType.Shop, "Report by shop") };
         }
@@ -57,8 +62,8 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewTactionReport.DataSource == null)
                 return;
 
-            string[] headerTexts = new string[] { "itemId", "Group", "Item", "Count", "Price per Item", "Purchased on", "Shops" };
-            int[] columnWidths = new int[] { 50, 150, 200, 80, 150, 100, 120 };
+            string[] headerTexts = new string[] { "itemId", "Group", "Item", "Count", "Price per Item", "Shops" };
+            int[] columnWidths = new int[] { 50, 150, 255, 65, 110, 100 };
             DataGridViewContentAlignment[] columnAlignments = { DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
@@ -75,8 +80,6 @@ namespace InvoiceManager_DBFirst
         {
             KeyValuePair<ReportType, string> item = (KeyValuePair<ReportType, string>)this.comboBoxReportType.SelectedItem;
 
-            List<ItemsReport> items = new List<ItemsReport>();
-
             switch (item.Key)
             {
                 case ReportType.ItemCount:
@@ -86,7 +89,7 @@ namespace InvoiceManager_DBFirst
                         ItemsReport report = null;
                         foreach (TactionDetails detail in taction.TactionDetails)
                         {
-                            report = items.Where(r => r.ItemId == detail.ItemId).FirstOrDefault();
+                            report = this._items.Where(r => r.ItemId == detail.ItemId).FirstOrDefault();
                             if (report != null)
                             {
                                 report.ItemCount += detail.Unit;
@@ -100,23 +103,49 @@ namespace InvoiceManager_DBFirst
                                 report.ItemName = detail.Item.Name;
                                 report.ItemCount = detail.Unit;
                                 report.TotalPricePerItem = (detail.DiscountedPrice != null) ? detail.DiscountedPrice.Value : detail.Unit * detail.UnitPrice;
-                                items.Add(report);
+                                this._items.Add(report);
                             }
+
+                            if (MayaMath.isInteger(report.ItemCount))
+                                report.ItemCount = System.Math.Round(report.ItemCount);
+
+                            report.TotalPricePerItem = System.Math.Round(report.TotalPricePerItem, 2);
                         }
                     }
+
                     
-                    this.dataGridViewTactionReport.DataSource = items;
                     break;
                 case ReportType.Shop:
 
                     break;
             }
 
-            this.textBoxTotalPrice.Text = items.Sum(r => r.TotalPricePerItem).ToString();
+            if (this._items.Count > 0)
+            {
+                this.dataGridViewTactionReport.DataSource = this._items.OrderByDescending(r => r.TotalPricePerItem).ToList();
+                this.textBoxTotalPrice.Text = System.Math.Round(this._items.Sum(r => r.TotalPricePerItem), 2).ToString();
+            }
         }
 
         private void toolStripMenuItemTextFile_Click(object sender, EventArgs e)
         {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (ItemsReport report in this._items)
+            {
+                string item = $"Group: {report.ItemGroupName} || " +
+                              $"Item: {report.ItemName} || " +
+                              $"Count: {report.ItemCount} || " +
+                              $"Total item price: {report.TotalPricePerItem} TL\n";
+
+                builder.Append(item);
+            }
+
+            string reportText = builder.ToString();
+
+            string dir = Environment.CurrentDirectory;
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(dir, $"ItemReport-{DateTime.Now.ToString().Replace(':', '.')}.txt")))
+                outputFile.WriteLine(reportText);
 
         }
 
@@ -130,7 +159,10 @@ namespace InvoiceManager_DBFirst
 
         }
 
-
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+        }
         private static void _setDefaultGridViewStyles(DataGridView gridview)
         {
             gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -159,5 +191,7 @@ namespace InvoiceManager_DBFirst
                 gridview.Columns[i].DefaultCellStyle.Alignment = columnAlignments[i];
             }
         }
+
+        
     }
 }

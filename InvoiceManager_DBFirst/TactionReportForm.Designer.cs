@@ -44,6 +44,7 @@
             this.groupBoxDetails = new System.Windows.Forms.GroupBox();
             this.labelTotalPrice = new System.Windows.Forms.Label();
             this.textBoxTotalPrice = new System.Windows.Forms.TextBox();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactionReport)).BeginInit();
             this.groupBoxReportType.SuspendLayout();
@@ -54,7 +55,7 @@
             // 
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(719, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(628, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip";
             // 
@@ -64,14 +65,15 @@
             this.actionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(719, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(628, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip";
             // 
             // actionsToolStripMenuItem
             // 
             this.actionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exportToolStripMenuItem});
+            this.exportToolStripMenuItem,
+            this.exitToolStripMenuItem});
             this.actionsToolStripMenuItem.Name = "actionsToolStripMenuItem";
             this.actionsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.actionsToolStripMenuItem.Text = "Actions";
@@ -112,7 +114,7 @@
             this.dataGridViewTactionReport.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTactionReport.Location = new System.Drawing.Point(12, 94);
             this.dataGridViewTactionReport.Name = "dataGridViewTactionReport";
-            this.dataGridViewTactionReport.Size = new System.Drawing.Size(695, 461);
+            this.dataGridViewTactionReport.Size = new System.Drawing.Size(606, 461);
             this.dataGridViewTactionReport.TabIndex = 2;
             // 
             // groupBoxReportType
@@ -123,13 +125,13 @@
             this.groupBoxReportType.Controls.Add(this.labelReportBy);
             this.groupBoxReportType.Location = new System.Drawing.Point(12, 46);
             this.groupBoxReportType.Name = "groupBoxReportType";
-            this.groupBoxReportType.Size = new System.Drawing.Size(695, 42);
+            this.groupBoxReportType.Size = new System.Drawing.Size(606, 42);
             this.groupBoxReportType.TabIndex = 3;
             this.groupBoxReportType.TabStop = false;
             // 
             // buttonClear
             // 
-            this.buttonClear.Location = new System.Drawing.Point(612, 12);
+            this.buttonClear.Location = new System.Drawing.Point(525, 12);
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(75, 24);
             this.buttonClear.TabIndex = 3;
@@ -138,7 +140,7 @@
             // 
             // buttonReport
             // 
-            this.buttonReport.Location = new System.Drawing.Point(531, 12);
+            this.buttonReport.Location = new System.Drawing.Point(444, 12);
             this.buttonReport.Name = "buttonReport";
             this.buttonReport.Size = new System.Drawing.Size(75, 24);
             this.buttonReport.TabIndex = 2;
@@ -150,7 +152,7 @@
             this.comboBoxReportType.FormattingEnabled = true;
             this.comboBoxReportType.Location = new System.Drawing.Point(70, 13);
             this.comboBoxReportType.Name = "comboBoxReportType";
-            this.comboBoxReportType.Size = new System.Drawing.Size(455, 22);
+            this.comboBoxReportType.Size = new System.Drawing.Size(321, 22);
             this.comboBoxReportType.TabIndex = 1;
             this.comboBoxReportType.SelectedIndexChanged += new System.EventHandler(this.comboBoxReportType_SelectedIndexChanged);
             // 
@@ -169,14 +171,14 @@
             this.groupBoxDetails.Controls.Add(this.labelTotalPrice);
             this.groupBoxDetails.Location = new System.Drawing.Point(12, 560);
             this.groupBoxDetails.Name = "groupBoxDetails";
-            this.groupBoxDetails.Size = new System.Drawing.Size(695, 41);
+            this.groupBoxDetails.Size = new System.Drawing.Size(606, 41);
             this.groupBoxDetails.TabIndex = 4;
             this.groupBoxDetails.TabStop = false;
             // 
             // labelTotalPrice
             // 
             this.labelTotalPrice.AutoSize = true;
-            this.labelTotalPrice.Location = new System.Drawing.Point(518, 18);
+            this.labelTotalPrice.Location = new System.Drawing.Point(429, 17);
             this.labelTotalPrice.Name = "labelTotalPrice";
             this.labelTotalPrice.Size = new System.Drawing.Size(63, 14);
             this.labelTotalPrice.TabIndex = 4;
@@ -184,16 +186,23 @@
             // 
             // textBoxTotalPrice
             // 
-            this.textBoxTotalPrice.Location = new System.Drawing.Point(587, 14);
+            this.textBoxTotalPrice.Location = new System.Drawing.Point(498, 13);
             this.textBoxTotalPrice.Name = "textBoxTotalPrice";
             this.textBoxTotalPrice.Size = new System.Drawing.Size(100, 22);
             this.textBoxTotalPrice.TabIndex = 5;
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // TactionReportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(719, 611);
+            this.ClientSize = new System.Drawing.Size(628, 608);
             this.Controls.Add(this.groupBoxDetails);
             this.Controls.Add(this.groupBoxReportType);
             this.Controls.Add(this.dataGridViewTactionReport);
@@ -236,5 +245,6 @@
         private System.Windows.Forms.GroupBox groupBoxDetails;
         private System.Windows.Forms.TextBox textBoxTotalPrice;
         private System.Windows.Forms.Label labelTotalPrice;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }

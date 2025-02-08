@@ -291,6 +291,7 @@
     <Compile Include="ItemTopGroup.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="MayaMath.cs" />
     <Compile Include="PaymentMethod.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
