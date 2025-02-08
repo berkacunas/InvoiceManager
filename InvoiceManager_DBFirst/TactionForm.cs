@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using static System.Reflection.Metadata.BlobBuilder;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
@@ -53,6 +54,8 @@ namespace InvoiceManager_DBFirst
         public TactionForm()
         {
             InitializeComponent();
+
+            this._createContextMenu();
 
             this.dbContext = new InvoicesEntities();
             this.dataGridViewTactions.DataSourceChanged += DataGridViewTactions_DataSourceChanged;
@@ -492,17 +495,25 @@ namespace InvoiceManager_DBFirst
             AutoCompleteStringCollection autoCompleteStringCollection = null;
             IQueryable<string> query = null;
 
+            //Item item = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault();
+            //if (item != null)
+            //{
+            //    // EFContext.TestAddresses.Where(a => a.age > 10).Select(m => m.name).Distinct();
+            //    var vatRate = dbContext.TactionDetails.Where(r => r.ItemId == item.id).Select(s => s.Vat).Distinct();
+            //    //this.textBoxVat.Text = vatRate.ToString();
+            //}
+
             if (dbContext.Item.Any(r => r.Name == this.textBoxItem.Text))
             {
                 query = from itemGroup in dbContext.ItemGroup
-                        join item in dbContext.Item on itemGroup.id equals item.GroupId
-                        where item.Name == textBoxItem.Text
+                        join i in dbContext.Item on itemGroup.id equals i.GroupId
+                        where i.Name == textBoxItem.Text
                         select itemGroup.Name;
             }
             else
             {
                 query = from itemGroup in dbContext.ItemGroup
-                        join item in dbContext.Item on itemGroup.id equals item.GroupId
+                        join i in dbContext.Item on itemGroup.id equals i.GroupId
                         select itemGroup.Name;
             }
 
@@ -997,6 +1008,47 @@ namespace InvoiceManager_DBFirst
                 if (c is TextBox) 
                     ((TextBox)c).Clear(); 
         }
+
+        private void _createContextMenu()
+        {
+            ContextMenuStrip menuStrip = new ContextMenuStrip();
+
+            ToolStripMenuItem contextMenuItemReport = new ToolStripMenuItem("Report...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReport_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemExit = new ToolStripMenuItem("Exit");
+
+            menuStrip.Items.AddRange(new ToolStripItem[] { contextMenuItemReport, 
+                                                           contextMenuItemExit });
+
+            this.ContextMenuStrip = menuStrip;
+        }
+
+        private void contextMenuItemReport_Click(object sender, EventArgs e)
+        {
+            DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
+            if (selectedRows == null)
+                return;
+
+            List<Taction> selectedTactions = new List<Taction>();
+            foreach (DataGridViewRow row in this.dataGridViewTactions.SelectedRows)
+            {
+                Type type = row.DataBoundItem.GetType();
+                int? tactionId = (int)type.GetProperty("tactionId").GetValue(row.DataBoundItem, null);
+            
+                if (tactionId != null)
+                {
+                    Taction taction = this.dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
+                    selectedTactions.Add(taction);
+                }
+            }
+
+            TactionReportForm tactionReportForm = new TactionReportForm();
+            tactionReportForm.SelectedTactions = selectedTactions;
+            if (tactionReportForm.ShowDialog() == DialogResult.OK)
+            {
+                
+            }
+        }
+
 
         private void _enableDiscountFields(bool enable)
         {

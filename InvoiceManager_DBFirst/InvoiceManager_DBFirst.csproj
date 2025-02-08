@@ -281,6 +281,7 @@
     <Compile Include="Item.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ItemsReport.cs" />
     <Compile Include="ItemGroup.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -366,6 +367,12 @@
     <Compile Include="TactionForm.Designer.cs">
       <DependentUpon>TactionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TactionReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TactionReportForm.Designer.cs">
+      <DependentUpon>TactionReportForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="User.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -410,6 +417,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TactionForm.resx">
       <DependentUpon>TactionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TactionReportForm.resx">
+      <DependentUpon>TactionReportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserForm.resx">
       <DependentUpon>UserForm.cs</DependentUpon>
