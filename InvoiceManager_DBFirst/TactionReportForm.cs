@@ -1,5 +1,7 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Build.Tasks;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,10 +11,13 @@ using System.IdentityModel.Tokens;
 using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.LinkLabel;
+using Spire.Xls;
+using Microsoft.Build.Framework.XamlTypes;
+
 
 namespace InvoiceManager_DBFirst
 {
@@ -133,29 +138,102 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemTextFile_Click(object sender, EventArgs e)
         {
-            StringBuilder builder = new StringBuilder();
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Text Documents (*.txt)|  *.txt";
 
-            foreach (ItemsReport report in this._items)
+            if (sfd.ShowDialog() == DialogResult.OK)
             {
-                string item = $"Group: {report.ItemGroupName} || " +
-                              $"Item: {report.ItemName} || " +
-                              $"Count: {report.ItemCount} || " +
-                              $"Total item price: {report.TotalPricePerItem} TL\n";
+                if (File.Exists(sfd.FileName))
+                {
+                    try
+                    {
+                        File.Delete(sfd.FileName);
+                    }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show("It wasn't possible to write the data to the disk." + ex.Message);
+                        return;
+                    }
+                }
 
-                builder.Append(item);
+                StringBuilder builder = new StringBuilder();
+
+                foreach (ItemsReport report in this._items)
+                {
+                    string item = $"{report.ItemGroupName}  " +
+                                  $"{report.ItemName}  " +
+                                  $"{report.ItemCount}  " +
+                                  $"Item Total: {report.TotalPricePerItem} TL\n";
+
+                    builder.Append(item);
+                }
+
+                string totalPrice = $"Total Price: {this._items.Sum(r => r.TotalPricePerItem)}\n";
+                builder.Append(totalPrice);
+
+                string reportText = builder.ToString();
+
+                using (StreamWriter outputFile = new StreamWriter(sfd.FileName))
+                    outputFile.WriteLine(reportText);
             }
-
-            string reportText = builder.ToString();
-
-            string dir = Environment.CurrentDirectory;
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(dir, $"ItemReport-{DateTime.Now.ToString().Replace(':', '.')}.txt")))
-                outputFile.WriteLine(reportText);
-
         }
 
+        
         private void toolStripMenuItemExcel_Click(object sender, EventArgs e)
         {
+            IList<ItemsReport> itemsList = (IList<ItemsReport>)this.dataGridViewTactionReport.DataSource;
+            //BindingSource bindingSource = (BindingSource)this.dataGridViewTactionReport.DataSource;
+            DataTable dataTable = (DataTable)this.dataGridViewTactionReport.DataSource;
 
+            this.writeExcel(dataTable);
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Excel (.xlsx)|  *.xlsx";
+            sfd.FileName = "Output.xlsx";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                if (File.Exists(sfd.FileName))
+                {
+                    try
+                    {
+                        File.Delete(sfd.FileName);
+                    }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show("It wasn't possible to write the data to the disk." + ex.Message);
+                        return;
+                    }
+                }
+
+                
+
+
+                
+            }
+               
+
+            //...
+        }
+
+        private void writeExcel(DataTable dataTable)
+        {
+            Workbook workbook = new Workbook();
+
+            // Remove default worksheets
+            workbook.Worksheets.Clear();
+
+            // Add a worksheet and name it
+            Worksheet worksheet = workbook.Worksheets.Add("InsertDataTable");
+
+            // Write datatable to the worksheet
+            worksheet.InsertDataTable(dataTable, true, 1, 1, true);
+
+            // Save to an Excel file
+            workbook.SaveToFile("InsertDataTable.xlsx", ExcelVersion.Version2016);
+
+            // Dispose resources
+            workbook.Dispose();
         }
 
         private void toolStripMenuItemEmail_Click(object sender, EventArgs e)
