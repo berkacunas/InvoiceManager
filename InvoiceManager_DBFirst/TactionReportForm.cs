@@ -52,9 +52,10 @@ namespace InvoiceManager_DBFirst
         {
             _setDefaultGridViewStyles(this.dataGridViewTactionReport);
 
-            this.comboBoxReportType.DataSource = this._reportTypes;
             this.comboBoxReportType.ValueMember = "Key";
             this.comboBoxReportType.DisplayMember = "Value";
+            this.comboBoxReportType.DataSource = this._reportTypes;
+            
         }
 
         private void DataGridViewTactionReport_DataSourceChanged(object sender, EventArgs e)
@@ -78,6 +79,8 @@ namespace InvoiceManager_DBFirst
 
         private void comboBoxReportType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this._items.Clear();
+
             KeyValuePair<ReportType, string> item = (KeyValuePair<ReportType, string>)this.comboBoxReportType.SelectedItem;
 
             switch (item.Key)
@@ -113,9 +116,10 @@ namespace InvoiceManager_DBFirst
                         }
                     }
 
-                    
                     break;
                 case ReportType.Shop:
+
+
 
                     break;
             }

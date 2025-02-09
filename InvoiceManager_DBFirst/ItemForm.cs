@@ -68,6 +68,7 @@ namespace InvoiceManager_DBFirst
         private Mode _groupMode;
         private Mode _topGroupMode;
 
+        private SortOrder[] _sortOrdersDataGridViewItemTopGroups = { SortOrder.ASC, SortOrder.UNORDERED };
         private SortOrder[] _sortOrdersDataGridViewItemGroups = { SortOrder.ASC, SortOrder.UNORDERED };
         private SortOrder[] _sortOrdersDataGridViewItems = { SortOrder.ASC, SortOrder.UNORDERED };
         
@@ -80,6 +81,7 @@ namespace InvoiceManager_DBFirst
 
             this.dbContext = new InvoicesEntities();
 
+            this.dataGridViewItemTopGroups.DataSourceChanged += DataGridViewItemTopGroups_DataSourceChanged;
             this.dataGridViewItemGroups.DataSourceChanged += DataGridViewItemGroups_DataSourceChanged;
             this.dataGridViewItems.DataSourceChanged += DataGridViewItems_DataSourceChanged;
         }
@@ -88,23 +90,43 @@ namespace InvoiceManager_DBFirst
         {
             this._setModes(Mode.Display);
 
-            _setDefaultGridViewStyles(this.dataGridViewItems);
+            _setDefaultGridViewStyles(this.dataGridViewItemTopGroups);
             _setDefaultGridViewStyles(this.dataGridViewItemGroups);
+            _setDefaultGridViewStyles(this.dataGridViewItems);
 
+
+            _enableDataGridViewMultiSelect(this.dataGridViewItemTopGroups, false);
             _enableDataGridViewMultiSelect(this.dataGridViewItems, false);
             _enableDataGridViewMultiSelect(this.dataGridViewItemGroups, false);
 
-            this._setEditableItems(false);
-            this._setEditableItemGroups(false);
             this._setEditableItemTopGroups(false);
+            this._setEditableItemGroups(false);
+            this._setEditableItems(false);
 
             this.comboBoxItemOptionsGroup.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxGroupOptionsTopGroup.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            this._bindDataToGridViewItem();
+            this._bindDataToGridViewItemTopGroup();
             this._bindDataToGridViewItemGroup();
+            this._bindDataToGridViewItem();
+            
 
             this.onItemFormOpened("Items", "Window opened", DateTime.Now);
+        }
+
+        private void DataGridViewItemTopGroups_DataSourceChanged(object sender, EventArgs e)
+        {
+            if (this.dataGridViewItemTopGroups.DataSource == null)
+                return;
+
+            string[] headerTexts = new string[] { "itemTopGroupId", "Top Group" };
+            int[] columnWidths = new int[] { 50, 150 };
+            DataGridViewContentAlignment[] columnAlignments = { DataGridViewContentAlignment.MiddleLeft,
+                                                                        DataGridViewContentAlignment.MiddleLeft };
+
+            _setDefaultGridViewHeaderStyles(this.dataGridViewItemTopGroups, headerTexts, columnWidths, columnAlignments);
+
+            this.dataGridViewItemTopGroups.Columns["id"].Visible = false;
         }
 
         private void DataGridViewItemGroups_DataSourceChanged(object sender, EventArgs e)
@@ -144,11 +166,11 @@ namespace InvoiceManager_DBFirst
             this.dataGridViewItems.Columns["itemGroupId"].Visible = false;
         }
 
-        private void dataGridViewItems_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewItemTopGroups_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            this._clearItemControls();
-            DataGridViewRow row = this.dataGridViewItems.CurrentRow;
-            this._setItemControls(row);
+            this._clearItemTopGroupControls();
+            DataGridViewRow row = this.dataGridViewItemTopGroups.CurrentRow;
+            this._setItemTopGroupControls(row);
         }
 
         private void dataGridViewItemGroups_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -158,32 +180,27 @@ namespace InvoiceManager_DBFirst
             this._setItemGroupControls(row);
         }
 
-        private void dataGridViewItems_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            string columnName = this.dataGridViewItems.Columns[e.ColumnIndex].HeaderText;
 
-            var query = dbContext.Item.Join(dbContext.ItemGroup,
-                        item => item.GroupId, itemGroup => itemGroup.id,
-                        (item, itemGroup) =>
-                        new
-                        {
-                            itemId = item.id,
-                            itemGroupId = itemGroup.id,
-                            itemName = item.Name,
-                            itemGroupName = itemGroup.Name,
-                            itemNote = item.Note
-                        });
+        private void dataGridViewItems_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            this._clearItemControls();
+            DataGridViewRow row = this.dataGridViewItems.CurrentRow;
+            this._setItemControls(row);
+        }
+
+        private void dataGridViewItemTopGroups_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            string columnName = this.dataGridViewItemTopGroups.Columns[e.ColumnIndex].HeaderText;
+
+            var query = from itemTopGroup in dbContext.ItemTopGroup
+                        select itemTopGroup;
 
             switch (columnName)
             {
-                case "Item":
-                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? query.OrderBy(r => r.itemName).ToList() : query.OrderByDescending(r => r.itemName).ToList();
-                    this._sortOrdersDataGridViewItems[0] = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
-                    break;
+                case "Top Group":
 
-                case "Group":
-                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
-                    this._sortOrdersDataGridViewItems[1] = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    this.dataGridViewItemTopGroups.DataSource = (this._sortOrdersDataGridViewItemTopGroups[1] == SortOrder.ASC) ? query.OrderBy(r => r.Name).ToList() : query.OrderByDescending(r => r.Name).ToList();
+                    this._sortOrdersDataGridViewItemTopGroups[1] = (this._sortOrdersDataGridViewItemTopGroups[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
                     break;
             }
         }
@@ -212,6 +229,36 @@ namespace InvoiceManager_DBFirst
                 case "Top Group":
                     this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemTopGroupName).ToList() : query.OrderByDescending(r => r.itemTopGroupName).ToList();
                     this._sortOrdersDataGridViewItemGroups[1] = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    break;
+            }
+        }
+
+        private void dataGridViewItems_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            string columnName = this.dataGridViewItems.Columns[e.ColumnIndex].HeaderText;
+
+            var query = dbContext.Item.Join(dbContext.ItemGroup,
+                        item => item.GroupId, itemGroup => itemGroup.id,
+                        (item, itemGroup) =>
+                        new
+                        {
+                            itemId = item.id,
+                            itemGroupId = itemGroup.id,
+                            itemName = item.Name,
+                            itemGroupName = itemGroup.Name,
+                            itemNote = item.Note
+                        });
+
+            switch (columnName)
+            {
+                case "Item":
+                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? query.OrderBy(r => r.itemName).ToList() : query.OrderByDescending(r => r.itemName).ToList();
+                    this._sortOrdersDataGridViewItems[0] = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    break;
+
+                case "Group":
+                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
+                    this._sortOrdersDataGridViewItems[1] = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
                     break;
             }
         }
@@ -581,15 +628,35 @@ namespace InvoiceManager_DBFirst
                                          where itemtopgroup.id == itemTopGroup.id
                                          select itemGroup;
 
-            var noTopGroupIdQuery = from itg in dbContext.ItemTopGroup
-                                 where itg.Name == "<NoGroup>"
-                                 select itg.id;
-
             List<ItemGroup> itemGroupsToUpdate = itemGroupToUpdateQuery.ToList();
-            int noTopGroupId = (int)noTopGroupIdQuery.FirstOrDefault();
 
-            foreach (ItemGroup itemGroup in itemGroupsToUpdate)
-                itemGroup.TopGroupId = noTopGroupId;
+            if (itemGroupsToUpdate.Count > 0)
+            {
+                string message = $"You may want to change or delete item groups associated with Item Top Group: {itemTopGroup.Name} first before deleting this item top group.\n\nThis item groups are:\n";
+
+                foreach (ItemGroup itemGroup in itemGroupsToUpdate)
+                {
+                    message += $"Item Group id: {itemGroup.id}  ";
+                    message += $"Item Group name: {itemGroup.Name}\n";
+                }
+                message = message.Remove(message.Length - 1, 1);
+
+                DialogResult dr = MessageBox.Show(message, "Do you really want to delete this ItemTopGroup. <No Group> title will be assigned for these ItemGroups ?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    var noTopGroupIdQuery = from itg in dbContext.ItemTopGroup
+                                            where itg.Name == "<No Group>"
+                                            select itg.id;
+
+
+                    int noTopGroupId = (int)noTopGroupIdQuery.FirstOrDefault();
+
+                    foreach (ItemGroup itemGroup in itemGroupsToUpdate)
+                        itemGroup.TopGroupId = noTopGroupId;
+                }
+                else
+                    return;
+            }
 
             dbContext.ItemTopGroup.Remove(itemTopGroup);
 
@@ -604,6 +671,7 @@ namespace InvoiceManager_DBFirst
             }
 
             this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Setnull);
+            this._bindDataToGridViewItemTopGroup();
             this._bindDataToGridViewItemGroup();
             this._clearItemTopGroupControls();
         }
@@ -617,6 +685,8 @@ namespace InvoiceManager_DBFirst
         {
             gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             gridview.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+
+            gridview.ReadOnly = true;
 
             gridview.DefaultCellStyle.Font = new Font("Calibri", 10);
             gridview.DefaultCellStyle.ForeColor = Color.FromArgb(7, 7, 7); //  152, g: 255, b: 152
@@ -689,15 +759,11 @@ namespace InvoiceManager_DBFirst
 
             itemTopGroup.Name = ((ItemTopGroup)this.comboBoxTopGroupOptionsTopGroup.SelectedItem).Name;
         }
-        private void _setItemControls(DataGridViewRow row)
+
+        private void _setItemTopGroupControls(DataGridViewRow row)
         {
-            int groupId = Convert.ToInt32(row.Cells["itemGroupId"].Value);
-
-            this.textBoxItemOptionsItem.Text = row.Cells["itemName"].Value.ToString();
-            if (row.Cells["itemNote"].Value != null)
-                this.textBoxItemOptionsNote.Text = row.Cells["itemNote"].Value.ToString();
-
-            this._bindDataToComboBoxItemOptionsGroup(BindType.Where, groupId);
+            int topGroupId = Convert.ToInt32(row.Cells["id"].Value);
+            this._bindDataComboBoxTopGroupOptionsTopGroup(BindType.Where, topGroupId);
         }
 
         private void _setItemGroupControls(DataGridViewRow row)
@@ -709,9 +775,29 @@ namespace InvoiceManager_DBFirst
             this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Where, topGroupId);
         }
 
+        private void _setItemControls(DataGridViewRow row)
+        {
+            int groupId = Convert.ToInt32(row.Cells["itemGroupId"].Value);
+
+            this.textBoxItemOptionsItem.Text = row.Cells["itemName"].Value.ToString();
+            if (row.Cells["itemNote"].Value != null)
+                this.textBoxItemOptionsNote.Text = row.Cells["itemNote"].Value.ToString();
+
+            this._bindDataToComboBoxItemOptionsGroup(BindType.Where, groupId);
+        }
+
         public static void _enableDataGridViewMultiSelect(DataGridView gridview, bool enable)
         {
             gridview.MultiSelect = enable;
+        }
+
+        private void _bindDataToGridViewItemTopGroup()
+        {
+            var query = from itemTopGroup in dbContext.ItemTopGroup
+                        orderby itemTopGroup.Name
+                        select itemTopGroup;
+
+            this.dataGridViewItemTopGroups.DataSource = query.ToList();
         }
 
         private void _bindDataToGridViewItemGroup()
@@ -751,6 +837,29 @@ namespace InvoiceManager_DBFirst
             this.onItemsLoaded("Items", "Item data loaded", DateTime.Now);
         }
 
+        private void _bindDataComboBoxTopGroupOptionsTopGroup(BindType bindType, int topGroupId = 0)
+        {
+            IQueryable<ItemTopGroup> query = null;
+
+            switch (bindType)
+            {
+                case BindType.Select:
+                    query = from itemTopGroup in dbContext.ItemTopGroup orderby itemTopGroup.Name ascending select itemTopGroup;
+                    break;
+                case BindType.Where:
+                    query = from itemTopGroup in dbContext.ItemTopGroup where itemTopGroup.id == topGroupId select itemTopGroup;
+                    break;
+                case BindType.Setnull:
+                    this.comboBoxTopGroupOptionsTopGroup.DataSource = null;
+                    return;
+            }
+
+            this.comboBoxTopGroupOptionsTopGroup.DisplayMember = "Name";
+            this.comboBoxTopGroupOptionsTopGroup.ValueMember = "id";
+            this.comboBoxTopGroupOptionsTopGroup.DataSource = query.ToList();
+        }
+
+
         private void _bindDataToComboBoxItemOptionsGroup(BindType bindType, int groupId = 0) // When bindType is set to "Where", groupId must be passed.
         {
             IQueryable<ItemGroup> query = null;
@@ -766,12 +875,11 @@ namespace InvoiceManager_DBFirst
                 case BindType.Setnull:
                     this.comboBoxItemOptionsGroup.DataSource = null;
                     return;
-
             }
 
-            this.comboBoxItemOptionsGroup.DataSource = query.ToList();
             this.comboBoxItemOptionsGroup.DisplayMember = "Name";
             this.comboBoxItemOptionsGroup.ValueMember = "id";
+            this.comboBoxItemOptionsGroup.DataSource = query.ToList();
         }
 
         private void _bindDataToComboBoxGroupOptionsTopGroup(BindType bindType, int topGroupId = 0)
@@ -791,9 +899,9 @@ namespace InvoiceManager_DBFirst
                     return;
             }
 
-            this.comboBoxGroupOptionsTopGroup.DataSource = query.ToList();
             this.comboBoxGroupOptionsTopGroup.DisplayMember = "Name";
             this.comboBoxGroupOptionsTopGroup.ValueMember = "id";
+            this.comboBoxGroupOptionsTopGroup.DataSource = query.ToList();
         }
 
         private void _bindDataToComboBoxTopGroupOptionsTopGroup(BindType bindType, int topGroupId)
@@ -811,9 +919,9 @@ namespace InvoiceManager_DBFirst
                     throw new NotImplementedException("This feature is unnecessary and is not implemented in this method.");
             }
 
-            this.comboBoxTopGroupOptionsTopGroup.DataSource = query.ToList();
             this.comboBoxTopGroupOptionsTopGroup.DisplayMember = "Name";
             this.comboBoxTopGroupOptionsTopGroup.ValueMember = "id";
+            this.comboBoxTopGroupOptionsTopGroup.DataSource = query.ToList();
         }
 
         private void _setModes(Mode mode)
