@@ -27,8 +27,10 @@ namespace InvoiceManager_DBFirst
     {
         enum ReportType
         {
-            ItemCount = 0,
-            Shop = 1
+            Selection = 0,
+            Daily = 1,
+            Weekly = 2,
+            Monthly = 3
         }
 
         private List<Taction> _selectedTactions;
@@ -49,8 +51,10 @@ namespace InvoiceManager_DBFirst
             this.dataGridViewTactionReport.DataSourceChanged += DataGridViewTactionReport_DataSourceChanged;
 
             this._items = new List<ItemsReport>();
-            this._reportTypes = new List<KeyValuePair<ReportType, string>>() { new KeyValuePair<ReportType, string>(ReportType.ItemCount, "Report by item count"),
-                                                                               new KeyValuePair<ReportType, string>(ReportType.Shop, "Report by shop") };
+            this._reportTypes = new List<KeyValuePair<ReportType, string>>() { new KeyValuePair<ReportType, string>(ReportType.Selection, "Report selection"),
+                                                                               new KeyValuePair<ReportType, string>(ReportType.Daily, "Report daily"),
+                                                                               new KeyValuePair<ReportType, string>(ReportType.Weekly, "Report weekly"),
+                                                                               new KeyValuePair<ReportType, string>(ReportType.Monthly, "Report monthly") };
         }
 
         private void TactionReportForm_Load(object sender, EventArgs e)
@@ -90,8 +94,7 @@ namespace InvoiceManager_DBFirst
 
             switch (item.Key)
             {
-                case ReportType.ItemCount:
-
+                case ReportType.Selection:
                     foreach (Taction taction in this.SelectedTactions) 
                     {
                         ItemsReport report = null;
@@ -122,10 +125,13 @@ namespace InvoiceManager_DBFirst
                     }
 
                     break;
-                case ReportType.Shop:
+                case ReportType.Daily:
+                    break;
 
+                case ReportType.Weekly:
+                    break;
 
-
+                case ReportType.Monthly:
                     break;
             }
 
@@ -178,7 +184,6 @@ namespace InvoiceManager_DBFirst
             }
         }
 
-        
         private void toolStripMenuItemExcel_Click(object sender, EventArgs e)
         {
             IList<ItemsReport> itemsList = (IList<ItemsReport>)this.dataGridViewTactionReport.DataSource;
@@ -214,26 +219,6 @@ namespace InvoiceManager_DBFirst
                
 
             //...
-        }
-
-        private void writeExcel(DataTable dataTable)
-        {
-            Workbook workbook = new Workbook();
-
-            // Remove default worksheets
-            workbook.Worksheets.Clear();
-
-            // Add a worksheet and name it
-            Worksheet worksheet = workbook.Worksheets.Add("InsertDataTable");
-
-            // Write datatable to the worksheet
-            worksheet.InsertDataTable(dataTable, true, 1, 1, true);
-
-            // Save to an Excel file
-            workbook.SaveToFile("InsertDataTable.xlsx", ExcelVersion.Version2016);
-
-            // Dispose resources
-            workbook.Dispose();
         }
 
         private void toolStripMenuItemEmail_Click(object sender, EventArgs e)
@@ -274,6 +259,26 @@ namespace InvoiceManager_DBFirst
             }
         }
 
-        
+        private void writeExcel(DataTable dataTable)
+        {
+            Workbook workbook = new Workbook();
+
+            // Remove default worksheets
+            workbook.Worksheets.Clear();
+
+            // Add a worksheet and name it
+            Worksheet worksheet = workbook.Worksheets.Add("InsertDataTable");
+
+            // Write datatable to the worksheet
+            worksheet.InsertDataTable(dataTable, true, 1, 1, true);
+
+            // Save to an Excel file
+            workbook.SaveToFile("InsertDataTable.xlsx", ExcelVersion.Version2016);
+
+            // Dispose resources
+            workbook.Dispose();
+        }
+
+
     }
 }

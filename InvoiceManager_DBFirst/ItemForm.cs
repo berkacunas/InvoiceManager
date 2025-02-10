@@ -583,6 +583,8 @@ namespace InvoiceManager_DBFirst
             }
 
             this._bindDataToComboBoxTopGroupOptionsTopGroup(BindType.Where, this._newItemTopGroup.id);
+            this._bindDataToGridViewItemTopGroup();
+
             this._clearItemTopGroupControls();
             this._setEditableItemTopGroups(false);
             this._newItemTopGroup = new ItemTopGroup();
@@ -591,13 +593,16 @@ namespace InvoiceManager_DBFirst
 
         private void buttonUpdateTopGroup_Click(object sender, EventArgs e)
         {
-            if (this.comboBoxTopGroupOptionsTopGroup.SelectedItem == null)
+            DataGridViewRow row = this.dataGridViewItemTopGroups.CurrentRow;
+
+            if (row == null)
             {
                 MessageBox.Show("Select the top group item you want to update first.", "Item not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            ItemTopGroup itemTopGroup = (ItemTopGroup)this.comboBoxTopGroupOptionsTopGroup.SelectedItem;
+            int itemTopGroupId = Convert.ToInt32(row.Cells["id"].Value);
+            ItemTopGroup itemTopGroup = (ItemTopGroup)dbContext.ItemTopGroup.Where(r => r.id == itemTopGroupId).FirstOrDefault();
             this._setItemTopGroupDataFromUiToObject(itemTopGroup);
 
             try
@@ -611,6 +616,8 @@ namespace InvoiceManager_DBFirst
             }
 
             this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Where, itemTopGroup.id);
+            this._bindDataToGridViewItemTopGroup();
+            this._bindDataToGridViewItemGroup();
         }
 
         private void buttonDeleteTopGroup_Click(object sender, EventArgs e)
@@ -751,13 +758,13 @@ namespace InvoiceManager_DBFirst
 
         private void _setItemTopGroupDataFromUiToObject(ItemTopGroup itemTopGroup)
         {
-            if (this.comboBoxTopGroupOptionsTopGroup.SelectedItem == null)
+            if (this.comboBoxTopGroupOptionsTopGroup.Text == null)
             {
                 MessageBox.Show("You didn't select item top group.", "Missing value.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            itemTopGroup.Name = ((ItemTopGroup)this.comboBoxTopGroupOptionsTopGroup.SelectedItem).Name;
+            itemTopGroup.Name = this.comboBoxTopGroupOptionsTopGroup.Text;
         }
 
         private void _setItemTopGroupControls(DataGridViewRow row)

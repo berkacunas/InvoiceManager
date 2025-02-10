@@ -1013,16 +1013,22 @@ namespace InvoiceManager_DBFirst
         {
             ContextMenuStrip menuStrip = new ContextMenuStrip();
 
-            ToolStripMenuItem contextMenuItemReport = new ToolStripMenuItem("Report...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReport_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportSelection = new ToolStripMenuItem("Report selection...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportSelection_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportDaily = new ToolStripMenuItem("Report daily...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportDaily_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportWeekly = new ToolStripMenuItem("Report weekly...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportWeekly_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportYearly = new ToolStripMenuItem("Report monthly...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportMonthly_Click), Keys.None);
             ToolStripMenuItem contextMenuItemExit = new ToolStripMenuItem("Exit");
 
-            menuStrip.Items.AddRange(new ToolStripItem[] { contextMenuItemReport, 
+            menuStrip.Items.AddRange(new ToolStripItem[] { contextMenuItemReportSelection, 
+                                                           contextMenuItemReportDaily,
+                                                           contextMenuItemReportWeekly,
+                                                           contextMenuItemReportYearly,
                                                            contextMenuItemExit });
 
             this.ContextMenuStrip = menuStrip;
         }
 
-        private void contextMenuItemReport_Click(object sender, EventArgs e)
+        private void contextMenuItemReportSelection_Click(object sender, EventArgs e)
         {
             DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
             if (selectedRows == null)
@@ -1042,6 +1048,7 @@ namespace InvoiceManager_DBFirst
             }
 
             TactionReportForm tactionReportForm = new TactionReportForm();
+            tactionReportForm.ty
             tactionReportForm.SelectedTactions = selectedTactions;
             if (tactionReportForm.ShowDialog() == DialogResult.OK)
             {
