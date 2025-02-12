@@ -217,6 +217,7 @@ namespace InvoiceManager_DBFirst
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while adding taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             this._clearTactionControls();
@@ -1032,30 +1033,97 @@ namespace InvoiceManager_DBFirst
         {
             DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
             if (selectedRows == null)
-                return;
-
-            List<Taction> selectedTactions = new List<Taction>();
-            foreach (DataGridViewRow row in this.dataGridViewTactions.SelectedRows)
             {
-                Type type = row.DataBoundItem.GetType();
-                int? tactionId = (int)type.GetProperty("tactionId").GetValue(row.DataBoundItem, null);
-            
-                if (tactionId != null)
-                {
-                    Taction taction = this.dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
-                    selectedTactions.Add(taction);
-                }
+                MessageBox.Show("You didn't select any row. Select rows for reporting.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             TactionReportForm tactionReportForm = new TactionReportForm();
-            tactionReportForm.ty
-            tactionReportForm.SelectedTactions = selectedTactions;
+            tactionReportForm.ReportType = TactionReportType.Selection;
+            tactionReportForm.SelectedTactions = _getSelectedTactions(selectedRows);
+
             if (tactionReportForm.ShowDialog() == DialogResult.OK)
             {
                 
             }
         }
 
+        private void contextMenuItemReportDaily_Click(object sender, EventArgs e)
+        {
+            DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
+            if (selectedRows == null)
+            {
+                MessageBox.Show("You didn't select any row. Select rows for reporting.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            DataGridViewRow row = this.dataGridViewTactions.SelectedRows[0] as DataGridViewRow;
+            DateTime selectedDate = this._getTactionFromRow(row).Dt;
+
+            TactionReportForm tactionReportForm = new TactionReportForm();
+            tactionReportForm.ReportType = TactionReportType.Daily;
+            tactionReportForm.SelectedTactions = null;
+
+            if (tactionReportForm.ShowDialog() == DialogResult.OK)
+            {
+                
+            }
+        }
+
+        private void contextMenuItemReportWeekly_Click(object sender, EventArgs e)
+        {
+            DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
+            if (selectedRows == null)
+            {
+                MessageBox.Show("You didn't select any row. Select rows for reporting.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            TactionReportForm tactionReportForm = new TactionReportForm();
+            tactionReportForm.ReportType = TactionReportType.Weekly;
+            tactionReportForm.DbSetTaction = this.dbContext.Taction;
+
+            if (tactionReportForm.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+        }
+
+        private void contextMenuItemReportMonthly_Click(object sender, EventArgs e)
+        {
+            TactionReportForm tactionReportForm = new TactionReportForm();
+            tactionReportForm.ReportType = TactionReportType.Monthly;
+            tactionReportForm.DbSetTaction = this.dbContext.Taction;
+
+            if (tactionReportForm.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+        }
+
+        private List<Taction> _getSelectedTactions(DataGridViewSelectedRowCollection rowCollection)
+        {
+            List<Taction> selectedTactions = new List<Taction>();
+
+            foreach (DataGridViewRow row in this.dataGridViewTactions.SelectedRows)
+            {
+                Taction taction = this._getTactionFromRow(row);
+                selectedTactions.Add(taction);
+            }
+
+            return selectedTactions;
+        }
+
+        private Taction _getTactionFromRow(DataGridViewRow row)
+        {
+            Type type = row.DataBoundItem.GetType();
+            int? tactionId = (int)type.GetProperty("tactionId").GetValue(row.DataBoundItem, null);
+
+            if (tactionId != null)
+                return this.dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
+
+            return null;
+        }
 
         private void _enableDiscountFields(bool enable)
         {

@@ -21,22 +21,26 @@ using Microsoft.Build.Framework.XamlTypes;
 
 namespace InvoiceManager_DBFirst
 {
-    
+    public enum TactionReportType
+    {
+        Selection = 0,
+        Daily = 1,
+        Weekly = 2,
+        Monthly = 3
+    }
 
     public partial class TactionReportForm : Form
     {
-        enum ReportType
-        {
-            Selection = 0,
-            Daily = 1,
-            Weekly = 2,
-            Monthly = 3
-        }
-
+        private DbSet<Taction> _dbSetTaction;
         private List<Taction> _selectedTactions;
-        List<ItemsReport> _items;
+        private DateTime _selectedDate;
 
-        private List<KeyValuePair<ReportType, string>> _reportTypes;
+        private List<ItemsReport> _items;
+        private TactionReportType _reportType;
+        private List<string> _comboBoxReportTypeItems;
+
+        private bool _isInitializing;
+
 
         public List<Taction> SelectedTactions
         {
@@ -44,27 +48,40 @@ namespace InvoiceManager_DBFirst
             set { _selectedTactions = value; }
         }
 
+        public TactionReportType ReportType
+        {
+            get { return _reportType; }
+            set { _reportType = value; }
+        }
+
+        public DbSet<Taction> DbSetTaction
+        {
+            get { return _dbSetTaction; }
+            set { _dbSetTaction = value; }
+        }
+
+        public DateTime SelectedDate
+        {
+            get { return _selectedDate; }
+            set { _selectedDate = value; }
+        }
+
         public TactionReportForm()
         {
             InitializeComponent();
 
-            this.dataGridViewTactionReport.DataSourceChanged += DataGridViewTactionReport_DataSourceChanged;
-
             this._items = new List<ItemsReport>();
-            this._reportTypes = new List<KeyValuePair<ReportType, string>>() { new KeyValuePair<ReportType, string>(ReportType.Selection, "Report selection"),
-                                                                               new KeyValuePair<ReportType, string>(ReportType.Daily, "Report daily"),
-                                                                               new KeyValuePair<ReportType, string>(ReportType.Weekly, "Report weekly"),
-                                                                               new KeyValuePair<ReportType, string>(ReportType.Monthly, "Report monthly") };
+            this._isInitializing = true;
+
+            this.dataGridViewTactionReport.DataSourceChanged += DataGridViewTactionReport_DataSourceChanged;
         }
 
         private void TactionReportForm_Load(object sender, EventArgs e)
         {
             _setDefaultGridViewStyles(this.dataGridViewTactionReport);
 
-            this.comboBoxReportType.ValueMember = "Key";
-            this.comboBoxReportType.DisplayMember = "Value";
-            this.comboBoxReportType.DataSource = this._reportTypes;
-            
+            this._comboBoxReportTypeItems = new List<string>(new string[] { "Report selection", "Report daily", "Report weekly", "Report monthly" });
+            this.comboBoxReportType.DataSource = _comboBoxReportTypeItems;
         }
 
         private void DataGridViewTactionReport_DataSourceChanged(object sender, EventArgs e)
@@ -88,13 +105,19 @@ namespace InvoiceManager_DBFirst
 
         private void comboBoxReportType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!this._isInitializing) 
+                _reportType = (TactionReportType)this.comboBoxReportType.SelectedIndex;
+
+            this._isInitializing = false;
             this._items.Clear();
+            this.dataGridViewTactionReport.DataSource = null;
+            this.textBoxTotalPrice.Text = string.Empty;
 
-            KeyValuePair<ReportType, string> item = (KeyValuePair<ReportType, string>)this.comboBoxReportType.SelectedItem;
-
-            switch (item.Key)
+            switch (_reportType)
             {
-                case ReportType.Selection:
+                case TactionReportType.Selection:
+                    this.Text = "Taction Report by Selection";
+
                     foreach (Taction taction in this.SelectedTactions) 
                     {
                         ItemsReport report = null;
@@ -125,13 +148,16 @@ namespace InvoiceManager_DBFirst
                     }
 
                     break;
-                case ReportType.Daily:
+                case TactionReportType.Daily:
+                    this.Text = "Daily Taction Report";
                     break;
 
-                case ReportType.Weekly:
+                case TactionReportType.Weekly:
+                    this.Text = "Weekly Taction Report";
                     break;
 
-                case ReportType.Monthly:
+                case TactionReportType.Monthly:
+                    this.Text = "Monthly Taction Report";
                     break;
             }
 
@@ -230,6 +256,7 @@ namespace InvoiceManager_DBFirst
         {
             this.DialogResult = DialogResult.OK;
         }
+
         private static void _setDefaultGridViewStyles(DataGridView gridview)
         {
             gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -278,7 +305,6 @@ namespace InvoiceManager_DBFirst
             // Dispose resources
             workbook.Dispose();
         }
-
 
     }
 }
