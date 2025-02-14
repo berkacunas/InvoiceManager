@@ -623,7 +623,7 @@ namespace InvoiceManager_DBFirst
             switch (bindType)
             {
                 case BindType.Select:
-                    query = from payment in dbContext.PaymentMethod select payment;
+                    query = from payment in dbContext.PaymentMethod orderby payment.Name select payment;
                     break;
                 case BindType.Where:
                     query = from payment in dbContext.PaymentMethod where payment.id == paymentMethodId select payment;
