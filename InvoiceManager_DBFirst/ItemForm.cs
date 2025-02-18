@@ -490,6 +490,7 @@ namespace InvoiceManager_DBFirst
             }
 
             this._bindDataToGridViewItemGroup();
+            this._bindDataToGridViewItem();
         }
 
         private void buttonDeleteGroup_Click(object sender, EventArgs e)

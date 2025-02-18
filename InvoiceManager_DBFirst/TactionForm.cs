@@ -879,14 +879,14 @@ namespace InvoiceManager_DBFirst
                 }
             }
 
-            if (this.checkBoxDiscount.Checked)
-            {
-                if (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text) && !string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
-                {
-                    MessageBox.Show("Too many values.", "You entered discounted price and discount rate, together. Enter only one of them.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
-                }
-            }
+            //if (this.checkBoxDiscount.Checked)
+            //{
+            //    if (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text) && !string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
+            //    {
+            //        MessageBox.Show("Too many values.", "You entered discounted price and discount rate, together. Enter only one of them.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        return false;
+            //    }
+            //}
 
             if (this._newTaction == null)   // Edit mode: taction exists in db, we get this taction object from database.
             {
@@ -907,18 +907,26 @@ namespace InvoiceManager_DBFirst
             {
                 if (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text))
                 {
-                    details.DiscountRate = Convert.ToDecimal(this.textBoxDiscountRate.Text);
-                    details.DiscountedPrice = _calculateDiscountedUnitPrice(details.DiscountRate.Value, details.UnitPrice, details.Unit);
-
-                    this.textBoxDiscountedPrice.Text = details.DiscountedPrice.ToString();
+                    decimal newRate = Convert.ToDecimal(this.textBoxDiscountRate.Text);
+                    if (details.DiscountRate == null || details.DiscountRate != newRate) // if empty or if value changed.
+                    {
+                        details.DiscountRate = newRate;
+                        details.DiscountedPrice = _calculateDiscountedUnitPrice(details.DiscountRate.Value, details.UnitPrice, details.Unit);
+                        
+                        this.textBoxDiscountedPrice.Text = details.DiscountedPrice.ToString();
+                    }
                 }
-                else if (!string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
+                if (!string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
                 {
-                    // details.DiscountedPrice is total discounted price per item. It's not discounted unit price.
-                    details.DiscountedPrice = Convert.ToDecimal(this.textBoxDiscountedPrice.Text) * details.Unit;
-                    details.DiscountRate = _calculateDiscountRate(Convert.ToDecimal(this.textBoxDiscountedPrice.Text), details.UnitPrice);
-
-                    this.textBoxDiscountRate.Text = Math.Round(Convert.ToDouble(details.DiscountRate), 2).ToString();
+                    decimal newDiscountedPrice = Convert.ToDecimal(this.textBoxDiscountedPrice.Text) * details.Unit;
+                    if (details.DiscountedPrice == null || details.DiscountedPrice != newDiscountedPrice) // if empty or if value changed.
+                    {
+                        // details.DiscountedPrice is total discounted price per item. It's not discounted unit price.
+                        details.DiscountedPrice = newDiscountedPrice;
+                        details.DiscountRate = _calculateDiscountRate(Convert.ToDecimal(this.textBoxDiscountedPrice.Text), details.UnitPrice);
+                 
+                        this.textBoxDiscountRate.Text = Math.Round(Convert.ToDouble(details.DiscountRate), 2).ToString();
+                    }
                 }
             }
 
@@ -932,9 +940,9 @@ namespace InvoiceManager_DBFirst
             return (1 - (rate / 100)) * unitPrice * unit;      
         }
 
-        private static decimal _calculateDiscountRate(decimal discountedUnitPrice, decimal unitPrice)
+        private static decimal _calculateDiscountRate(decimal discountedUnitPrice, decimal unitPrice) // Returns rate value between 0 and 100.
         {
-            return 1 - discountedUnitPrice / unitPrice;
+            return (1 - discountedUnitPrice / unitPrice) * 100;
         }
 
         private decimal _calculateItemPrice(decimal unitPrice, decimal unit, decimal? discountedPrice = null)
@@ -985,6 +993,7 @@ namespace InvoiceManager_DBFirst
             this.textBoxDiscountRate.Text = (row.Cells["discountRate"].Value != null) ? row.Cells["discountRate"].Value.ToString() : string.Empty;
             this.textBoxDiscountedPrice.Text = (row.Cells["discountedPrice"].Value != null) ? row.Cells["discountedPrice"].Value.ToString() : string.Empty;
             this.checkBoxDiscount.Checked = (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text) || !string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text));
+            this.textBoxDetailsNote.Text = (row.Cells["note"].Value != null) ? row.Cells["note"].Value.ToString() : string.Empty;
         }
 
         private static void _limitTextBoxCharLength(TextBox textBox, int maxLength)
