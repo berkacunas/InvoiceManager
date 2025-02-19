@@ -466,6 +466,11 @@
     <EmbeddedResource Include="assets\groceries.png" />
     <EmbeddedResource Include="assets\shopping-bag.png" />
     <EmbeddedResource Include="assets\settings.png" />
+    <EmbeddedResource Include="assets\faq.png" />
+    <EmbeddedResource Include="assets\question-mark.png" />
+    <EmbeddedResource Include="assets\question1.png" />
+    <EmbeddedResource Include="assets\question2.png" />
+    <EmbeddedResource Include="assets\think.png" />
     <Content Include="cash.ico" />
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
     <Content Include="InvoiceModel.Context.tt">

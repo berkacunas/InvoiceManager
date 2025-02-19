@@ -41,7 +41,7 @@ namespace InvoiceManager_DBFirst
             int[] listViewLogColumnWidths = new int[] { 400, 300, 250 };
             HorizontalAlignment[] listViewLogColumnAlignments = { HorizontalAlignment.Left, HorizontalAlignment.Left, HorizontalAlignment.Left };
 
-            _setListViewRowStyles(this.listViewLog, View.Details, true, false);
+            _setListViewRowStyles(this.listViewLog, View.Details, true, true, false);
             _setListViewColumnStyles(this.listViewLog, listViewLogColumns, listViewLogColumnWidths, listViewLogColumnAlignments);
             this._loadToolStripMenuItemIcons();
         }
@@ -262,9 +262,10 @@ namespace InvoiceManager_DBFirst
             this.listViewLog.Items.Add(new ListViewItem(new string[] { message, actionType, eventTime.ToString(_eventTimeFormat) }));
         }
 
-        private static void _setListViewRowStyles(ListView listView, View view, bool fullRowSelect, bool multiSelect)
+        private static void _setListViewRowStyles(ListView listView, View view, bool gridLines, bool fullRowSelect, bool multiSelect)
         {
             listView.View = view;
+            listView.GridLines = gridLines;
             listView.FullRowSelect = fullRowSelect;
             listView.MultiSelect = multiSelect;
         }

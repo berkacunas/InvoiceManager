@@ -47,6 +47,8 @@ namespace InvoiceManager_DBFirst
         public event Notify TransactionFormOpened;
         public event Notify TransactionFormClosed;
 
+        private ImageList _imageList;
+
         private InvoicesEntities dbContext;
         private Taction _newTaction;
         private Mode _mode;
@@ -56,12 +58,13 @@ namespace InvoiceManager_DBFirst
             InitializeComponent();
 
             this._createContextMenu();
+            this._createImageList();
 
             this.dbContext = new InvoicesEntities();
             this.dataGridViewTactions.DataSourceChanged += DataGridViewTactions_DataSourceChanged;
             this.dataGridViewTactionDetails.DataSourceChanged += DataGridViewTactionDetails_DataSourceChanged;
         }
-        
+
         private void TactionForm_Load(object sender, EventArgs e)
         {
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -74,6 +77,8 @@ namespace InvoiceManager_DBFirst
 
             _setDefaultGridViewStyles(this.dataGridViewTactions);
             _setDefaultGridViewStyles(this.dataGridViewTactionDetails);
+            _setButtonImages(buttonLastUnitPrice, _imageList, "QuestionMark", Color.White, Color.FromArgb(70, 70, 70), FlatStyle.Flat, 0);
+            _setButtonImages(buttonLastVat, _imageList, "QuestionMark", Color.White, Color.FromArgb(70, 70, 70), FlatStyle.Flat, 0);
 
             this.comboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxOwner.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -419,6 +424,60 @@ namespace InvoiceManager_DBFirst
             this._bindDataToGridViewTactionDetails(tactionId);
         }
 
+        private void buttonLastUnitPrice_Click(object sender, EventArgs e)
+        {
+            string itemName = this.textBoxItem.Text;
+
+            if (string.IsNullOrEmpty(itemName))
+            {
+                MessageBox.Show("Enter an item first to get its last unit price.", "Item not entered", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            if (!dbContext.Item.Any(r => r.Name == this.textBoxItem.Text))
+            {
+                MessageBox.Show("Cannot find this item in database.", "Item not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int itemId = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
+
+            var query = from details in dbContext.TactionDetails
+                        join taction in dbContext.Taction on details.TransactionId equals taction.id
+                        where details.ItemId == itemId
+                        orderby taction.Dt descending
+                        select details.UnitPrice;
+
+            decimal unitPrice = Convert.ToDecimal(query.FirstOrDefault());
+            this.textBoxUnitPrice.Text = unitPrice.ToString();
+        }
+
+        private void buttonLastVat_Click(object sender, EventArgs e)
+        {
+            string itemName = this.textBoxItem.Text;
+
+            if (string.IsNullOrEmpty(itemName))
+            {
+                MessageBox.Show("Enter an item first to get its last unit price.", "Item not entered", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            if (!dbContext.Item.Any(r => r.Name == this.textBoxItem.Text))
+            {
+                MessageBox.Show("Cannot find this item in database.", "Item not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int itemId = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
+
+            var query = from details in dbContext.TactionDetails
+                        join taction in dbContext.Taction on details.TransactionId equals taction.id
+                        where details.ItemId == itemId
+                        orderby taction.Dt descending
+                        select details.Vat;
+
+            int vat = Convert.ToInt32(query.FirstOrDefault());
+            this.textBoxVat.Text = vat.ToString();
+        }
+
         private void checkBoxDetailsEditable_CheckedChanged(object sender, EventArgs e)
         {
             this._setEditableDetails(this.checkBoxDetailsEditable.Checked);
@@ -756,6 +815,16 @@ namespace InvoiceManager_DBFirst
             this.textBoxItemSubType.AutoCompleteCustomSource = itemSubTypeNameCollection;
         }
 
+        private static void _setButtonImages(Button button, ImageList imageList, string imageIndexOfKey, Color foreColor, Color backColor, FlatStyle flatStyle, int borderWidth)
+        { 
+            button.ImageList = imageList;
+            button.ImageIndex = imageList.Images.IndexOfKey(imageIndexOfKey);
+            button.ForeColor = foreColor;
+            //button.BackColor = backColor;
+            button.FlatStyle = flatStyle;
+            button.FlatAppearance.BorderSize = borderWidth;
+        }
+
         private void _setEditableTactions(bool isEditable)
         {
             this.dataGridViewTactions.Enabled = !isEditable;
@@ -1019,6 +1088,19 @@ namespace InvoiceManager_DBFirst
                     ((TextBox)c).Clear(); 
         }
 
+        private void _createImageList()
+        {
+            _imageList = new ImageList
+            {
+                ImageSize = new Size(19, 19),
+                ColorDepth = ColorDepth.Depth32Bit
+            };
+            _imageList.Images.Add("Thinker", BitmapResourceLoader.Thinker);
+            _imageList.Images.Add("FAQ", BitmapResourceLoader.FAQ);
+            _imageList.Images.Add("QuestionMark", BitmapResourceLoader.QuestionMark);
+            _imageList.Images.Add("Question1", BitmapResourceLoader.Question1);
+            _imageList.Images.Add("Question2", BitmapResourceLoader.Question2);
+        }
         private void _createContextMenu()
         {
             ContextMenuStrip menuStrip = new ContextMenuStrip();
@@ -1260,5 +1342,6 @@ namespace InvoiceManager_DBFirst
                     break;
             }
         }
+
     }
 }
