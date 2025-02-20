@@ -79,11 +79,10 @@
             this.buttonCancelTaction = new System.Windows.Forms.Button();
             this.checkBoxTactionsEditable = new System.Windows.Forms.CheckBox();
             this.groupBoxTactionDetailsOptions = new System.Windows.Forms.GroupBox();
+            this.buttonAdviceLastUnitPrice = new System.Windows.Forms.Button();
             this.labelVatPercantage = new System.Windows.Forms.Label();
             this.toolStripTaction = new System.Windows.Forms.ToolStrip();
             this.statusStripTaction = new System.Windows.Forms.StatusStrip();
-            this.buttonLastUnitPrice = new System.Windows.Forms.Button();
-            this.buttonLastVat = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactions)).BeginInit();
             this.groupBoxTactions.SuspendLayout();
             this.groupBoxTactionDetails.SuspendLayout();
@@ -566,8 +565,7 @@
             // 
             // groupBoxTactionDetailsOptions
             // 
-            this.groupBoxTactionDetailsOptions.Controls.Add(this.buttonLastVat);
-            this.groupBoxTactionDetailsOptions.Controls.Add(this.buttonLastUnitPrice);
+            this.groupBoxTactionDetailsOptions.Controls.Add(this.buttonAdviceLastUnitPrice);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.labelVatPercantage);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.textBoxItem);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.labelItemGroup);
@@ -600,6 +598,15 @@
             this.groupBoxTactionDetailsOptions.TabStop = false;
             this.groupBoxTactionDetailsOptions.Text = "Detail Options";
             // 
+            // buttonAdviceLastUnitPrice
+            // 
+            this.buttonAdviceLastUnitPrice.Location = new System.Drawing.Point(451, 54);
+            this.buttonAdviceLastUnitPrice.Name = "buttonAdviceLastUnitPrice";
+            this.buttonAdviceLastUnitPrice.Size = new System.Drawing.Size(23, 23);
+            this.buttonAdviceLastUnitPrice.TabIndex = 33;
+            this.buttonAdviceLastUnitPrice.UseVisualStyleBackColor = true;
+            this.buttonAdviceLastUnitPrice.Click += new System.EventHandler(this.buttonAdviceLastUnitPrice_Click);
+            // 
             // labelVatPercantage
             // 
             this.labelVatPercantage.Location = new System.Drawing.Point(355, 90);
@@ -624,24 +631,6 @@
             this.statusStripTaction.Size = new System.Drawing.Size(1690, 22);
             this.statusStripTaction.TabIndex = 7;
             this.statusStripTaction.Text = "statusStrip1";
-            // 
-            // buttonLastUnitPrice
-            // 
-            this.buttonLastUnitPrice.Location = new System.Drawing.Point(451, 54);
-            this.buttonLastUnitPrice.Name = "buttonLastUnitPrice";
-            this.buttonLastUnitPrice.Size = new System.Drawing.Size(23, 23);
-            this.buttonLastUnitPrice.TabIndex = 33;
-            this.buttonLastUnitPrice.UseVisualStyleBackColor = true;
-            this.buttonLastUnitPrice.Click += new System.EventHandler(this.buttonLastUnitPrice_Click);
-            // 
-            // buttonLastVat
-            // 
-            this.buttonLastVat.Location = new System.Drawing.Point(451, 86);
-            this.buttonLastVat.Name = "buttonLastVat";
-            this.buttonLastVat.Size = new System.Drawing.Size(23, 23);
-            this.buttonLastVat.TabIndex = 34;
-            this.buttonLastVat.UseVisualStyleBackColor = true;
-            this.buttonLastVat.Click += new System.EventHandler(this.buttonLastVat_Click);
             // 
             // TactionForm
             // 
@@ -730,7 +719,6 @@
         private System.Windows.Forms.TextBox textBoxTotalVatPrice;
         private System.Windows.Forms.Label labelTotalVatPrice;
         private System.Windows.Forms.Label labelVatPercantage;
-        private System.Windows.Forms.Button buttonLastVat;
-        private System.Windows.Forms.Button buttonLastUnitPrice;
+        private System.Windows.Forms.Button buttonAdviceLastUnitPrice;
     }
 }

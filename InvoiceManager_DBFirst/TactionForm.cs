@@ -77,8 +77,7 @@ namespace InvoiceManager_DBFirst
 
             _setDefaultGridViewStyles(this.dataGridViewTactions);
             _setDefaultGridViewStyles(this.dataGridViewTactionDetails);
-            _setButtonImages(buttonLastUnitPrice, _imageList, "QuestionMark", Color.White, Color.FromArgb(70, 70, 70), FlatStyle.Flat, 0);
-            _setButtonImages(buttonLastVat, _imageList, "QuestionMark", Color.White, Color.FromArgb(70, 70, 70), FlatStyle.Flat, 0);
+            _setButtonImages(buttonAdviceLastUnitPrice, _imageList, "QuestionMark", Color.White, Color.FromArgb(70, 70, 70), FlatStyle.Flat, 0);
 
             this.comboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxOwner.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -424,58 +423,25 @@ namespace InvoiceManager_DBFirst
             this._bindDataToGridViewTactionDetails(tactionId);
         }
 
-        private void buttonLastUnitPrice_Click(object sender, EventArgs e)
+        private void buttonAdviceLastUnitPrice_Click(object sender, EventArgs e)
         {
             string itemName = this.textBoxItem.Text;
 
             if (string.IsNullOrEmpty(itemName))
             {
                 MessageBox.Show("Enter an item first to get its last unit price.", "Item not entered", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
-            if (!dbContext.Item.Any(r => r.Name == this.textBoxItem.Text))
+            if (!dbContext.Item.Any(r => r.Name == itemName))
             {
                 MessageBox.Show("Cannot find this item in database.", "Item not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            int itemId = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
-
-            var query = from details in dbContext.TactionDetails
-                        join taction in dbContext.Taction on details.TransactionId equals taction.id
-                        where details.ItemId == itemId
-                        orderby taction.Dt descending
-                        select details.UnitPrice;
-
-            decimal unitPrice = Convert.ToDecimal(query.FirstOrDefault());
-            this.textBoxUnitPrice.Text = unitPrice.ToString();
-        }
-
-        private void buttonLastVat_Click(object sender, EventArgs e)
-        {
-            string itemName = this.textBoxItem.Text;
-
-            if (string.IsNullOrEmpty(itemName))
-            {
-                MessageBox.Show("Enter an item first to get its last unit price.", "Item not entered", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            if (!dbContext.Item.Any(r => r.Name == this.textBoxItem.Text))
-            {
-                MessageBox.Show("Cannot find this item in database.", "Item not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            int itemId = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
-
-            var query = from details in dbContext.TactionDetails
-                        join taction in dbContext.Taction on details.TransactionId equals taction.id
-                        where details.ItemId == itemId
-                        orderby taction.Dt descending
-                        select details.Vat;
-
-            int vat = Convert.ToInt32(query.FirstOrDefault());
-            this.textBoxVat.Text = vat.ToString();
+            int itemId = dbContext.Item.Where(r => r.Name == itemName).FirstOrDefault().id;
+            this.textBoxUnitPrice.Text = _adviceUnitPriceForItem(itemId).ToString();
+            this.textBoxVat.Text = _adviceVatForItem(itemId).ToString();
         }
 
         private void checkBoxDetailsEditable_CheckedChanged(object sender, EventArgs e)
@@ -555,14 +521,6 @@ namespace InvoiceManager_DBFirst
             AutoCompleteStringCollection autoCompleteStringCollection = null;
             IQueryable<string> query = null;
 
-            //Item item = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault();
-            //if (item != null)
-            //{
-            //    // EFContext.TestAddresses.Where(a => a.age > 10).Select(m => m.name).Distinct();
-            //    var vatRate = dbContext.TactionDetails.Where(r => r.ItemId == item.id).Select(s => s.Vat).Distinct();
-            //    //this.textBoxVat.Text = vatRate.ToString();
-            //}
-
             if (dbContext.Item.Any(r => r.Name == this.textBoxItem.Text))
             {
                 query = from itemGroup in dbContext.ItemGroup
@@ -583,6 +541,15 @@ namespace InvoiceManager_DBFirst
                 this.textBoxItemGroup.Text = autoCompleteStringCollection[0];
 
             this.textBoxItemGroup.AutoCompleteCustomSource = autoCompleteStringCollection;
+        }
+
+        private void toolStripMenuItemItems_Click(object sender, EventArgs e)
+        {
+            ItemForm itemForm = new ItemForm();
+            if (itemForm.ShowDialog() == DialogResult.OK)
+            {
+
+            }
         }
 
         private void _bindDataToGridViewTaction()
@@ -845,6 +812,7 @@ namespace InvoiceManager_DBFirst
             this.buttonAddDetail.Enabled = isEditable;
             this.buttonUpdateDetail.Enabled = isEditable;
             this.buttonRemoveDetail.Enabled = isEditable;
+            this.buttonAdviceLastUnitPrice.Enabled = isEditable;
             this.checkBoxDiscount.Enabled = isEditable;
             this.textBoxItemGroup.ReadOnly = !isEditable;
             this.textBoxItem.ReadOnly = !isEditable;
@@ -948,15 +916,6 @@ namespace InvoiceManager_DBFirst
                 }
             }
 
-            //if (this.checkBoxDiscount.Checked)
-            //{
-            //    if (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text) && !string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text))
-            //    {
-            //        MessageBox.Show("Too many values.", "You entered discounted price and discount rate, together. Enter only one of them.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        return false;
-            //    }
-            //}
-
             if (this._newTaction == null)   // Edit mode: taction exists in db, we get this taction object from database.
             {
                 DataGridViewRow row = this.dataGridViewTactions.CurrentRow;
@@ -1002,28 +961,6 @@ namespace InvoiceManager_DBFirst
             details.Note = !string.IsNullOrEmpty(this.textBoxDetailsNote.Text) ? this.textBoxDetailsNote.Text : null;
 
             return true;
-        }
-
-        private static decimal _calculateDiscountedUnitPrice(decimal rate, decimal unitPrice, decimal unit)
-        {
-            return (1 - (rate / 100)) * unitPrice * unit;      
-        }
-
-        private static decimal _calculateDiscountRate(decimal discountedUnitPrice, decimal unitPrice) // Returns rate value between 0 and 100.
-        {
-            return (1 - discountedUnitPrice / unitPrice) * 100;
-        }
-
-        private decimal _calculateItemPrice(decimal unitPrice, decimal unit, decimal? discountedPrice = null)
-        {
-            // return (details.DiscountedPrice == null) ? (details.UnitPrice * details.Unit) : (details.DiscountedPrice.Value);
-
-            return (discountedPrice == null) ? unitPrice * unit : discountedPrice.Value;
-        }
-
-        private decimal _calculateItemVatPrice(decimal itemPrice, int vat)
-        {
-            return itemPrice * vat / 100;
         }
 
         private int _setTactionControls(DataGridViewRow row)
@@ -1269,14 +1206,55 @@ namespace InvoiceManager_DBFirst
             return autoCompleteStringCollection;
         }
 
-        private void toolStripMenuItemItems_Click(object sender, EventArgs e)
-        {
-            ItemForm itemForm = new ItemForm();
-            if (itemForm.ShowDialog() == DialogResult.OK)
-            {
+        #region Logic
 
-            }
+        private static decimal _calculateDiscountedUnitPrice(decimal rate, decimal unitPrice, decimal unit)
+        {
+            return (1 - (rate / 100)) * unitPrice * unit;
         }
+
+        private static decimal _calculateDiscountRate(decimal discountedUnitPrice, decimal unitPrice) // Returns rate value between 0 and 100.
+        {
+            return (1 - discountedUnitPrice / unitPrice) * 100;
+        }
+
+        private decimal _calculateItemPrice(decimal unitPrice, decimal unit, decimal? discountedPrice = null)
+        {
+            // return (details.DiscountedPrice == null) ? (details.UnitPrice * details.Unit) : (details.DiscountedPrice.Value);
+
+            return (discountedPrice == null) ? unitPrice * unit : discountedPrice.Value;
+        }
+
+        private decimal _calculateItemVatPrice(decimal itemPrice, int vat)
+        {
+            return itemPrice * vat / 100;
+        }
+
+        private decimal _adviceUnitPriceForItem(int itemId)
+        {
+            var query = from details in dbContext.TactionDetails
+                        join taction in dbContext.Taction on details.TransactionId equals taction.id
+                        where details.ItemId == itemId
+                        orderby taction.Dt descending
+                        select details.UnitPrice;
+
+            return Convert.ToDecimal(query.FirstOrDefault());
+        }
+
+        private int _adviceVatForItem(int itemId)
+        {
+            var query = from details in dbContext.TactionDetails
+                        join taction in dbContext.Taction on details.TransactionId equals taction.id
+                        where details.ItemId == itemId
+                        orderby taction.Dt descending
+                        select details.Vat;
+
+            return Convert.ToInt32(query.FirstOrDefault());
+        }
+
+        #endregion
+
+        #region User-defined Event Handlers
 
         protected virtual void onTransactionSaved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
@@ -1343,5 +1321,8 @@ namespace InvoiceManager_DBFirst
             }
         }
 
+        #endregion
+
+        
     }
 }
