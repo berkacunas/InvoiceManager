@@ -499,7 +499,6 @@ namespace InvoiceManager_DBFirst
                         join itemGroup in dbContext.ItemGroup on item.GroupId equals itemGroup.id
                         where itemGroup.Name == textBoxItemGroup.Text
                         select item.Name;
-
             }
             else
             {
@@ -524,14 +523,17 @@ namespace InvoiceManager_DBFirst
             if (dbContext.Item.Any(r => r.Name == this.textBoxItem.Text))
             {
                 query = from itemGroup in dbContext.ItemGroup
-                        join i in dbContext.Item on itemGroup.id equals i.GroupId
-                        where i.Name == textBoxItem.Text
+                        join item in dbContext.Item on itemGroup.id equals item.GroupId
+                        where item.Name == textBoxItem.Text
                         select itemGroup.Name;
+
+                int itemId = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
+                this._bindDataToComboBoxItemSubType(BindType.Select, itemId);
             }
             else
             {
                 query = from itemGroup in dbContext.ItemGroup
-                        join i in dbContext.Item on itemGroup.id equals i.GroupId
+                        join item in dbContext.Item on itemGroup.id equals item.GroupId
                         select itemGroup.Name;
             }
 
@@ -601,7 +603,7 @@ namespace InvoiceManager_DBFirst
                             itemId = item.id,
                             itemGroup = itemGroup.Name,
                             itemName = item.Name,
-                            itemSubTypeId = jt != null ? jt.Name : "",
+                            itemSubTypeId = jt != null ? jt.id : 0,
                             unit = details.Unit,
                             unitPrice = details.UnitPrice,
                             vat = details.Vat,
@@ -629,7 +631,7 @@ namespace InvoiceManager_DBFirst
                             itemId = item.id,
                             itemGroup = itemGroup.Name,
                             itemName = item.Name,
-                            itemSubTypeId = jt != null ? jt.Name : "",
+                            itemSubTypeId = jt != null ? jt.id : 0,
                             unit = details.Unit,
                             unitPrice = details.UnitPrice,
                             vat = details.Vat,
@@ -696,6 +698,47 @@ namespace InvoiceManager_DBFirst
                 this.comboBoxOwner.SelectedValue = ownerId;
         }
 
+        private void _bindDataToComboBoxItemSubType(BindType bindType, int itemId = 0, int itemSubTypeId = 0)
+        {
+            IQueryable<ItemSubType> query = null;
+
+            /*
+              SELECT DISTINCT(ItemSubType.Name) FROM ItemSubType 
+              JOIN TactionDetails ON ItemSubType.id = TactionDetails.ItemSubTypeId
+              JOIN Item ON Item.id = TactionDetails.ItemId
+              WHERE Item.id = (SELECT Item.id FROM Item WHERE Item.Name = 'Hamidiye Kaynak Suyu');
+             */
+
+            switch (bindType)
+            {
+                case BindType.Select:
+                    query = from itemSubType in dbContext.ItemSubType
+                            join details in dbContext.TactionDetails on itemSubType.id equals details.ItemSubTypeId
+                            join item in dbContext.Item on details.ItemId equals item.id
+                            where item.id == itemId
+                            select itemSubType;
+                    break;
+                case BindType.Where:
+                    if (itemSubTypeId == 0)
+                    {
+                        this.comboBoxItemSubType.DataSource = null;
+                        return;
+                    }
+                    else
+                        query = from itemSubType in dbContext.ItemSubType
+                                where itemSubType.id == itemSubTypeId
+                                select itemSubType;
+                    break;
+                case BindType.Setnull:
+                    this.comboBoxItemSubType.DataSource = null;
+                    return;
+            }
+
+            this.comboBoxItemSubType.DataSource = query.ToList();
+            this.comboBoxItemSubType.DisplayMember = "Name";
+            this.comboBoxItemSubType.ValueMember = "id";
+        }
+
         private static void _setDefaultGridViewStyles(DataGridView gridview)
         {
             gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -731,13 +774,13 @@ namespace InvoiceManager_DBFirst
             this.textBoxSeller.AutoCompleteMode = AutoCompleteMode.Suggest;
             this.textBoxItemGroup.AutoCompleteMode = AutoCompleteMode.Suggest;
             this.textBoxItem.AutoCompleteMode = AutoCompleteMode.Suggest;
-            this.textBoxItemSubType.AutoCompleteMode = AutoCompleteMode.Suggest;
+            //this.textBoxItemSubType.AutoCompleteMode = AutoCompleteMode.Suggest;
 
             this.textBoxShop.AutoCompleteSource = AutoCompleteSource.CustomSource;
             this.textBoxSeller.AutoCompleteSource = AutoCompleteSource.CustomSource;
             this.textBoxItemGroup.AutoCompleteSource = AutoCompleteSource.CustomSource;
             this.textBoxItem.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            this.textBoxItemSubType.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            //this.textBoxItemSubType.AutoCompleteSource = AutoCompleteSource.CustomSource;
 
             var shopNameQuery = from shop in dbContext.Shop
                                 select shop.Name;
@@ -779,7 +822,7 @@ namespace InvoiceManager_DBFirst
             this.textBoxSeller.AutoCompleteCustomSource = sellerNameCollection;
             this.textBoxItemGroup.AutoCompleteCustomSource = itemGroupNameCollection;
             this.textBoxItem.AutoCompleteCustomSource = itemNameCollection;
-            this.textBoxItemSubType.AutoCompleteCustomSource = itemSubTypeNameCollection;
+            //this.textBoxItemSubType.AutoCompleteCustomSource = itemSubTypeNameCollection;
         }
 
         private static void _setButtonImages(Button button, ImageList imageList, string imageIndexOfKey, Color foreColor, Color backColor, FlatStyle flatStyle, int borderWidth)
@@ -816,7 +859,8 @@ namespace InvoiceManager_DBFirst
             this.checkBoxDiscount.Enabled = isEditable;
             this.textBoxItemGroup.ReadOnly = !isEditable;
             this.textBoxItem.ReadOnly = !isEditable;
-            this.textBoxItemSubType.ReadOnly = !isEditable;
+            //this.textBoxItemSubType.ReadOnly = !isEditable;
+            this.comboBoxItemSubType.Enabled = !isEditable;
             this.textBoxUnit.ReadOnly = !isEditable;
             this.textBoxUnitPrice.ReadOnly = !isEditable;
             this.textBoxVat.ReadOnly = !isEditable;
@@ -883,7 +927,13 @@ namespace InvoiceManager_DBFirst
                 return false;
             }
 
-            if (!string.IsNullOrEmpty(this.textBoxItemSubType.Text) && !dbContext.ItemSubType.Any(r => r.Name == this.textBoxItemSubType.Text))
+            //if (!string.IsNullOrEmpty(this.textBoxItemSubType.Text) && !dbContext.ItemSubType.Any(r => r.Name == this.textBoxItemSubType.Text))
+            //{
+            //    MessageBox.Show("Input doesn't exist.", "The itemsubtype you entered does not exist in database. Please first save this itemsubtype into itemsubtype table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return false;
+            //}
+
+            if (!string.IsNullOrEmpty(this.comboBoxItemSubType.Text) && !dbContext.ItemSubType.Any(r => r.Name == this.comboBoxItemSubType.Text))
             {
                 MessageBox.Show("Input doesn't exist.", "The itemsubtype you entered does not exist in database. Please first save this itemsubtype into itemsubtype table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -925,7 +975,15 @@ namespace InvoiceManager_DBFirst
 
             details.Taction = this._newTaction;
             details.ItemId = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
-            details.ItemSubTypeId = dbContext.ItemSubType.Where(r => r.Name == this.textBoxItemSubType.Text).FirstOrDefault()?.id;
+
+            string itemSubTypeName = null;
+            if (this.comboBoxItemSubType.SelectedItem != null)
+                itemSubTypeName = this.comboBoxItemSubType.SelectedText;
+            else if (!string.IsNullOrEmpty(this.comboBoxItemSubType.Text))
+                itemSubTypeName = this.comboBoxItemSubType.Text;
+
+            if (!string.IsNullOrEmpty(itemSubTypeName))
+                details.ItemSubTypeId = dbContext.ItemSubType.Where(r => r.Name == itemSubTypeName).FirstOrDefault()?.id;
 
             details.Unit = Convert.ToDecimal(this.textBoxUnit.Text);
             details.UnitPrice = Convert.ToDecimal(this.textBoxUnitPrice.Text);
@@ -992,7 +1050,8 @@ namespace InvoiceManager_DBFirst
         {
             this.textBoxItemGroup.Text = row.Cells["itemGroup"].Value.ToString();
             this.textBoxItem.Text = row.Cells["itemName"].Value.ToString();
-            this.textBoxItemSubType.Text = row.Cells["itemSubTypeId"].Value.ToString();
+            //this.textBoxItemSubType.Text = row.Cells["itemSubTypeId"].Value.ToString();
+            this._bindDataToComboBoxItemSubType(BindType.Where, 0, Convert.ToInt32(row.Cells["itemSubTypeId"].Value));
             this.textBoxUnit.Text = row.Cells["unit"].Value.ToString();
             this.textBoxUnitPrice.Text = row.Cells["unitPrice"].Value.ToString();
             this.textBoxVat.Text = row.Cells["vat"].Value.ToString();

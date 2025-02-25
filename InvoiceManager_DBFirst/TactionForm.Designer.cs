@@ -61,7 +61,6 @@
             this.labelUnitPrice = new System.Windows.Forms.Label();
             this.textBoxUnit = new System.Windows.Forms.TextBox();
             this.labelUnit = new System.Windows.Forms.Label();
-            this.textBoxItemSubType = new System.Windows.Forms.TextBox();
             this.labelItemSubType = new System.Windows.Forms.Label();
             this.textBoxItem = new System.Windows.Forms.TextBox();
             this.labelItem = new System.Windows.Forms.Label();
@@ -83,6 +82,7 @@
             this.labelVatPercantage = new System.Windows.Forms.Label();
             this.toolStripTaction = new System.Windows.Forms.ToolStrip();
             this.statusStripTaction = new System.Windows.Forms.StatusStrip();
+            this.comboBoxItemSubType = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactions)).BeginInit();
             this.groupBoxTactions.SuspendLayout();
             this.groupBoxTactionDetails.SuspendLayout();
@@ -387,13 +387,6 @@
             this.labelUnit.TabIndex = 9;
             this.labelUnit.Text = "Unit";
             // 
-            // textBoxItemSubType
-            // 
-            this.textBoxItemSubType.Location = new System.Drawing.Point(77, 86);
-            this.textBoxItemSubType.Name = "textBoxItemSubType";
-            this.textBoxItemSubType.Size = new System.Drawing.Size(174, 23);
-            this.textBoxItemSubType.TabIndex = 8;
-            // 
             // labelItemSubType
             // 
             this.labelItemSubType.AutoSize = true;
@@ -565,6 +558,7 @@
             // 
             // groupBoxTactionDetailsOptions
             // 
+            this.groupBoxTactionDetailsOptions.Controls.Add(this.comboBoxItemSubType);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.buttonAdviceLastUnitPrice);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.labelVatPercantage);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.textBoxItem);
@@ -572,7 +566,6 @@
             this.groupBoxTactionDetailsOptions.Controls.Add(this.textBoxItemGroup);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.labelItem);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.labelItemSubType);
-            this.groupBoxTactionDetailsOptions.Controls.Add(this.textBoxItemSubType);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.labelUnit);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.textBoxUnit);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.labelUnitPrice);
@@ -632,6 +625,14 @@
             this.statusStripTaction.TabIndex = 7;
             this.statusStripTaction.Text = "statusStrip1";
             // 
+            // comboBoxItemSubType
+            // 
+            this.comboBoxItemSubType.FormattingEnabled = true;
+            this.comboBoxItemSubType.Location = new System.Drawing.Point(77, 86);
+            this.comboBoxItemSubType.Name = "comboBoxItemSubType";
+            this.comboBoxItemSubType.Size = new System.Drawing.Size(174, 23);
+            this.comboBoxItemSubType.TabIndex = 34;
+            // 
             // TactionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
@@ -679,7 +680,6 @@
         private System.Windows.Forms.Label labelUnitPrice;
         private System.Windows.Forms.TextBox textBoxUnit;
         private System.Windows.Forms.Label labelUnit;
-        private System.Windows.Forms.TextBox textBoxItemSubType;
         private System.Windows.Forms.Label labelItemSubType;
         private System.Windows.Forms.Button buttonDeleteTaction;
         private System.Windows.Forms.Button buttonUpdateTaction;
@@ -720,5 +720,6 @@
         private System.Windows.Forms.Label labelTotalVatPrice;
         private System.Windows.Forms.Label labelVatPercantage;
         private System.Windows.Forms.Button buttonAdviceLastUnitPrice;
+        private System.Windows.Forms.ComboBox comboBoxItemSubType;
     }
 }
