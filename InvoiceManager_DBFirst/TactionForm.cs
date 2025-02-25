@@ -1,10 +1,12 @@
 ﻿using SQLitePCL;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Core.Common.CommandTrees;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
@@ -529,6 +531,7 @@ namespace InvoiceManager_DBFirst
 
                 int itemId = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
                 this._bindDataToComboBoxItemSubType(BindType.Select, itemId);
+                this.comboBoxItemSubType.Enabled = true;
             }
             else
             {
@@ -712,12 +715,32 @@ namespace InvoiceManager_DBFirst
             switch (bindType)
             {
                 case BindType.Select:
-                    query = from itemSubType in dbContext.ItemSubType
+
+                    // var result = pList.Where(p => p.Name != null).GroupBy(p => p.Id).Select(grp => grp.FirstOrDefault());
+
+    //                var query = students.Join(departments,
+    //student => student.DepartmentID, department => department.ID,
+    //(student, department) => new { Name = $"{student.FirstName} {student.LastName}", DepartmentName = department.Name });
+
+
+                    List<ItemSubType> itemSubTypes = dbContext.ItemSubType.Join()
+
+
+
+                    var query2 = from itemSubType in dbContext.ItemSubType
                             join details in dbContext.TactionDetails on itemSubType.id equals details.ItemSubTypeId
                             join item in dbContext.Item on details.ItemId equals item.id
                             where item.id == itemId
-                            select itemSubType;
-                    break;
+                            select new
+                            {
+                                id = itemSubType.id,
+                                Name = itemSubType.Name
+                            };
+
+                    this.comboBoxItemSubType.DataSource = query2.Where(p => p.Name != null).GroupBy(p => p.id).Select(grp => grp.FirstOrDefault());
+                    this.comboBoxItemSubType.DisplayMember = "Name";
+                    this.comboBoxItemSubType.ValueMember = "id";
+                    return;
                 case BindType.Where:
                     if (itemSubTypeId == 0)
                     {
