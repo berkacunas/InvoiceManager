@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace InvoiceManager_DBFirst
 {
@@ -105,6 +106,9 @@ namespace InvoiceManager_DBFirst
 
             this.comboBoxItemOptionsGroup.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxGroupOptionsTopGroup.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.comboBoxItemSubTypeOptionsItemSubType.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            this.textBoxItemSubTypeOptionsItem.ReadOnly = true;
 
             this._bindDataToGridViewItemTopGroup();
             this._bindDataToGridViewItemGroup();
