@@ -714,7 +714,7 @@ namespace InvoiceManager_DBFirst
                        JOIN Item ON Item.id = TactionDetails.ItemId
                        WHERE Item.id = (SELECT Item.id FROM Item WHERE Item.Name = 'Hamidiye Kaynak Suyu'); */
 
-                    var query2 = from itemSubType in dbContext.ItemSubType
+                    var querySubType = from itemSubType in dbContext.ItemSubType
                             join details in dbContext.TactionDetails on itemSubType.id equals details.ItemSubTypeId
                             join item in dbContext.Item on details.ItemId equals item.id
                             where item.id == itemId
@@ -724,7 +724,7 @@ namespace InvoiceManager_DBFirst
                                 Name = itemSubType.Name
                             };
 
-                    this.comboBoxItemSubType.DataSource = query2.ToList().Distinct().ToList();   //Where(p => p.Name != null).GroupBy(p => p.id).Select(grp => grp.FirstOrDefault());
+                    this.comboBoxItemSubType.DataSource = querySubType.ToList().Distinct().ToList();   //Where(p => p.Name != null).GroupBy(p => p.id).Select(grp => grp.FirstOrDefault());
                     this.comboBoxItemSubType.DisplayMember = "Name";
                     this.comboBoxItemSubType.ValueMember = "id";
                     return;

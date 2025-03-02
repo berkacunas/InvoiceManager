@@ -106,7 +106,6 @@ namespace InvoiceManager_DBFirst
 
             this.comboBoxItemOptionsGroup.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxGroupOptionsTopGroup.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.comboBoxItemSubTypeOptionsItemSubType.DropDownStyle = ComboBoxStyle.DropDownList;
 
             this.textBoxItemSubTypeOptionsItem.ReadOnly = true;
 
@@ -190,6 +189,7 @@ namespace InvoiceManager_DBFirst
             this._clearItemControls();
             DataGridViewRow row = this.dataGridViewItems.CurrentRow;
             this._setItemControls(row);
+            this._setItemSubTypeControls(row);
         }
 
         private void dataGridViewItemTopGroups_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -273,7 +273,10 @@ namespace InvoiceManager_DBFirst
             {
                 DataGridViewRow row = this.dataGridViewItems.Rows[0];
                 if (row != null)
+                {
                     this._setItemControls(row);
+                    this._setItemSubTypeControls(row);
+                }
             }
         }
 
@@ -798,6 +801,13 @@ namespace InvoiceManager_DBFirst
             this._bindDataToComboBoxItemOptionsGroup(BindType.Where, groupId);
         }
 
+        private void _setItemSubTypeControls(DataGridViewRow row)
+        {
+            int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
+            this.textBoxItemSubTypeOptionsItem.Text = row.Cells["itemName"].Value.ToString();
+            this._bindDataToComboBoxItemSubTypeOptionsItemSubType(BindType.Where, itemId);
+        }
+
         public static void _enableDataGridViewMultiSelect(DataGridView gridview, bool enable)
         {
             gridview.MultiSelect = enable;
@@ -871,27 +881,24 @@ namespace InvoiceManager_DBFirst
             this.comboBoxTopGroupOptionsTopGroup.DataSource = query.ToList();
         }
 
-
-        private void _bindDataToComboBoxItemOptionsGroup(BindType bindType, int groupId = 0) // When bindType is set to "Where", groupId must be passed.
+        private void _bindDataToComboBoxTopGroupOptionsTopGroup(BindType bindType, int topGroupId)
         {
-            IQueryable<ItemGroup> query = null;
+            IQueryable<ItemTopGroup> query = null;
 
             switch (bindType)
             {
                 case BindType.Select:
-                    query = from itemGroup in dbContext.ItemGroup orderby itemGroup.Name ascending select itemGroup;
-                    break;
+                    throw new NotImplementedException("This feature is unnecessary and is not implemented in this method.");
                 case BindType.Where:
-                    query = from itemGroup in dbContext.ItemGroup where itemGroup.id == groupId select itemGroup;
+                    query = from itemTopGroup in dbContext.ItemTopGroup where itemTopGroup.id == topGroupId select itemTopGroup;
                     break;
                 case BindType.Setnull:
-                    this.comboBoxItemOptionsGroup.DataSource = null;
-                    return;
+                    throw new NotImplementedException("This feature is unnecessary and is not implemented in this method.");
             }
 
-            this.comboBoxItemOptionsGroup.DisplayMember = "Name";
-            this.comboBoxItemOptionsGroup.ValueMember = "id";
-            this.comboBoxItemOptionsGroup.DataSource = query.ToList();
+            this.comboBoxTopGroupOptionsTopGroup.DisplayMember = "Name";
+            this.comboBoxTopGroupOptionsTopGroup.ValueMember = "id";
+            this.comboBoxTopGroupOptionsTopGroup.DataSource = query.ToList();
         }
 
         private void _bindDataToComboBoxGroupOptionsTopGroup(BindType bindType, int topGroupId = 0)
@@ -916,24 +923,56 @@ namespace InvoiceManager_DBFirst
             this.comboBoxGroupOptionsTopGroup.DataSource = query.ToList();
         }
 
-        private void _bindDataToComboBoxTopGroupOptionsTopGroup(BindType bindType, int topGroupId)
+        private void _bindDataToComboBoxItemOptionsGroup(BindType bindType, int groupId = 0) // When bindType is set to "Where", groupId must be passed.
         {
-            IQueryable<ItemTopGroup> query = null;
+            IQueryable<ItemGroup> query = null;
 
             switch (bindType)
             {
                 case BindType.Select:
-                    throw new NotImplementedException("This feature is unnecessary and is not implemented in this method.");
+                    query = from itemGroup in dbContext.ItemGroup orderby itemGroup.Name ascending select itemGroup;
+                    break;
                 case BindType.Where:
-                    query = from itemTopGroup in dbContext.ItemTopGroup where itemTopGroup.id == topGroupId select itemTopGroup;
+                    query = from itemGroup in dbContext.ItemGroup where itemGroup.id == groupId select itemGroup;
                     break;
                 case BindType.Setnull:
-                    throw new NotImplementedException("This feature is unnecessary and is not implemented in this method.");
+                    this.comboBoxItemOptionsGroup.DataSource = null;
+                    return;
             }
 
-            this.comboBoxTopGroupOptionsTopGroup.DisplayMember = "Name";
-            this.comboBoxTopGroupOptionsTopGroup.ValueMember = "id";
-            this.comboBoxTopGroupOptionsTopGroup.DataSource = query.ToList();
+            this.comboBoxItemOptionsGroup.DisplayMember = "Name";
+            this.comboBoxItemOptionsGroup.ValueMember = "id";
+            this.comboBoxItemOptionsGroup.DataSource = query.ToList();
+        }
+
+        private void _bindDataToComboBoxItemSubTypeOptionsItemSubType(BindType bindType, int itemId = 0)
+        {
+            IQueryable<ItemSubType> query = null;
+
+            switch (bindType)
+            {
+                case BindType.Select:
+                    throw new NotImplementedException("_bindDataToComboBoxItemSubTypeOptionsItemSubType BindType.Select switch case is not implemented.");
+                case BindType.Where:
+                    /* SELECT DISTINCT(ItemSubType.id), ItemSubType.Name FROM ItemSubType 
+                       JOIN TactionDetails ON ItemSubType.id = TactionDetails.ItemSubTypeId
+                       JOIN Item ON Item.id = TactionDetails.ItemId
+                       WHERE Item.id = (SELECT Item.id FROM Item WHERE Item.Name = 'Hamidiye Kaynak Suyu'); */
+
+                    query = from itemSubType in dbContext.ItemSubType
+                                join details in dbContext.TactionDetails on itemSubType.id equals details.ItemSubTypeId
+                                join item in dbContext.Item on details.ItemId equals item.id
+                                where item.id == itemId
+                                select itemSubType;
+                    break;
+                case BindType.Setnull:
+                    this.comboBoxItemSubTypeOptionsItemSubType.DataSource = null;
+                    return;
+            }
+
+            this.comboBoxItemSubTypeOptionsItemSubType.DataSource = query.ToList().Distinct().ToList();
+            this.comboBoxItemSubTypeOptionsItemSubType.DisplayMember = "Name";
+            this.comboBoxItemSubTypeOptionsItemSubType.ValueMember = "id";
         }
 
         private void _setModes(Mode mode)

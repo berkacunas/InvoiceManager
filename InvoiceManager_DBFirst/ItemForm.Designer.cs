@@ -70,8 +70,6 @@
             this.buttonDeleteItemSubType = new System.Windows.Forms.Button();
             this.buttonUpdateItemSubType = new System.Windows.Forms.Button();
             this.buttonSaveItemSubType = new System.Windows.Forms.Button();
-            this.textBoxItemSubTypeOptionsNote = new System.Windows.Forms.TextBox();
-            this.labelItemSubTypeOptionsNote = new System.Windows.Forms.Label();
             this.labelItemSubTypeOptionsItem = new System.Windows.Forms.Label();
             this.labelItemSubTypeOptionsItemSubType = new System.Windows.Forms.Label();
             this.comboBoxItemSubTypeOptionsItemSubType = new System.Windows.Forms.ComboBox();
@@ -474,13 +472,11 @@
             this.groupBoxItemSubTypeOptions.Controls.Add(this.buttonDeleteItemSubType);
             this.groupBoxItemSubTypeOptions.Controls.Add(this.buttonUpdateItemSubType);
             this.groupBoxItemSubTypeOptions.Controls.Add(this.buttonSaveItemSubType);
-            this.groupBoxItemSubTypeOptions.Controls.Add(this.textBoxItemSubTypeOptionsNote);
-            this.groupBoxItemSubTypeOptions.Controls.Add(this.labelItemSubTypeOptionsNote);
             this.groupBoxItemSubTypeOptions.Controls.Add(this.labelItemSubTypeOptionsItem);
             this.groupBoxItemSubTypeOptions.Controls.Add(this.labelItemSubTypeOptionsItemSubType);
             this.groupBoxItemSubTypeOptions.Location = new System.Drawing.Point(1195, 455);
             this.groupBoxItemSubTypeOptions.Name = "groupBoxItemSubTypeOptions";
-            this.groupBoxItemSubTypeOptions.Size = new System.Drawing.Size(433, 201);
+            this.groupBoxItemSubTypeOptions.Size = new System.Drawing.Size(433, 123);
             this.groupBoxItemSubTypeOptions.TabIndex = 11;
             this.groupBoxItemSubTypeOptions.TabStop = false;
             this.groupBoxItemSubTypeOptions.Text = "Subitem Options";
@@ -488,7 +484,7 @@
             // checkBoxItemSubTypeOptionsEdit
             // 
             this.checkBoxItemSubTypeOptionsEdit.AutoSize = true;
-            this.checkBoxItemSubTypeOptionsEdit.Location = new System.Drawing.Point(6, 176);
+            this.checkBoxItemSubTypeOptionsEdit.Location = new System.Drawing.Point(6, 98);
             this.checkBoxItemSubTypeOptionsEdit.Name = "checkBoxItemSubTypeOptionsEdit";
             this.checkBoxItemSubTypeOptionsEdit.Size = new System.Drawing.Size(47, 19);
             this.checkBoxItemSubTypeOptionsEdit.TabIndex = 10;
@@ -497,7 +493,7 @@
             // 
             // buttonNewItemSubType
             // 
-            this.buttonNewItemSubType.Location = new System.Drawing.Point(86, 170);
+            this.buttonNewItemSubType.Location = new System.Drawing.Point(86, 92);
             this.buttonNewItemSubType.Name = "buttonNewItemSubType";
             this.buttonNewItemSubType.Size = new System.Drawing.Size(75, 23);
             this.buttonNewItemSubType.TabIndex = 9;
@@ -506,7 +502,7 @@
             // 
             // buttonDeleteItemSubType
             // 
-            this.buttonDeleteItemSubType.Location = new System.Drawing.Point(339, 170);
+            this.buttonDeleteItemSubType.Location = new System.Drawing.Point(339, 92);
             this.buttonDeleteItemSubType.Name = "buttonDeleteItemSubType";
             this.buttonDeleteItemSubType.Size = new System.Drawing.Size(75, 23);
             this.buttonDeleteItemSubType.TabIndex = 8;
@@ -515,7 +511,7 @@
             // 
             // buttonUpdateItemSubType
             // 
-            this.buttonUpdateItemSubType.Location = new System.Drawing.Point(254, 170);
+            this.buttonUpdateItemSubType.Location = new System.Drawing.Point(254, 92);
             this.buttonUpdateItemSubType.Name = "buttonUpdateItemSubType";
             this.buttonUpdateItemSubType.Size = new System.Drawing.Size(75, 23);
             this.buttonUpdateItemSubType.TabIndex = 7;
@@ -524,34 +520,17 @@
             // 
             // buttonSaveItemSubType
             // 
-            this.buttonSaveItemSubType.Location = new System.Drawing.Point(169, 170);
+            this.buttonSaveItemSubType.Location = new System.Drawing.Point(169, 92);
             this.buttonSaveItemSubType.Name = "buttonSaveItemSubType";
             this.buttonSaveItemSubType.Size = new System.Drawing.Size(75, 23);
             this.buttonSaveItemSubType.TabIndex = 6;
             this.buttonSaveItemSubType.Text = "Save";
             this.buttonSaveItemSubType.UseVisualStyleBackColor = true;
             // 
-            // textBoxItemSubTypeOptionsNote
-            // 
-            this.textBoxItemSubTypeOptionsNote.Location = new System.Drawing.Point(86, 89);
-            this.textBoxItemSubTypeOptionsNote.Multiline = true;
-            this.textBoxItemSubTypeOptionsNote.Name = "textBoxItemSubTypeOptionsNote";
-            this.textBoxItemSubTypeOptionsNote.Size = new System.Drawing.Size(330, 73);
-            this.textBoxItemSubTypeOptionsNote.TabIndex = 5;
-            // 
-            // labelItemSubTypeOptionsNote
-            // 
-            this.labelItemSubTypeOptionsNote.AutoSize = true;
-            this.labelItemSubTypeOptionsNote.Location = new System.Drawing.Point(37, 95);
-            this.labelItemSubTypeOptionsNote.Name = "labelItemSubTypeOptionsNote";
-            this.labelItemSubTypeOptionsNote.Size = new System.Drawing.Size(32, 15);
-            this.labelItemSubTypeOptionsNote.TabIndex = 4;
-            this.labelItemSubTypeOptionsNote.Text = "Note";
-            // 
             // labelItemSubTypeOptionsItem
             // 
             this.labelItemSubTypeOptionsItem.AutoSize = true;
-            this.labelItemSubTypeOptionsItem.Location = new System.Drawing.Point(37, 37);
+            this.labelItemSubTypeOptionsItem.Location = new System.Drawing.Point(40, 37);
             this.labelItemSubTypeOptionsItem.Name = "labelItemSubTypeOptionsItem";
             this.labelItemSubTypeOptionsItem.Size = new System.Drawing.Size(31, 15);
             this.labelItemSubTypeOptionsItem.TabIndex = 2;
@@ -664,8 +643,6 @@
         private System.Windows.Forms.Button buttonDeleteItemSubType;
         private System.Windows.Forms.Button buttonUpdateItemSubType;
         private System.Windows.Forms.Button buttonSaveItemSubType;
-        private System.Windows.Forms.TextBox textBoxItemSubTypeOptionsNote;
-        private System.Windows.Forms.Label labelItemSubTypeOptionsNote;
         private System.Windows.Forms.Label labelItemSubTypeOptionsItem;
         private System.Windows.Forms.Label labelItemSubTypeOptionsItemSubType;
         private System.Windows.Forms.ComboBox comboBoxItemSubTypeOptionsItemSubType;
