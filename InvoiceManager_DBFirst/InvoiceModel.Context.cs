@@ -41,5 +41,6 @@ namespace InvoiceManager_DBFirst
         public virtual DbSet<TactionDetails> TactionDetails { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserImage> UserImage { get; set; }
+        public virtual DbSet<ItemSubTypeDetails> ItemSubTypeDetails { get; set; }
     }
 }

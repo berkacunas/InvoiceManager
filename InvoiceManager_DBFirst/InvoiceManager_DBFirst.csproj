@@ -291,6 +291,9 @@
     <Compile Include="ItemSubType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ItemSubTypeDetails.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ItemTopGroup.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>

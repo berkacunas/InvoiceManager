@@ -65,6 +65,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataGridViewItemTopGroups = new System.Windows.Forms.DataGridView();
             this.groupBoxItemSubTypeOptions = new System.Windows.Forms.GroupBox();
+            this.textBoxItemSubTypeOptionsItem = new System.Windows.Forms.TextBox();
+            this.comboBoxItemSubTypeOptionsItemSubType = new System.Windows.Forms.ComboBox();
             this.checkBoxItemSubTypeOptionsEdit = new System.Windows.Forms.CheckBox();
             this.buttonNewItemSubType = new System.Windows.Forms.Button();
             this.buttonDeleteItemSubType = new System.Windows.Forms.Button();
@@ -72,8 +74,6 @@
             this.buttonSaveItemSubType = new System.Windows.Forms.Button();
             this.labelItemSubTypeOptionsItem = new System.Windows.Forms.Label();
             this.labelItemSubTypeOptionsItemSubType = new System.Windows.Forms.Label();
-            this.comboBoxItemSubTypeOptionsItemSubType = new System.Windows.Forms.ComboBox();
-            this.textBoxItemSubTypeOptionsItem = new System.Windows.Forms.TextBox();
             this.groupBoxItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItems)).BeginInit();
             this.groupBoxItemOptions.SuspendLayout();
@@ -481,6 +481,21 @@
             this.groupBoxItemSubTypeOptions.TabStop = false;
             this.groupBoxItemSubTypeOptions.Text = "Subitem Options";
             // 
+            // textBoxItemSubTypeOptionsItem
+            // 
+            this.textBoxItemSubTypeOptionsItem.Location = new System.Drawing.Point(86, 31);
+            this.textBoxItemSubTypeOptionsItem.Name = "textBoxItemSubTypeOptionsItem";
+            this.textBoxItemSubTypeOptionsItem.Size = new System.Drawing.Size(330, 23);
+            this.textBoxItemSubTypeOptionsItem.TabIndex = 12;
+            // 
+            // comboBoxItemSubTypeOptionsItemSubType
+            // 
+            this.comboBoxItemSubTypeOptionsItemSubType.FormattingEnabled = true;
+            this.comboBoxItemSubTypeOptionsItemSubType.Location = new System.Drawing.Point(86, 60);
+            this.comboBoxItemSubTypeOptionsItemSubType.Name = "comboBoxItemSubTypeOptionsItemSubType";
+            this.comboBoxItemSubTypeOptionsItemSubType.Size = new System.Drawing.Size(330, 23);
+            this.comboBoxItemSubTypeOptionsItemSubType.TabIndex = 11;
+            // 
             // checkBoxItemSubTypeOptionsEdit
             // 
             this.checkBoxItemSubTypeOptionsEdit.AutoSize = true;
@@ -499,6 +514,7 @@
             this.buttonNewItemSubType.TabIndex = 9;
             this.buttonNewItemSubType.Text = "New";
             this.buttonNewItemSubType.UseVisualStyleBackColor = true;
+            this.buttonNewItemSubType.Click += new System.EventHandler(this.buttonNewItemSubType_Click);
             // 
             // buttonDeleteItemSubType
             // 
@@ -508,6 +524,7 @@
             this.buttonDeleteItemSubType.TabIndex = 8;
             this.buttonDeleteItemSubType.Text = "Delete";
             this.buttonDeleteItemSubType.UseVisualStyleBackColor = true;
+            this.buttonDeleteItemSubType.Click += new System.EventHandler(this.buttonDeleteItemSubType_Click);
             // 
             // buttonUpdateItemSubType
             // 
@@ -517,6 +534,7 @@
             this.buttonUpdateItemSubType.TabIndex = 7;
             this.buttonUpdateItemSubType.Text = "Update";
             this.buttonUpdateItemSubType.UseVisualStyleBackColor = true;
+            this.buttonUpdateItemSubType.Click += new System.EventHandler(this.buttonUpdateItemSubType_Click);
             // 
             // buttonSaveItemSubType
             // 
@@ -526,6 +544,7 @@
             this.buttonSaveItemSubType.TabIndex = 6;
             this.buttonSaveItemSubType.Text = "Save";
             this.buttonSaveItemSubType.UseVisualStyleBackColor = true;
+            this.buttonSaveItemSubType.Click += new System.EventHandler(this.buttonSaveItemSubType_Click);
             // 
             // labelItemSubTypeOptionsItem
             // 
@@ -544,21 +563,6 @@
             this.labelItemSubTypeOptionsItemSubType.Size = new System.Drawing.Size(51, 15);
             this.labelItemSubTypeOptionsItemSubType.TabIndex = 0;
             this.labelItemSubTypeOptionsItemSubType.Text = "Subitem";
-            // 
-            // comboBoxItemSubTypeOptionsItemSubType
-            // 
-            this.comboBoxItemSubTypeOptionsItemSubType.FormattingEnabled = true;
-            this.comboBoxItemSubTypeOptionsItemSubType.Location = new System.Drawing.Point(86, 60);
-            this.comboBoxItemSubTypeOptionsItemSubType.Name = "comboBoxItemSubTypeOptionsItemSubType";
-            this.comboBoxItemSubTypeOptionsItemSubType.Size = new System.Drawing.Size(330, 23);
-            this.comboBoxItemSubTypeOptionsItemSubType.TabIndex = 11;
-            // 
-            // textBoxItemSubTypeOptionsItem
-            // 
-            this.textBoxItemSubTypeOptionsItem.Location = new System.Drawing.Point(86, 31);
-            this.textBoxItemSubTypeOptionsItem.Name = "textBoxItemSubTypeOptionsItem";
-            this.textBoxItemSubTypeOptionsItem.Size = new System.Drawing.Size(330, 23);
-            this.textBoxItemSubTypeOptionsItem.TabIndex = 12;
             // 
             // ItemForm
             // 

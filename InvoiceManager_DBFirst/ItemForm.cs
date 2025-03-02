@@ -8,6 +8,7 @@ using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Data.SqlClient;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
+using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,10 +63,13 @@ namespace InvoiceManager_DBFirst
         private InvoicesEntities dbContext;
 
         private Item _newItem;
+        private ItemSubType _newItemSubType;
+        private ItemSubTypeDetails _newItemSubTypeDetails;
         private ItemGroup _newItemGroup;
         private ItemTopGroup _newItemTopGroup;
 
         private Mode _itemMode;
+        private Mode _itemSubTypeMode;
         private Mode _groupMode;
         private Mode _topGroupMode;
 
@@ -103,6 +107,7 @@ namespace InvoiceManager_DBFirst
             this._setEditableItemTopGroups(false);
             this._setEditableItemGroups(false);
             this._setEditableItems(false);
+            this._setEditableItemSubTypes(false);
 
             this.comboBoxItemOptionsGroup.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxGroupOptionsTopGroup.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -187,6 +192,7 @@ namespace InvoiceManager_DBFirst
         private void dataGridViewItems_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             this._clearItemControls();
+            this._clearItemSubTypeControls();
             DataGridViewRow row = this.dataGridViewItems.CurrentRow;
             this._setItemControls(row);
             this._setItemSubTypeControls(row);
@@ -691,6 +697,50 @@ namespace InvoiceManager_DBFirst
             this._clearItemTopGroupControls();
         }
 
+        private void buttonNewItemSubType_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow row = this.dataGridViewItems.CurrentRow;
+
+            if (row == null)
+            {
+                MessageBox.Show("Select the row you want to update first.", "Row not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
+
+            this._itemSubTypeMode = (this._itemSubTypeMode == Mode.Add) ? Mode.Display : Mode.Add;
+            this.buttonNewItemSubType.Text = (this._itemSubTypeMode == Mode.Add) ? "Cancel" : "New";
+
+            if (this._itemSubTypeMode == Mode.Add)
+            {
+                this._setEditableItemSubTypes(true);
+                this._newItemSubTypeDetails = new ItemSubTypeDetails();
+                this._newItemSubTypeDetails.ItemId = itemId;
+                this._bindDataToComboBoxItemSubTypeOptionsItemSubType(BindType.Setnull);
+            }
+            else
+            {
+                this._bindDataToComboBoxItemSubTypeOptionsItemSubType(BindType.Where, itemId);
+                this._setEditableItemSubTypes(false);
+            }
+        }
+
+        private void buttonSaveItemSubType_Click(object sender, EventArgs e)
+        {
+            //...
+        }
+
+        private void buttonUpdateItemSubType_Click(object sender, EventArgs e)
+        {
+            //...
+        }
+
+        private void buttonDeleteItemSubType_Click(object sender, EventArgs e)
+        {
+            //...
+        }
+
         private void buttonClose_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -978,6 +1028,7 @@ namespace InvoiceManager_DBFirst
         private void _setModes(Mode mode)
         {
             this._itemMode = mode;
+            this._itemSubTypeMode = mode;
             this._groupMode = mode;
             this._topGroupMode = mode;
         }
@@ -987,6 +1038,14 @@ namespace InvoiceManager_DBFirst
             this.buttonSaveItem.Enabled = isEditable;
             this.buttonUpdateItem.Enabled = !isEditable;
             this.buttonDeleteItem.Enabled = !isEditable;
+        }
+
+        private void _setEditableItemSubTypes(bool isEditable)
+        {
+            this.buttonSaveItemSubType.Enabled = isEditable;
+            this.buttonUpdateItemSubType.Enabled = isEditable;
+            this.buttonDeleteItemSubType.Enabled = isEditable;
+            this.comboBoxItemSubTypeOptionsItemSubType.DropDownStyle = (isEditable) ? ComboBoxStyle.DropDown : ComboBoxStyle.DropDownList;
         }
 
         private void _setEditableItemGroups(bool isEditable)
@@ -1008,6 +1067,17 @@ namespace InvoiceManager_DBFirst
             foreach (Control c in this.groupBoxItemOptions.Controls)
                 if (c is TextBox)
                     ((TextBox)c).Clear();
+        }
+
+        private void _clearItemSubTypeControls()
+        {
+            foreach (Control c in this.groupBoxItemSubTypeOptions.Controls)
+            {
+                if (c is TextBox)
+                    ((TextBox)c).Clear();
+                if (c is ComboBox)
+                    ((ComboBox)c).DataSource = null;
+            }
         }
 
         private void _clearItemGroupControls()

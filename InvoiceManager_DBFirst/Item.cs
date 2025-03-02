@@ -18,6 +18,7 @@ namespace InvoiceManager_DBFirst
         public Item()
         {
             this.TactionDetails = new HashSet<TactionDetails>();
+            this.ItemSubTypeDetails = new HashSet<ItemSubTypeDetails>();
         }
     
         public int id { get; set; }
@@ -29,5 +30,7 @@ namespace InvoiceManager_DBFirst
         public virtual ItemGroup ItemGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TactionDetails> TactionDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ItemSubTypeDetails> ItemSubTypeDetails { get; set; }
     }
 }

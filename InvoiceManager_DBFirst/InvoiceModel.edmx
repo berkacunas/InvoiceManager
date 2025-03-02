@@ -65,6 +65,14 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
         </EntityType>
+        <EntityType Name="ItemSubTypeDetails">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemId" Type="int" Nullable="false" />
+          <Property Name="ItemSubTypeId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="ItemTopGroup">
           <Key>
             <PropertyRef Name="id" />
@@ -231,6 +239,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ItemSubTypeDetails_ItemId">
+          <End Role="Item" Type="Self.Item" Multiplicity="1" />
+          <End Role="ItemSubTypeDetails" Type="Self.ItemSubTypeDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ItemSubTypeDetails">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemSubTypeDetails_ItemSubTypeId">
+          <End Role="ItemSubType" Type="Self.ItemSubType" Multiplicity="1" />
+          <End Role="ItemSubTypeDetails" Type="Self.ItemSubTypeDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemSubType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ItemSubTypeDetails">
+              <PropertyRef Name="ItemSubTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PaymentMethod_BankCardId">
           <End Role="BankCard" Type="Self.BankCard" Multiplicity="0..1" />
           <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="*" />
@@ -394,6 +426,7 @@
           <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemGroup" EntityType="Self.ItemGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemSubType" EntityType="Self.ItemSubType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemSubTypeDetails" EntityType="Self.ItemSubTypeDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemTopGroup" EntityType="Self.ItemTopGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentMethod" EntityType="Self.PaymentMethod" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Seller" EntityType="Self.Seller" Schema="dbo" store:Type="Tables" />
@@ -423,6 +456,14 @@
           <AssociationSet Name="FK_ItemGroup_TopGroupId" Association="Self.FK_ItemGroup_TopGroupId">
             <End Role="ItemGroup" EntitySet="ItemGroup" />
             <End Role="ItemGroup1" EntitySet="ItemGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemSubTypeDetails_ItemId" Association="Self.FK_ItemSubTypeDetails_ItemId">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="ItemSubTypeDetails" EntitySet="ItemSubTypeDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemSubTypeDetails_ItemSubTypeId" Association="Self.FK_ItemSubTypeDetails_ItemSubTypeId">
+            <End Role="ItemSubType" EntitySet="ItemSubType" />
+            <End Role="ItemSubTypeDetails" EntitySet="ItemSubTypeDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_PaymentMethod_BankCardId" Association="Self.FK_PaymentMethod_BankCardId">
             <End Role="BankCard" EntitySet="BankCard" />
@@ -531,6 +572,7 @@
           <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ItemGroup" Relationship="Self.FK_Item_GroupId" FromRole="Item" ToRole="ItemGroup" />
           <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetails_ItemId" FromRole="Item" ToRole="TactionDetails" />
+          <NavigationProperty Name="ItemSubTypeDetails" Relationship="InvoicesModel.FK_ItemSubTypeDetails_ItemId" FromRole="Item" ToRole="ItemSubTypeDetails" />
         </EntityType>
         <EntityType Name="ItemGroup">
           <Key>
@@ -550,6 +592,7 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="TactionDetails" Relationship="Self.FK_TactionDetails_ItemSubTypeId" FromRole="ItemSubType" ToRole="TactionDetails" />
+          <NavigationProperty Name="ItemSubTypeDetails" Relationship="InvoicesModel.FK_ItemSubTypeDetails_ItemSubTypeId" FromRole="ItemSubType" ToRole="ItemSubTypeDetails" />
         </EntityType>
         <EntityType Name="ItemTopGroup">
           <Key>
@@ -988,7 +1031,50 @@
             <End Role="User" EntitySet="User" />
             <End Role="UserImage" EntitySet="UserImage" />
           </AssociationSet>
+          <EntitySet Name="ItemSubTypeDetails" EntityType="InvoicesModel.ItemSubTypeDetails" />
+          <AssociationSet Name="FK_ItemSubTypeDetails_ItemId" Association="InvoicesModel.FK_ItemSubTypeDetails_ItemId">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="ItemSubTypeDetails" EntitySet="ItemSubTypeDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemSubTypeDetails_ItemSubTypeId" Association="InvoicesModel.FK_ItemSubTypeDetails_ItemSubTypeId">
+            <End Role="ItemSubType" EntitySet="ItemSubType" />
+            <End Role="ItemSubTypeDetails" EntitySet="ItemSubTypeDetails" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="ItemSubTypeDetails">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="ItemSubTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Item" Relationship="InvoicesModel.FK_ItemSubTypeDetails_ItemId" FromRole="ItemSubTypeDetails" ToRole="Item" />
+          <NavigationProperty Name="ItemSubType" Relationship="InvoicesModel.FK_ItemSubTypeDetails_ItemSubTypeId" FromRole="ItemSubTypeDetails" ToRole="ItemSubType" />
+        </EntityType>
+        <Association Name="FK_ItemSubTypeDetails_ItemId">
+          <End Type="InvoicesModel.Item" Role="Item" Multiplicity="1" />
+          <End Type="InvoicesModel.ItemSubTypeDetails" Role="ItemSubTypeDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ItemSubTypeDetails">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemSubTypeDetails_ItemSubTypeId">
+          <End Type="InvoicesModel.ItemSubType" Role="ItemSubType" Multiplicity="1" />
+          <End Type="InvoicesModel.ItemSubTypeDetails" Role="ItemSubTypeDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemSubType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ItemSubTypeDetails">
+              <PropertyRef Name="ItemSubTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1174,6 +1260,15 @@
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="imageData" ColumnName="imageData" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemSubTypeDetails">
+            <EntityTypeMapping TypeName="InvoicesModel.ItemSubTypeDetails">
+              <MappingFragment StoreEntitySet="ItemSubTypeDetails">
+                <ScalarProperty Name="ItemSubTypeId" ColumnName="ItemSubTypeId" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

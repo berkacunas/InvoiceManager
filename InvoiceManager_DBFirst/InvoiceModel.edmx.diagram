@@ -39,6 +39,9 @@
         <AssociationConnector Association="InvoicesModel.FK_Taction_WhoDidIt" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_TactionDetails_TactionId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_UserImage_UserId" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="InvoicesModel.ItemSubTypeDetails" Width="1.5" PointX="13.5" PointY="5.875" />
+        <AssociationConnector Association="InvoicesModel.FK_ItemSubTypeDetails_ItemId" />
+        <AssociationConnector Association="InvoicesModel.FK_ItemSubTypeDetails_ItemSubTypeId" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

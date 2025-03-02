@@ -128,9 +128,10 @@ namespace InvoiceManager_DBFirst
             if (this.dataGridViewTactionDetails.DataSource == null)
                 return;
 
-            string[] detailsHeaderTexts = new string[] { "detailsId", "tactionId", "itemId", "Group", "Item", "Sub Type", "Unit", "Unit Price", "Vat", "Price", "(*) Rate", "(*) Price", "Note" };
-            int[] detailsColumnWidths = new int[] { 50, 110, 50, 115, 220, 115, 70, 85, 50, 70, 80, 80, 80 };
+            string[] detailsHeaderTexts = new string[] { "detailsId", "tactionId", "itemId", "itemSubTypeId", "Group", "Item", "Sub Type", "Unit", "Unit Price", "Vat", "Price", "(*) Rate", "(*) Price", "Note" };
+            int[] detailsColumnWidths = new int[] { 50, 50, 50, 50, 115, 220, 115, 70, 85, 50, 70, 80, 80, 80 };
             DataGridViewContentAlignment[] detailsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft,
@@ -149,6 +150,7 @@ namespace InvoiceManager_DBFirst
             this.dataGridViewTactionDetails.Columns["detailsId"].Visible = false;
             this.dataGridViewTactionDetails.Columns["tactionId"].Visible = false;
             this.dataGridViewTactionDetails.Columns["itemId"].Visible = false;
+            this.dataGridViewTactionDetails.Columns["itemSubTypeId"].Visible = false;
             this.dataGridViewTactionDetails.Columns["note"].Visible = false;
         }
 
@@ -605,9 +607,10 @@ namespace InvoiceManager_DBFirst
                             detailsId = details.id,
                             tactionId = details.TransactionId,
                             itemId = item.id,
+                            itemSubTypeId = jt != null ? jt.id : 0,
                             itemGroup = itemGroup.Name,
                             itemName = item.Name,
-                            itemSubTypeId = jt != null ? jt.id : 0,
+                            itemSubTypeName = jt != null ? jt.Name : "",
                             unit = details.Unit,
                             unitPrice = details.UnitPrice,
                             vat = details.Vat,
@@ -633,9 +636,10 @@ namespace InvoiceManager_DBFirst
                             detailsId = details.id,
                             tactionId = details.TransactionId,
                             itemId = item.id,
+                            itemSubTypeId = jt != null ? jt.id : 0,
                             itemGroup = itemGroup.Name,
                             itemName = item.Name,
-                            itemSubTypeId = jt != null ? jt.id : 0,
+                            itemSubTypeName = jt != null ? jt.Name : "",
                             unit = details.Unit,
                             unitPrice = details.UnitPrice,
                             vat = details.Vat,
@@ -715,16 +719,12 @@ namespace InvoiceManager_DBFirst
                        WHERE Item.id = (SELECT Item.id FROM Item WHERE Item.Name = 'Hamidiye Kaynak Suyu'); */
 
                     var querySubType = from itemSubType in dbContext.ItemSubType
-                            join details in dbContext.TactionDetails on itemSubType.id equals details.ItemSubTypeId
-                            join item in dbContext.Item on details.ItemId equals item.id
-                            where item.id == itemId
-                            select new
-                            {
-                                id = itemSubType.id,
-                                Name = itemSubType.Name
-                            };
+                                       join details in dbContext.TactionDetails on itemSubType.id equals details.ItemSubTypeId
+                                       join item in dbContext.Item on details.ItemId equals item.id
+                                       where item.id == itemId
+                                       select itemSubType;
 
-                    this.comboBoxItemSubType.DataSource = querySubType.ToList().Distinct().ToList();   //Where(p => p.Name != null).GroupBy(p => p.id).Select(grp => grp.FirstOrDefault());
+                    this.comboBoxItemSubType.DataSource = querySubType.ToList().Distinct().ToList();
                     this.comboBoxItemSubType.DisplayMember = "Name";
                     this.comboBoxItemSubType.ValueMember = "id";
                     return;
@@ -937,18 +937,6 @@ namespace InvoiceManager_DBFirst
                 return false;
             }
 
-            //if (!string.IsNullOrEmpty(this.textBoxItemSubType.Text) && !dbContext.ItemSubType.Any(r => r.Name == this.textBoxItemSubType.Text))
-            //{
-            //    MessageBox.Show("Input doesn't exist.", "The itemsubtype you entered does not exist in database. Please first save this itemsubtype into itemsubtype table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return false;
-            //}
-
-            if (!string.IsNullOrEmpty(this.comboBoxItemSubType.Text) && !dbContext.ItemSubType.Any(r => r.Name == this.comboBoxItemSubType.Text))
-            {
-                MessageBox.Show("Input doesn't exist.", "The itemsubtype you entered does not exist in database. Please first save this itemsubtype into itemsubtype table.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
             if (string.IsNullOrEmpty(this.textBoxUnit.Text))
             {
                 MessageBox.Show("Missing value.", "You didn't enter unit.", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -986,14 +974,12 @@ namespace InvoiceManager_DBFirst
             details.Taction = this._newTaction;
             details.ItemId = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
 
-            string itemSubTypeName = null;
-            if (this.comboBoxItemSubType.SelectedItem != null)
-                itemSubTypeName = this.comboBoxItemSubType.SelectedText;
-            else if (!string.IsNullOrEmpty(this.comboBoxItemSubType.Text))
-                itemSubTypeName = this.comboBoxItemSubType.Text;
 
-            if (!string.IsNullOrEmpty(itemSubTypeName))
-                details.ItemSubTypeId = dbContext.ItemSubType.Where(r => r.Name == itemSubTypeName).FirstOrDefault()?.id;
+            if (this.comboBoxItemSubType.SelectedItem != null)
+            {
+                ItemSubType itemSubType = (ItemSubType)this.comboBoxItemSubType.SelectedItem;
+                details.ItemSubTypeId = itemSubType.id;
+            }
 
             details.Unit = Convert.ToDecimal(this.textBoxUnit.Text);
             details.UnitPrice = Convert.ToDecimal(this.textBoxUnitPrice.Text);
@@ -1090,8 +1076,12 @@ namespace InvoiceManager_DBFirst
         private void _clearDetailsControls()
         {
             foreach (Control c in this.groupBoxTactionDetailsOptions.Controls)
-                if (c is TextBox) 
-                    ((TextBox)c).Clear(); 
+            {
+                if (c is TextBox)
+                    ((TextBox)c).Clear();
+                if (c is ComboBox)
+                    ((ComboBox)c).DataSource = null;
+            }
         }
 
         private void _createImageList()
