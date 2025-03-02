@@ -728,12 +728,76 @@ namespace InvoiceManager_DBFirst
 
         private void buttonSaveItemSubType_Click(object sender, EventArgs e)
         {
-            //...
+            if (string.IsNullOrEmpty(this.comboBoxItemSubTypeOptionsItemSubType.Text))
+            {
+                MessageBox.Show("Enter item sub type name first.", "Text not entered.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            string itemSubTypeName = this.comboBoxItemSubTypeOptionsItemSubType.Text;
+
+            ItemSubType itemSubType = this.dbContext.ItemSubType.Where(r => r.Name == itemSubTypeName).FirstOrDefault();
+            if (itemSubType != null)
+                this._newItemSubTypeDetails.ItemSubTypeId = itemSubType.id;
+            else
+            {
+                itemSubType = new ItemSubType();
+                itemSubType.Name = itemSubTypeName;
+                this.dbContext.ItemSubType.Add(itemSubType);
+            }
+
+            this._newItemSubTypeDetails.ItemSubType = itemSubType;
+            this.dbContext.ItemSubTypeDetails.Add(this._newItemSubTypeDetails);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while inserting itemsubtype and itemsubtypedetails.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            this._bindDataToComboBoxItemSubTypeOptionsItemSubType(BindType.Where, this._newItemSubTypeDetails.ItemId);
+            this._setEditableItemSubTypes(false);
+            this._newItemSubTypeDetails = new ItemSubTypeDetails();
+            this._itemSubTypeMode = Mode.Display;
         }
 
         private void buttonUpdateItemSubType_Click(object sender, EventArgs e)
         {
-            //...
+            DataGridViewRow row = this.dataGridViewItems.CurrentRow;
+
+            if (row == null)
+            {
+                MessageBox.Show("Select the item you want to update its item sub types first.", "Item not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
+
+            /*
+       
+
+            int itemTopGroupId = Convert.ToInt32(row.Cells["id"].Value);
+            ItemTopGroup itemTopGroup = (ItemTopGroup)dbContext.ItemTopGroup.Where(r => r.id == itemTopGroupId).FirstOrDefault();
+            this._setItemTopGroupDataFromUiToObject(itemTopGroup);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+                this.onItemTopGroupUpdated("ItemGroups", $"Id {itemTopGroup.id} updated", DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while deleting item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Where, itemTopGroup.id);
+            this._bindDataToGridViewItemTopGroup();
+            this._bindDataToGridViewItemGroup();
+            */
         }
 
         private void buttonDeleteItemSubType_Click(object sender, EventArgs e)
@@ -1009,7 +1073,7 @@ namespace InvoiceManager_DBFirst
                        JOIN Item ON Item.id = TactionDetails.ItemId
                        WHERE Item.id = (SELECT Item.id FROM Item WHERE Item.Name = 'Hamidiye Kaynak Suyu'); */
 
-                    query = from itemSubType in dbContext.ItemSubType
+            query = from itemSubType in dbContext.ItemSubType
                                 join details in dbContext.TactionDetails on itemSubType.id equals details.ItemSubTypeId
                                 join item in dbContext.Item on details.ItemId equals item.id
                                 where item.id == itemId
