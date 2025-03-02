@@ -83,6 +83,7 @@ namespace InvoiceManager_DBFirst
 
             this.comboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxOwner.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.comboBoxItemSubType.DropDownStyle = ComboBoxStyle.DropDownList;
 
             this._setAutoCompleteTextBoxes();
             this._bindDataToGridViewTaction();
@@ -705,27 +706,13 @@ namespace InvoiceManager_DBFirst
         {
             IQueryable<ItemSubType> query = null;
 
-            /*
-              SELECT DISTINCT(ItemSubType.Name) FROM ItemSubType 
-              JOIN TactionDetails ON ItemSubType.id = TactionDetails.ItemSubTypeId
-              JOIN Item ON Item.id = TactionDetails.ItemId
-              WHERE Item.id = (SELECT Item.id FROM Item WHERE Item.Name = 'Hamidiye Kaynak Suyu');
-             */
-
             switch (bindType)
             {
                 case BindType.Select:
-
-                    // var result = pList.Where(p => p.Name != null).GroupBy(p => p.Id).Select(grp => grp.FirstOrDefault());
-
-    //                var query = students.Join(departments,
-    //student => student.DepartmentID, department => department.ID,
-    //(student, department) => new { Name = $"{student.FirstName} {student.LastName}", DepartmentName = department.Name });
-
-
-                    List<ItemSubType> itemSubTypes = dbContext.ItemSubType.Join()
-
-
+                    /* SELECT DISTINCT(ItemSubType.id), ItemSubType.Name FROM ItemSubType 
+                       JOIN TactionDetails ON ItemSubType.id = TactionDetails.ItemSubTypeId
+                       JOIN Item ON Item.id = TactionDetails.ItemId
+                       WHERE Item.id = (SELECT Item.id FROM Item WHERE Item.Name = 'Hamidiye Kaynak Suyu'); */
 
                     var query2 = from itemSubType in dbContext.ItemSubType
                             join details in dbContext.TactionDetails on itemSubType.id equals details.ItemSubTypeId
@@ -737,7 +724,7 @@ namespace InvoiceManager_DBFirst
                                 Name = itemSubType.Name
                             };
 
-                    this.comboBoxItemSubType.DataSource = query2.Where(p => p.Name != null).GroupBy(p => p.id).Select(grp => grp.FirstOrDefault());
+                    this.comboBoxItemSubType.DataSource = query2.ToList().Distinct().ToList();   //Where(p => p.Name != null).GroupBy(p => p.id).Select(grp => grp.FirstOrDefault());
                     this.comboBoxItemSubType.DisplayMember = "Name";
                     this.comboBoxItemSubType.ValueMember = "id";
                     return;
