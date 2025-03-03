@@ -87,10 +87,9 @@ namespace InvoiceManager_DBFirst
 
             this._setAutoCompleteTextBoxes();
             this._bindDataToGridViewTaction();
-            //this._bindDataToComboBoxPaymentMethod(BindType.Select);
-            //this._bindDataToComboBoxOwner(BindType.Select);
 
             this._mode = Mode.Display;
+
             this.dateTimePickerTactionDate.Format = DateTimePickerFormat.Custom;
             this.dateTimePickerTactionDate.ShowUpDown = true;
             this.dateTimePickerTactionDate.CustomFormat = "dd.MM.yyyy dddd HH:mm";
