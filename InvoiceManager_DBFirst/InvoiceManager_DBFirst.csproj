@@ -291,6 +291,12 @@
     <Compile Include="ItemSubType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ItemSubTypeBatcherForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ItemSubTypeBatcherForm.Designer.cs">
+      <DependentUpon>ItemSubTypeBatcherForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ItemSubTypeDetails.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -394,6 +400,9 @@
     </Compile>
     <EmbeddedResource Include="ItemForm.resx">
       <DependentUpon>ItemForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ItemSubTypeBatcherForm.resx">
+      <DependentUpon>ItemSubTypeBatcherForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

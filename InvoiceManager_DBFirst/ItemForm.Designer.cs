@@ -495,6 +495,7 @@
             this.comboBoxItemSubTypeOptionsItemSubType.Name = "comboBoxItemSubTypeOptionsItemSubType";
             this.comboBoxItemSubTypeOptionsItemSubType.Size = new System.Drawing.Size(330, 23);
             this.comboBoxItemSubTypeOptionsItemSubType.TabIndex = 11;
+            this.comboBoxItemSubTypeOptionsItemSubType.SelectedIndexChanged += new System.EventHandler(this.comboBoxItemSubTypeOptionsItemSubType_SelectedIndexChanged);
             // 
             // checkBoxItemSubTypeOptionsEdit
             // 
@@ -505,6 +506,7 @@
             this.checkBoxItemSubTypeOptionsEdit.TabIndex = 10;
             this.checkBoxItemSubTypeOptionsEdit.Text = "Edit";
             this.checkBoxItemSubTypeOptionsEdit.UseVisualStyleBackColor = true;
+            this.checkBoxItemSubTypeOptionsEdit.CheckedChanged += new System.EventHandler(this.checkBoxItemSubTypeOptionsEdit_CheckedChanged);
             // 
             // buttonNewItemSubType
             // 

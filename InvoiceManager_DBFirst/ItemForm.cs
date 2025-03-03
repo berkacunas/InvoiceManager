@@ -99,7 +99,6 @@ namespace InvoiceManager_DBFirst
             _setDefaultGridViewStyles(this.dataGridViewItemGroups);
             _setDefaultGridViewStyles(this.dataGridViewItems);
 
-
             _enableDataGridViewMultiSelect(this.dataGridViewItemTopGroups, false);
             _enableDataGridViewMultiSelect(this.dataGridViewItems, false);
             _enableDataGridViewMultiSelect(this.dataGridViewItemGroups, false);
@@ -196,6 +195,7 @@ namespace InvoiceManager_DBFirst
             DataGridViewRow row = this.dataGridViewItems.CurrentRow;
             this._setItemControls(row);
             this._setItemSubTypeControls(row);
+            this._setItemSubTypeDetails(row);
         }
 
         private void dataGridViewItemTopGroups_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -282,6 +282,7 @@ namespace InvoiceManager_DBFirst
                 {
                     this._setItemControls(row);
                     this._setItemSubTypeControls(row);
+                    this._setItemSubTypeDetails(row);
                 }
             }
         }
@@ -314,6 +315,11 @@ namespace InvoiceManager_DBFirst
                 this._bindDataToComboBoxItemOptionsGroup(BindType.Where, groupId);
         }
 
+        private void checkBoxItemSubTypeOptionsEdit_CheckedChanged(object sender, EventArgs e)
+        {
+            this._setEditableItemSubTypes(this.checkBoxItemSubTypeOptionsEdit.Checked);
+        }
+
         private void checkBoxGroupOptionsEdit_CheckedChanged(object sender, EventArgs e)
         {
             DataGridViewRow row = this.dataGridViewItemGroups.CurrentRow;
@@ -330,6 +336,16 @@ namespace InvoiceManager_DBFirst
                 this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Select);
             else
                 this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Where, topGroupId);
+        }
+
+        private void comboBoxItemSubTypeOptionsItemSubType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.comboBoxItemSubTypeOptionsItemSubType.SelectedItem == null)    // if item has no subitem.
+                return;
+
+            this._newItemSubType = (ItemSubType)this.comboBoxItemSubTypeOptionsItemSubType.SelectedItem;
+            this._newItemSubTypeDetails = new ItemSubTypeDetails();
+            this._newItemSubTypeDetails.ItemSubTypeId = this._newItemSubType.id;
         }
 
         private void buttonNewItem_Click(object sender, EventArgs e)
@@ -500,6 +516,7 @@ namespace InvoiceManager_DBFirst
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while deleting item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             this._bindDataToGridViewItemGroup();
@@ -550,6 +567,7 @@ namespace InvoiceManager_DBFirst
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while deleting item group.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             this._bindDataToComboBoxItemOptionsGroup(BindType.Setnull);
@@ -627,6 +645,7 @@ namespace InvoiceManager_DBFirst
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while deleting item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Where, itemTopGroup.id);
@@ -711,12 +730,13 @@ namespace InvoiceManager_DBFirst
 
             this._itemSubTypeMode = (this._itemSubTypeMode == Mode.Add) ? Mode.Display : Mode.Add;
             this.buttonNewItemSubType.Text = (this._itemSubTypeMode == Mode.Add) ? "Cancel" : "New";
+            this.checkBoxItemSubTypeOptionsEdit.Checked = false;
 
             if (this._itemSubTypeMode == Mode.Add)
             {
                 this._setEditableItemSubTypes(true);
-                this._newItemSubTypeDetails = new ItemSubTypeDetails();
-                this._newItemSubTypeDetails.ItemId = itemId;
+                //this._newItemSubTypeDetails = new ItemSubTypeDetails();
+                //this._newItemSubTypeDetails.ItemId = itemId;
                 this._bindDataToComboBoxItemSubTypeOptionsItemSubType(BindType.Setnull);
             }
             else
@@ -756,6 +776,7 @@ namespace InvoiceManager_DBFirst
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while inserting itemsubtype and itemsubtypedetails.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
 
             }
 
@@ -775,34 +796,87 @@ namespace InvoiceManager_DBFirst
                 return;
             }
 
+            if (string.IsNullOrEmpty(this.comboBoxItemSubTypeOptionsItemSubType.Text))
+            {
+                MessageBox.Show("Enter item sub type name first.", "Text not entered.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
+            string itemSubTypeName = this.comboBoxItemSubTypeOptionsItemSubType.Text;
 
-            /*
-       
+            if (string.IsNullOrEmpty(itemSubTypeName))
+            {
+                MessageBox.Show("Cannot set empty name.", "Text not entered.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-            int itemTopGroupId = Convert.ToInt32(row.Cells["id"].Value);
-            ItemTopGroup itemTopGroup = (ItemTopGroup)dbContext.ItemTopGroup.Where(r => r.id == itemTopGroupId).FirstOrDefault();
-            this._setItemTopGroupDataFromUiToObject(itemTopGroup);
+            ItemSubType itemSubType = this.dbContext.ItemSubType.Where(r => r.Name == itemSubTypeName).FirstOrDefault();
+            if (itemSubType != null)
+            {
+                if (this.dbContext.ItemSubTypeDetails.Any(r => r.ItemId == itemId && r.ItemSubTypeId == itemSubType.id))
+                {
+                    MessageBox.Show("Item already has this sub item.", "Duplicate entry.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                this._newItemSubTypeDetails.ItemSubTypeId = this.dbContext.ItemSubType.Where(r => r.Name == itemSubTypeName).FirstOrDefault().id;
+            }
+            else
+            {
+                itemSubType = new ItemSubType();
+                itemSubType.Name = itemSubTypeName;
+            
+                this._newItemSubTypeDetails.ItemSubType = itemSubType;
+            }
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemTopGroupUpdated("ItemGroups", $"Id {itemTopGroup.id} updated", DateTime.Now);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while deleting item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred while updating sub item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
-            this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Where, itemTopGroup.id);
-            this._bindDataToGridViewItemTopGroup();
-            this._bindDataToGridViewItemGroup();
-            */
+            this._bindDataToComboBoxItemSubTypeOptionsItemSubType(BindType.Where, itemId);
         }
 
         private void buttonDeleteItemSubType_Click(object sender, EventArgs e)
         {
-            //...
+            DataGridViewRow row = this.dataGridViewItems.CurrentRow;
+
+            if (row == null)
+            {
+                MessageBox.Show("Select the item you want to delete its item sub types first.", "Item not selected.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (this.comboBoxItemSubTypeOptionsItemSubType.SelectedItem == null)
+            {
+                MessageBox.Show("This item hasn't got any subitem.", "Subitem not found.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
+            ItemSubType itemSubType = (ItemSubType)this.comboBoxItemSubTypeOptionsItemSubType.SelectedItem;
+
+            ItemSubTypeDetails itemSubTypeDetails = this.dbContext.ItemSubTypeDetails.Where(r => r.ItemId == itemId && r.ItemSubTypeId == itemSubType.id).FirstOrDefault();
+            this.dbContext.ItemSubTypeDetails.Remove(itemSubTypeDetails);
+
+            if (!this.dbContext.ItemSubTypeDetails.Any(r => r.ItemSubTypeId == itemSubType.id))
+                this.dbContext.ItemSubType.Remove(itemSubType);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while updating sub item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -920,6 +994,12 @@ namespace InvoiceManager_DBFirst
             int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
             this.textBoxItemSubTypeOptionsItem.Text = row.Cells["itemName"].Value.ToString();
             this._bindDataToComboBoxItemSubTypeOptionsItemSubType(BindType.Where, itemId);
+        }
+
+        private void _setItemSubTypeDetails(DataGridViewRow row)
+        {
+            int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
+            this._newItemSubTypeDetails.ItemId = itemId;
         }
 
         public static void _enableDataGridViewMultiSelect(DataGridView gridview, bool enable)
@@ -1084,9 +1164,9 @@ namespace InvoiceManager_DBFirst
                     return;
             }
 
-            this.comboBoxItemSubTypeOptionsItemSubType.DataSource = query.ToList().Distinct().ToList();
             this.comboBoxItemSubTypeOptionsItemSubType.DisplayMember = "Name";
             this.comboBoxItemSubTypeOptionsItemSubType.ValueMember = "id";
+            this.comboBoxItemSubTypeOptionsItemSubType.DataSource = query.ToList().Distinct().ToList();
         }
 
         private void _setModes(Mode mode)
@@ -1103,7 +1183,7 @@ namespace InvoiceManager_DBFirst
             this.buttonUpdateItem.Enabled = !isEditable;
             this.buttonDeleteItem.Enabled = !isEditable;
         }
-
+          
         private void _setEditableItemSubTypes(bool isEditable)
         {
             this.buttonSaveItemSubType.Enabled = isEditable;

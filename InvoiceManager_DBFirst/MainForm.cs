@@ -63,6 +63,16 @@ namespace InvoiceManager_DBFirst
             }
         }
 
+        private void toolStripMenuItemBatchItemSubTypes_Click(object sender, EventArgs e)
+        {
+            ItemSubTypeBatcherForm itemSubTypeBatcherForm = new ItemSubTypeBatcherForm();
+
+            if (itemSubTypeBatcherForm.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+        }
+
         private void toolStripMenuItemTransactions_Click(object sender, EventArgs e)
         {
             this._initializeTactionForm();
@@ -329,8 +339,8 @@ namespace InvoiceManager_DBFirst
             settingsForm.ShowDialog();
         }
 
-        #endregion
 
+        #endregion
 
     }
 }
