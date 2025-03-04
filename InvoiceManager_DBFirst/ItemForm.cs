@@ -381,7 +381,7 @@ namespace InvoiceManager_DBFirst
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while adding item.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.InnerException.ToString(), "An error occurred while adding item.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             this._clearItemControls();
@@ -1153,11 +1153,12 @@ namespace InvoiceManager_DBFirst
                        JOIN Item ON Item.id = TactionDetails.ItemId
                        WHERE Item.id = (SELECT Item.id FROM Item WHERE Item.Name = 'Hamidiye Kaynak Suyu'); */
 
-            query = from itemSubType in dbContext.ItemSubType
-                                join details in dbContext.TactionDetails on itemSubType.id equals details.ItemSubTypeId
-                                join item in dbContext.Item on details.ItemId equals item.id
-                                where item.id == itemId
-                                select itemSubType;
+            query = from itemSubTypeDetails in dbContext.ItemSubTypeDetails
+                    join item in dbContext.Item on itemSubTypeDetails.ItemId equals item.id
+                    join itemSubType in dbContext.ItemSubType on itemSubTypeDetails.ItemSubTypeId equals itemSubType.id
+                    where item.id == itemId
+                    select itemSubType;
+
                     break;
                 case BindType.Setnull:
                     this.comboBoxItemSubTypeOptionsItemSubType.DataSource = null;
