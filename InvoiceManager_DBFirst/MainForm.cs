@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.IdentityModel.Tokens;
 using System.Linq;
-using System.Net.Sockets;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +19,17 @@ namespace InvoiceManager_DBFirst
     {
         private System.Threading.Timer _timer;
         private string _eventTimeFormat = "dd.MM.yyyy dddd HH:mm:ss";
+
+        private List<UserControl> _userControls = new List<UserControl>();
+        private int _panelIndex;
+
+        private static TactionForm _tactionForm;
+        private static ItemForm _itemForm;
+        private static ShopForm _shopForm;
+        private static PaymentMethodForm _paymentMethodForm;
+        private static UserForm _userForm;
+        private static SellerForm _sellerForm;
+        private static SettingsForm _settingsForm;
 
         public MainForm()
         {
@@ -76,36 +84,43 @@ namespace InvoiceManager_DBFirst
         private void toolStripMenuItemTransactions_Click(object sender, EventArgs e)
         {
             this._initializeTactionForm();
+            _tactionForm.Show();
         }
 
         private void toolStripMenuItemItems_Click(object sender, EventArgs e)
         {
             this._initializeItemForm();
+            _itemForm.Show();
         }
 
         private void toolStripMenuItemShops_Click(object sender, EventArgs e)
         {
             this._initializeShopForm();
+            _shopForm.Show();
         }
 
         private void toolStripMenuItemPaymentMethods_Click(object sender, EventArgs e)
         {
             this._initializePaymentMethodForm();
+            _paymentMethodForm.Show();
         }
 
         private void toolStripMenuItemUsers_Click(object sender, EventArgs e)
         {
             this._initializeUserForm();
+            _userForm.Show();
         }
 
         private void toolStripMenuItemSellers_Click(object sender, EventArgs e)
         {
             this._initializeSellerForm();
+            _sellerForm.Show();
         }
 
         private void toolStripMenuItemSettings_Click(object sender, EventArgs e)
         {
             this._initializeSettingsForm();
+            _settingsForm.Show();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -249,10 +264,10 @@ namespace InvoiceManager_DBFirst
             toolStripButtonSellers.Image = BitmapResourceLoader.Seller;
             toolStripButtonSettings.Image = BitmapResourceLoader.Settings;
 
-            toolStripMain.Items.AddRange(new ToolStripItem[] { 
+            toolStripMain.Items.AddRange(new ToolStripItem[] {
                 toolStripButtonSyncSqlite, separator1,
-                toolStripButtonTactions, toolStripButtonItems, 
-                toolStripButtonShops, toolStripButtonPaymentMethods, 
+                toolStripButtonTactions, toolStripButtonItems,
+                toolStripButtonShops, toolStripButtonPaymentMethods,
                 toolStripButtonUsers, toolStripButtonSellers,
                 separator2, toolStripButtonSettings
             });
@@ -287,60 +302,97 @@ namespace InvoiceManager_DBFirst
 
         #endregion
 
+
         #region Initialize Forms
         private void _initializeTactionForm()
         {
-            TactionForm tactionForm = new TactionForm();
-            tactionForm.TransactionFormOpened += TactionForm_TransactionFormOpened;
-            tactionForm.TransactionChanged += TactionForm_TransactionChanged;
-            tactionForm.TransactionFormClosed += TactionForm_TransactionFormClosed;
-            tactionForm.Show();
+            if (_tactionForm != null)
+                return;
+
+            _tactionForm = new TactionForm();
+            _tactionForm.TransactionFormOpened += TactionForm_TransactionFormOpened;
+            _tactionForm.TransactionChanged += TactionForm_TransactionChanged;
+            _tactionForm.TransactionFormClosed += TactionForm_TransactionFormClosed;
+            //_tactionForm.Show();
         }
 
         private void _initializeItemForm()
         {
-            ItemForm itemForm = new ItemForm();
-            itemForm.ItemFormOpened += ItemForm_ItemFormOpened;
-            itemForm.ItemChanged += ItemForm_ItemChanged;
-            itemForm.ItemFormClosed += ItemForm_ItemFormClosed;
-            itemForm.Show();
+            if (_itemForm != null)
+                return;
+
+            _itemForm = new ItemForm();
+            _itemForm.ItemFormOpened += ItemForm_ItemFormOpened;
+            _itemForm.ItemChanged += ItemForm_ItemChanged;
+            _itemForm.ItemFormClosed += ItemForm_ItemFormClosed;
+            _itemForm.Show();
         }
 
         private void _initializeShopForm()
         {
-            ShopForm shopForm = new ShopForm();
-            shopForm.ShopFormOpened += ShopForm_ShopFormOpened;
-            shopForm.ShopChanged += ShopForm_ShopChanged;
-            shopForm.ShopFormClosed += ShopForm_ShopFormClosed;
-            shopForm.Show();
+            if (_shopForm != null)
+                return;
+
+            _shopForm = new ShopForm();
+            _shopForm.ShopFormOpened += ShopForm_ShopFormOpened;
+            _shopForm.ShopChanged += ShopForm_ShopChanged;
+            _shopForm.ShopFormClosed += ShopForm_ShopFormClosed;
+            _shopForm.Show();
         }
 
         private void _initializePaymentMethodForm()
         {
-            PaymentMethodForm paymentMethodForm = new PaymentMethodForm();
-            paymentMethodForm.Show();
+            if (_paymentMethodForm != null)
+                return;
+
+            _paymentMethodForm = new PaymentMethodForm();
+            _paymentMethodForm.Show();
         }
 
         private void _initializeUserForm()
         {
-            UserForm userForm = new UserForm();
-            userForm.Show();
+            if (_userForm != null)
+                return;
+
+            _userForm = new UserForm();
+            _userForm.Show();
         }
 
         private void _initializeSellerForm()
         {
-            SellerForm sellerForm = new SellerForm();
-            sellerForm.Show();
+            if (_sellerForm != null)
+                return;
+
+            _sellerForm = new SellerForm();
+            _sellerForm.Show();
         }
 
         private void _initializeSettingsForm()
         {
-            SettingsForm settingsForm = new SettingsForm();
-            settingsForm.ShowDialog();
+            if (_settingsForm != null)
+                return;
+
+            _settingsForm = new SettingsForm();
+            _settingsForm.ShowDialog();
         }
 
 
         #endregion
 
+        private void toolStripMenuItemShowTactions_Click(object sender, EventArgs e)
+        {
+            TactionUserControl _tactionUserControl = new TactionUserControl();
+
+            _tactionForm.FormBorderStyle = FormBorderStyle.None;
+            _tactionForm.TopLevel = false;
+            _tactionForm.AutoScroll = true;
+            _tactionForm.Dock = DockStyle.Fill;
+
+            this.splitContainerMain.Panel2.Controls.Add(_tactionUserControl);
+            this._userControls.Add(_tactionUserControl);
+            this._userControls
+            this.groupBoxWithListView.Visible = false;
+            _tactionUserControl.Show
+        }
     }
 }
