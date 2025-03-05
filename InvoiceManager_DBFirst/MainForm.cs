@@ -209,7 +209,7 @@ namespace InvoiceManager_DBFirst
         private void _loadToolStripMenuItemIcons()
         {
             this.toolStripMenuItemSync.Image = BitmapResourceLoader.Loop;
-            this.exitToolStripMenuItem.Image = BitmapResourceLoader.Exit;
+            this.toolStripMenuItemExit.Image = BitmapResourceLoader.Exit;
 
             this.toolStripMenuItemSyncSqlite.Image = BitmapResourceLoader.Sqlite;
 
