@@ -411,20 +411,58 @@ namespace InvoiceManager_DBFirst
 
             int detailsId = Convert.ToInt32(row.Cells["detailsId"].Value);
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+            int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
 
-            var details = dbContext.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
-            dbContext.TactionDetails.Remove(details);
+            decimal unit = Convert.ToDecimal(row.Cells["unit"].Value);
+            decimal unitPrice = Convert.ToDecimal(row.Cells["unitPrice"].Value);
+            decimal vat = Convert.ToDecimal(row.Cells["vat"].Value);
 
-            try
+            TactionDetails details = this.dbContext.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
+            if (details != null)
             {
-                dbContext.SaveChanges();
+                Taction taction = this.dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
+
+                try
+                {
+                    taction.TactionDetails.Remove(details);
+                    this.dbContext.TactionDetails.Remove(details);
+                    this.dbContext.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occurred while removing taction detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                this._bindDataToGridViewTactionDetails(tactionId);
+                this._setTactionTotalPrice(taction);
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("An error occurred while removing detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                details = this._newTaction.TactionDetails.Where(r => r.ItemId == itemId && r.Unit == unit && r.UnitPrice == unitPrice && r.Vat == vat).FirstOrDefault();
+                this._newTaction.TactionDetails.Remove(details);
+                this._updateDataGridViewTactionDetails();
+                this._setTactionTotalPrice(_newTaction);
             }
 
-            this._bindDataToGridViewTactionDetails(tactionId);
+
+
+            //var details = this._newTaction.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
+            //this._newTaction.TactionDetails.Remove(details);
+            //this.dataGridViewTactionDetails.Rows.Remove(row);
+
+            //var details = dbContext.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
+            //dbContext.TactionDetails.Remove(details);
+
+            //try
+            //{
+            //    dbContext.SaveChanges();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("An error occurred while removing detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+
+            //this._bindDataToGridViewTactionDetails(tactionId);
         }
 
         private void buttonAdviceLastUnitPrice_Click(object sender, EventArgs e)
