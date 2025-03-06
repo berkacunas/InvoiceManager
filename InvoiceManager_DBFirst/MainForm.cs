@@ -388,11 +388,12 @@ namespace InvoiceManager_DBFirst
             _tactionForm.AutoScroll = true;
             _tactionForm.Dock = DockStyle.Fill;
 
+            this.groupBoxWithListView.Visible = false;
+
             this.splitContainerMain.Panel2.Controls.Add(_tactionUserControl);
             this._userControls.Add(_tactionUserControl);
-            this._userControls
-            this.groupBoxWithListView.Visible = false;
-            _tactionUserControl.Show
+            this._userControls[_panelIndex].Visible = true;
+            this._userControls[_panelIndex].Show(); // Not necessary
         }
     }
 }
