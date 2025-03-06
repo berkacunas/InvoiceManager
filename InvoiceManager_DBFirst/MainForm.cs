@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,11 +18,16 @@ namespace InvoiceManager_DBFirst
 {
     public partial class MainForm : Form
     {
+        enum PanelSelection
+        {
+            Transactions = 0,
+            ApplicationLog = 1
+        };
+
         private System.Threading.Timer _timer;
         private string _eventTimeFormat = "dd.MM.yyyy dddd HH:mm:ss";
 
-        private List<UserControl> _userControls = new List<UserControl>();
-        private int _panelIndex;
+        private static Dictionary<PanelSelection, Panel> _panels = new Dictionary<PanelSelection, Panel>();
 
         private static TactionForm _tactionForm;
         private static ItemForm _itemForm;
@@ -35,6 +41,9 @@ namespace InvoiceManager_DBFirst
         {
             InitializeComponent();
 
+            _panels.Add(PanelSelection.Transactions, this.panelTransactions);
+            _panels.Add(PanelSelection.ApplicationLog, this.panelApplicationLog);
+            
             this._createToolStripButtons();
 
             this.Icon = Icon.FromHandle(BitmapResourceLoader.AppIcon.GetHicon());
@@ -42,8 +51,10 @@ namespace InvoiceManager_DBFirst
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Maximized;
             this._timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
+
+            _setDefaultPanelBehaviours(this.panelTransactions, DockStyle.Fill, false, true);
+            _setDefaultPanelBehaviours(this.panelApplicationLog, DockStyle.Fill, false, true);
 
             string[] listViewLogColumns = new string[] { "Message", "Action Type", "Action Time" };
             int[] listViewLogColumnWidths = new int[] { 400, 300, 250 };
@@ -52,6 +63,8 @@ namespace InvoiceManager_DBFirst
             _setListViewRowStyles(this.listViewLog, View.Details, true, true, false);
             _setListViewColumnStyles(this.listViewLog, listViewLogColumns, listViewLogColumnWidths, listViewLogColumnAlignments);
             this._loadToolStripMenuItemIcons();
+
+            this.WindowState = FormWindowState.Maximized;
         }
 
 
@@ -83,8 +96,8 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemTransactions_Click(object sender, EventArgs e)
         {
-            this._initializeTactionForm();
-            _tactionForm.Show();
+            _panels[PanelSelection.Transactions].BringToFront();
+            _panels[PanelSelection.Transactions].Show();
         }
 
         private void toolStripMenuItemItems_Click(object sender, EventArgs e)
@@ -121,6 +134,12 @@ namespace InvoiceManager_DBFirst
         {
             this._initializeSettingsForm();
             _settingsForm.Show();
+        }
+
+        private void toolStripMenuItemApplicationLog_Click(object sender, EventArgs e)
+        {
+            _panels[PanelSelection.ApplicationLog].BringToFront();
+            _panels[PanelSelection.ApplicationLog].Show();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -313,7 +332,7 @@ namespace InvoiceManager_DBFirst
             _tactionForm.TransactionFormOpened += TactionForm_TransactionFormOpened;
             _tactionForm.TransactionChanged += TactionForm_TransactionChanged;
             _tactionForm.TransactionFormClosed += TactionForm_TransactionFormClosed;
-            //_tactionForm.Show();
+            _tactionForm.Show();
         }
 
         private void _initializeItemForm()
@@ -381,7 +400,7 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemShowTactions_Click(object sender, EventArgs e)
         {
-            TactionUserControl _tactionUserControl = new TactionUserControl();
+            //TactionUserControl _tactionUserControl = new TactionUserControl();
 
             _tactionForm.FormBorderStyle = FormBorderStyle.None;
             _tactionForm.TopLevel = false;
@@ -390,10 +409,15 @@ namespace InvoiceManager_DBFirst
 
             this.groupBoxWithListView.Visible = false;
 
-            this.splitContainerMain.Panel2.Controls.Add(_tactionUserControl);
-            this._userControls.Add(_tactionUserControl);
-            this._userControls[_panelIndex].Visible = true;
-            this._userControls[_panelIndex].Show(); // Not necessary
+            
         }
+
+        private static void _setDefaultPanelBehaviours(Panel panel, DockStyle dockStyle, bool visible, bool autoScroll)
+        {
+            panel.Dock = dockStyle;
+            panel.Visible = visible;
+            panel.AutoScroll = autoScroll;
+        }
+
     }
 }
