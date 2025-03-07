@@ -21,7 +21,12 @@ namespace InvoiceManager_DBFirst
         enum PanelSelection
         {
             Transactions = 0,
-            ApplicationLog = 1
+            Items = 1,
+            Shops = 2,
+            PaymentMethods = 3,
+            Users = 4,
+            Sellers = 5,
+            ApplicationLog = 6
         };
 
         private System.Threading.Timer _timer;
@@ -43,6 +48,11 @@ namespace InvoiceManager_DBFirst
 
             _panels = new Dictionary<PanelSelection, Panel>();
             _panels.Add(PanelSelection.Transactions, this.panelTransactions);
+            _panels.Add(PanelSelection.Items, this.panelItems);
+            _panels.Add(PanelSelection.Shops, this.panelShops);
+            _panels.Add(PanelSelection.PaymentMethods, this.panelPaymentMethods);
+            _panels.Add(PanelSelection.Users, this.panelUsers);
+            _panels.Add(PanelSelection.Sellers, this.panelSellers);
             _panels.Add(PanelSelection.ApplicationLog, this.panelApplicationLog);
             
             this._createToolStripButtons();
@@ -55,6 +65,11 @@ namespace InvoiceManager_DBFirst
             this._timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
 
             _setDefaultPanelBehaviours(this.panelTransactions, DockStyle.Fill, false, true);
+            _setDefaultPanelBehaviours(this.panelItems, DockStyle.Fill, false, true);
+            _setDefaultPanelBehaviours(this.panelShops, DockStyle.Fill, false, true);
+            _setDefaultPanelBehaviours(this.panelPaymentMethods, DockStyle.Fill, false, true);
+            _setDefaultPanelBehaviours(this.panelUsers, DockStyle.Fill, false, true);
+            _setDefaultPanelBehaviours(this.panelSellers, DockStyle.Fill, false, true);
             _setDefaultPanelBehaviours(this.panelApplicationLog, DockStyle.Fill, false, true);
 
             string[] listViewLogColumns = new string[] { "Message", "Action Type", "Action Time" };
@@ -103,32 +118,32 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemItems_Click(object sender, EventArgs e)
         {
-            this._initializeItemForm();
-            _itemForm.Show();
+            _panels[PanelSelection.Items].BringToFront();
+            _panels[PanelSelection.Items].Show();
         }
 
         private void toolStripMenuItemShops_Click(object sender, EventArgs e)
         {
-            this._initializeShopForm();
-            _shopForm.Show();
+            _panels[PanelSelection.Shops].BringToFront();
+            _panels[PanelSelection.Shops].Show();
         }
 
         private void toolStripMenuItemPaymentMethods_Click(object sender, EventArgs e)
         {
-            this._initializePaymentMethodForm();
-            _paymentMethodForm.Show();
+            _panels[PanelSelection.PaymentMethods].BringToFront();
+            _panels[PanelSelection.PaymentMethods].Show();
         }
 
         private void toolStripMenuItemUsers_Click(object sender, EventArgs e)
         {
-            this._initializeUserForm();
-            _userForm.Show();
+            _panels[PanelSelection.Users].BringToFront();
+            _panels[PanelSelection.Users].Show();
         }
 
         private void toolStripMenuItemSellers_Click(object sender, EventArgs e)
         {
-            this._initializeSellerForm();
-            _sellerForm.Show();
+            _panels[PanelSelection.Sellers].BringToFront();
+            _panels[PanelSelection.Sellers].Show();
         }
 
         private void toolStripMenuItemSettings_Click(object sender, EventArgs e)
