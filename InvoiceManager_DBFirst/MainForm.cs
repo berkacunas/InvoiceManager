@@ -46,6 +46,10 @@ namespace InvoiceManager_DBFirst
         {
             InitializeComponent();
 
+            this._createToolStripButtons();
+
+            this.Icon = Icon.FromHandle(BitmapResourceLoader.AppIcon.GetHicon());
+
             _panels = new Dictionary<PanelSelection, Panel>();
             _panels.Add(PanelSelection.Transactions, this.panelTransactions);
             _panels.Add(PanelSelection.Items, this.panelItems);
@@ -54,10 +58,13 @@ namespace InvoiceManager_DBFirst
             _panels.Add(PanelSelection.Users, this.panelUsers);
             _panels.Add(PanelSelection.Sellers, this.panelSellers);
             _panels.Add(PanelSelection.ApplicationLog, this.panelApplicationLog);
-            
-            this._createToolStripButtons();
 
-            this.Icon = Icon.FromHandle(BitmapResourceLoader.AppIcon.GetHicon());
+            this.panelTransactions.VisibleChanged += PanelTransactions_VisibleChanged;
+        }
+
+        private void PanelTransactions_VisibleChanged(object sender, EventArgs e)
+        {
+            MessageBox.Show("Test !");
         }
 
         private void MainForm_Load(object sender, EventArgs e)

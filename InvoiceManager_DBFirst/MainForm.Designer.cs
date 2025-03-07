@@ -641,6 +641,7 @@
             this.panelTransactions.Name = "panelTransactions";
             this.panelTransactions.Size = new System.Drawing.Size(206, 185);
             this.panelTransactions.TabIndex = 6;
+            this.panelTransactions.Visible = false;
             // 
             // groupBoxTactionOptions
             // 
@@ -1679,10 +1680,9 @@
             this.panelShops.Controls.Add(this.groupBoxShopTypes);
             this.panelShops.Controls.Add(this.groupBox1);
             this.panelShops.Controls.Add(this.groupBoxShopOptions);
-            this.panelShops.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelShops.Location = new System.Drawing.Point(0, 0);
+            this.panelShops.Location = new System.Drawing.Point(623, 3);
             this.panelShops.Name = "panelShops";
-            this.panelShops.Size = new System.Drawing.Size(1682, 838);
+            this.panelShops.Size = new System.Drawing.Size(194, 185);
             this.panelShops.TabIndex = 8;
             // 
             // groupBoxShopGroupOptions
@@ -1699,7 +1699,7 @@
             this.groupBoxShopGroupOptions.Controls.Add(this.comboBoxShopGroupOptionsShopType);
             this.groupBoxShopGroupOptions.Controls.Add(this.textBoxShopGroupOptionsOwner);
             this.groupBoxShopGroupOptions.Controls.Add(this.labelShopGroupOptionsShopType);
-            this.groupBoxShopGroupOptions.Location = new System.Drawing.Point(770, 628);
+            this.groupBoxShopGroupOptions.Location = new System.Drawing.Point(770, -25);
             this.groupBoxShopGroupOptions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxShopGroupOptions.Name = "groupBoxShopGroupOptions";
             this.groupBoxShopGroupOptions.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -1831,7 +1831,7 @@
             this.dataGridViewShopGroups.Location = new System.Drawing.Point(7, 22);
             this.dataGridViewShopGroups.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridViewShopGroups.Name = "dataGridViewShopGroups";
-            this.dataGridViewShopGroups.Size = new System.Drawing.Size(602, 588);
+            this.dataGridViewShopGroups.Size = new System.Drawing.Size(602, 0);
             this.dataGridViewShopGroups.TabIndex = 0;
             // 
             // comboBoxShopOptionsShopGroup
@@ -1923,7 +1923,7 @@
             this.groupBoxShopGroups.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxShopGroups.Name = "groupBoxShopGroups";
             this.groupBoxShopGroups.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxShopGroups.Size = new System.Drawing.Size(617, 616);
+            this.groupBoxShopGroups.Size = new System.Drawing.Size(617, 0);
             this.groupBoxShopGroups.TabIndex = 37;
             this.groupBoxShopGroups.TabStop = false;
             this.groupBoxShopGroups.Text = "Shop Groups";
@@ -1947,7 +1947,7 @@
             this.groupBoxShops.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxShops.Name = "groupBoxShops";
             this.groupBoxShops.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxShops.Size = new System.Drawing.Size(805, 616);
+            this.groupBoxShops.Size = new System.Drawing.Size(805, 0);
             this.groupBoxShops.TabIndex = 36;
             this.groupBoxShops.TabStop = false;
             this.groupBoxShops.Text = "Shops";
@@ -1960,7 +1960,7 @@
             this.dataGridViewShops.Location = new System.Drawing.Point(7, 22);
             this.dataGridViewShops.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridViewShops.Name = "dataGridViewShops";
-            this.dataGridViewShops.Size = new System.Drawing.Size(790, 588);
+            this.dataGridViewShops.Size = new System.Drawing.Size(790, 0);
             this.dataGridViewShops.TabIndex = 0;
             // 
             // groupBoxShopTypes
@@ -1972,7 +1972,7 @@
             this.groupBoxShopTypes.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxShopTypes.Name = "groupBoxShopTypes";
             this.groupBoxShopTypes.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxShopTypes.Size = new System.Drawing.Size(224, 823);
+            this.groupBoxShopTypes.Size = new System.Drawing.Size(224, 170);
             this.groupBoxShopTypes.TabIndex = 38;
             this.groupBoxShopTypes.TabStop = false;
             this.groupBoxShopTypes.Text = "Shop types";
@@ -1985,7 +1985,7 @@
             this.dataGridViewShopTypes.Location = new System.Drawing.Point(7, 22);
             this.dataGridViewShopTypes.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridViewShopTypes.Name = "dataGridViewShopTypes";
-            this.dataGridViewShopTypes.Size = new System.Drawing.Size(209, 795);
+            this.dataGridViewShopTypes.Size = new System.Drawing.Size(209, 142);
             this.dataGridViewShopTypes.TabIndex = 0;
             // 
             // groupBox1
@@ -1998,7 +1998,7 @@
             this.groupBox1.Controls.Add(this.buttonUpdateShopType);
             this.groupBox1.Controls.Add(this.checkBoxSetRelational);
             this.groupBox1.Controls.Add(this.buttonSaveShopType);
-            this.groupBox1.Location = new System.Drawing.Point(1108, 628);
+            this.groupBox1.Location = new System.Drawing.Point(1108, -25);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -2098,7 +2098,7 @@
             this.groupBoxShopOptions.Controls.Add(this.buttonUpdateShop);
             this.groupBoxShopOptions.Controls.Add(this.buttonSaveShop);
             this.groupBoxShopOptions.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxShopOptions.Location = new System.Drawing.Point(240, 628);
+            this.groupBoxShopOptions.Location = new System.Drawing.Point(240, -25);
             this.groupBoxShopOptions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxShopOptions.Name = "groupBoxShopOptions";
             this.groupBoxShopOptions.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
