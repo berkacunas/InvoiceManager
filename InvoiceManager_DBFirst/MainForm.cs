@@ -27,7 +27,7 @@ namespace InvoiceManager_DBFirst
         private System.Threading.Timer _timer;
         private string _eventTimeFormat = "dd.MM.yyyy dddd HH:mm:ss";
 
-        private static Dictionary<PanelSelection, Panel> _panels = new Dictionary<PanelSelection, Panel>();
+        private static Dictionary<PanelSelection, Panel> _panels;
 
         private static TactionForm _tactionForm;
         private static ItemForm _itemForm;
@@ -41,6 +41,7 @@ namespace InvoiceManager_DBFirst
         {
             InitializeComponent();
 
+            _panels = new Dictionary<PanelSelection, Panel>();
             _panels.Add(PanelSelection.Transactions, this.panelTransactions);
             _panels.Add(PanelSelection.ApplicationLog, this.panelApplicationLog);
             
