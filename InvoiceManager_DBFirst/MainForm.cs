@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.IdentityModel.Tokens;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +20,7 @@ namespace InvoiceManager_DBFirst
 {
     public partial class MainForm : Form
     {
+        private InvoicesEntities dbContext;
         enum PanelSelection
         {
             Transactions = 0,
@@ -26,7 +29,8 @@ namespace InvoiceManager_DBFirst
             PaymentMethods = 3,
             Users = 4,
             Sellers = 5,
-            ApplicationLog = 6
+            Settings = 6,
+            ApplicationLog = 7
         };
 
         private System.Threading.Timer _timer;
@@ -46,6 +50,8 @@ namespace InvoiceManager_DBFirst
         {
             InitializeComponent();
 
+            this.dbContext = new InvoicesEntities();
+
             this._createToolStripButtons();
 
             this.Icon = Icon.FromHandle(BitmapResourceLoader.AppIcon.GetHicon());
@@ -62,10 +68,84 @@ namespace InvoiceManager_DBFirst
             this.panelTransactions.VisibleChanged += PanelTransactions_VisibleChanged;
         }
 
+
+        
         private void PanelTransactions_VisibleChanged(object sender, EventArgs e)
         {
-            MessageBox.Show("Test !");
+            if (this.panelTransactions.Visible)
+            {
+                TactionBusiness tactionBusiness = new TactionBusiness();
+
+                DataGridView dataGridViewTactions = (DataGridView)this.panelTransactions.Controls["DataGridViewTactions"];
+                dataGridViewTactions.DataSourceChanged += DataGridViewTactions_DataSourceChanged;
+                dataGridViewTactionDetails.DataSourceChanged += DataGridViewTactionDetails_DataSourceChanged;
+
+                ImageList imageList = tactionBusiness.CreateImageList();
+                this.ContextMenuStrip = tactionBusiness.CreateReportContextMenu();
+            }
+            else
+            {
+                // Dispose
+            }
         }
+
+        private void DataGridViewTactions_DataSourceChanged(object sender, EventArgs e)
+        {
+            if (this.dataGridViewTactions.DataSource == null)
+                return;
+
+            string[] tactionsHeaderTexts = new string[] { "tactionId", "paymentId", "ownerId", "Date", "Shop", "Total Price", "Payment Type", "No", "Seller", "Who did it" };
+            int[] tactionsColumnWidths = new int[] { 50, 50, 50, 110, 200, 100, 120, 50, 100, 100 };
+            DataGridViewContentAlignment[] tactionsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleRight,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleRight,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft };
+
+            TactionBusiness.SetDefaultGridViewHeaderStyles(this.dataGridViewTactions, tactionsHeaderTexts, tactionsColumnWidths, tactionsColumnAlignments);
+
+            this.dataGridViewTactions.Columns["tactionId"].Visible = false;
+            this.dataGridViewTactions.Columns["paymentId"].Visible = false;
+            this.dataGridViewTactions.Columns["ownerId"].Visible = false;
+        }
+
+        private void DataGridViewTactionDetails_DataSourceChanged(object sender, EventArgs e)
+        {
+            if (this.dataGridViewTactionDetails.DataSource == null)
+                return;
+
+            string[] detailsHeaderTexts = new string[] { "detailsId", "tactionId", "itemId", "itemSubTypeId", "Group", "Item", "Sub Type", "Unit", "Unit Price", "Vat", "Price", "(*) Rate", "(*) Price", "Note" };
+            int[] detailsColumnWidths = new int[] { 50, 50, 50, 50, 115, 220, 115, 70, 85, 50, 70, 80, 80, 80 };
+            DataGridViewContentAlignment[] detailsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleRight,
+                                                                DataGridViewContentAlignment.MiddleRight,
+                                                                DataGridViewContentAlignment.MiddleRight,
+                                                                DataGridViewContentAlignment.MiddleRight,
+                                                                DataGridViewContentAlignment.MiddleRight,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft,
+                                                                DataGridViewContentAlignment.MiddleLeft };
+
+            TactionBusiness.SetDefaultGridViewHeaderStyles(this.dataGridViewTactionDetails, detailsHeaderTexts, detailsColumnWidths, detailsColumnAlignments);
+
+            this.dataGridViewTactionDetails.Columns["detailsId"].Visible = false;
+            this.dataGridViewTactionDetails.Columns["tactionId"].Visible = false;
+            this.dataGridViewTactionDetails.Columns["itemId"].Visible = false;
+            this.dataGridViewTactionDetails.Columns["itemSubTypeId"].Visible = false;
+            this.dataGridViewTactionDetails.Columns["note"].Visible = false;
+        }
+
+        
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -119,50 +199,42 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemTransactions_Click(object sender, EventArgs e)
         {
-            _panels[PanelSelection.Transactions].BringToFront();
-            _panels[PanelSelection.Transactions].Show();
+            this._setPanelVisibilities(PanelSelection.Transactions);
         }
 
         private void toolStripMenuItemItems_Click(object sender, EventArgs e)
         {
-            _panels[PanelSelection.Items].BringToFront();
-            _panels[PanelSelection.Items].Show();
+            this._setPanelVisibilities(PanelSelection.Items);
         }
 
         private void toolStripMenuItemShops_Click(object sender, EventArgs e)
         {
-            _panels[PanelSelection.Shops].BringToFront();
-            _panels[PanelSelection.Shops].Show();
+            this._setPanelVisibilities(PanelSelection.Shops);
         }
 
         private void toolStripMenuItemPaymentMethods_Click(object sender, EventArgs e)
         {
-            _panels[PanelSelection.PaymentMethods].BringToFront();
-            _panels[PanelSelection.PaymentMethods].Show();
+            this._setPanelVisibilities(PanelSelection.PaymentMethods);
         }
 
         private void toolStripMenuItemUsers_Click(object sender, EventArgs e)
         {
-            _panels[PanelSelection.Users].BringToFront();
-            _panels[PanelSelection.Users].Show();
+            this._setPanelVisibilities(PanelSelection.Users);
         }
 
         private void toolStripMenuItemSellers_Click(object sender, EventArgs e)
         {
-            _panels[PanelSelection.Sellers].BringToFront();
-            _panels[PanelSelection.Sellers].Show();
+            this._setPanelVisibilities(PanelSelection.Sellers);
         }
 
         private void toolStripMenuItemSettings_Click(object sender, EventArgs e)
         {
-            this._initializeSettingsForm();
-            _settingsForm.Show();
+            this._setPanelVisibilities(PanelSelection.Settings);
         }
 
         private void toolStripMenuItemApplicationLog_Click(object sender, EventArgs e)
         {
             _panels[PanelSelection.ApplicationLog].BringToFront();
-            _panels[PanelSelection.ApplicationLog].Show();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -433,6 +505,18 @@ namespace InvoiceManager_DBFirst
             this.groupBoxWithListView.Visible = false;
 
             
+        }
+
+        private void _setPanelVisibilities(PanelSelection panelSelection)
+        {
+            foreach (KeyValuePair<PanelSelection, Panel> panel in _panels)
+            {
+                panel.Value.Visible = (panel.Key == panelSelection);
+                if (panel.Value.Visible)
+                    panel.Value.Show();
+                else
+                    panel.Value.Hide();
+            }
         }
 
         private static void _setDefaultPanelBehaviours(Panel panel, DockStyle dockStyle, bool visible, bool autoScroll)

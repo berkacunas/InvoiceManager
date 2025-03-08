@@ -371,6 +371,7 @@
     <Compile Include="Taction.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="TactionBusiness.cs" />
     <Compile Include="TactionDetails.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
