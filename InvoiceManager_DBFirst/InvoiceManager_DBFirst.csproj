@@ -255,6 +255,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserControls\ApplicationLogUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ApplicationLogUserControl.Designer.cs">
+      <DependentUpon>ApplicationLogUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="BankCard.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -389,6 +395,12 @@
     <Compile Include="User.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\TactionUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\TactionUserControl.Designer.cs">
+      <DependentUpon>TactionUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -398,6 +410,10 @@
     <Compile Include="UserImage.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="WinFormsHelper.cs" />
+    <EmbeddedResource Include="UserControls\ApplicationLogUserControl.resx">
+      <DependentUpon>ApplicationLogUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ItemForm.resx">
       <DependentUpon>ItemForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -436,6 +452,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TactionReportForm.resx">
       <DependentUpon>TactionReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\TactionUserControl.resx">
+      <DependentUpon>TactionUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserForm.resx">
       <DependentUpon>UserForm.cs</DependentUpon>

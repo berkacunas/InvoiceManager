@@ -59,10 +59,9 @@
             this.listBoxSidePanel = new System.Windows.Forms.ListBox();
             this.panelTopSide = new System.Windows.Forms.Panel();
             this.treeViewSidePanel = new System.Windows.Forms.TreeView();
+            this.placeHolder = new System.Windows.Forms.Panel();
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
-            this.groupBoxWithListView = new System.Windows.Forms.GroupBox();
-            this.listViewLog = new System.Windows.Forms.ListView();
             this.menuStripMain.SuspendLayout();
             this.statusStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
@@ -71,7 +70,6 @@
             this.splitContainerMain.SuspendLayout();
             this.panelBottomSide.SuspendLayout();
             this.panelTopSide.SuspendLayout();
-            this.groupBoxWithListView.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripMain
@@ -104,7 +102,7 @@
             this.toolStripMenuItemSync.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemSyncSqlite});
             this.toolStripMenuItemSync.Name = "toolStripMenuItemSync";
-            this.toolStripMenuItemSync.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemSync.Size = new System.Drawing.Size(135, 22);
             this.toolStripMenuItemSync.Text = "Sync";
             // 
             // toolStripMenuItemSyncSqlite
@@ -121,13 +119,13 @@
             this.toolStripMenuItemBatch.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemBatchItemSubTypes});
             this.toolStripMenuItemBatch.Name = "toolStripMenuItemBatch";
-            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(135, 22);
             this.toolStripMenuItemBatch.Text = "Batch";
             // 
             // toolStripMenuItemBatchItemSubTypes
             // 
             this.toolStripMenuItemBatchItemSubTypes.Name = "toolStripMenuItemBatchItemSubTypes";
-            this.toolStripMenuItemBatchItemSubTypes.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemBatchItemSubTypes.Size = new System.Drawing.Size(147, 22);
             this.toolStripMenuItemBatchItemSubTypes.Text = "ItemSubTypes";
             this.toolStripMenuItemBatchItemSubTypes.Click += new System.EventHandler(this.toolStripMenuItemBatchItemSubTypes_Click);
             // 
@@ -136,7 +134,7 @@
             this.toolStripMenuItemExit.Name = "toolStripMenuItemExit";
             this.toolStripMenuItemExit.ShortcutKeyDisplayString = "";
             this.toolStripMenuItemExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.toolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemExit.Size = new System.Drawing.Size(135, 22);
             this.toolStripMenuItemExit.Text = "Exit";
             this.toolStripMenuItemExit.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -212,7 +210,7 @@
             // toolStripMenuItemSettings
             // 
             this.toolStripMenuItemSettings.Name = "toolStripMenuItemSettings";
-            this.toolStripMenuItemSettings.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemSettings.Size = new System.Drawing.Size(116, 22);
             this.toolStripMenuItemSettings.Text = "Settings";
             this.toolStripMenuItemSettings.Click += new System.EventHandler(this.toolStripMenuItemSettings_Click);
             // 
@@ -312,9 +310,9 @@
             // 
             // splitContainerMain.Panel2
             // 
-            this.splitContainerMain.Panel2.Controls.Add(this.groupBoxWithListView);
+            this.splitContainerMain.Panel2.Controls.Add(this.placeHolder);
             this.splitContainerMain.Size = new System.Drawing.Size(1325, 668);
-            this.splitContainerMain.SplitterDistance = 206;
+            this.splitContainerMain.SplitterDistance = 190;
             this.splitContainerMain.TabIndex = 5;
             // 
             // panelBottomSide
@@ -323,7 +321,7 @@
             this.panelBottomSide.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottomSide.Location = new System.Drawing.Point(0, 442);
             this.panelBottomSide.Name = "panelBottomSide";
-            this.panelBottomSide.Size = new System.Drawing.Size(206, 226);
+            this.panelBottomSide.Size = new System.Drawing.Size(190, 226);
             this.panelBottomSide.TabIndex = 2;
             // 
             // listBoxSidePanel
@@ -334,7 +332,7 @@
             this.listBoxSidePanel.ItemHeight = 15;
             this.listBoxSidePanel.Location = new System.Drawing.Point(0, 0);
             this.listBoxSidePanel.Name = "listBoxSidePanel";
-            this.listBoxSidePanel.Size = new System.Drawing.Size(206, 226);
+            this.listBoxSidePanel.Size = new System.Drawing.Size(190, 226);
             this.listBoxSidePanel.TabIndex = 0;
             // 
             // panelTopSide
@@ -345,7 +343,7 @@
             this.panelTopSide.Controls.Add(this.treeViewSidePanel);
             this.panelTopSide.Location = new System.Drawing.Point(0, 0);
             this.panelTopSide.Name = "panelTopSide";
-            this.panelTopSide.Size = new System.Drawing.Size(206, 436);
+            this.panelTopSide.Size = new System.Drawing.Size(190, 436);
             this.panelTopSide.TabIndex = 1;
             // 
             // treeViewSidePanel
@@ -354,8 +352,18 @@
             this.treeViewSidePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewSidePanel.Location = new System.Drawing.Point(0, 0);
             this.treeViewSidePanel.Name = "treeViewSidePanel";
-            this.treeViewSidePanel.Size = new System.Drawing.Size(206, 436);
+            this.treeViewSidePanel.Size = new System.Drawing.Size(190, 436);
             this.treeViewSidePanel.TabIndex = 0;
+            // 
+            // placeHolder
+            // 
+            this.placeHolder.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.placeHolder.Location = new System.Drawing.Point(0, 0);
+            this.placeHolder.Name = "placeHolder";
+            this.placeHolder.Size = new System.Drawing.Size(1132, 668);
+            this.placeHolder.TabIndex = 0;
             // 
             // toolStripMain
             // 
@@ -375,30 +383,6 @@
             this.labelHorizontalLine1.Name = "labelHorizontalLine1";
             this.labelHorizontalLine1.Size = new System.Drawing.Size(1326, 2);
             this.labelHorizontalLine1.TabIndex = 7;
-            // 
-            // groupBoxWithListView
-            // 
-            this.groupBoxWithListView.Controls.Add(this.listViewLog);
-            this.groupBoxWithListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxWithListView.Location = new System.Drawing.Point(0, 0);
-            this.groupBoxWithListView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxWithListView.Name = "groupBoxWithListView";
-            this.groupBoxWithListView.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxWithListView.Size = new System.Drawing.Size(1115, 668);
-            this.groupBoxWithListView.TabIndex = 4;
-            this.groupBoxWithListView.TabStop = false;
-            this.groupBoxWithListView.Text = "Application Log";
-            // 
-            // listViewLog
-            // 
-            this.listViewLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewLog.HideSelection = false;
-            this.listViewLog.Location = new System.Drawing.Point(4, 19);
-            this.listViewLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.listViewLog.Name = "listViewLog";
-            this.listViewLog.Size = new System.Drawing.Size(1107, 646);
-            this.listViewLog.TabIndex = 0;
-            this.listViewLog.UseCompatibleStateImageBehavior = false;
             // 
             // MainForm
             // 
@@ -426,7 +410,6 @@
             this.splitContainerMain.ResumeLayout(false);
             this.panelBottomSide.ResumeLayout(false);
             this.panelTopSide.ResumeLayout(false);
-            this.groupBoxWithListView.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -467,8 +450,7 @@
         private System.Windows.Forms.Panel panelBottomSide;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBatch;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBatchItemSubTypes;
-        private System.Windows.Forms.GroupBox groupBoxWithListView;
-        private System.Windows.Forms.ListView listViewLog;
+        private System.Windows.Forms.Panel placeHolder;
     }
 }
 
