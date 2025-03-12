@@ -78,11 +78,11 @@
             this.buttonCancelTaction = new System.Windows.Forms.Button();
             this.checkBoxTactionsEditable = new System.Windows.Forms.CheckBox();
             this.groupBoxTactionDetailsOptions = new System.Windows.Forms.GroupBox();
+            this.comboBoxItemSubType = new System.Windows.Forms.ComboBox();
             this.buttonAdviceLastUnitPrice = new System.Windows.Forms.Button();
             this.labelVatPercantage = new System.Windows.Forms.Label();
             this.toolStripTaction = new System.Windows.Forms.ToolStrip();
             this.statusStripTaction = new System.Windows.Forms.StatusStrip();
-            this.comboBoxItemSubType = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactions)).BeginInit();
             this.groupBoxTactions.SuspendLayout();
             this.groupBoxTactionDetails.SuspendLayout();
@@ -591,6 +591,14 @@
             this.groupBoxTactionDetailsOptions.TabStop = false;
             this.groupBoxTactionDetailsOptions.Text = "Detail Options";
             // 
+            // comboBoxItemSubType
+            // 
+            this.comboBoxItemSubType.FormattingEnabled = true;
+            this.comboBoxItemSubType.Location = new System.Drawing.Point(77, 86);
+            this.comboBoxItemSubType.Name = "comboBoxItemSubType";
+            this.comboBoxItemSubType.Size = new System.Drawing.Size(174, 23);
+            this.comboBoxItemSubType.TabIndex = 34;
+            // 
             // buttonAdviceLastUnitPrice
             // 
             this.buttonAdviceLastUnitPrice.Location = new System.Drawing.Point(451, 54);
@@ -624,14 +632,6 @@
             this.statusStripTaction.Size = new System.Drawing.Size(1690, 22);
             this.statusStripTaction.TabIndex = 7;
             this.statusStripTaction.Text = "statusStrip1";
-            // 
-            // comboBoxItemSubType
-            // 
-            this.comboBoxItemSubType.FormattingEnabled = true;
-            this.comboBoxItemSubType.Location = new System.Drawing.Point(77, 86);
-            this.comboBoxItemSubType.Name = "comboBoxItemSubType";
-            this.comboBoxItemSubType.Size = new System.Drawing.Size(174, 23);
-            this.comboBoxItemSubType.TabIndex = 34;
             // 
             // TactionForm
             // 

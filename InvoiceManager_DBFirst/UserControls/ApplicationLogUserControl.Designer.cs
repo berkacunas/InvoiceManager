@@ -59,8 +59,7 @@
             // 
             // ApplicationLogUserControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.Controls.Add(this.groupBoxWithListView);
             this.Name = "ApplicationLogUserControl";
             this.Size = new System.Drawing.Size(704, 459);

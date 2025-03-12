@@ -312,7 +312,7 @@
             // 
             this.splitContainerMain.Panel2.Controls.Add(this.placeHolder);
             this.splitContainerMain.Size = new System.Drawing.Size(1325, 668);
-            this.splitContainerMain.SplitterDistance = 190;
+            this.splitContainerMain.SplitterDistance = 146;
             this.splitContainerMain.TabIndex = 5;
             // 
             // panelBottomSide
@@ -321,7 +321,7 @@
             this.panelBottomSide.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottomSide.Location = new System.Drawing.Point(0, 442);
             this.panelBottomSide.Name = "panelBottomSide";
-            this.panelBottomSide.Size = new System.Drawing.Size(190, 226);
+            this.panelBottomSide.Size = new System.Drawing.Size(146, 226);
             this.panelBottomSide.TabIndex = 2;
             // 
             // listBoxSidePanel
@@ -332,7 +332,7 @@
             this.listBoxSidePanel.ItemHeight = 15;
             this.listBoxSidePanel.Location = new System.Drawing.Point(0, 0);
             this.listBoxSidePanel.Name = "listBoxSidePanel";
-            this.listBoxSidePanel.Size = new System.Drawing.Size(190, 226);
+            this.listBoxSidePanel.Size = new System.Drawing.Size(146, 226);
             this.listBoxSidePanel.TabIndex = 0;
             // 
             // panelTopSide
@@ -343,7 +343,7 @@
             this.panelTopSide.Controls.Add(this.treeViewSidePanel);
             this.panelTopSide.Location = new System.Drawing.Point(0, 0);
             this.panelTopSide.Name = "panelTopSide";
-            this.panelTopSide.Size = new System.Drawing.Size(190, 436);
+            this.panelTopSide.Size = new System.Drawing.Size(144, 436);
             this.panelTopSide.TabIndex = 1;
             // 
             // treeViewSidePanel
@@ -352,7 +352,7 @@
             this.treeViewSidePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewSidePanel.Location = new System.Drawing.Point(0, 0);
             this.treeViewSidePanel.Name = "treeViewSidePanel";
-            this.treeViewSidePanel.Size = new System.Drawing.Size(190, 436);
+            this.treeViewSidePanel.Size = new System.Drawing.Size(144, 436);
             this.treeViewSidePanel.TabIndex = 0;
             // 
             // placeHolder
@@ -360,9 +360,10 @@
             this.placeHolder.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.placeHolder.AutoScroll = true;
             this.placeHolder.Location = new System.Drawing.Point(0, 0);
             this.placeHolder.Name = "placeHolder";
-            this.placeHolder.Size = new System.Drawing.Size(1132, 668);
+            this.placeHolder.Size = new System.Drawing.Size(1176, 668);
             this.placeHolder.TabIndex = 0;
             // 
             // toolStripMain
