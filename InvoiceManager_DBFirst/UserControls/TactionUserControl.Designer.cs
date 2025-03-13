@@ -610,7 +610,6 @@
             this.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "TactionUserControl";
             this.Size = new System.Drawing.Size(1670, 929);
-            this.Load += new System.EventHandler(this.TactionUserControl_Load);
             this.groupBoxTactionOptions.ResumeLayout(false);
             this.groupBoxTactionOptions.PerformLayout();
             this.groupBoxTactionDetailsOptions.ResumeLayout(false);

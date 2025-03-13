@@ -53,6 +53,8 @@ namespace InvoiceManager_DBFirst.UserControls
 
             this.dbContext = new InvoicesEntities();
 
+            this.Load += tactionUserControl_Load;
+
             this.dataGridViewTactions.DataBindingComplete += dataGridViewTactions_DataBindingComplete;
             this.dataGridViewTactions.DataSourceChanged += dataGridViewTactions_DataSourceChanged;
             this.dataGridViewTactions.CellClick += dataGridViewTactions_CellClick;
@@ -72,10 +74,24 @@ namespace InvoiceManager_DBFirst.UserControls
             this.buttonUpdateDetail.Click += buttonUpdateDetail_Click;
             this.buttonRemoveDetail.Click += buttonRemoveDetail_Click;
 
-            // Event'leri eklemeye devam et.
+            this.buttonAdviceLastUnitPrice.Click += buttonAdviceLastUnitPrice_Click;
+
+            this.checkBoxDetailsEditable.CheckedChanged += checkBoxDetailsEditable_CheckedChanged;
+            this.checkBoxTactionsEditable.CheckedChanged += checkBoxTactionsEditable_CheckedChanged;
+            this.checkBoxDiscount.CheckedChanged += checkBoxDiscount_CheckedChanged;
+            this.checkBoxSeller.CheckedChanged += checkBoxSeller_CheckedChanged;
+
+            this.textBoxUnit.KeyPress += textBoxUnit_KeyPress;
+            this.textBoxUnitPrice.KeyPress += textBoxUnitPrice_KeyPress;
+            this.textBoxVat.KeyPress += textBoxVat_KeyPress;
+
+            this.textBoxItemGroup.Leave += textBoxItemGroup_Leave;
+            this.textBoxItem.Leave += textBoxItem_Leave;
         }
 
-        private void TactionUserControl_Load(object sender, EventArgs e)
+        #region Event Handlers
+
+        private void tactionUserControl_Load(object sender, EventArgs e)
         {
             this._setEditableTactions(false);
             this._setEditableDetails(false);
@@ -83,8 +99,8 @@ namespace InvoiceManager_DBFirst.UserControls
             this._setReadOnlyTotalVatPriceField();
             _limitTextBoxCharLength(this.textBoxVat, 2);
 
-            _setDefaultGridViewStyles(this.dataGridViewTactions);
-            _setDefaultGridViewStyles(this.dataGridViewTactionDetails);
+            WinFormsHelper.SetDefaultGridViewStyles(this.dataGridViewTactions);
+            WinFormsHelper.SetDefaultGridViewStyles(this.dataGridViewTactionDetails);
             _setButtonImages(buttonAdviceLastUnitPrice, _imageList, "QuestionMark", Color.White, Color.FromArgb(70, 70, 70), FlatStyle.Flat, 0);
 
             this.comboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -102,7 +118,6 @@ namespace InvoiceManager_DBFirst.UserControls
 
             this.onTransactionFormOpened("Transactions", "Window opened", DateTime.Now);
         }
-
 
         private void dataGridViewTactions_DataSourceChanged(object sender, EventArgs e)
         {
@@ -122,7 +137,7 @@ namespace InvoiceManager_DBFirst.UserControls
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft };
 
-            _setDefaultGridViewHeaderStyles(this.dataGridViewTactions, tactionsHeaderTexts, tactionsColumnWidths, tactionsColumnAlignments);
+            WinFormsHelper.SetDefaultGridViewHeaderStyles(this.dataGridViewTactions, tactionsHeaderTexts, tactionsColumnWidths, tactionsColumnAlignments);
 
             this.dataGridViewTactions.Columns["tactionId"].Visible = false;
             this.dataGridViewTactions.Columns["paymentId"].Visible = false;
@@ -151,7 +166,7 @@ namespace InvoiceManager_DBFirst.UserControls
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft };
 
-            _setDefaultGridViewHeaderStyles(this.dataGridViewTactionDetails, detailsHeaderTexts, detailsColumnWidths, detailsColumnAlignments);
+            WinFormsHelper.SetDefaultGridViewHeaderStyles(this.dataGridViewTactionDetails, detailsHeaderTexts, detailsColumnWidths, detailsColumnAlignments);
 
             this.dataGridViewTactionDetails.Columns["detailsId"].Visible = false;
             this.dataGridViewTactionDetails.Columns["tactionId"].Visible = false;
@@ -344,29 +359,6 @@ namespace InvoiceManager_DBFirst.UserControls
             this._setTactionTotalPrice(this._newTaction);
         }
 
-        private Tuple<decimal, decimal> _calculateTotalPriceAndVatPrice(Taction taction)
-        {
-            decimal totalPrice = 0;
-            decimal totalVatPrice = 0;
-            foreach (TactionDetails details in taction.TactionDetails)
-            {
-                decimal itemPrice = this._calculateItemPrice(details.UnitPrice, details.Unit, details.DiscountedPrice);
-
-                totalVatPrice += this._calculateItemVatPrice(itemPrice, details.Vat);
-                totalPrice += itemPrice;
-            }
-
-            return new Tuple<decimal, decimal>(totalPrice, totalVatPrice);
-        }
-
-
-        private void _setTactionTotalPrice(Taction taction)
-        {
-            Tuple<decimal, decimal> totalPriceAndVatPrice = this._calculateTotalPriceAndVatPrice(taction);
-            textBoxTotalPrice.Text = totalPriceAndVatPrice.Item1.ToString();
-            textBoxTotalVatPrice.Text = totalPriceAndVatPrice.Item2.ToString();
-        }
-
         private void buttonUpdateDetail_Click(object sender, EventArgs e)
         {
             DataGridViewRow row = this.dataGridViewTactionDetails.CurrentRow;
@@ -450,26 +442,6 @@ namespace InvoiceManager_DBFirst.UserControls
                 this._updateDataGridViewTactionDetails();
                 this._setTactionTotalPrice(_newTaction);
             }
-
-
-
-            //var details = this._newTaction.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
-            //this._newTaction.TactionDetails.Remove(details);
-            //this.dataGridViewTactionDetails.Rows.Remove(row);
-
-            //var details = dbContext.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
-            //dbContext.TactionDetails.Remove(details);
-
-            //try
-            //{
-            //    dbContext.SaveChanges();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("An error occurred while removing detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-
-            //this._bindDataToGridViewTactionDetails(tactionId);
         }
 
         private void buttonAdviceLastUnitPrice_Click(object sender, EventArgs e)
@@ -537,6 +509,7 @@ namespace InvoiceManager_DBFirst.UserControls
         {
             this._formatTwoDigitNumericTextBox(sender, e);
         }
+       
         private void textBoxItemGroup_Leave(object sender, EventArgs e)
         {
             AutoCompleteStringCollection autoCompleteStringCollection = null;
@@ -595,14 +568,81 @@ namespace InvoiceManager_DBFirst.UserControls
             this.textBoxItemGroup.AutoCompleteCustomSource = autoCompleteStringCollection;
         }
 
-        private void toolStripMenuItemItems_Click(object sender, EventArgs e)
+        private void contextMenuItemReportSelection_Click(object sender, EventArgs e)
         {
-            ItemForm itemForm = new ItemForm();
-            if (itemForm.ShowDialog() == DialogResult.OK)
+            DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
+            if (selectedRows == null)
+            {
+                MessageBox.Show("You didn't select any row. Select rows for reporting.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            TactionReportForm tactionReportForm = new TactionReportForm();
+            tactionReportForm.ReportType = TactionReportType.Selection;
+            tactionReportForm.SelectedTactions = _getSelectedTactions(selectedRows);
+
+            if (tactionReportForm.ShowDialog() == DialogResult.OK)
             {
 
             }
         }
+
+        private void contextMenuItemReportDaily_Click(object sender, EventArgs e)
+        {
+            DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
+            if (selectedRows == null)
+            {
+                MessageBox.Show("You didn't select any row. Select rows for reporting.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            DataGridViewRow row = this.dataGridViewTactions.SelectedRows[0] as DataGridViewRow;
+            DateTime selectedDate = this._getTactionFromRow(row).Dt;
+
+            TactionReportForm tactionReportForm = new TactionReportForm();
+            tactionReportForm.ReportType = TactionReportType.Daily;
+            tactionReportForm.SelectedTactions = null;
+
+            if (tactionReportForm.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+        }
+
+        private void contextMenuItemReportWeekly_Click(object sender, EventArgs e)
+        {
+            DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
+            if (selectedRows == null)
+            {
+                MessageBox.Show("You didn't select any row. Select rows for reporting.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            TactionReportForm tactionReportForm = new TactionReportForm();
+            tactionReportForm.ReportType = TactionReportType.Weekly;
+            tactionReportForm.DbSetTaction = this.dbContext.Taction;
+
+            if (tactionReportForm.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+        }
+
+        private void contextMenuItemReportMonthly_Click(object sender, EventArgs e)
+        {
+            TactionReportForm tactionReportForm = new TactionReportForm();
+            tactionReportForm.ReportType = TactionReportType.Monthly;
+            tactionReportForm.DbSetTaction = this.dbContext.Taction;
+
+            if (tactionReportForm.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+        }
+
+        #endregion
+
+        #region Databind Queries
 
         private void _bindDataToGridViewTaction()
         {
@@ -788,34 +828,9 @@ namespace InvoiceManager_DBFirst.UserControls
             this.comboBoxItemSubType.ValueMember = "id";
         }
 
-        private static void _setDefaultGridViewStyles(DataGridView gridview)
-        {
-            gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            gridview.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+        #endregion
 
-            gridview.DefaultCellStyle.Font = new Font("Calibri", 10);
-            gridview.DefaultCellStyle.ForeColor = Color.FromArgb(7, 7, 7); //  152, g: 255, b: 152
-            gridview.DefaultCellStyle.BackColor = Color.White;
-
-            gridview.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(7, 7, 7);
-            gridview.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 240, 240);
-
-            gridview.DefaultCellStyle.SelectionForeColor = Color.FromArgb(7, 7, 7);
-            gridview.DefaultCellStyle.SelectionBackColor = Color.FromArgb(163, 255, 179);
-
-            gridview.ColumnHeadersDefaultCellStyle.Font = new Font("Calibri", 9.5f, FontStyle.Bold);
-            gridview.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        }
-
-        private static void _setDefaultGridViewHeaderStyles(DataGridView gridview, string[] headerTexts, int[] columnWidths, DataGridViewContentAlignment[] columnAlignments)
-        {
-            for (int i = 0; i < gridview.Columns.Count; ++i)
-            {
-                gridview.Columns[i].HeaderCell.Value = headerTexts[i];
-                gridview.Columns[i].Width = columnWidths[i];
-                gridview.Columns[i].DefaultCellStyle.Alignment = columnAlignments[i];
-            }
-        }
+        #region Set data to Controls
 
         private void _setAutoCompleteTextBoxes()
         {
@@ -874,49 +889,56 @@ namespace InvoiceManager_DBFirst.UserControls
             //this.textBoxItemSubType.AutoCompleteCustomSource = itemSubTypeNameCollection;
         }
 
-        private static void _setButtonImages(Button button, ImageList imageList, string imageIndexOfKey, Color foreColor, Color backColor, FlatStyle flatStyle, int borderWidth)
+        private int _setTactionControls(DataGridViewRow row)
         {
-            button.ImageList = imageList;
-            button.ImageIndex = imageList.Images.IndexOfKey(imageIndexOfKey);
-            button.ForeColor = foreColor;
-            //button.BackColor = backColor;
-            button.FlatStyle = flatStyle;
-            button.FlatAppearance.BorderSize = borderWidth;
+            /* Returns TactionId */
+            int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
+            int paymentId = Convert.ToInt32(row.Cells["paymentId"].Value);
+
+            this.dateTimePickerTactionDate.Value = DateTime.Parse(row.Cells["Date"].Value.ToString());
+            this.textBoxShop.Text = row.Cells["shopName"].Value.ToString();
+            this._bindDataToComboBoxPaymentMethod(BindType.Where, paymentId);
+
+            if (row.Cells["ownerId"].Value != null)
+            {
+                int ownerId = Convert.ToInt32(row.Cells["ownerId"].Value);
+                this._bindDataToComboBoxOwner(BindType.Where, ownerId);
+            }
+
+            this.textBoxTactionNo.Text = (row.Cells["tactionNo"].Value != null) ? row.Cells["tactionNo"].Value.ToString() : string.Empty;
+
+            Taction taction = dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
+            _setTactionTotalPrice(taction);
+            //this.textBoxTotalPrice.Text = row.Cells["totalPrice"].Value.ToString();
+
+            return tactionId;
         }
 
-        private void _setEditableTactions(bool isEditable)
+        private void _setTactionDetailsControls(DataGridViewRow row)
         {
-            this.dataGridViewTactions.Enabled = !isEditable;
-            this.buttonSaveTaction.Enabled = isEditable;
-            this.buttonUpdateTaction.Enabled = isEditable;
-            this.buttonCancelTaction.Enabled = isEditable;
-            this.dateTimePickerTactionDate.Enabled = isEditable;
-            this.textBoxShop.ReadOnly = !isEditable;
-            this.comboBoxPaymentMethod.Enabled = isEditable;
-            this.comboBoxOwner.Enabled = isEditable;
-            this.checkBoxSeller.Enabled = isEditable;
-            this.textBoxSeller.ReadOnly = !isEditable;
-            this.textBoxTactionNo.ReadOnly = !isEditable;
+            this.textBoxItemGroup.Text = row.Cells["itemGroup"].Value.ToString();
+            this.textBoxItem.Text = row.Cells["itemName"].Value.ToString();
+            //this.textBoxItemSubType.Text = row.Cells["itemSubTypeId"].Value.ToString();
+            this._bindDataToComboBoxItemSubType(BindType.Where, 0, Convert.ToInt32(row.Cells["itemSubTypeId"].Value));
+            this.textBoxUnit.Text = row.Cells["unit"].Value.ToString();
+            this.textBoxUnitPrice.Text = row.Cells["unitPrice"].Value.ToString();
+            this.textBoxVat.Text = row.Cells["vat"].Value.ToString();
+            this.textBoxDiscountRate.Text = (row.Cells["discountRate"].Value != null) ? row.Cells["discountRate"].Value.ToString() : string.Empty;
+            this.textBoxDiscountedPrice.Text = (row.Cells["discountedPrice"].Value != null) ? row.Cells["discountedPrice"].Value.ToString() : string.Empty;
+            this.checkBoxDiscount.Checked = (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text) || !string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text));
+            this.textBoxDetailsNote.Text = (row.Cells["note"].Value != null) ? row.Cells["note"].Value.ToString() : string.Empty;
         }
 
-        private void _setEditableDetails(bool isEditable)
+        private void _setTactionTotalPrice(Taction taction)
         {
-            this.buttonAddDetail.Enabled = isEditable;
-            this.buttonUpdateDetail.Enabled = isEditable;
-            this.buttonRemoveDetail.Enabled = isEditable;
-            this.buttonAdviceLastUnitPrice.Enabled = isEditable;
-            this.checkBoxDiscount.Enabled = isEditable;
-            this.textBoxItemGroup.ReadOnly = !isEditable;
-            this.textBoxItem.ReadOnly = !isEditable;
-            //this.textBoxItemSubType.ReadOnly = !isEditable;
-            this.comboBoxItemSubType.Enabled = !isEditable;
-            this.textBoxUnit.ReadOnly = !isEditable;
-            this.textBoxUnitPrice.ReadOnly = !isEditable;
-            this.textBoxVat.ReadOnly = !isEditable;
-            this.textBoxDiscountRate.ReadOnly = !isEditable;
-            this.textBoxDiscountedPrice.ReadOnly = !isEditable;
-            this.textBoxDetailsNote.ReadOnly = !isEditable;
+            Tuple<decimal, decimal> totalPriceAndVatPrice = this._calculateTotalPriceAndVatPrice(taction);
+            textBoxTotalPrice.Text = totalPriceAndVatPrice.Item1.ToString();
+            textBoxTotalVatPrice.Text = totalPriceAndVatPrice.Item2.ToString();
         }
+
+        #endregion
+
+        #region Get data from Controls
 
         private void _setTactionDataFromUiToObject(Taction taction)
         {
@@ -1056,177 +1078,6 @@ namespace InvoiceManager_DBFirst.UserControls
             return true;
         }
 
-        private int _setTactionControls(DataGridViewRow row)
-        {
-            /* Returns TactionId */
-            int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
-            int paymentId = Convert.ToInt32(row.Cells["paymentId"].Value);
-
-            this.dateTimePickerTactionDate.Value = DateTime.Parse(row.Cells["Date"].Value.ToString());
-            this.textBoxShop.Text = row.Cells["shopName"].Value.ToString();
-            this._bindDataToComboBoxPaymentMethod(BindType.Where, paymentId);
-
-            if (row.Cells["ownerId"].Value != null)
-            {
-                int ownerId = Convert.ToInt32(row.Cells["ownerId"].Value);
-                this._bindDataToComboBoxOwner(BindType.Where, ownerId);
-            }
-
-            this.textBoxTactionNo.Text = (row.Cells["tactionNo"].Value != null) ? row.Cells["tactionNo"].Value.ToString() : string.Empty;
-
-            Taction taction = dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
-            _setTactionTotalPrice(taction);
-            //this.textBoxTotalPrice.Text = row.Cells["totalPrice"].Value.ToString();
-
-            return tactionId;
-        }
-
-        private void _setTactionDetailsControls(DataGridViewRow row)
-        {
-            this.textBoxItemGroup.Text = row.Cells["itemGroup"].Value.ToString();
-            this.textBoxItem.Text = row.Cells["itemName"].Value.ToString();
-            //this.textBoxItemSubType.Text = row.Cells["itemSubTypeId"].Value.ToString();
-            this._bindDataToComboBoxItemSubType(BindType.Where, 0, Convert.ToInt32(row.Cells["itemSubTypeId"].Value));
-            this.textBoxUnit.Text = row.Cells["unit"].Value.ToString();
-            this.textBoxUnitPrice.Text = row.Cells["unitPrice"].Value.ToString();
-            this.textBoxVat.Text = row.Cells["vat"].Value.ToString();
-            this.textBoxDiscountRate.Text = (row.Cells["discountRate"].Value != null) ? row.Cells["discountRate"].Value.ToString() : string.Empty;
-            this.textBoxDiscountedPrice.Text = (row.Cells["discountedPrice"].Value != null) ? row.Cells["discountedPrice"].Value.ToString() : string.Empty;
-            this.checkBoxDiscount.Checked = (!string.IsNullOrEmpty(this.textBoxDiscountRate.Text) || !string.IsNullOrEmpty(this.textBoxDiscountedPrice.Text));
-            this.textBoxDetailsNote.Text = (row.Cells["note"].Value != null) ? row.Cells["note"].Value.ToString() : string.Empty;
-        }
-
-        private static void _limitTextBoxCharLength(TextBox textBox, int maxLength)
-        {
-            textBox.MaxLength = maxLength;
-        }
-
-        private void _clearTactionControls()
-        {
-            foreach (Control c in this.groupBoxTactionOptions.Controls)
-                if (c is TextBox)
-                    ((TextBox)c).Clear();
-
-            foreach (Control c in this.groupBoxTactionOptions.Controls)
-                if (c is ComboBox)
-                    ((ComboBox)c).Text = string.Empty;
-        }
-
-        private void _clearDetailsControls()
-        {
-            foreach (Control c in this.groupBoxTactionDetailsOptions.Controls)
-            {
-                if (c is TextBox)
-                    ((TextBox)c).Clear();
-                if (c is ComboBox)
-                    ((ComboBox)c).DataSource = null;
-            }
-        }
-
-        private void _createImageList()
-        {
-            _imageList = new ImageList
-            {
-                ImageSize = new Size(19, 19),
-                ColorDepth = ColorDepth.Depth32Bit
-            };
-            _imageList.Images.Add("Thinker", BitmapResourceLoader.Thinker);
-            _imageList.Images.Add("FAQ", BitmapResourceLoader.FAQ);
-            _imageList.Images.Add("QuestionMark", BitmapResourceLoader.QuestionMark);
-            _imageList.Images.Add("Question1", BitmapResourceLoader.Question1);
-            _imageList.Images.Add("Question2", BitmapResourceLoader.Question2);
-        }
-        private void _createContextMenu()
-        {
-            ContextMenuStrip menuStrip = new ContextMenuStrip();
-
-            ToolStripMenuItem contextMenuItemReportSelection = new ToolStripMenuItem("Report selection...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportSelection_Click), Keys.None);
-            ToolStripMenuItem contextMenuItemReportDaily = new ToolStripMenuItem("Report daily...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportDaily_Click), Keys.None);
-            ToolStripMenuItem contextMenuItemReportWeekly = new ToolStripMenuItem("Report weekly...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportWeekly_Click), Keys.None);
-            ToolStripMenuItem contextMenuItemReportYearly = new ToolStripMenuItem("Report monthly...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportMonthly_Click), Keys.None);
-            ToolStripMenuItem contextMenuItemExit = new ToolStripMenuItem("Exit");
-
-            menuStrip.Items.AddRange(new ToolStripItem[] { contextMenuItemReportSelection,
-                                                           contextMenuItemReportDaily,
-                                                           contextMenuItemReportWeekly,
-                                                           contextMenuItemReportYearly,
-                                                           contextMenuItemExit });
-
-            this.ContextMenuStrip = menuStrip;
-        }
-
-        private void contextMenuItemReportSelection_Click(object sender, EventArgs e)
-        {
-            DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
-            if (selectedRows == null)
-            {
-                MessageBox.Show("You didn't select any row. Select rows for reporting.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            TactionReportForm tactionReportForm = new TactionReportForm();
-            tactionReportForm.ReportType = TactionReportType.Selection;
-            tactionReportForm.SelectedTactions = _getSelectedTactions(selectedRows);
-
-            if (tactionReportForm.ShowDialog() == DialogResult.OK)
-            {
-
-            }
-        }
-
-        private void contextMenuItemReportDaily_Click(object sender, EventArgs e)
-        {
-            DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
-            if (selectedRows == null)
-            {
-                MessageBox.Show("You didn't select any row. Select rows for reporting.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            DataGridViewRow row = this.dataGridViewTactions.SelectedRows[0] as DataGridViewRow;
-            DateTime selectedDate = this._getTactionFromRow(row).Dt;
-
-            TactionReportForm tactionReportForm = new TactionReportForm();
-            tactionReportForm.ReportType = TactionReportType.Daily;
-            tactionReportForm.SelectedTactions = null;
-
-            if (tactionReportForm.ShowDialog() == DialogResult.OK)
-            {
-
-            }
-        }
-
-        private void contextMenuItemReportWeekly_Click(object sender, EventArgs e)
-        {
-            DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
-            if (selectedRows == null)
-            {
-                MessageBox.Show("You didn't select any row. Select rows for reporting.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            TactionReportForm tactionReportForm = new TactionReportForm();
-            tactionReportForm.ReportType = TactionReportType.Weekly;
-            tactionReportForm.DbSetTaction = this.dbContext.Taction;
-
-            if (tactionReportForm.ShowDialog() == DialogResult.OK)
-            {
-
-            }
-        }
-
-        private void contextMenuItemReportMonthly_Click(object sender, EventArgs e)
-        {
-            TactionReportForm tactionReportForm = new TactionReportForm();
-            tactionReportForm.ReportType = TactionReportType.Monthly;
-            tactionReportForm.DbSetTaction = this.dbContext.Taction;
-
-            if (tactionReportForm.ShowDialog() == DialogResult.OK)
-            {
-
-            }
-        }
-
         private List<Taction> _getSelectedTactions(DataGridViewSelectedRowCollection rowCollection)
         {
             List<Taction> selectedTactions = new List<Taction>();
@@ -1249,6 +1100,95 @@ namespace InvoiceManager_DBFirst.UserControls
                 return this.dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
 
             return null;
+        }
+
+        #endregion
+
+        #region Create Controls
+
+        private void _createImageList()
+        {
+            _imageList = new ImageList
+            {
+                ImageSize = new Size(19, 19),
+                ColorDepth = ColorDepth.Depth32Bit
+            };
+            _imageList.Images.Add("Thinker", BitmapResourceLoader.Thinker);
+            _imageList.Images.Add("FAQ", BitmapResourceLoader.FAQ);
+            _imageList.Images.Add("QuestionMark", BitmapResourceLoader.QuestionMark);
+            _imageList.Images.Add("Question1", BitmapResourceLoader.Question1);
+            _imageList.Images.Add("Question2", BitmapResourceLoader.Question2);
+        }
+        
+        private void _createContextMenu()
+        {
+            ContextMenuStrip menuStrip = new ContextMenuStrip();
+
+            ToolStripMenuItem contextMenuItemReportSelection = new ToolStripMenuItem("Report selection...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportSelection_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportDaily = new ToolStripMenuItem("Report daily...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportDaily_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportWeekly = new ToolStripMenuItem("Report weekly...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportWeekly_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportYearly = new ToolStripMenuItem("Report monthly...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportMonthly_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemExit = new ToolStripMenuItem("Exit");
+
+            menuStrip.Items.AddRange(new ToolStripItem[] { contextMenuItemReportSelection,
+                                                           contextMenuItemReportDaily,
+                                                           contextMenuItemReportWeekly,
+                                                           contextMenuItemReportYearly,
+                                                           contextMenuItemExit });
+
+            this.ContextMenuStrip = menuStrip;
+        }
+
+        #endregion
+
+        #region Create data for Controls
+
+        private AutoCompleteStringCollection _createAutoCompleteStringCollection(IQueryable<string> query)
+        {
+            AutoCompleteStringCollection autoCompleteStringCollection = new AutoCompleteStringCollection();
+
+            foreach (var item in query)
+                autoCompleteStringCollection.Add(item);
+
+            return autoCompleteStringCollection;
+        }
+
+        #endregion
+
+        #region Set Enabled & Checked & Read-only Controls
+
+        private void _setEditableTactions(bool isEditable)
+        {
+            this.dataGridViewTactions.Enabled = !isEditable;
+            this.buttonSaveTaction.Enabled = isEditable;
+            this.buttonUpdateTaction.Enabled = isEditable;
+            this.buttonCancelTaction.Enabled = isEditable;
+            this.dateTimePickerTactionDate.Enabled = isEditable;
+            this.textBoxShop.ReadOnly = !isEditable;
+            this.comboBoxPaymentMethod.Enabled = isEditable;
+            this.comboBoxOwner.Enabled = isEditable;
+            this.checkBoxSeller.Enabled = isEditable;
+            this.textBoxSeller.ReadOnly = !isEditable;
+            this.textBoxTactionNo.ReadOnly = !isEditable;
+        }
+
+        private void _setEditableDetails(bool isEditable)
+        {
+            this.buttonAddDetail.Enabled = isEditable;
+            this.buttonUpdateDetail.Enabled = isEditable;
+            this.buttonRemoveDetail.Enabled = isEditable;
+            this.buttonAdviceLastUnitPrice.Enabled = isEditable;
+            this.checkBoxDiscount.Enabled = isEditable;
+            this.textBoxItemGroup.ReadOnly = !isEditable;
+            this.textBoxItem.ReadOnly = !isEditable;
+            //this.textBoxItemSubType.ReadOnly = !isEditable;
+            this.comboBoxItemSubType.Enabled = !isEditable;
+            this.textBoxUnit.ReadOnly = !isEditable;
+            this.textBoxUnitPrice.ReadOnly = !isEditable;
+            this.textBoxVat.ReadOnly = !isEditable;
+            this.textBoxDiscountRate.ReadOnly = !isEditable;
+            this.textBoxDiscountedPrice.ReadOnly = !isEditable;
+            this.textBoxDetailsNote.ReadOnly = !isEditable;
         }
 
         private void _enableDiscountFields(bool enable)
@@ -1278,6 +1218,10 @@ namespace InvoiceManager_DBFirst.UserControls
             this.textBoxTotalVatPrice.ReadOnly = true;
         }
 
+        #endregion
+
+        #region Format Controls
+
         private void _formatCurrencyTextBox(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != ','))
@@ -1294,17 +1238,55 @@ namespace InvoiceManager_DBFirst.UserControls
                 e.Handled = true;
         }
 
-        private AutoCompleteStringCollection _createAutoCompleteStringCollection(IQueryable<string> query)
+        private static void _limitTextBoxCharLength(TextBox textBox, int maxLength)
         {
-            AutoCompleteStringCollection autoCompleteStringCollection = new AutoCompleteStringCollection();
-
-            foreach (var item in query)
-                autoCompleteStringCollection.Add(item);
-
-            return autoCompleteStringCollection;
+            textBox.MaxLength = maxLength;
         }
 
-        #region Logic
+
+        #endregion
+
+        #region Style Controls
+
+        private static void _setButtonImages(Button button, ImageList imageList, string imageIndexOfKey, Color foreColor, Color backColor, FlatStyle flatStyle, int borderWidth)
+        {
+            button.ImageList = imageList;
+            button.ImageIndex = imageList.Images.IndexOfKey(imageIndexOfKey);
+            button.ForeColor = foreColor;
+            //button.BackColor = backColor;
+            button.FlatStyle = flatStyle;
+            button.FlatAppearance.BorderSize = borderWidth;
+        }
+
+        #endregion
+
+        #region Clear Controls
+
+        private void _clearTactionControls()
+        {
+            foreach (Control c in this.groupBoxTactionOptions.Controls)
+                if (c is TextBox)
+                    ((TextBox)c).Clear();
+
+            foreach (Control c in this.groupBoxTactionOptions.Controls)
+                if (c is ComboBox)
+                    ((ComboBox)c).Text = string.Empty;
+        }
+
+        private void _clearDetailsControls()
+        {
+            foreach (Control c in this.groupBoxTactionDetailsOptions.Controls)
+            {
+                if (c is TextBox)
+                    ((TextBox)c).Clear();
+                if (c is ComboBox)
+                    ((ComboBox)c).DataSource = null;
+            }
+        }
+
+        #endregion
+
+        #region Calculations
 
         private static decimal _calculateDiscountedUnitPrice(decimal rate, decimal unitPrice, decimal unit)
         {
@@ -1326,6 +1308,21 @@ namespace InvoiceManager_DBFirst.UserControls
         private decimal _calculateItemVatPrice(decimal itemPrice, int vat)
         {
             return itemPrice * vat / 100;
+        }
+
+        private Tuple<decimal, decimal> _calculateTotalPriceAndVatPrice(Taction taction)
+        {
+            decimal totalPrice = 0;
+            decimal totalVatPrice = 0;
+            foreach (TactionDetails details in taction.TactionDetails)
+            {
+                decimal itemPrice = this._calculateItemPrice(details.UnitPrice, details.Unit, details.DiscountedPrice);
+
+                totalVatPrice += this._calculateItemVatPrice(itemPrice, details.Vat);
+                totalPrice += itemPrice;
+            }
+
+            return new Tuple<decimal, decimal>(totalPrice, totalVatPrice);
         }
 
         private decimal _adviceUnitPriceForItem(int itemId)
@@ -1421,7 +1418,6 @@ namespace InvoiceManager_DBFirst.UserControls
 
 
         #endregion
-
 
     }
 }
