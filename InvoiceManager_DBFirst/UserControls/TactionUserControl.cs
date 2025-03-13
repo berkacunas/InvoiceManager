@@ -6,29 +6,14 @@ using System.Drawing;
 using System.Linq;
 using System.Data.Entity;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using InvoiceManager_DBFirst.Globals;
 
 namespace InvoiceManager_DBFirst.UserControls
 {
     public partial class TactionUserControl : UserControl
     {
-        enum Mode
-        {
-            Display,
-            Add,
-            Edit,
-            Search
-        }
-
-        enum BindType
-        {
-            Select,
-            Where,
-            Setnull
-        }
-
         public event Notify TransactionsLoaded;
         public event Notify TransactionSaved;
         public event Notify TransactionUpdated;
@@ -62,7 +47,6 @@ namespace InvoiceManager_DBFirst.UserControls
             this.dataGridViewTactionDetails.DataBindingComplete += dataGridViewTactionDetails_DataBindingComplete;
             this.dataGridViewTactionDetails.DataSourceChanged += dataGridViewTactionDetails_DataSourceChanged;
             this.dataGridViewTactionDetails.CellClick += dataGridViewTactionDetails_CellClick;
-
 
             this.buttonNewTaction.Click += buttonNewTaction_Click;
             this.buttonSaveTaction.Click += buttonSaveTaction_Click;
@@ -1329,7 +1313,7 @@ namespace InvoiceManager_DBFirst.UserControls
             return new Tuple<decimal, decimal>(totalPrice, totalVatPrice);
         }
 
-        private decimal _adviceUnitPriceForItem(int itemId, int itemSubTypeId)
+        private decimal _adviceUnitPriceForItem(int itemId, int itemSubTypeId = 0)
         {
             var query = from details in dbContext.TactionDetails
                         join itemSubType in dbContext.Item on details.ItemSubTypeId equals itemSubType.id into joinTable

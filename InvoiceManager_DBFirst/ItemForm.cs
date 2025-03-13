@@ -1,46 +1,18 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.Entity;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
-using System.Data.SqlClient;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
-using System.IdentityModel.Tokens;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
+
+using InvoiceManager_DBFirst.Globals;
 
 namespace InvoiceManager_DBFirst
 {
     public partial class ItemForm : Form
     {
-        enum Mode
-        {
-            Display,
-            Add,
-            Edit,
-            Search
-        }
-
-        enum BindType
-        {
-            Select,
-            Where,
-            Setnull
-        }
-
-        private enum SortOrder
-        {
-            ASC,
-            DESC,
-            UNORDERED
-        }
-
         public event Notify ItemsLoaded;
         public event Notify ItemSaved;
         public event Notify ItemUpdated;
@@ -73,9 +45,9 @@ namespace InvoiceManager_DBFirst
         private Mode _groupMode;
         private Mode _topGroupMode;
 
-        private SortOrder[] _sortOrdersDataGridViewItemTopGroups = { SortOrder.ASC, SortOrder.UNORDERED };
-        private SortOrder[] _sortOrdersDataGridViewItemGroups = { SortOrder.ASC, SortOrder.UNORDERED };
-        private SortOrder[] _sortOrdersDataGridViewItems = { SortOrder.ASC, SortOrder.UNORDERED };
+        private ColumnSortOrder[] _sortOrdersDataGridViewItemTopGroups = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
+        private ColumnSortOrder[] _sortOrdersDataGridViewItemGroups = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
+        private ColumnSortOrder[] _sortOrdersDataGridViewItems = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
         
 
         public ItemForm()
@@ -187,7 +159,6 @@ namespace InvoiceManager_DBFirst
             this._setItemGroupControls(row);
         }
 
-
         private void dataGridViewItems_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             this._clearItemControls();
@@ -209,8 +180,8 @@ namespace InvoiceManager_DBFirst
             {
                 case "Top Group":
 
-                    this.dataGridViewItemTopGroups.DataSource = (this._sortOrdersDataGridViewItemTopGroups[1] == SortOrder.ASC) ? query.OrderBy(r => r.Name).ToList() : query.OrderByDescending(r => r.Name).ToList();
-                    this._sortOrdersDataGridViewItemTopGroups[1] = (this._sortOrdersDataGridViewItemTopGroups[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    this.dataGridViewItemTopGroups.DataSource = (this._sortOrdersDataGridViewItemTopGroups[1] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.Name).ToList() : query.OrderByDescending(r => r.Name).ToList();
+                    this._sortOrdersDataGridViewItemTopGroups[1] = (this._sortOrdersDataGridViewItemTopGroups[1] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
                     break;
             }
         }
@@ -233,12 +204,12 @@ namespace InvoiceManager_DBFirst
             switch (columnName)
             {
                 case "Group":
-                    this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[0] == SortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
-                    this._sortOrdersDataGridViewItemGroups[0] = (this._sortOrdersDataGridViewItemGroups[0] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
+                    this._sortOrdersDataGridViewItemGroups[0] = (this._sortOrdersDataGridViewItemGroups[0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
                     break;
                 case "Top Group":
-                    this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemTopGroupName).ToList() : query.OrderByDescending(r => r.itemTopGroupName).ToList();
-                    this._sortOrdersDataGridViewItemGroups[1] = (this._sortOrdersDataGridViewItemGroups[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    this.dataGridViewItemGroups.DataSource = (this._sortOrdersDataGridViewItemGroups[1] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.itemTopGroupName).ToList() : query.OrderByDescending(r => r.itemTopGroupName).ToList();
+                    this._sortOrdersDataGridViewItemGroups[1] = (this._sortOrdersDataGridViewItemGroups[1] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
                     break;
             }
         }
@@ -262,13 +233,13 @@ namespace InvoiceManager_DBFirst
             switch (columnName)
             {
                 case "Item":
-                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? query.OrderBy(r => r.itemName).ToList() : query.OrderByDescending(r => r.itemName).ToList();
-                    this._sortOrdersDataGridViewItems[0] = (this._sortOrdersDataGridViewItems[0] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.itemName).ToList() : query.OrderByDescending(r => r.itemName).ToList();
+                    this._sortOrdersDataGridViewItems[0] = (this._sortOrdersDataGridViewItems[0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
                     break;
 
                 case "Group":
-                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
-                    this._sortOrdersDataGridViewItems[1] = (this._sortOrdersDataGridViewItems[1] == SortOrder.ASC) ? SortOrder.DESC : SortOrder.ASC;
+                    this.dataGridViewItems.DataSource = (this._sortOrdersDataGridViewItems[1] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.itemGroupName).ToList() : query.OrderByDescending(r => r.itemGroupName).ToList();
+                    this._sortOrdersDataGridViewItems[1] = (this._sortOrdersDataGridViewItems[1] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
                     break;
             }
         }

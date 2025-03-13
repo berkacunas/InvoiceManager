@@ -1,45 +1,20 @@
-﻿using SQLitePCL;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Entity;
-using System.Data.Entity.Core.Common.CommandTrees;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
-using System.IdentityModel.Tokens;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Reflection.Metadata.BlobBuilder;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
+
+using InvoiceManager_DBFirst.Globals;
 
 namespace InvoiceManager_DBFirst
 {
-    public delegate void Notify(string actionType, string message, DateTime eventTime);
 
     public partial class TactionForm : Form
     {
-        enum Mode
-        {
-            Display,
-            Add,
-            Edit,
-            Search
-        }
-
-        enum BindType
-        {
-            Select,
-            Where,
-            Setnull
-        }
-
         public event Notify TransactionsLoaded;
         public event Notify TransactionSaved;
         public event Notify TransactionUpdated;

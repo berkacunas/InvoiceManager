@@ -4,36 +4,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using InvoiceManager_DBFirst.Globals;
 
 namespace InvoiceManager_DBFirst
 {
     public partial class SellerForm : Form
     {
-        enum Mode
-        {
-            Display,
-            Add,
-            Edit,
-            Search
-        }
-
-        enum BindType
-        {
-            Select,
-            Where,
-            Setnull
-        }
-
-        private enum SortOrder
-        {
-            ASC,
-            DESC,
-            UNORDERED
-        }
-
         public event Notify SellersLoaded;
         public event Notify SellerSaved;
         public event Notify SellerUpdated;
@@ -59,7 +37,7 @@ namespace InvoiceManager_DBFirst
 
         private Mode _sellerMode;
 
-        private SortOrder[] _sortOrdersDataGridViewSellers = { SortOrder.ASC, SortOrder.UNORDERED };
+        private ColumnSortOrder[] _sortOrdersDataGridViewSellers = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
 
         public SellerForm()
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace InvoiceManager_DBFirst
+namespace InvoiceManager_DBFirst.Globals
 {
     internal class WinFormsHelper
     {
@@ -37,6 +37,11 @@ namespace InvoiceManager_DBFirst
                 gridview.Columns[i].Width = columnWidths[i];
                 gridview.Columns[i].DefaultCellStyle.Alignment = columnAlignments[i];
             }
+        }
+
+        public static void EnableDataGridViewMultiSelect(DataGridView gridview, bool enable)
+        {
+            gridview.MultiSelect = enable;
         }
 
         public static void SetListViewRowStyles(ListView listView, View view, bool gridLines, bool fullRowSelect, bool multiSelect)

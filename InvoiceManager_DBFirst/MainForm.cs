@@ -78,7 +78,7 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemItems_Click(object sender, EventArgs e)
         {
-            this._initializeItemForm();
+            this.initializeItemUserControl();
         }
 
         private void toolStripMenuItemShops_Click(object sender, EventArgs e)
@@ -125,7 +125,7 @@ namespace InvoiceManager_DBFirst
 
         private void ToolStripButtonItems_Click(object sender, EventArgs e)
         {
-            this._initializeItemForm();
+            this.initializeItemUserControl();
         }
 
         private void ToolStripButtonShops_Click(object sender, EventArgs e)
@@ -171,17 +171,17 @@ namespace InvoiceManager_DBFirst
             this._applicationLogUserControl.AddLog(message, actionType, eventTime);
         }
 
-        private void ItemForm_ItemFormOpened(string actionType, string message, DateTime eventTime)
+        private void itemUserControl_ItemFormOpened(string actionType, string message, DateTime eventTime)
         {
             this._applicationLogUserControl.AddLog(message, actionType, eventTime);
         }
 
-        private void ItemForm_ItemFormClosed(string actionType, string message, DateTime eventTime)
+        private void itemUserControl_ItemChanged(string actionType, string message, DateTime eventTime)
         {
             this._applicationLogUserControl.AddLog(message, actionType, eventTime);
         }
 
-        private void ItemForm_ItemChanged(string actionType, string message, DateTime eventTime)
+        private void itemForm_ItemFormClosed(string actionType, string message, DateTime eventTime)
         {
             this._applicationLogUserControl.AddLog(message, actionType, eventTime);
         }
@@ -280,13 +280,15 @@ namespace InvoiceManager_DBFirst
             this.placeHolder.Controls.Add(tactionUserControl);
         }
 
-        private void _initializeItemForm()
+        private void initializeItemUserControl()
         {
-            ItemForm itemForm = new ItemForm();
-            itemForm.ItemFormOpened += ItemForm_ItemFormOpened;
-            itemForm.ItemChanged += ItemForm_ItemChanged;
-            itemForm.ItemFormClosed += ItemForm_ItemFormClosed;
-            itemForm.Show();
+            ItemUserControl itemUserControl = new ItemUserControl();
+            itemUserControl.ItemFormOpened += itemUserControl_ItemFormOpened;
+            itemUserControl.ItemChanged += itemUserControl_ItemChanged;
+            itemUserControl.ItemFormClosed += itemForm_ItemFormClosed;
+
+            this.placeHolder.Controls.Clear();
+            this.placeHolder.Controls.Add(itemUserControl);
         }
 
         private void _initializeShopForm()

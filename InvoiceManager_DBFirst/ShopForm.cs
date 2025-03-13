@@ -1,43 +1,18 @@
-﻿using SQLitePCL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+
+using InvoiceManager_DBFirst.Globals;
 
 namespace InvoiceManager_DBFirst
 {
     public partial class ShopForm : Form
     {
-        enum Mode
-        {
-            Display,
-            Add,
-            Edit,
-            Search
-        }
-
-        enum BindType
-        {
-            Select,
-            Where,
-            Setnull
-        }
-
-        private enum SortOrder
-        {
-            ASC,
-            DESC,
-            UNORDERED
-        }
-
         public event Notify ShopsLoaded;
         public event Notify ShopSaved;
         public event Notify ShopUpdated;
@@ -67,8 +42,8 @@ namespace InvoiceManager_DBFirst
         private Mode _groupMode;
         private Mode _typeMode;
 
-        private SortOrder[] _sortOrdersDataGridViewShopGroups = { SortOrder.ASC, SortOrder.UNORDERED };
-        private SortOrder[] _sortOrdersDataGridViewShops = { SortOrder.ASC, SortOrder.UNORDERED };
+        private ColumnSortOrder[] _sortOrdersDataGridViewShopGroups = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
+        private ColumnSortOrder[] _sortOrdersDataGridViewShops = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
 
         public ShopForm()
         {
