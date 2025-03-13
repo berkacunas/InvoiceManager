@@ -447,6 +447,7 @@ namespace InvoiceManager_DBFirst.UserControls
         private void buttonAdviceLastUnitPrice_Click(object sender, EventArgs e)
         {
             string itemName = this.textBoxItem.Text;
+            int itemSubTypeId = 0;
 
             if (string.IsNullOrEmpty(itemName))
             {
@@ -460,8 +461,11 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
             }
 
+            if (this.comboBoxItemSubType.SelectedItem != null)
+                itemSubTypeId = ((ItemSubType)this.comboBoxItemSubType.SelectedItem).id;
+
             int itemId = dbContext.Item.Where(r => r.Name == itemName).FirstOrDefault().id;
-            this.textBoxUnitPrice.Text = _adviceUnitPriceForItem(itemId).ToString();
+            this.textBoxUnitPrice.Text = _adviceUnitPriceForItem(itemId, itemSubTypeId).ToString();
             this.textBoxVat.Text = _adviceVatForItem(itemId).ToString();
         }
 
@@ -1325,15 +1329,19 @@ namespace InvoiceManager_DBFirst.UserControls
             return new Tuple<decimal, decimal>(totalPrice, totalVatPrice);
         }
 
-        private decimal _adviceUnitPriceForItem(int itemId)
+        private decimal _adviceUnitPriceForItem(int itemId, int itemSubTypeId)
         {
             var query = from details in dbContext.TactionDetails
+                        join itemSubType in dbContext.Item on details.ItemSubTypeId equals itemSubType.id into joinTable
+                        from jt in joinTable.DefaultIfEmpty()
                         join taction in dbContext.Taction on details.TransactionId equals taction.id
                         where details.ItemId == itemId
-                        orderby taction.Dt descending
-                        select details.UnitPrice;
+                        select details;
 
-            return Convert.ToDecimal(query.FirstOrDefault());
+            if (itemSubTypeId > 0)
+                query = query.Where(r => r.ItemSubTypeId == itemSubTypeId);
+
+            return Convert.ToDecimal(query.OrderByDescending(r => r.Taction.Dt).FirstOrDefault().UnitPrice);
         }
 
         private int _adviceVatForItem(int itemId)
