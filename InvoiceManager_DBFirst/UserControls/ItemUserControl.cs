@@ -195,7 +195,7 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
 
             string[] tactionsHeaderTexts = new string[] { "itemId", "groupId", "Item", "Group", "Note" };
-            int[] tactionsColumnWidths = new int[] { 50, 50, 280, 160, 120 };
+            int[] tactionsColumnWidths = new int[] { 50, 50, 280, 160, 150 };
             DataGridViewContentAlignment[] tactionsColumnAlignments = { DataGridViewContentAlignment.MiddleLeft,
                                                                         DataGridViewContentAlignment.MiddleLeft,
                                                                         DataGridViewContentAlignment.MiddleLeft,

@@ -114,7 +114,7 @@
             this.groupBoxTactionOptions.Controls.Add(this.buttonUpdateTaction);
             this.groupBoxTactionOptions.Controls.Add(this.textBoxTactionNo);
             this.groupBoxTactionOptions.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxTactionOptions.Location = new System.Drawing.Point(742, 581);
+            this.groupBoxTactionOptions.Location = new System.Drawing.Point(742, 591);
             this.groupBoxTactionOptions.Name = "groupBoxTactionOptions";
             this.groupBoxTactionOptions.Size = new System.Drawing.Size(921, 168);
             this.groupBoxTactionOptions.TabIndex = 7;
@@ -335,7 +335,7 @@
             this.groupBoxTactionDetailsOptions.Controls.Add(this.buttonAddDetail);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.textBoxDetailsNote);
             this.groupBoxTactionDetailsOptions.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxTactionDetailsOptions.Location = new System.Drawing.Point(742, 755);
+            this.groupBoxTactionDetailsOptions.Location = new System.Drawing.Point(742, 765);
             this.groupBoxTactionDetailsOptions.Name = "groupBoxTactionDetailsOptions";
             this.groupBoxTactionDetailsOptions.Size = new System.Drawing.Size(921, 167);
             this.groupBoxTactionDetailsOptions.TabIndex = 8;
@@ -558,7 +558,7 @@
             this.groupBoxTactionDetails.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxTactionDetails.Location = new System.Drawing.Point(742, 3);
             this.groupBoxTactionDetails.Name = "groupBoxTactionDetails";
-            this.groupBoxTactionDetails.Size = new System.Drawing.Size(921, 572);
+            this.groupBoxTactionDetails.Size = new System.Drawing.Size(921, 582);
             this.groupBoxTactionDetails.TabIndex = 6;
             this.groupBoxTactionDetails.TabStop = false;
             this.groupBoxTactionDetails.Text = "Details";
@@ -570,7 +570,7 @@
             this.dataGridViewTactionDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTactionDetails.Location = new System.Drawing.Point(6, 24);
             this.dataGridViewTactionDetails.Name = "dataGridViewTactionDetails";
-            this.dataGridViewTactionDetails.Size = new System.Drawing.Size(908, 538);
+            this.dataGridViewTactionDetails.Size = new System.Drawing.Size(908, 548);
             this.dataGridViewTactionDetails.TabIndex = 0;
             // 
             // groupBoxTactions
@@ -582,7 +582,7 @@
             this.groupBoxTactions.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxTactions.Location = new System.Drawing.Point(3, 3);
             this.groupBoxTactions.Name = "groupBoxTactions";
-            this.groupBoxTactions.Size = new System.Drawing.Size(733, 919);
+            this.groupBoxTactions.Size = new System.Drawing.Size(733, 929);
             this.groupBoxTactions.TabIndex = 5;
             this.groupBoxTactions.TabStop = false;
             this.groupBoxTactions.Text = "Transactions";
@@ -595,7 +595,7 @@
             this.dataGridViewTactions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTactions.Location = new System.Drawing.Point(6, 24);
             this.dataGridViewTactions.Name = "dataGridViewTactions";
-            this.dataGridViewTactions.Size = new System.Drawing.Size(721, 889);
+            this.dataGridViewTactions.Size = new System.Drawing.Size(721, 899);
             this.dataGridViewTactions.TabIndex = 0;
             // 
             // TactionUserControl
@@ -609,7 +609,7 @@
             this.Controls.Add(this.groupBoxTactions);
             this.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "TactionUserControl";
-            this.Size = new System.Drawing.Size(1670, 929);
+            this.Size = new System.Drawing.Size(1670, 938);
             this.groupBoxTactionOptions.ResumeLayout(false);
             this.groupBoxTactionOptions.PerformLayout();
             this.groupBoxTactionDetailsOptions.ResumeLayout(false);

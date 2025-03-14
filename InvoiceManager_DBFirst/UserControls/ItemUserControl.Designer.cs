@@ -96,7 +96,7 @@
             this.groupBoxItemSubTypeOptions.Controls.Add(this.buttonSaveItemSubType);
             this.groupBoxItemSubTypeOptions.Controls.Add(this.labelItemSubTypeOptionsItem);
             this.groupBoxItemSubTypeOptions.Controls.Add(this.labelItemSubTypeOptionsItemSubType);
-            this.groupBoxItemSubTypeOptions.Location = new System.Drawing.Point(1186, 446);
+            this.groupBoxItemSubTypeOptions.Location = new System.Drawing.Point(1234, 446);
             this.groupBoxItemSubTypeOptions.Name = "groupBoxItemSubTypeOptions";
             this.groupBoxItemSubTypeOptions.Size = new System.Drawing.Size(433, 123);
             this.groupBoxItemSubTypeOptions.TabIndex = 18;
@@ -187,17 +187,19 @@
             this.groupBox1.Controls.Add(this.dataGridViewItemTopGroups);
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(185, 769);
+            this.groupBox1.Size = new System.Drawing.Size(202, 930);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Edit Top Groups...";
             // 
             // dataGridViewItemTopGroups
             // 
+            this.dataGridViewItemTopGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridViewItemTopGroups.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewItemTopGroups.Location = new System.Drawing.Point(6, 22);
             this.dataGridViewItemTopGroups.Name = "dataGridViewItemTopGroups";
-            this.dataGridViewItemTopGroups.Size = new System.Drawing.Size(173, 741);
+            this.dataGridViewItemTopGroups.Size = new System.Drawing.Size(190, 902);
             this.dataGridViewItemTopGroups.TabIndex = 0;
             // 
             // groupBoxItemTopGroupOptions
@@ -208,7 +210,7 @@
             this.groupBoxItemTopGroupOptions.Controls.Add(this.buttonDeleteTopGroup);
             this.groupBoxItemTopGroupOptions.Controls.Add(this.buttonUpdateTopGroup);
             this.groupBoxItemTopGroupOptions.Controls.Add(this.buttonSaveTopGroup);
-            this.groupBoxItemTopGroupOptions.Location = new System.Drawing.Point(1186, 3);
+            this.groupBoxItemTopGroupOptions.Location = new System.Drawing.Point(1234, 3);
             this.groupBoxItemTopGroupOptions.Name = "groupBoxItemTopGroupOptions";
             this.groupBoxItemTopGroupOptions.Size = new System.Drawing.Size(433, 96);
             this.groupBoxItemTopGroupOptions.TabIndex = 19;
@@ -279,7 +281,7 @@
             this.groupBoxItemGroupOptions.Controls.Add(this.buttonUpdateGroup);
             this.groupBoxItemGroupOptions.Controls.Add(this.buttonSaveGroup);
             this.groupBoxItemGroupOptions.Controls.Add(this.labelGroupOptionsTopGroup);
-            this.groupBoxItemGroupOptions.Location = new System.Drawing.Point(1186, 105);
+            this.groupBoxItemGroupOptions.Location = new System.Drawing.Point(1234, 105);
             this.groupBoxItemGroupOptions.Name = "groupBoxItemGroupOptions";
             this.groupBoxItemGroupOptions.Size = new System.Drawing.Size(433, 126);
             this.groupBoxItemGroupOptions.TabIndex = 17;
@@ -369,23 +371,25 @@
             // 
             this.groupBoxItemGroups.Controls.Add(this.dataGridViewItemGroups);
             this.groupBoxItemGroups.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxItemGroups.Location = new System.Drawing.Point(195, 3);
+            this.groupBoxItemGroups.Location = new System.Drawing.Point(212, 3);
             this.groupBoxItemGroups.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxItemGroups.Name = "groupBoxItemGroups";
             this.groupBoxItemGroups.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxItemGroups.Size = new System.Drawing.Size(359, 769);
+            this.groupBoxItemGroups.Size = new System.Drawing.Size(359, 930);
             this.groupBoxItemGroups.TabIndex = 15;
             this.groupBoxItemGroups.TabStop = false;
             this.groupBoxItemGroups.Text = "Groups";
             // 
             // dataGridViewItemGroups
             // 
+            this.dataGridViewItemGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridViewItemGroups.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dataGridViewItemGroups.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewItemGroups.Location = new System.Drawing.Point(8, 22);
             this.dataGridViewItemGroups.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridViewItemGroups.Name = "dataGridViewItemGroups";
-            this.dataGridViewItemGroups.Size = new System.Drawing.Size(343, 741);
+            this.dataGridViewItemGroups.Size = new System.Drawing.Size(343, 902);
             this.dataGridViewItemGroups.TabIndex = 0;
             // 
             // groupBoxItemOptions
@@ -401,7 +405,7 @@
             this.groupBoxItemOptions.Controls.Add(this.labelItemOptionsGroup);
             this.groupBoxItemOptions.Controls.Add(this.textBoxItemOptionsItem);
             this.groupBoxItemOptions.Controls.Add(this.labelItemOptionsItem);
-            this.groupBoxItemOptions.Location = new System.Drawing.Point(1186, 239);
+            this.groupBoxItemOptions.Location = new System.Drawing.Point(1234, 239);
             this.groupBoxItemOptions.Name = "groupBoxItemOptions";
             this.groupBoxItemOptions.Size = new System.Drawing.Size(433, 201);
             this.groupBoxItemOptions.TabIndex = 16;
@@ -508,23 +512,25 @@
             // 
             this.groupBoxItems.Controls.Add(this.dataGridViewItems);
             this.groupBoxItems.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxItems.Location = new System.Drawing.Point(562, 3);
+            this.groupBoxItems.Location = new System.Drawing.Point(579, 3);
             this.groupBoxItems.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxItems.Name = "groupBoxItems";
             this.groupBoxItems.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxItems.Size = new System.Drawing.Size(617, 769);
+            this.groupBoxItems.Size = new System.Drawing.Size(648, 930);
             this.groupBoxItems.TabIndex = 14;
             this.groupBoxItems.TabStop = false;
             this.groupBoxItems.Text = "Items";
             // 
             // dataGridViewItems
             // 
+            this.dataGridViewItems.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridViewItems.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dataGridViewItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewItems.Location = new System.Drawing.Point(8, 22);
             this.dataGridViewItems.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridViewItems.Name = "dataGridViewItems";
-            this.dataGridViewItems.Size = new System.Drawing.Size(601, 741);
+            this.dataGridViewItems.Size = new System.Drawing.Size(632, 902);
             this.dataGridViewItems.TabIndex = 0;
             // 
             // ItemUserControl
@@ -538,7 +544,7 @@
             this.Controls.Add(this.groupBoxItemOptions);
             this.Controls.Add(this.groupBoxItems);
             this.Name = "ItemUserControl";
-            this.Size = new System.Drawing.Size(1628, 777);
+            this.Size = new System.Drawing.Size(1670, 936);
             this.groupBoxItemSubTypeOptions.ResumeLayout(false);
             this.groupBoxItemSubTypeOptions.PerformLayout();
             this.groupBox1.ResumeLayout(false);
