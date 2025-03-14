@@ -973,11 +973,6 @@ namespace InvoiceManager_DBFirst
             this._newItemSubTypeDetails.ItemId = itemId;
         }
 
-        public static void _enableDataGridViewMultiSelect(DataGridView gridview, bool enable)
-        {
-            gridview.MultiSelect = enable;
-        }
-
         private void _bindDataToGridViewItemTopGroup()
         {
             var query = from itemTopGroup in dbContext.ItemTopGroup
@@ -1147,6 +1142,11 @@ namespace InvoiceManager_DBFirst
             this._itemSubTypeMode = mode;
             this._groupMode = mode;
             this._topGroupMode = mode;
+        }
+
+        public static void _enableDataGridViewMultiSelect(DataGridView gridview, bool enable)
+        {
+            gridview.MultiSelect = enable;
         }
 
         private void _setEditableItems(bool isEditable)

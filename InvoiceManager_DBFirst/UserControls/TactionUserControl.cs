@@ -33,8 +33,8 @@ namespace InvoiceManager_DBFirst.UserControls
         {
             InitializeComponent();
 
-            this._createContextMenu();
-            this._createImageList();
+            this.createContextMenu();
+            this.createImageList();
 
             this.dbContext = new InvoicesEntities();
 
@@ -77,22 +77,22 @@ namespace InvoiceManager_DBFirst.UserControls
 
         private void tactionUserControl_Load(object sender, EventArgs e)
         {
-            this._setEditableTactions(false);
-            this._setEditableDetails(false);
-            this._setReadOnlyTotalPriceField();
-            this._setReadOnlyTotalVatPriceField();
-            _limitTextBoxCharLength(this.textBoxVat, 2);
+            this.setEditableTactions(false);
+            this.setEditableDetails(false);
+            this.setReadOnlyTotalPriceField();
+            this.setReadOnlyTotalVatPriceField();
+            limitTextBoxCharLength(this.textBoxVat, 2);
 
             WinFormsHelper.SetDefaultGridViewStyles(this.dataGridViewTactions);
             WinFormsHelper.SetDefaultGridViewStyles(this.dataGridViewTactionDetails);
-            _setButtonImages(buttonAdviceLastUnitPrice, _imageList, "QuestionMark", Color.White, Color.FromArgb(70, 70, 70), FlatStyle.Flat, 0);
+            setButtonImages(buttonAdviceLastUnitPrice, _imageList, "QuestionMark", Color.White, Color.FromArgb(70, 70, 70), FlatStyle.Flat, 0);
 
             this.comboBoxPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxOwner.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxItemSubType.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            this._setAutoCompleteTextBoxes();
-            this._bindDataToGridViewTaction();
+            this.setAutoCompleteTextBoxes();
+            this.bindDataToGridViewTaction();
 
             this._mode = Mode.Display;
 
@@ -161,19 +161,19 @@ namespace InvoiceManager_DBFirst.UserControls
 
         private void dataGridViewTactions_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            this._setEditableTactions(false);
-            this._setEditableDetails(false);
-            this._checkEditableCheckBoxes(false);
+            this.setEditableTactions(false);
+            this.setEditableDetails(false);
+            this.checkEditableCheckBoxes(false);
 
             DataGridViewRow row = this.dataGridViewTactions.CurrentRow;
-            int tactionId = this._setTactionControls(row);
-            this._bindDataToGridViewTactionDetails(tactionId);
+            int tactionId = this.setTactionControls(row);
+            this.bindDataToGridViewTactionDetails(tactionId);
         }
 
         private void dataGridViewTactionDetails_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewRow row = this.dataGridViewTactionDetails.CurrentRow;
-            this._setTactionDetailsControls(row);
+            this.setTactionDetailsControls(row);
         }
 
         private void dataGridViewTactions_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -183,8 +183,8 @@ namespace InvoiceManager_DBFirst.UserControls
                 DataGridViewRow row = this.dataGridViewTactions.Rows[0];
                 if (row != null)
                 {
-                    int tactionId = this._setTactionControls(row);
-                    this._bindDataToGridViewTactionDetails(tactionId);
+                    int tactionId = this.setTactionControls(row);
+                    this.bindDataToGridViewTactionDetails(tactionId);
                 }
             }
         }
@@ -195,7 +195,7 @@ namespace InvoiceManager_DBFirst.UserControls
             {
                 DataGridViewRow row = this.dataGridViewTactionDetails.Rows[0];
                 if (row != null)
-                    this._setTactionDetailsControls(row);
+                    this.setTactionDetailsControls(row);
             }
         }
 
@@ -204,23 +204,23 @@ namespace InvoiceManager_DBFirst.UserControls
             this._newTaction = new Taction();
             this._mode = Mode.Add;
 
-            this._setEditableTactions(true);
-            this._setEditableDetails(true);
-            this._checkEditableCheckBoxes(true);
-            this._enableDiscountFields(false);
-            this._enableSellerField(false);
-            this._clearTactionControls();
-            this._clearDetailsControls();
+            this.setEditableTactions(true);
+            this.setEditableDetails(true);
+            this.checkEditableCheckBoxes(true);
+            this.enableDiscountFields(false);
+            this.enableSellerField(false);
+            this.clearTactionControls();
+            this.clearDetailsControls();
             this.dataGridViewTactionDetails.DataSource = null;
             this.dateTimePickerTactionDate.Value = DateTime.Now;
 
             this._bindDataToComboBoxPaymentMethod(BindType.Select);
-            this._bindDataToComboBoxOwner(BindType.Select);
+            this.bindDataToComboBoxOwner(BindType.Select);
         }
 
         private void buttonSaveTaction_Click(object sender, EventArgs e)
         {
-            this._setTactionDataFromUiToObject(this._newTaction);
+            this.setTactionDataFromUiToObject(this._newTaction);
             this.dbContext.Taction.Add(this._newTaction);
 
             try
@@ -234,10 +234,10 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
             }
 
-            this._clearTactionControls();
-            this._clearDetailsControls();
+            this.clearTactionControls();
+            this.clearDetailsControls();
             this.dataGridViewTactionDetails.DataSource = null;
-            this._bindDataToGridViewTaction();
+            this.bindDataToGridViewTaction();
             this._newTaction = new Taction();
         }
 
@@ -260,7 +260,7 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
             }
 
-            this._setTactionDataFromUiToObject(taction);
+            this.setTactionDataFromUiToObject(taction);
 
             try
             {
@@ -272,7 +272,7 @@ namespace InvoiceManager_DBFirst.UserControls
                 MessageBox.Show("An error occurred while updating taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            this._bindDataToGridViewTaction();
+            this.bindDataToGridViewTaction();
         }
 
         private void buttonDeleteTaction_Click(object sender, EventArgs e)
@@ -306,26 +306,26 @@ namespace InvoiceManager_DBFirst.UserControls
                 MessageBox.Show("An error occurred while deleting taction.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            this._clearTactionControls();
-            this._clearDetailsControls();
+            this.clearTactionControls();
+            this.clearDetailsControls();
             this.dataGridViewTactionDetails.DataSource = null;
 
-            this._bindDataToGridViewTaction();
+            this.bindDataToGridViewTaction();
         }
 
         private void buttonCancelTaction_Click(object sender, EventArgs e)
         {
-            this._setEditableTactions(false);
-            this._setEditableDetails(false);
-            this._checkEditableCheckBoxes(false);
-            this._enableDiscountFields(false);
-            this._enableSellerField(false);
-            this._clearTactionControls();
-            this._clearDetailsControls();
+            this.setEditableTactions(false);
+            this.setEditableDetails(false);
+            this.checkEditableCheckBoxes(false);
+            this.enableDiscountFields(false);
+            this.enableSellerField(false);
+            this.clearTactionControls();
+            this.clearDetailsControls();
             this.dataGridViewTactionDetails.DataSource = null;
 
             this._bindDataToComboBoxPaymentMethod(BindType.Setnull);
-            this._bindDataToComboBoxOwner(BindType.Setnull);
+            this.bindDataToComboBoxOwner(BindType.Setnull);
 
             this._newTaction = null;
             this._mode = Mode.Display;
@@ -334,13 +334,13 @@ namespace InvoiceManager_DBFirst.UserControls
         private void buttonAddDetail_Click(object sender, EventArgs e)
         {
             TactionDetails details = new TactionDetails();
-            if (!this._setTactionDetailsDataFromUiToObject(details))
+            if (!this.setTactionDetailsDataFromUiToObject(details))
                 return;
 
             this._newTaction.TactionDetails.Add(details);
             this._updateDataGridViewTactionDetails();
-            this._clearDetailsControls();
-            this._setTactionTotalPrice(this._newTaction);
+            this.clearDetailsControls();
+            this.setTactionTotalPrice(this._newTaction);
         }
 
         private void buttonUpdateDetail_Click(object sender, EventArgs e)
@@ -366,7 +366,7 @@ namespace InvoiceManager_DBFirst.UserControls
             if (this.dbContext.TactionDetails.Count(r => r.id == detailsId) > 0)
             {
                 details = this.dbContext.TactionDetails.Where(r => r.id == detailsId).FirstOrDefault();
-                if (!this._setTactionDetailsDataFromUiToObject(details))
+                if (!this.setTactionDetailsDataFromUiToObject(details))
                     return;
 
                 this.dbContext.SaveChanges();
@@ -374,12 +374,12 @@ namespace InvoiceManager_DBFirst.UserControls
             else
             {
                 details = this._newTaction.TactionDetails.Where(r => r.ItemId == itemId && r.Unit == unit && r.UnitPrice == unitPrice && r.Vat == vat).FirstOrDefault();
-                if (!this._setTactionDetailsDataFromUiToObject(details))
+                if (!this.setTactionDetailsDataFromUiToObject(details))
                     return;
             }
 
             this._updateDataGridViewTactionDetails();
-            this._setTactionTotalPrice(_newTaction);
+            this.setTactionTotalPrice(_newTaction);
         }
 
         private void buttonRemoveDetail_Click(object sender, EventArgs e)
@@ -416,15 +416,15 @@ namespace InvoiceManager_DBFirst.UserControls
                     MessageBox.Show("An error occurred while removing taction detail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                this._bindDataToGridViewTactionDetails(tactionId);
-                this._setTactionTotalPrice(taction);
+                this.bindDataToGridViewTactionDetails(tactionId);
+                this.setTactionTotalPrice(taction);
             }
             else
             {
                 details = this._newTaction.TactionDetails.Where(r => r.ItemId == itemId && r.Unit == unit && r.UnitPrice == unitPrice && r.Vat == vat).FirstOrDefault();
                 this._newTaction.TactionDetails.Remove(details);
                 this._updateDataGridViewTactionDetails();
-                this._setTactionTotalPrice(_newTaction);
+                this.setTactionTotalPrice(_newTaction);
             }
         }
 
@@ -449,14 +449,14 @@ namespace InvoiceManager_DBFirst.UserControls
                 itemSubTypeId = ((ItemSubType)this.comboBoxItemSubType.SelectedItem).id;
 
             int itemId = dbContext.Item.Where(r => r.Name == itemName).FirstOrDefault().id;
-            this.textBoxUnitPrice.Text = _adviceUnitPriceForItem(itemId, itemSubTypeId).ToString();
-            this.textBoxVat.Text = _adviceVatForItem(itemId).ToString();
+            this.textBoxUnitPrice.Text = adviceUnitPriceForItem(itemId, itemSubTypeId).ToString();
+            this.textBoxVat.Text = adviceVatForItem(itemId).ToString();
         }
 
         private void checkBoxDetailsEditable_CheckedChanged(object sender, EventArgs e)
         {
-            this._setEditableDetails(this.checkBoxDetailsEditable.Checked);
-            this._enableDiscountFields(this.checkBoxDiscount.Checked);
+            this.setEditableDetails(this.checkBoxDetailsEditable.Checked);
+            this.enableDiscountFields(this.checkBoxDiscount.Checked);
         }
 
         private void checkBoxTactionsEditable_CheckedChanged(object sender, EventArgs e)
@@ -467,35 +467,35 @@ namespace InvoiceManager_DBFirst.UserControls
             int paymentId = Convert.ToInt32(row.Cells["paymentId"].Value);
             int ownerId = Convert.ToInt32(row.Cells["ownerId"].Value);
 
-            this._setEditableTactions(this.checkBoxTactionsEditable.Checked);
-            this._enableSellerField(this.checkBoxSeller.Checked);
+            this.setEditableTactions(this.checkBoxTactionsEditable.Checked);
+            this.enableSellerField(this.checkBoxSeller.Checked);
             this._bindDataToComboBoxPaymentMethod(BindType.Select, paymentId);
-            this._bindDataToComboBoxOwner(BindType.Select, ownerId);
+            this.bindDataToComboBoxOwner(BindType.Select, ownerId);
         }
 
         private void checkBoxDiscount_CheckedChanged(object sender, EventArgs e)
         {
-            this._enableDiscountFields(this.checkBoxDiscount.Checked);
+            this.enableDiscountFields(this.checkBoxDiscount.Checked);
         }
 
         private void checkBoxSeller_CheckedChanged(object sender, EventArgs e)
         {
-            this._enableSellerField(this.checkBoxSeller.Checked);
+            this.enableSellerField(this.checkBoxSeller.Checked);
         }
 
         private void textBoxUnit_KeyPress(object sender, KeyPressEventArgs e)
         {
-            this._formatCurrencyTextBox(sender, e);
+            this.formatCurrencyTextBox(sender, e);
         }
 
         private void textBoxUnitPrice_KeyPress(object sender, KeyPressEventArgs e)
         {
-            this._formatCurrencyTextBox(sender, e);
+            this.formatCurrencyTextBox(sender, e);
         }
 
         private void textBoxVat_KeyPress(object sender, KeyPressEventArgs e)
         {
-            this._formatTwoDigitNumericTextBox(sender, e);
+            this.formatTwoDigitNumericTextBox(sender, e);
         }
        
         private void textBoxItemGroup_Leave(object sender, EventArgs e)
@@ -517,7 +517,7 @@ namespace InvoiceManager_DBFirst.UserControls
                         select item.Name;
             }
 
-            autoCompleteStringCollection = this._createAutoCompleteStringCollection(query);
+            autoCompleteStringCollection = this.createAutoCompleteStringCollection(query);
 
             if (autoCompleteStringCollection.Count == 1)
                 this.textBoxItem.Text = autoCompleteStringCollection[0];
@@ -538,7 +538,7 @@ namespace InvoiceManager_DBFirst.UserControls
                         select itemGroup.Name;
 
                 int itemId = dbContext.Item.Where(r => r.Name == this.textBoxItem.Text).FirstOrDefault().id;
-                this._bindDataToComboBoxItemSubType(BindType.Select, itemId);
+                this.bindDataToComboBoxItemSubType(BindType.Select, itemId);
                 this.comboBoxItemSubType.Enabled = true;
             }
             else
@@ -548,7 +548,7 @@ namespace InvoiceManager_DBFirst.UserControls
                         select itemGroup.Name;
             }
 
-            autoCompleteStringCollection = this._createAutoCompleteStringCollection(query);
+            autoCompleteStringCollection = this.createAutoCompleteStringCollection(query);
 
             if (autoCompleteStringCollection.Count == 1)
                 this.textBoxItemGroup.Text = autoCompleteStringCollection[0];
@@ -567,7 +567,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
             TactionReportForm tactionReportForm = new TactionReportForm();
             tactionReportForm.ReportType = TactionReportType.Selection;
-            tactionReportForm.SelectedTactions = _getSelectedTactions(selectedRows);
+            tactionReportForm.SelectedTactions = getSelectedTactions(selectedRows);
 
             if (tactionReportForm.ShowDialog() == DialogResult.OK)
             {
@@ -585,7 +585,7 @@ namespace InvoiceManager_DBFirst.UserControls
             }
 
             DataGridViewRow row = this.dataGridViewTactions.SelectedRows[0] as DataGridViewRow;
-            DateTime selectedDate = this._getTactionFromRow(row).Dt;
+            DateTime selectedDate = this.getTactionFromRow(row).Dt;
 
             TactionReportForm tactionReportForm = new TactionReportForm();
             tactionReportForm.ReportType = TactionReportType.Daily;
@@ -632,7 +632,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region Databind Queries
 
-        private void _bindDataToGridViewTaction()
+        private void bindDataToGridViewTaction()
         {
             var query = from taction in dbContext.Taction
                         join shop in dbContext.Shop on taction.ShopId equals shop.id
@@ -665,7 +665,7 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onTransactionsLoaded("Transactions", "Transaction data Loaded", DateTime.Now);
         }
 
-        private void _bindDataToGridViewTactionDetails(int tactionId)
+        private void bindDataToGridViewTactionDetails(int tactionId)
         {
             var query = from details in dbContext.TactionDetails
                         join item in dbContext.Item on details.ItemId equals item.id
@@ -749,7 +749,7 @@ namespace InvoiceManager_DBFirst.UserControls
                 this.comboBoxPaymentMethod.SelectedValue = paymentMethodId;
         }
 
-        private void _bindDataToComboBoxOwner(BindType bindType, int ownerId = 0)
+        private void bindDataToComboBoxOwner(BindType bindType, int ownerId = 0)
         {
             IQueryable<User> query = null;
 
@@ -778,7 +778,7 @@ namespace InvoiceManager_DBFirst.UserControls
                 this.comboBoxOwner.SelectedValue = ownerId;
         }
 
-        private void _bindDataToComboBoxItemSubType(BindType bindType, int itemId = 0, int itemSubTypeId = 0)
+        private void bindDataToComboBoxItemSubType(BindType bindType, int itemId = 0, int itemSubTypeId = 0)
         {
             IQueryable<ItemSubType> query = null;
 
@@ -820,7 +820,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region Set data to Controls
 
-        private void _setAutoCompleteTextBoxes()
+        private void setAutoCompleteTextBoxes()
         {
             this.textBoxShop.AutoCompleteMode = AutoCompleteMode.Suggest;
             this.textBoxSeller.AutoCompleteMode = AutoCompleteMode.Suggest;
@@ -877,7 +877,7 @@ namespace InvoiceManager_DBFirst.UserControls
             //this.textBoxItemSubType.AutoCompleteCustomSource = itemSubTypeNameCollection;
         }
 
-        private int _setTactionControls(DataGridViewRow row)
+        private int setTactionControls(DataGridViewRow row)
         {
             /* Returns TactionId */
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
@@ -890,24 +890,24 @@ namespace InvoiceManager_DBFirst.UserControls
             if (row.Cells["ownerId"].Value != null)
             {
                 int ownerId = Convert.ToInt32(row.Cells["ownerId"].Value);
-                this._bindDataToComboBoxOwner(BindType.Where, ownerId);
+                this.bindDataToComboBoxOwner(BindType.Where, ownerId);
             }
 
             this.textBoxTactionNo.Text = (row.Cells["tactionNo"].Value != null) ? row.Cells["tactionNo"].Value.ToString() : string.Empty;
 
             Taction taction = dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
-            _setTactionTotalPrice(taction);
+            setTactionTotalPrice(taction);
             //this.textBoxTotalPrice.Text = row.Cells["totalPrice"].Value.ToString();
 
             return tactionId;
         }
 
-        private void _setTactionDetailsControls(DataGridViewRow row)
+        private void setTactionDetailsControls(DataGridViewRow row)
         {
             this.textBoxItemGroup.Text = row.Cells["itemGroup"].Value.ToString();
             this.textBoxItem.Text = row.Cells["itemName"].Value.ToString();
             //this.textBoxItemSubType.Text = row.Cells["itemSubTypeId"].Value.ToString();
-            this._bindDataToComboBoxItemSubType(BindType.Where, 0, Convert.ToInt32(row.Cells["itemSubTypeId"].Value));
+            this.bindDataToComboBoxItemSubType(BindType.Where, 0, Convert.ToInt32(row.Cells["itemSubTypeId"].Value));
             this.textBoxUnit.Text = row.Cells["unit"].Value.ToString();
             this.textBoxUnitPrice.Text = row.Cells["unitPrice"].Value.ToString();
             this.textBoxVat.Text = row.Cells["vat"].Value.ToString();
@@ -917,9 +917,9 @@ namespace InvoiceManager_DBFirst.UserControls
             this.textBoxDetailsNote.Text = (row.Cells["note"].Value != null) ? row.Cells["note"].Value.ToString() : string.Empty;
         }
 
-        private void _setTactionTotalPrice(Taction taction)
+        private void setTactionTotalPrice(Taction taction)
         {
-            Tuple<decimal, decimal> totalPriceAndVatPrice = this._calculateTotalPriceAndVatPrice(taction);
+            Tuple<decimal, decimal> totalPriceAndVatPrice = this.calculateTotalPriceAndVatPrice(taction);
             textBoxTotalPrice.Text = totalPriceAndVatPrice.Item1.ToString();
             textBoxTotalVatPrice.Text = totalPriceAndVatPrice.Item2.ToString();
         }
@@ -928,7 +928,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region Get data from Controls
 
-        private void _setTactionDataFromUiToObject(Taction taction)
+        private void setTactionDataFromUiToObject(Taction taction)
         {
             if (taction.TactionDetails.Count == 0)
             {
@@ -978,7 +978,7 @@ namespace InvoiceManager_DBFirst.UserControls
             // taction.TotalPrice += taction.TactionDetails.Sum(r => r.UnitPrice * r.Unit);
         }
 
-        private bool _setTactionDetailsDataFromUiToObject(TactionDetails details)
+        private bool setTactionDetailsDataFromUiToObject(TactionDetails details)
         {
             if (!dbContext.Item.Any(r => r.Name == this.textBoxItem.Text))
             {
@@ -1042,7 +1042,7 @@ namespace InvoiceManager_DBFirst.UserControls
                     if (details.DiscountRate == null || details.DiscountRate != newRate) // if empty or if value changed.
                     {
                         details.DiscountRate = newRate;
-                        details.DiscountedPrice = _calculateDiscountedUnitPrice(details.DiscountRate.Value, details.UnitPrice, details.Unit);
+                        details.DiscountedPrice = calculateDiscountedUnitPrice(details.DiscountRate.Value, details.UnitPrice, details.Unit);
 
                         this.textBoxDiscountedPrice.Text = details.DiscountedPrice.ToString();
                     }
@@ -1054,7 +1054,7 @@ namespace InvoiceManager_DBFirst.UserControls
                     {
                         // details.DiscountedPrice is total discounted price per item. It's not discounted unit price.
                         details.DiscountedPrice = newDiscountedPrice;
-                        details.DiscountRate = _calculateDiscountRate(Convert.ToDecimal(this.textBoxDiscountedPrice.Text), details.UnitPrice);
+                        details.DiscountRate = calculateDiscountRate(Convert.ToDecimal(this.textBoxDiscountedPrice.Text), details.UnitPrice);
 
                         this.textBoxDiscountRate.Text = Math.Round(Convert.ToDouble(details.DiscountRate), 2).ToString();
                     }
@@ -1066,20 +1066,20 @@ namespace InvoiceManager_DBFirst.UserControls
             return true;
         }
 
-        private List<Taction> _getSelectedTactions(DataGridViewSelectedRowCollection rowCollection)
+        private List<Taction> getSelectedTactions(DataGridViewSelectedRowCollection rowCollection)
         {
             List<Taction> selectedTactions = new List<Taction>();
 
             foreach (DataGridViewRow row in this.dataGridViewTactions.SelectedRows)
             {
-                Taction taction = this._getTactionFromRow(row);
+                Taction taction = this.getTactionFromRow(row);
                 selectedTactions.Add(taction);
             }
 
             return selectedTactions;
         }
 
-        private Taction _getTactionFromRow(DataGridViewRow row)
+        private Taction getTactionFromRow(DataGridViewRow row)
         {
             Type type = row.DataBoundItem.GetType();
             int? tactionId = (int)type.GetProperty("tactionId").GetValue(row.DataBoundItem, null);
@@ -1094,7 +1094,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region Create Controls
 
-        private void _createImageList()
+        private void createImageList()
         {
             _imageList = new ImageList
             {
@@ -1108,7 +1108,7 @@ namespace InvoiceManager_DBFirst.UserControls
             _imageList.Images.Add("Question2", BitmapResourceLoader.Question2);
         }
         
-        private void _createContextMenu()
+        private void createContextMenu()
         {
             ContextMenuStrip menuStrip = new ContextMenuStrip();
 
@@ -1131,7 +1131,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region Create data for Controls
 
-        private AutoCompleteStringCollection _createAutoCompleteStringCollection(IQueryable<string> query)
+        private AutoCompleteStringCollection createAutoCompleteStringCollection(IQueryable<string> query)
         {
             AutoCompleteStringCollection autoCompleteStringCollection = new AutoCompleteStringCollection();
 
@@ -1145,7 +1145,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region Set Enabled & Checked & Read-only Controls
 
-        private void _setEditableTactions(bool isEditable)
+        private void setEditableTactions(bool isEditable)
         {
             this.dataGridViewTactions.Enabled = !isEditable;
             this.buttonSaveTaction.Enabled = isEditable;
@@ -1160,7 +1160,7 @@ namespace InvoiceManager_DBFirst.UserControls
             this.textBoxTactionNo.ReadOnly = !isEditable;
         }
 
-        private void _setEditableDetails(bool isEditable)
+        private void setEditableDetails(bool isEditable)
         {
             this.buttonAddDetail.Enabled = isEditable;
             this.buttonUpdateDetail.Enabled = isEditable;
@@ -1179,29 +1179,29 @@ namespace InvoiceManager_DBFirst.UserControls
             this.textBoxDetailsNote.ReadOnly = !isEditable;
         }
 
-        private void _enableDiscountFields(bool enable)
+        private void enableDiscountFields(bool enable)
         {
             this.textBoxDiscountRate.Enabled = enable;
             this.textBoxDiscountedPrice.Enabled = enable;
         }
 
-        private void _enableSellerField(bool enable)
+        private void enableSellerField(bool enable)
         {
             this.textBoxSeller.Enabled = enable;
         }
 
-        private void _checkEditableCheckBoxes(bool check)
+        private void checkEditableCheckBoxes(bool check)
         {
             this.checkBoxTactionsEditable.Checked = check;
             this.checkBoxDetailsEditable.Checked = check;
         }
 
-        private void _setReadOnlyTotalPriceField()
+        private void setReadOnlyTotalPriceField()
         {
             this.textBoxTotalPrice.ReadOnly = true;
         }
 
-        private void _setReadOnlyTotalVatPriceField()
+        private void setReadOnlyTotalVatPriceField()
         {
             this.textBoxTotalVatPrice.ReadOnly = true;
         }
@@ -1210,7 +1210,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region Format Controls
 
-        private void _formatCurrencyTextBox(object sender, KeyPressEventArgs e)
+        private void formatCurrencyTextBox(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != ','))
                 e.Handled = true;
@@ -1220,13 +1220,13 @@ namespace InvoiceManager_DBFirst.UserControls
                 e.Handled = true;
         }
 
-        private void _formatTwoDigitNumericTextBox(object sender, KeyPressEventArgs e)
+        private void formatTwoDigitNumericTextBox(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
                 e.Handled = true;
         }
 
-        private static void _limitTextBoxCharLength(TextBox textBox, int maxLength)
+        private static void limitTextBoxCharLength(TextBox textBox, int maxLength)
         {
             textBox.MaxLength = maxLength;
         }
@@ -1236,7 +1236,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region Style Controls
 
-        private static void _setButtonImages(Button button, ImageList imageList, string imageIndexOfKey, Color foreColor, Color backColor, FlatStyle flatStyle, int borderWidth)
+        private static void setButtonImages(Button button, ImageList imageList, string imageIndexOfKey, Color foreColor, Color backColor, FlatStyle flatStyle, int borderWidth)
         {
             button.ImageList = imageList;
             button.ImageIndex = imageList.Images.IndexOfKey(imageIndexOfKey);
@@ -1250,7 +1250,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region Clear Controls
 
-        private void _clearTactionControls()
+        private void clearTactionControls()
         {
             foreach (Control c in this.groupBoxTactionOptions.Controls)
                 if (c is TextBox)
@@ -1261,7 +1261,7 @@ namespace InvoiceManager_DBFirst.UserControls
                     ((ComboBox)c).Text = string.Empty;
         }
 
-        private void _clearDetailsControls()
+        private void clearDetailsControls()
         {
             foreach (Control c in this.groupBoxTactionDetailsOptions.Controls)
             {
@@ -1276,44 +1276,44 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region Calculations
 
-        private static decimal _calculateDiscountedUnitPrice(decimal rate, decimal unitPrice, decimal unit)
+        private static decimal calculateDiscountedUnitPrice(decimal rate, decimal unitPrice, decimal unit)
         {
             return (1 - (rate / 100)) * unitPrice * unit;
         }
 
-        private static decimal _calculateDiscountRate(decimal discountedUnitPrice, decimal unitPrice) // Returns rate value between 0 and 100.
+        private static decimal calculateDiscountRate(decimal discountedUnitPrice, decimal unitPrice) // Returns rate value between 0 and 100.
         {
             return (1 - discountedUnitPrice / unitPrice) * 100;
         }
 
-        private decimal _calculateItemPrice(decimal unitPrice, decimal unit, decimal? discountedPrice = null)
+        private decimal calculateItemPrice(decimal unitPrice, decimal unit, decimal? discountedPrice = null)
         {
             // return (details.DiscountedPrice == null) ? (details.UnitPrice * details.Unit) : (details.DiscountedPrice.Value);
 
             return (discountedPrice == null) ? unitPrice * unit : discountedPrice.Value;
         }
 
-        private decimal _calculateItemVatPrice(decimal itemPrice, int vat)
+        private decimal calculateItemVatPrice(decimal itemPrice, int vat)
         {
             return itemPrice * vat / 100;
         }
 
-        private Tuple<decimal, decimal> _calculateTotalPriceAndVatPrice(Taction taction)
+        private Tuple<decimal, decimal> calculateTotalPriceAndVatPrice(Taction taction)
         {
             decimal totalPrice = 0;
             decimal totalVatPrice = 0;
             foreach (TactionDetails details in taction.TactionDetails)
             {
-                decimal itemPrice = this._calculateItemPrice(details.UnitPrice, details.Unit, details.DiscountedPrice);
+                decimal itemPrice = this.calculateItemPrice(details.UnitPrice, details.Unit, details.DiscountedPrice);
 
-                totalVatPrice += this._calculateItemVatPrice(itemPrice, details.Vat);
+                totalVatPrice += this.calculateItemVatPrice(itemPrice, details.Vat);
                 totalPrice += itemPrice;
             }
 
             return new Tuple<decimal, decimal>(totalPrice, totalVatPrice);
         }
 
-        private decimal _adviceUnitPriceForItem(int itemId, int itemSubTypeId = 0)
+        private decimal adviceUnitPriceForItem(int itemId, int itemSubTypeId = 0)
         {
             var query = from details in dbContext.TactionDetails
                         join itemSubType in dbContext.Item on details.ItemSubTypeId equals itemSubType.id into joinTable
@@ -1328,7 +1328,7 @@ namespace InvoiceManager_DBFirst.UserControls
             return Convert.ToDecimal(query.OrderByDescending(r => r.Taction.Dt).FirstOrDefault().UnitPrice);
         }
 
-        private int _adviceVatForItem(int itemId)
+        private int adviceVatForItem(int itemId)
         {
             var query = from details in dbContext.TactionDetails
                         join taction in dbContext.Taction on details.TransactionId equals taction.id
@@ -1408,8 +1408,6 @@ namespace InvoiceManager_DBFirst.UserControls
             }
         }
 
-
         #endregion
-
     }
 }

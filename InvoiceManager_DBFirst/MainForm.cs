@@ -31,8 +31,6 @@ namespace InvoiceManager_DBFirst
 
             this.Icon = Icon.FromHandle(BitmapResourceLoader.AppIcon.GetHicon());
             this._createToolStripButtons();
-
-            this._applicationLogUserControl = new ApplicationLogUserControl();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -40,8 +38,10 @@ namespace InvoiceManager_DBFirst
             this.WindowState = FormWindowState.Maximized;
             this._timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
 
-            this.placeHolder.Controls.Add(this._applicationLogUserControl);
+            this._applicationLogUserControl = new ApplicationLogUserControl();
+
             this._loadToolStripMenuItemIcons();
+            this.initializeTactionUserControl();
         }
 
 
