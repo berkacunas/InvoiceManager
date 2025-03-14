@@ -21,16 +21,25 @@ namespace InvoiceManager_DBFirst
 {
     public partial class MainForm : Form
     {
+        private InvoicesEntities dbContext;
         private System.Threading.Timer _timer;
 
-        private ApplicationLogUserControl _applicationLogUserControl;
+        private List<AppLog> _appLogs;
+        
 
         public MainForm()
         {
             InitializeComponent();
 
+            this.dbContext = new InvoicesEntities();
+
+            this._appLogs = new List<AppLog>();
+
             this.Icon = Icon.FromHandle(BitmapResourceLoader.AppIcon.GetHicon());
             this._createToolStripButtons();
+
+            this.Load += MainForm_Load;
+            this.FormClosing += MainForm_FormClosing;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -38,12 +47,23 @@ namespace InvoiceManager_DBFirst
             this.WindowState = FormWindowState.Maximized;
             this._timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
 
-            this._applicationLogUserControl = new ApplicationLogUserControl();
-
             this._loadToolStripMenuItemIcons();
             this.initializeTactionUserControl();
         }
 
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.dbContext.AppLog.AddRange(this._appLogs);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Cannot save application logs", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void timer_callback(object state)
         {
@@ -106,6 +126,11 @@ namespace InvoiceManager_DBFirst
             this._initializeSettingsForm();
         }
 
+        private void toolStripMenuItemApplicationLog_Click(object sender, EventArgs e)
+        {
+            this.initializeApplicationLogUserControl();
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (System.Windows.Forms.Application.MessageLoop)
@@ -155,55 +180,80 @@ namespace InvoiceManager_DBFirst
 
         #endregion
 
+
         #region User-Defined Form Events
+
         private void TactionForm_TransactionFormOpened(string actionType, string message, DateTime eventTime)
         {
-            this._applicationLogUserControl.AddLog(message, actionType, eventTime);
+            this.addLog(actionType, message, eventTime);
         }
 
         private void TactionForm_TransactionChanged(string actionType, string message, DateTime eventTime)
         {
-            this._applicationLogUserControl.AddLog(message, actionType, eventTime);
+            this.addLog(actionType, message, eventTime);
         }
 
         private void TactionForm_TransactionFormClosed(string actionType, string message, DateTime eventTime)
         {
-            this._applicationLogUserControl.AddLog(message, actionType, eventTime);
+            this.addLog(actionType, message, eventTime);
         }
 
         private void itemUserControl_ItemFormOpened(string actionType, string message, DateTime eventTime)
         {
-            this._applicationLogUserControl.AddLog(message, actionType, eventTime);
+            this.addLog(actionType, message, eventTime);
         }
 
         private void itemUserControl_ItemChanged(string actionType, string message, DateTime eventTime)
         {
-            this._applicationLogUserControl.AddLog(message, actionType, eventTime);
+            this.addLog(actionType, message, eventTime);
         }
 
         private void itemForm_ItemFormClosed(string actionType, string message, DateTime eventTime)
         {
-            this._applicationLogUserControl.AddLog(message, actionType, eventTime);
+            this.addLog(actionType, message, eventTime);
         }
 
         private void ShopForm_ShopFormOpened(string actionType, string message, DateTime eventTime)
         {
-            this._applicationLogUserControl.AddLog(message, actionType, eventTime);
+            this.addLog(actionType, message, eventTime);
         }
 
         private void ShopForm_ShopChanged(string actionType, string message, DateTime eventTime)
         {
-            this._applicationLogUserControl.AddLog(message, actionType, eventTime);
+            this.addLog(actionType, message, eventTime);
         }
 
         private void ShopForm_ShopFormClosed(string actionType, string message, DateTime eventTime)
         {
-            this._applicationLogUserControl.AddLog(message, actionType, eventTime);
+            this.addLog(actionType, message, eventTime);
         }
 
         #endregion
 
         #region Private Functions
+
+        private void addLog(string actionType, string message, DateTime eventTime)
+        {
+            AppLog appLog = new AppLog();
+            AppLogActionType appLogActionType = this.dbContext.AppLogActionType.Where(r => r.Name == actionType).FirstOrDefault();
+
+            if (appLogActionType == null)
+            {
+                appLogActionType = new AppLogActionType();
+                appLogActionType.Name = actionType;
+
+                this.dbContext.AppLogActionType.Add(appLogActionType);
+                this.dbContext.SaveChanges();
+            }
+
+            appLog.AppLogActionType = appLogActionType;
+            appLog.ActionTypeId = appLogActionType.id;
+            appLog.Message = message;
+            appLog.EventTime = eventTime;
+
+            this._appLogs.Add(appLog);
+        }
+
         private void _loadToolStripMenuItemIcons()
         {
             this.toolStripMenuItemSync.Image = BitmapResourceLoader.Loop;
@@ -324,8 +374,17 @@ namespace InvoiceManager_DBFirst
             settingsForm.ShowDialog();
         }
 
+        private void initializeApplicationLogUserControl()
+        {
+            ApplicationLogUserControl applicationLogUserControl = new ApplicationLogUserControl(this._appLogs);
+            
+            this.placeHolder.Controls.Clear();
+            this.placeHolder.Controls.Add(applicationLogUserControl);
+        }
+
 
         #endregion
 
+        
     }
 }

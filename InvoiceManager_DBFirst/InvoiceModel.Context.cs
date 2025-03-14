@@ -42,5 +42,7 @@ namespace InvoiceManager_DBFirst
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserImage> UserImage { get; set; }
         public virtual DbSet<ItemSubTypeDetails> ItemSubTypeDetails { get; set; }
+        public virtual DbSet<AppLog> AppLog { get; set; }
+        public virtual DbSet<AppLogActionType> AppLogActionType { get; set; }
     }
 }

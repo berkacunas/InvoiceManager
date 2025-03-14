@@ -62,6 +62,7 @@
             this.placeHolder = new System.Windows.Forms.Panel();
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
+            this.toolStripMenuItemApplicationLog = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             this.statusStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
@@ -102,7 +103,7 @@
             this.toolStripMenuItemSync.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemSyncSqlite});
             this.toolStripMenuItemSync.Name = "toolStripMenuItemSync";
-            this.toolStripMenuItemSync.Size = new System.Drawing.Size(135, 22);
+            this.toolStripMenuItemSync.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSync.Text = "Sync";
             // 
             // toolStripMenuItemSyncSqlite
@@ -119,7 +120,7 @@
             this.toolStripMenuItemBatch.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemBatchItemSubTypes});
             this.toolStripMenuItemBatch.Name = "toolStripMenuItemBatch";
-            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(135, 22);
+            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemBatch.Text = "Batch";
             // 
             // toolStripMenuItemBatchItemSubTypes
@@ -134,7 +135,7 @@
             this.toolStripMenuItemExit.Name = "toolStripMenuItemExit";
             this.toolStripMenuItemExit.ShortcutKeyDisplayString = "";
             this.toolStripMenuItemExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.toolStripMenuItemExit.Size = new System.Drawing.Size(135, 22);
+            this.toolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemExit.Text = "Exit";
             this.toolStripMenuItemExit.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -146,7 +147,8 @@
             this.toolStripMenuItemShops,
             this.toolStripMenuItemPaymentMethods,
             this.toolStripMenuItemUsers,
-            this.toolStripMenuItemSellers});
+            this.toolStripMenuItemSellers,
+            this.toolStripMenuItemApplicationLog});
             this.toolStripMenuItemWindows.Name = "toolStripMenuItemWindows";
             this.toolStripMenuItemWindows.Size = new System.Drawing.Size(59, 20);
             this.toolStripMenuItemWindows.Text = "Actions";
@@ -210,7 +212,7 @@
             // toolStripMenuItemSettings
             // 
             this.toolStripMenuItemSettings.Name = "toolStripMenuItemSettings";
-            this.toolStripMenuItemSettings.Size = new System.Drawing.Size(116, 22);
+            this.toolStripMenuItemSettings.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSettings.Text = "Settings";
             this.toolStripMenuItemSettings.Click += new System.EventHandler(this.toolStripMenuItemSettings_Click);
             // 
@@ -385,6 +387,13 @@
             this.labelHorizontalLine1.Size = new System.Drawing.Size(1326, 2);
             this.labelHorizontalLine1.TabIndex = 7;
             // 
+            // toolStripMenuItemApplicationLog
+            // 
+            this.toolStripMenuItemApplicationLog.Name = "toolStripMenuItemApplicationLog";
+            this.toolStripMenuItemApplicationLog.Size = new System.Drawing.Size(212, 22);
+            this.toolStripMenuItemApplicationLog.Text = "Application Log";
+            this.toolStripMenuItemApplicationLog.Click += new System.EventHandler(this.toolStripMenuItemApplicationLog_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -400,7 +409,6 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "MainForm";
             this.Text = "Invoice Manager";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
             this.statusStripMain.ResumeLayout(false);
@@ -452,6 +460,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBatch;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBatchItemSubTypes;
         private System.Windows.Forms.Panel placeHolder;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemApplicationLog;
     }
 }
 

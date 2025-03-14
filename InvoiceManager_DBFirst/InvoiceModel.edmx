@@ -5,6 +5,22 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="InvoicesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AppLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ActionTypeId" Type="int" Nullable="false" />
+          <Property Name="EventTime" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AppLogActionType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+        </EntityType>
         <EntityType Name="BankCard">
           <Key>
             <PropertyRef Name="id" />
@@ -24,7 +40,7 @@
           <Property Name="Direction" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Val" Type="decimal" Precision="19" Scale="2" Nullable="false" />
           <Property Name="PaymentMethodId" Type="int" Nullable="false" />
-          <Property Name="For" Type="nvarchar" MaxLength="50" />
+          <Property Name="For" Type="nvarchar" MaxLength="512" />
           <Property Name="Note" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="CurrencyMovement">
@@ -179,6 +195,18 @@
           <Property Name="imageData" Type="varbinary(max)" Nullable="false" />
           <Property Name="isDefault" Type="bit" Nullable="false" />
         </EntityType>
+        <Association Name="FK_AppLog_ActionTypeId">
+          <End Role="AppLogActionType" Type="Self.AppLogActionType" Multiplicity="1" />
+          <End Role="AppLog" Type="Self.AppLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppLogActionType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="AppLog">
+              <PropertyRef Name="ActionTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CashTransfer_PaymentMethodId">
           <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
           <End Role="CashTransfer" Type="Self.CashTransfer" Multiplicity="*" />
@@ -420,6 +448,8 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="InvoicesModelStoreContainer">
+          <EntitySet Name="AppLog" EntityType="Self.AppLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AppLogActionType" EntityType="Self.AppLogActionType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BankCard" EntityType="Self.BankCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CashTransfer" EntityType="Self.CashTransfer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CurrencyMovement" EntityType="Self.CurrencyMovement" Schema="dbo" store:Type="Tables" />
@@ -437,6 +467,10 @@
           <EntitySet Name="TactionDetails" EntityType="Self.TactionDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserImage" EntityType="Self.UserImage" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AppLog_ActionTypeId" Association="Self.FK_AppLog_ActionTypeId">
+            <End Role="AppLogActionType" EntitySet="AppLogActionType" />
+            <End Role="AppLog" EntitySet="AppLog" />
+          </AssociationSet>
           <AssociationSet Name="FK_CashTransfer_PaymentMethodId" Association="Self.FK_CashTransfer_PaymentMethodId">
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
             <End Role="CashTransfer" EntitySet="CashTransfer" />
@@ -542,7 +576,7 @@
           <Property Name="Direction" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Val" Type="Decimal" Precision="19" Scale="2" Nullable="false" />
           <Property Name="PaymentMethodId" Type="Int32" Nullable="false" />
-          <Property Name="For" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="For" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
           <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_CashTransfer_PaymentMethodId" FromRole="CashTransfer" ToRole="PaymentMethod" />
           <NavigationProperty Name="User" Relationship="Self.FK_CashTransferFrom_UserId" FromRole="CashTransfer" ToRole="User" />
@@ -1040,6 +1074,12 @@
             <End Role="ItemSubType" EntitySet="ItemSubType" />
             <End Role="ItemSubTypeDetails" EntitySet="ItemSubTypeDetails" />
           </AssociationSet>
+          <EntitySet Name="AppLog" EntityType="InvoicesModel.AppLog" />
+          <EntitySet Name="AppLogActionType" EntityType="InvoicesModel.AppLogActionType" />
+          <AssociationSet Name="FK_AppLog_ActionTypeId" Association="InvoicesModel.FK_AppLog_ActionTypeId">
+            <End Role="AppLogActionType" EntitySet="AppLogActionType" />
+            <End Role="AppLog" EntitySet="AppLog" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ItemSubTypeDetails">
           <Key>
@@ -1072,6 +1112,36 @@
             </Principal>
             <Dependent Role="ItemSubTypeDetails">
               <PropertyRef Name="ItemSubTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AppLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeId" Type="Int32" Nullable="false" />
+          <Property Name="EventTime" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="AppLogActionType" Relationship="InvoicesModel.FK_AppLog_ActionTypeId" FromRole="AppLog" ToRole="AppLogActionType" />
+        </EntityType>
+        <EntityType Name="AppLogActionType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AppLog" Relationship="InvoicesModel.FK_AppLog_ActionTypeId" FromRole="AppLogActionType" ToRole="AppLog" />
+        </EntityType>
+        <Association Name="FK_AppLog_ActionTypeId">
+          <End Type="InvoicesModel.AppLogActionType" Role="AppLogActionType" Multiplicity="1" />
+          <End Type="InvoicesModel.AppLog" Role="AppLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppLogActionType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="AppLog">
+              <PropertyRef Name="ActionTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1268,6 +1338,24 @@
               <MappingFragment StoreEntitySet="ItemSubTypeDetails">
                 <ScalarProperty Name="ItemSubTypeId" ColumnName="ItemSubTypeId" />
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppLog">
+            <EntityTypeMapping TypeName="InvoicesModel.AppLog">
+              <MappingFragment StoreEntitySet="AppLog">
+                <ScalarProperty Name="EventTime" ColumnName="EventTime" />
+                <ScalarProperty Name="ActionTypeId" ColumnName="ActionTypeId" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppLogActionType">
+            <EntityTypeMapping TypeName="InvoicesModel.AppLogActionType">
+              <MappingFragment StoreEntitySet="AppLogActionType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
