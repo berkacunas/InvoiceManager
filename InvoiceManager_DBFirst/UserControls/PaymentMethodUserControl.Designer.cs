@@ -44,7 +44,7 @@
             this.comboBoxPaymentMethodOptionsCardType = new System.Windows.Forms.ComboBox();
             this.labelPaymentMethodOptionsCardType = new System.Windows.Forms.Label();
             this.comboBoxPaymentMethodOptionsCard = new System.Windows.Forms.ComboBox();
-            this.checkBoxPaymentOptionsEdit = new System.Windows.Forms.CheckBox();
+            this.checkBoxPaymentMethodOptionsEdit = new System.Windows.Forms.CheckBox();
             this.buttonNewPaymentMethod = new System.Windows.Forms.Button();
             this.buttonDeletePaymentMethod = new System.Windows.Forms.Button();
             this.buttonUpdatePaymentMethod = new System.Windows.Forms.Button();
@@ -168,7 +168,7 @@
             this.groupBoxPaymentMethodOptions.Controls.Add(this.comboBoxPaymentMethodOptionsCardType);
             this.groupBoxPaymentMethodOptions.Controls.Add(this.labelPaymentMethodOptionsCardType);
             this.groupBoxPaymentMethodOptions.Controls.Add(this.comboBoxPaymentMethodOptionsCard);
-            this.groupBoxPaymentMethodOptions.Controls.Add(this.checkBoxPaymentOptionsEdit);
+            this.groupBoxPaymentMethodOptions.Controls.Add(this.checkBoxPaymentMethodOptionsEdit);
             this.groupBoxPaymentMethodOptions.Controls.Add(this.buttonNewPaymentMethod);
             this.groupBoxPaymentMethodOptions.Controls.Add(this.buttonDeletePaymentMethod);
             this.groupBoxPaymentMethodOptions.Controls.Add(this.buttonUpdatePaymentMethod);
@@ -225,15 +225,15 @@
             this.comboBoxPaymentMethodOptionsCard.Size = new System.Drawing.Size(284, 23);
             this.comboBoxPaymentMethodOptionsCard.TabIndex = 14;
             // 
-            // checkBoxPaymentOptionsEdit
+            // checkBoxPaymentMethodOptionsEdit
             // 
-            this.checkBoxPaymentOptionsEdit.AutoSize = true;
-            this.checkBoxPaymentOptionsEdit.Location = new System.Drawing.Point(6, 163);
-            this.checkBoxPaymentOptionsEdit.Name = "checkBoxPaymentOptionsEdit";
-            this.checkBoxPaymentOptionsEdit.Size = new System.Drawing.Size(47, 19);
-            this.checkBoxPaymentOptionsEdit.TabIndex = 10;
-            this.checkBoxPaymentOptionsEdit.Text = "Edit";
-            this.checkBoxPaymentOptionsEdit.UseVisualStyleBackColor = true;
+            this.checkBoxPaymentMethodOptionsEdit.AutoSize = true;
+            this.checkBoxPaymentMethodOptionsEdit.Location = new System.Drawing.Point(6, 163);
+            this.checkBoxPaymentMethodOptionsEdit.Name = "checkBoxPaymentMethodOptionsEdit";
+            this.checkBoxPaymentMethodOptionsEdit.Size = new System.Drawing.Size(47, 19);
+            this.checkBoxPaymentMethodOptionsEdit.TabIndex = 10;
+            this.checkBoxPaymentMethodOptionsEdit.Text = "Edit";
+            this.checkBoxPaymentMethodOptionsEdit.UseVisualStyleBackColor = true;
             // 
             // buttonNewPaymentMethod
             // 
@@ -386,7 +386,7 @@
         private System.Windows.Forms.ComboBox comboBoxPaymentMethodOptionsCardType;
         private System.Windows.Forms.Label labelPaymentMethodOptionsCardType;
         private System.Windows.Forms.ComboBox comboBoxPaymentMethodOptionsCard;
-        private System.Windows.Forms.CheckBox checkBoxPaymentOptionsEdit;
+        private System.Windows.Forms.CheckBox checkBoxPaymentMethodOptionsEdit;
         private System.Windows.Forms.Button buttonNewPaymentMethod;
         private System.Windows.Forms.Button buttonDeletePaymentMethod;
         private System.Windows.Forms.Button buttonUpdatePaymentMethod;

@@ -214,7 +214,7 @@ namespace InvoiceManager_DBFirst.UserControls
             this.dataGridViewTactionDetails.DataSource = null;
             this.dateTimePickerTactionDate.Value = DateTime.Now;
 
-            this._bindDataToComboBoxPaymentMethod(BindType.Select);
+            this.bindDataToComboBoxPaymentMethod(BindType.Select);
             this.bindDataToComboBoxOwner(BindType.Select);
         }
 
@@ -324,7 +324,7 @@ namespace InvoiceManager_DBFirst.UserControls
             this.clearDetailsControls();
             this.dataGridViewTactionDetails.DataSource = null;
 
-            this._bindDataToComboBoxPaymentMethod(BindType.Setnull);
+            this.bindDataToComboBoxPaymentMethod(BindType.Setnull);
             this.bindDataToComboBoxOwner(BindType.Setnull);
 
             this._newTaction = null;
@@ -338,7 +338,7 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
 
             this._newTaction.TactionDetails.Add(details);
-            this._updateDataGridViewTactionDetails();
+            this.updateDataGridViewTactionDetails();
             this.clearDetailsControls();
             this.setTactionTotalPrice(this._newTaction);
         }
@@ -378,7 +378,7 @@ namespace InvoiceManager_DBFirst.UserControls
                     return;
             }
 
-            this._updateDataGridViewTactionDetails();
+            this.updateDataGridViewTactionDetails();
             this.setTactionTotalPrice(_newTaction);
         }
 
@@ -423,7 +423,7 @@ namespace InvoiceManager_DBFirst.UserControls
             {
                 details = this._newTaction.TactionDetails.Where(r => r.ItemId == itemId && r.Unit == unit && r.UnitPrice == unitPrice && r.Vat == vat).FirstOrDefault();
                 this._newTaction.TactionDetails.Remove(details);
-                this._updateDataGridViewTactionDetails();
+                this.updateDataGridViewTactionDetails();
                 this.setTactionTotalPrice(_newTaction);
             }
         }
@@ -469,7 +469,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
             this.setEditableTactions(this.checkBoxTactionsEditable.Checked);
             this.enableSellerField(this.checkBoxSeller.Checked);
-            this._bindDataToComboBoxPaymentMethod(BindType.Select, paymentId);
+            this.bindDataToComboBoxPaymentMethod(BindType.Select, paymentId);
             this.bindDataToComboBoxOwner(BindType.Select, ownerId);
         }
 
@@ -695,7 +695,7 @@ namespace InvoiceManager_DBFirst.UserControls
             this.dataGridViewTactionDetails.DataSource = query.ToList();
         }
 
-        private void _updateDataGridViewTactionDetails()
+        private void updateDataGridViewTactionDetails()
         {
             var query = from details in _newTaction.TactionDetails.ToList()
                         join item in dbContext.Item on details.ItemId equals item.id
@@ -724,7 +724,7 @@ namespace InvoiceManager_DBFirst.UserControls
             this.dataGridViewTactionDetails.DataSource = query.ToList();
         }
 
-        private void _bindDataToComboBoxPaymentMethod(BindType bindType, int paymentMethodId = 0)
+        private void bindDataToComboBoxPaymentMethod(BindType bindType, int paymentMethodId = 0)
         {
             IQueryable<PaymentMethod> query = null;
 
@@ -885,7 +885,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
             this.dateTimePickerTactionDate.Value = DateTime.Parse(row.Cells["Date"].Value.ToString());
             this.textBoxShop.Text = row.Cells["shopName"].Value.ToString();
-            this._bindDataToComboBoxPaymentMethod(BindType.Where, paymentId);
+            this.bindDataToComboBoxPaymentMethod(BindType.Where, paymentId);
 
             if (row.Cells["ownerId"].Value != null)
             {
