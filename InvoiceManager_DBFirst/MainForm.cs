@@ -160,7 +160,7 @@ namespace InvoiceManager_DBFirst
 
         private void ToolStripButtonPaymentMethods_Click(object sender, EventArgs e)
         {
-            this._initializePaymentMethodForm();
+            this.initializePaymentMethodUserControl();
         }
 
         private void ToolStripButtonUsers_Click(object sender, EventArgs e)
@@ -183,47 +183,7 @@ namespace InvoiceManager_DBFirst
 
         #region User-Defined Form Events
 
-        private void TactionForm_TransactionFormOpened(string actionType, string message, DateTime eventTime)
-        {
-            this.addLog(actionType, message, eventTime);
-        }
-
-        private void TactionForm_TransactionChanged(string actionType, string message, DateTime eventTime)
-        {
-            this.addLog(actionType, message, eventTime);
-        }
-
-        private void TactionForm_TransactionFormClosed(string actionType, string message, DateTime eventTime)
-        {
-            this.addLog(actionType, message, eventTime);
-        }
-
-        private void itemUserControl_ItemFormOpened(string actionType, string message, DateTime eventTime)
-        {
-            this.addLog(actionType, message, eventTime);
-        }
-
-        private void itemUserControl_ItemChanged(string actionType, string message, DateTime eventTime)
-        {
-            this.addLog(actionType, message, eventTime);
-        }
-
-        private void itemForm_ItemFormClosed(string actionType, string message, DateTime eventTime)
-        {
-            this.addLog(actionType, message, eventTime);
-        }
-
-        private void ShopForm_ShopFormOpened(string actionType, string message, DateTime eventTime)
-        {
-            this.addLog(actionType, message, eventTime);
-        }
-
-        private void ShopForm_ShopChanged(string actionType, string message, DateTime eventTime)
-        {
-            this.addLog(actionType, message, eventTime);
-        }
-
-        private void ShopForm_ShopFormClosed(string actionType, string message, DateTime eventTime)
+        private void UserControl_ActionHandler(string actionType, string message, DateTime eventTime)
         {
             this.addLog(actionType, message, eventTime);
         }
@@ -322,9 +282,9 @@ namespace InvoiceManager_DBFirst
         private void initializeTactionUserControl()
         {
             TactionUserControl tactionUserControl = new TactionUserControl();
-            tactionUserControl.TransactionFormOpened += TactionForm_TransactionFormOpened;
-            tactionUserControl.TransactionChanged += TactionForm_TransactionChanged;
-            tactionUserControl.TransactionFormClosed += TactionForm_TransactionFormClosed;
+            tactionUserControl.TransactionFormOpened += UserControl_ActionHandler;
+            tactionUserControl.TransactionChanged += UserControl_ActionHandler;
+            tactionUserControl.TransactionFormClosed += UserControl_ActionHandler;
 
             this.placeHolder.Controls.Clear();
             this.placeHolder.Controls.Add(tactionUserControl);
@@ -333,9 +293,9 @@ namespace InvoiceManager_DBFirst
         private void initializeItemUserControl()
         {
             ItemUserControl itemUserControl = new ItemUserControl();
-            itemUserControl.ItemFormOpened += itemUserControl_ItemFormOpened;
-            itemUserControl.ItemChanged += itemUserControl_ItemChanged;
-            itemUserControl.ItemFormClosed += itemForm_ItemFormClosed;
+            itemUserControl.ItemFormOpened += UserControl_ActionHandler;
+            itemUserControl.ItemChanged += UserControl_ActionHandler;
+            itemUserControl.ItemFormClosed += UserControl_ActionHandler;
 
             this.placeHolder.Controls.Clear();
             this.placeHolder.Controls.Add(itemUserControl);
@@ -344,9 +304,20 @@ namespace InvoiceManager_DBFirst
         private void initializeShopUserControl()
         {
             ShopUserControl shopUserControl = new ShopUserControl();
+            shopUserControl.ShopFormOpened += UserControl_ActionHandler;
+            shopUserControl.ShopChanged += UserControl_ActionHandler;
+            shopUserControl.ShopFormClosed += UserControl_ActionHandler;
 
             this.placeHolder.Controls.Clear();
             this.placeHolder.Controls.Add(shopUserControl);
+        }
+
+        private void initializePaymentMethodUserControl()
+        {
+            PaymentMethodUserControl paymentMethodUserControl = new PaymentMethodUserControl();
+
+            this.placeHolder.Controls.Clear();
+            this.placeHolder.Controls.Add(paymentMethodUserControl);
         }
 
         private void _initializePaymentMethodForm()

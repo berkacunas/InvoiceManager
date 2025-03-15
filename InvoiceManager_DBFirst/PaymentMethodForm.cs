@@ -12,32 +12,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using InvoiceManager_DBFirst.Globals;
+
 namespace InvoiceManager_DBFirst
 {
     public partial class PaymentMethodForm : Form
     {
-        enum Mode
-        {
-            Display,
-            Add,
-            Edit,
-            Search
-        }
-
-        enum BindType
-        {
-            Select,
-            Where,
-            Setnull
-        }
-
-        private enum SortOrder
-        {
-            ASC,
-            DESC,
-            UNORDERED
-        }
-
         private InvoicesEntities dbContext;
 
         private BankCard _newBankCard;
@@ -46,8 +26,8 @@ namespace InvoiceManager_DBFirst
         private Mode _bankCardMode;
         private Mode _paymentMode;
 
-        private SortOrder[] _sortOrdersDataGridViewItemGroups = { SortOrder.ASC, SortOrder.UNORDERED };
-        private SortOrder[] _sortOrdersDataGridViewItems = { SortOrder.ASC, SortOrder.UNORDERED };
+        private ColumnSortOrder[] _sortOrdersDataGridViewItemGroups = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
+        private ColumnSortOrder[] _sortOrdersDataGridViewItems = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
 
         public PaymentMethodForm()
         {

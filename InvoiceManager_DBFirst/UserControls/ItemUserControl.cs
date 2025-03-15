@@ -66,12 +66,6 @@ namespace InvoiceManager_DBFirst.UserControls
             new ColumnSortOrder[] { ColumnSortOrder.ASC, ColumnSortOrder.DESC }
         };
 
-
-
-        //private ColumnSortOrder[] _sortOrdersDataGridViewItemTopGroups = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
-        //private ColumnSortOrder[] _sortOrdersDataGridViewItemGroups = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
-        //private ColumnSortOrder[] _sortOrdersDataGridViewItems = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
-
         public ItemUserControl()
         {
             InitializeComponent();
