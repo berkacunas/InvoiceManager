@@ -108,7 +108,7 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemPaymentMethods_Click(object sender, EventArgs e)
         {
-            this._initializePaymentMethodForm();
+            this.initializePaymentMethodUserControl();
         }
 
         private void toolStripMenuItemUsers_Click(object sender, EventArgs e)
@@ -315,15 +315,12 @@ namespace InvoiceManager_DBFirst
         private void initializePaymentMethodUserControl()
         {
             PaymentMethodUserControl paymentMethodUserControl = new PaymentMethodUserControl();
+            paymentMethodUserControl.PaymentMethodFormOpened += UserControl_ActionHandler;
+            paymentMethodUserControl.DataChanged += UserControl_ActionHandler;
+            paymentMethodUserControl.PaymentMethodFormClosed += UserControl_ActionHandler;
 
             this.placeHolder.Controls.Clear();
             this.placeHolder.Controls.Add(paymentMethodUserControl);
-        }
-
-        private void _initializePaymentMethodForm()
-        {
-            PaymentMethodForm paymentMethodForm = new PaymentMethodForm();
-            paymentMethodForm.Show();
         }
 
         private void _initializeUserForm()

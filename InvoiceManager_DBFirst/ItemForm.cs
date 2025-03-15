@@ -348,7 +348,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemSaved("Items", $"New id {_newItem.id} saved", DateTime.Now);
+                this.onItemSaved("Items", $"New item {_newItem.id}: {_newItem.Name} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -380,7 +380,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemUpdated("Items", $"Id {item.id} updated", DateTime.Now);
+                this.onItemUpdated("Items", $"Item {item.id}: {item.Name} updated", DateTime.Now);
 
             }
             catch (Exception ex)
@@ -409,7 +409,7 @@ namespace InvoiceManager_DBFirst
             try
             {
                 dbContext.SaveChanges();
-                this.onItemRemoved("Items", $"Id {item.Name} removed", DateTime.Now);
+                this.onItemRemoved("Items", $"Item {item.id}: {item.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {

@@ -90,8 +90,6 @@ namespace InvoiceManager_DBFirst.UserControls
         {
             this._setModes(Mode.Display);
 
-            //this.onPaymentMethodFormOpened("Payment Method Window opened", DateTime.Now);
-
             WinFormsHelper.SetDefaultGridViewStyles(this.dataGridViewBankCards);
             WinFormsHelper.SetDefaultGridViewStyles(this.dataGridViewPaymentMethods);
 
@@ -107,6 +105,8 @@ namespace InvoiceManager_DBFirst.UserControls
 
             this._bindDataToGridViewBankCard();
             this._bindDataToGridViewPaymentMethod();
+
+            this.onPaymentMethodFormOpened("PaymentMethods", "Payment Method Window opened", DateTime.Now);
         }
 
         private void dataGridViewBankCards_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -286,7 +286,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onBankCardSaved($"Item {_newBankCard.Name} saved", DateTime.Now);
+                this.onBankCardSaved("BankCards", $"New bank card {_newBankCard.id}: {_newBankCard.Name} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -319,7 +319,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onBankCardUpdated($"BankCard {bankCard.Name} updated", DateTime.Now);
+                this.onBankCardUpdated("BankCards", $"Bank card {bankCard.id}: {bankCard.Name} updated", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -347,7 +347,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 dbContext.SaveChanges();
-                //this.onBankCardRemoved($"BankCard card {bankCard.Name} removed", DateTime.Now);
+                this.onBankCardRemoved("BankCards", $"Bank card {bankCard.id}: {bankCard.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -393,7 +393,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onPaymentMethodSaved($"Item {this._newPaymentMethod.Name} saved", DateTime.Now);
+                this.onPaymentMethodSaved("PaymentMethods", $"Payment method {_newPaymentMethod.id}: {_newPaymentMethod.Name} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -425,8 +425,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onPaymentMethodUpdated($"PaymentMethod {paymentMethod.Name} updated", DateTime.Now);
-
+                this.onPaymentMethodUpdated("PaymentMethods", $"Payment method {paymentMethod.id}: {paymentMethod.Name} updated", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -469,6 +468,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 dbContext.SaveChanges();
+                this.onPaymentMethodRemoved("PaymentMethods", $"Payment method {paymentMethod.id}: {paymentMethod.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -557,7 +557,7 @@ namespace InvoiceManager_DBFirst.UserControls
                         };
 
             this.dataGridViewBankCards.DataSource = query.ToList();
-            //this.onBankCardsLoaded("Bank Cards Loaded", DateTime.Now);
+            this.onBankCardsLoaded("BankCards", "Bank Cards Loaded", DateTime.Now);
         }
 
         private void _bindDataToGridViewPaymentMethod()
@@ -578,7 +578,7 @@ namespace InvoiceManager_DBFirst.UserControls
                         };
 
             this.dataGridViewPaymentMethods.DataSource = query.ToList();
-            //this.onPaymentMethodsLoaded("Payment Methods Loaded", DateTime.Now);
+            this.onPaymentMethodsLoaded("PaymentMethods", "Payment Methods Loaded", DateTime.Now);
         }
 
         private void _bindDataToComboBoxCardOptionsCardType(BindType bindType, int bankCardId = 0, string bankCardName = null, string bankCardType = null)

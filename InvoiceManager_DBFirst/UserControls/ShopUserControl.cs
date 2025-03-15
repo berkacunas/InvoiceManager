@@ -371,7 +371,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopTypeSaved("ShopTypes", $"New id {this._newShopType.id} saved", DateTime.Now);
+                this.onShopTypeSaved("ShopTypes", $"New shop type {this._newShopType.id}: {this._newShopType.Name} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -411,7 +411,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopTypeUpdated("ShopTypes", $"Id {shopType.id} updated", DateTime.Now);
+                this.onShopTypeUpdated("ShopTypes", $"Shop type {shopType.id}: {shopType.Name} updated", DateTime.Now);
 
             }
             catch (Exception ex)
@@ -463,7 +463,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 dbContext.SaveChanges();
-                this.onShopTypeRemoved("ShopTypes", $"Id {shopType.id} removed", DateTime.Now);
+                this.onShopTypeRemoved("ShopTypes", $"Shop type {shopType.id}: {shopType.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -506,7 +506,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopGroupSaved("ShopGroups", $"New id {this._newShopGroup.Name} saved.", DateTime.Now);
+                this.onShopGroupSaved("ShopGroups", $"New shop group {_newShopGroup.id}: {_newShopGroup.Name} saved.", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -538,7 +538,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopGroupUpdated("ShopGroups", $"Id {shopGroup.id} updated", DateTime.Now);
+                this.onShopGroupUpdated("ShopGroups", $"Shop group {shopGroup.id}: {shopGroup.Name} updated", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -589,7 +589,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 dbContext.SaveChanges();
-                this.onShopGroupRemoved("ShopGroups", $"Id {shopGroup.id} removed", DateTime.Now);
+                this.onShopGroupRemoved("ShopGroups", $"Shop group {shopGroup.id}: {shopGroup.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -597,7 +597,6 @@ namespace InvoiceManager_DBFirst.UserControls
             }
 
             this.bindDataToComboBoxShopOptionsShopGroup(BindType.Setnull);
-            //this._bindDataToComboBoxGroupOptionsTopGroup(BindType.Setnull);
             this.bindDataToGridViewShopGroup();
             this.clearShopGroupControls();
         }
@@ -631,7 +630,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopSaved("Shops", $"New id {_newShop.Name} saved", DateTime.Now);
+                this.onShopSaved("Shops", $"New shop {_newShop.id}: {_newShop.Name} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -663,7 +662,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopUpdated("Shops", $"Id {shop.id} updated", DateTime.Now);
+                this.onShopSaved("Shops", $"shop {shop.id}: {shop.Name} updated", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -691,7 +690,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopRemoved("Shops", $"Id {shop.id} removed", DateTime.Now);
+                this.onShopSaved("Shops", $"Shop {shop.id}: {shop.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -702,8 +701,6 @@ namespace InvoiceManager_DBFirst.UserControls
             this.bindDataToGridViewShop();
             this.clearShopControls();
         }
-
-
 
         private void checkBoxShopGroupOptionsEdit_CheckedChanged(object sender, EventArgs e)
         {
