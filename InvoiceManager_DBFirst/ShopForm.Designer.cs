@@ -136,7 +136,6 @@
             this.dataGridViewShopTypes.Name = "dataGridViewShopTypes";
             this.dataGridViewShopTypes.Size = new System.Drawing.Size(193, 733);
             this.dataGridViewShopTypes.TabIndex = 0;
-            this.dataGridViewShopTypes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewShopTypes_CellClick);
             this.dataGridViewShopTypes.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewShopTypes_DataBindingComplete);
             // 
             // groupBoxItemTopGroupOptions

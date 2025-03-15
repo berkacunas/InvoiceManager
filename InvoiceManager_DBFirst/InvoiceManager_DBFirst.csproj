@@ -402,6 +402,12 @@
     <Compile Include="UserControls\ItemUserControl.Designer.cs">
       <DependentUpon>ItemUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ShopUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ShopUserControl.Designer.cs">
+      <DependentUpon>ShopUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\TactionUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -462,6 +468,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ItemUserControl.resx">
       <DependentUpon>ItemUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ShopUserControl.resx">
+      <DependentUpon>ShopUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\TactionUserControl.resx">
       <DependentUpon>TactionUserControl.cs</DependentUpon>

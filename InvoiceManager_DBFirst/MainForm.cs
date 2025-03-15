@@ -103,7 +103,7 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemShops_Click(object sender, EventArgs e)
         {
-            this._initializeShopForm();
+            this.initializeShopUserControl();
         }
 
         private void toolStripMenuItemPaymentMethods_Click(object sender, EventArgs e)
@@ -155,7 +155,7 @@ namespace InvoiceManager_DBFirst
 
         private void ToolStripButtonShops_Click(object sender, EventArgs e)
         {
-            this._initializeShopForm();
+            this.initializeShopUserControl();
         }
 
         private void ToolStripButtonPaymentMethods_Click(object sender, EventArgs e)
@@ -341,13 +341,12 @@ namespace InvoiceManager_DBFirst
             this.placeHolder.Controls.Add(itemUserControl);
         }
 
-        private void _initializeShopForm()
+        private void initializeShopUserControl()
         {
-            ShopForm shopForm = new ShopForm();
-            shopForm.ShopFormOpened += ShopForm_ShopFormOpened;
-            shopForm.ShopChanged += ShopForm_ShopChanged;
-            shopForm.ShopFormClosed += ShopForm_ShopFormClosed;
-            shopForm.Show();
+            ShopUserControl shopUserControl = new ShopUserControl();
+
+            this.placeHolder.Controls.Clear();
+            this.placeHolder.Controls.Add(shopUserControl);
         }
 
         private void _initializePaymentMethodForm()

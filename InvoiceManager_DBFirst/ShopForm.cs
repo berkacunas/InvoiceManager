@@ -52,7 +52,6 @@ namespace InvoiceManager_DBFirst
             this.Icon = Icon.FromHandle(BitmapResourceLoader.Shop.GetHicon());
 
             this.dbContext = new InvoicesEntities();
-
             this.FormClosing += ShopForm_FormClosing;
 
             this.dataGridViewShops.DataSourceChanged += DataGridViewShops_DataSourceChanged;
@@ -990,5 +989,6 @@ namespace InvoiceManager_DBFirst
 
             }
         }
+
     }
 }
