@@ -43,8 +43,24 @@ namespace InvoiceManager_DBFirst.UserControls
         private Mode _groupMode;
         private Mode _typeMode;
 
-        private ColumnSortOrder[] _sortOrdersDataGridViewShopGroups = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
-        private ColumnSortOrder[] _sortOrdersDataGridViewShops = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
+        private List<ColumnSortOrder[]> _columnSortOrdersShopTypes = new List<ColumnSortOrder[]> 
+        {
+            new ColumnSortOrder[] { ColumnSortOrder.ASC, ColumnSortOrder.DESC }
+        };
+
+        private List<ColumnSortOrder[]> _columnSortOrdersShopGroups = new List<ColumnSortOrder[]>
+        {
+            new ColumnSortOrder[] { ColumnSortOrder.ASC, ColumnSortOrder.DESC },
+            new ColumnSortOrder[] { ColumnSortOrder.ASC, ColumnSortOrder.DESC },
+            new ColumnSortOrder[] { ColumnSortOrder.ASC, ColumnSortOrder.DESC }
+        };
+
+        private List<ColumnSortOrder[]> _columnSortOrdersShops = new List<ColumnSortOrder[]>
+        {
+            new ColumnSortOrder[] { ColumnSortOrder.ASC, ColumnSortOrder.DESC },
+            new ColumnSortOrder[] { ColumnSortOrder.ASC, ColumnSortOrder.DESC },
+            new ColumnSortOrder[] { ColumnSortOrder.ASC, ColumnSortOrder.DESC }
+        };
 
         public ShopUserControl()
         {
@@ -229,19 +245,63 @@ namespace InvoiceManager_DBFirst.UserControls
 
         private void dataGridViewShopTypes_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            throw new NotImplementedException();
+            string columnName = this.dataGridViewShopTypes.Columns[e.ColumnIndex].HeaderText;
+
+            var query = from shopType in dbContext.ShopType
+                        orderby shopType.Name
+                        select new
+                        {
+                            shopTypeId = shopType.id,
+                            shopTypeName = shopType.Name
+                        };
+
+            switch (columnName)
+            {
+                case "Shop Type":
+                    
+                    this.dataGridViewShopTypes.DataSource = (this._columnSortOrdersShopTypes[0][0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.shopTypeName).ToList() : query.OrderByDescending(r => r.shopTypeName).ToList();
+                    this._columnSortOrdersShopTypes[0][0] = (this._columnSortOrdersShopTypes[0][0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    break;
+            }
         }
 
         private void dataGridViewShopGroups_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            throw new NotImplementedException();
+            string columnName = this.dataGridViewShopGroups.Columns[e.ColumnIndex].HeaderText;
+
+            var query = from shopGroup in dbContext.ShopGroup
+                        join shopType in dbContext.ShopType on shopGroup.TypeId equals shopType.id
+                        orderby shopGroup.Name ascending
+                        select new
+                        {
+                            shopGroupId = shopGroup.id,
+                            shopTypeId = shopType.id,
+                            shopGroupName = shopGroup.Name,
+                            shopTypeName = shopType.Name,
+                            shopGroupOwner = shopGroup.Owner
+                        };
+
+            switch (columnName)
+            {
+                case "Group":
+                    this.dataGridViewShopGroups.DataSource = (this._columnSortOrdersShopGroups[0][0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.shopGroupName).ToList() : query.OrderByDescending(r => r.shopGroupName).ToList();
+                    this._columnSortOrdersShopGroups[0][0] = (this._columnSortOrdersShopGroups[0][0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    break;
+
+                case "Type":
+                    this.dataGridViewShopGroups.DataSource = (this._columnSortOrdersShopGroups[1][0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.shopTypeName).ToList() : query.OrderByDescending(r => r.shopTypeName).ToList();
+                    this._columnSortOrdersShopGroups[1][0] = (this._columnSortOrdersShopGroups[1][0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    break;
+
+                case "Owner":
+                    this.dataGridViewShopGroups.DataSource = (this._columnSortOrdersShopGroups[2][0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.shopGroupOwner).ToList() : query.OrderByDescending(r => r.shopGroupOwner).ToList();
+                    this._columnSortOrdersShopGroups[2][0] = (this._columnSortOrdersShopGroups[2][0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    break;
+            }
         }
 
         private void dataGridViewShops_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            //throw new NotImplementedException();
-
-            #region Code-block taken and adapted from ItemUserControl
             string columnName = this.dataGridViewShops.Columns[e.ColumnIndex].HeaderText;
 
             var query = from shop in dbContext.Shop
@@ -262,20 +322,19 @@ namespace InvoiceManager_DBFirst.UserControls
             switch (columnName)
             {
                 case "Shop":
-                    this.dataGridViewShops.DataSource = (this._sortOrdersDataGridViewShops[0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.shopName).ToList() : query.OrderByDescending(r => r.shopName).ToList();
-                    this._sortOrdersDataGridViewShops[0] = (this._sortOrdersDataGridViewShops[0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    this.dataGridViewShops.DataSource = (this._columnSortOrdersShops[0][0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.shopName).ToList() : query.OrderByDescending(r => r.shopName).ToList();
+                    this._columnSortOrdersShops[0][0] = (this._columnSortOrdersShops[0][0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
                     break;
 
                 case "Nickname":
-                    this.dataGridViewShops.DataSource = (this._sortOrdersDataGridViewShops[1] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.nickname).ToList() : query.OrderByDescending(r => r.nickname).ToList();
-                    this._sortOrdersDataGridViewShops[1] = (this._sortOrdersDataGridViewShops[1] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    this.dataGridViewShops.DataSource = (this._columnSortOrdersShops[1][0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.nickname).ToList() : query.OrderByDescending(r => r.nickname).ToList();
+                    this._columnSortOrdersShops[1][0] = (this._columnSortOrdersShops[1][0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
                     break;
                 case "Tel":
-                    this.dataGridViewShops.DataSource = (this._sortOrdersDataGridViewShops[1] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.tel).ToList() : query.OrderByDescending(r => r.tel).ToList();
-                    this._sortOrdersDataGridViewShops[1] = (this._sortOrdersDataGridViewShops[1] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    this.dataGridViewShops.DataSource = (this._columnSortOrdersShops[2][0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.tel).ToList() : query.OrderByDescending(r => r.tel).ToList();
+                    this._columnSortOrdersShops[2][0] = (this._columnSortOrdersShops[2][0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
                     break;
             }
-            #endregion
         }
 
         private void buttonNewShopType_Click(object sender, EventArgs e)
@@ -674,7 +733,6 @@ namespace InvoiceManager_DBFirst.UserControls
             this.dataGridViewShopTypes.DataSource = query.ToList();
             //this.onShopTypesLoaded("ShopTypes Loaded", DateTime.Now);
             this.onShopTypesLoaded("ShopTypes", "ShopType data loaded", DateTime.Now);
-
         }
 
         private void bindDataToGridViewShopGroup()
