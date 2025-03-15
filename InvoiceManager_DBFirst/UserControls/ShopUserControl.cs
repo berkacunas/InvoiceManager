@@ -239,34 +239,34 @@ namespace InvoiceManager_DBFirst.UserControls
 
         private void dataGridViewShops_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
 
             #region Code-block taken and adapted from ItemUserControl
-            //string columnName = this.dataGridViewShops.Columns[e.ColumnIndex].HeaderText;
+            string columnName = this.dataGridViewShops.Columns[e.ColumnIndex].HeaderText;
 
-            //var query = dbContext.Shop.Join(dbContext.ShopGroup,
-            //            shop => shop.GroupId, shopGroup => shopGroup.id,
-            //            (shop, shopGroup) =>
-            //            new
-            //            {
-            //                shopId = shop.id,
-            //                shopGroupId = shopGroup.id,
-            //                shopName = shop.Name,
-            //                shopGroupName = shopGroup.Name,
-            //            });
+            var query = dbContext.Shop.Join(dbContext.ShopGroup,
+                        shop => shop.GroupId, shopGroup => shopGroup.id,
+                        (shop, shopGroup) =>
+                        new
+                        {
+                            shopId = shop.id,
+                            shopGroupId = shopGroup.id,
+                            shopName = shop.Name,
+                            shopGroupName = shopGroup.Name,
+                        });
 
-            //switch (columnName)
-            //{
-            //    case "Item":
-            //        this.dataGridViewShops.DataSource = (this._sortOrdersDataGridViewShops[0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.shopName).ToList() : query.OrderByDescending(r => r.shopName).ToList();
-            //        this._sortOrdersDataGridViewShops[0] = (this._sortOrdersDataGridViewShops[0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
-            //        break;
+            switch (columnName)
+            {
+                case "Shop":
+                    this.dataGridViewShops.DataSource = (this._sortOrdersDataGridViewShops[0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.shopName).ToList() : query.OrderByDescending(r => r.shopName).ToList();
+                    this._sortOrdersDataGridViewShops[0] = (this._sortOrdersDataGridViewShops[0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    break;
 
-            //    case "Group":
-            //        this.dataGridViewShops.DataSource = (this._sortOrdersDataGridViewShops[1] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.shopGroupName).ToList() : query.OrderByDescending(r => r.shopGroupName).ToList();
-            //        this._sortOrdersDataGridViewShops[1] = (this._sortOrdersDataGridViewShops[1] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
-            //        break;
-            //}
+                case "Group":
+                    this.dataGridViewShops.DataSource = (this._sortOrdersDataGridViewShops[1] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.shopGroupName).ToList() : query.OrderByDescending(r => r.shopGroupName).ToList();
+                    this._sortOrdersDataGridViewShops[1] = (this._sortOrdersDataGridViewShops[1] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    break;
+            }
             #endregion
         }
 
