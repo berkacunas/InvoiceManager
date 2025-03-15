@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using InvoiceManager_DBFirst.Globals;
 
 
 namespace InvoiceManager_DBFirst.UserControls
