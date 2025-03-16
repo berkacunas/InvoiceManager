@@ -206,7 +206,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onUserSaved("Users", $"New id {_newUser.id} saved", DateTime.Now);
+                this.onUserSaved("Users", $"New user {_newUser.id}: {_newUser.Fullname} saved", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -238,7 +238,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                //this.onUserUpdated("Items", $"Id {user.id} updated", DateTime.Now);
+                this.onUserUpdated("Users", $"User {user.id}: {user.Fullname} updated", DateTime.Now);
 
             }
             catch (Exception ex)
@@ -282,7 +282,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
                 dbContext.User.Remove(user);
                 dbContext.SaveChanges();
-                //this.onUserRemoved("Users", $"User id {user.id} removed", DateTime.Now);
+                this.onUserRemoved("Users", $"User {user.id}: {user.Fullname} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
