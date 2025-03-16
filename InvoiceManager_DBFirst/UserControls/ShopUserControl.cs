@@ -662,7 +662,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopSaved("Shops", $"shop {shop.id}: {shop.Name} updated", DateTime.Now);
+                this.onShopSaved("Shops", $"Shop {shop.id}: {shop.Name} updated", DateTime.Now);
             }
             catch (Exception ex)
             {
