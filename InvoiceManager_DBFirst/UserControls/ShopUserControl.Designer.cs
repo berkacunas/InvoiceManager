@@ -119,7 +119,7 @@
             this.groupBoxShopGroupOptions.Controls.Add(this.comboBoxShopGroupOptionsShopType);
             this.groupBoxShopGroupOptions.Controls.Add(this.textBoxShopGroupOptionsOwner);
             this.groupBoxShopGroupOptions.Controls.Add(this.labelShopGroupOptionsShopType);
-            this.groupBoxShopGroupOptions.Location = new System.Drawing.Point(220, 732);
+            this.groupBoxShopGroupOptions.Location = new System.Drawing.Point(750, 732);
             this.groupBoxShopGroupOptions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxShopGroupOptions.Name = "groupBoxShopGroupOptions";
             this.groupBoxShopGroupOptions.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -254,7 +254,7 @@
             this.groupBoxShopOptions.Controls.Add(this.buttonUpdateShop);
             this.groupBoxShopOptions.Controls.Add(this.buttonSaveShop);
             this.groupBoxShopOptions.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxShopOptions.Location = new System.Drawing.Point(558, 732);
+            this.groupBoxShopOptions.Location = new System.Drawing.Point(220, 732);
             this.groupBoxShopOptions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxShopOptions.Name = "groupBoxShopOptions";
             this.groupBoxShopOptions.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);

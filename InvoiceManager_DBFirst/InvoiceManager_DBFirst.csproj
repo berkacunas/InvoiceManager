@@ -420,6 +420,12 @@
     <Compile Include="UserControls\TactionUserControl.Designer.cs">
       <DependentUpon>TactionUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserUserControl.Designer.cs">
+      <DependentUpon>UserUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -483,6 +489,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\TactionUserControl.resx">
       <DependentUpon>TactionUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserUserControl.resx">
+      <DependentUpon>UserUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserForm.resx">
       <DependentUpon>UserForm.cs</DependentUpon>

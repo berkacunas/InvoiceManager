@@ -113,7 +113,7 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemUsers_Click(object sender, EventArgs e)
         {
-            this._initializeUserForm();
+            this.initializeUserUserControl();
         }
 
         private void toolStripMenuItemSellers_Click(object sender, EventArgs e)
@@ -165,7 +165,7 @@ namespace InvoiceManager_DBFirst
 
         private void ToolStripButtonUsers_Click(object sender, EventArgs e)
         {
-            this._initializeUserForm();
+            this.initializeUserUserControl();
         }
 
         private void ToolStripButtonSellers_Click(object sender, EventArgs e)
@@ -323,10 +323,12 @@ namespace InvoiceManager_DBFirst
             this.placeHolder.Controls.Add(paymentMethodUserControl);
         }
 
-        private void _initializeUserForm()
+        private void initializeUserUserControl()
         {
-            UserForm userForm = new UserForm();
-            userForm.Show();
+            UserUserControl userUserControl = new UserUserControl();
+
+            this.placeHolder.Controls.Clear();
+            this.placeHolder.Controls.Add(userUserControl);
         }
 
         private void _initializeSellerForm()

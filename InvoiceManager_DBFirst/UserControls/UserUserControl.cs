@@ -1,22 +1,29 @@
-﻿using SQLitePCL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using InvoiceManager_DBFirst.Globals;
 
-namespace InvoiceManager_DBFirst
+namespace InvoiceManager_DBFirst.UserControls
 {
-    public partial class UserForm : Form
+    public partial class UserUserControl : UserControl
     {
-        
+        public event Notify UsersLoaded;
+        public event Notify UserSaved;
+        public event Notify UserUpdated;
+        public event Notify UserRemoved;
+
+        public event Notify UserChanged;
+        public event Notify UserFormOpened;
+        public event Notify UserFormClosed;
 
         private InvoicesEntities dbContext;
 
@@ -29,42 +36,62 @@ namespace InvoiceManager_DBFirst
         private Mode _userMode;
         private Mode _userImageMode;
 
-        private ColumnSortOrder[] _sortOrdersDataGridViewUsers = { ColumnSortOrder.ASC, ColumnSortOrder.UNORDERED };
+        private List<ColumnSortOrder[]> _columnSortOrdersUsers = new List<ColumnSortOrder[]>
+        {
+            new ColumnSortOrder[] { ColumnSortOrder.ASC, ColumnSortOrder.DESC },
+            new ColumnSortOrder[] { ColumnSortOrder.ASC, ColumnSortOrder.DESC },
+            new ColumnSortOrder[] { ColumnSortOrder.ASC, ColumnSortOrder.DESC }
+        };
 
-        public UserForm()
+        public UserUserControl()
         {
             InitializeComponent();
+
+            this.Load += userUserControl_Load;
 
             this._isInitialized = false;
             this._currentImageIndexDict = new Dictionary<int, int>();
 
-            this.Icon = Icon.FromHandle(BitmapResourceLoader.User.GetHicon());
-
             this.dbContext = new InvoicesEntities();
 
-            this.dataGridViewUsers.CellClick += DataGridViewUsers_CellClick;
-            this.dataGridViewUsers.DataSourceChanged += DataGridViewUsers_DataSourceChanged;
-            this.dataGridViewUsers.DataBindingComplete += DataGridViewUsers_DataBindingComplete;
+            this.dataGridViewUsers.DataBindingComplete += dataGridViewUsers_DataBindingComplete;
+            this.dataGridViewUsers.DataSourceChanged += dataGridViewUsers_DataSourceChanged;
+            this.dataGridViewUsers.CellClick += dataGridViewUsers_CellClick;
+            this.dataGridViewUsers.ColumnHeaderMouseClick += dataGridViewUsers_ColumnHeaderMouseClick;
+            this.dataGridViewUsers.CellFormatting += dataGridViewUsers_CellFormatting;
 
-            this.textBoxUserOptionsName.Leave += TextBoxUserOptionsName_Leave;
-            this.textBoxUserOptionsSurname.Leave += TextBoxUserOptionsSurname_Leave;
+            this.buttonNewUser.Click += buttonNewUser_Click;
+            this.buttonSaveUser.Click += buttonSaveUser_Click;
+            this.buttonUpdateUser.Click += buttonUpdateUser_Click;
+            this.buttonDeleteUser.Click += buttonDeleteUser_Click;
+
+            this.buttonAddImage.Click += buttonAddImage_Click;
+            this.buttonDeleteImage.Click += buttonDeleteImage_Click;
+            this.buttonPreviousImage.Click += buttonPreviousImage_Click;
+            this.buttonNextImage.Click += buttonNextImage_Click;
+
+            this.textBoxUserOptionsName.Leave += textBoxUserOptionsName_Leave;
+            this.textBoxUserOptionsSurname.Leave += textBoxUserOptionsSurname_Leave;
         }
 
-        private void UserForm_Load(object sender, EventArgs e)
+        #region Event Handlers
+
+        private void userUserControl_Load(object sender, EventArgs e)
         {
             this.textBoxUserOptionsFullname.ReadOnly = true;
 
             this._setModes(Mode.Display);
 
-            _setDefaultGridViewStyles(this.dataGridViewUsers);
-            _enableDataGridViewMultiSelect(this.dataGridViewUsers, false);
+            WinFormsHelper.SetDefaultGridViewStyles(this.dataGridViewUsers);
+            WinFormsHelper.EnableDataGridViewMultiSelect(this.dataGridViewUsers, false);
 
             this._setEditableUsers(false);
             this._bindDataToGridViewUser();
-            //this.onUserFormOpened("Users", "Window opened", DateTime.Now);
+
+            this.onUserFormOpened("Users", "Window opened", DateTime.Now);
         }
 
-        private void DataGridViewUsers_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void dataGridViewUsers_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewUsers.Rows.Count > 0)
             {
@@ -80,7 +107,7 @@ namespace InvoiceManager_DBFirst
             //this._isInitialized = true;
         }
 
-        private void DataGridViewUsers_DataSourceChanged(object sender, EventArgs e)
+        private void dataGridViewUsers_DataSourceChanged(object sender, EventArgs e)
         {
             if (this.dataGridViewUsers.DataSource == null)
                 return;
@@ -93,12 +120,12 @@ namespace InvoiceManager_DBFirst
                                                                 DataGridViewContentAlignment.MiddleLeft,
                                                                 DataGridViewContentAlignment.MiddleLeft };
 
-            _setDefaultGridViewHeaderStyles(this.dataGridViewUsers, headerTexts, columnWidths, columnAlignments);
+            WinFormsHelper.SetDefaultGridViewHeaderStyles(this.dataGridViewUsers, headerTexts, columnWidths, columnAlignments);
 
             this.dataGridViewUsers.Columns["userId"].Visible = false;
         }
 
-        private void DataGridViewUsers_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewUsers_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewRow row = this.dataGridViewUsers.CurrentRow;
 
@@ -106,7 +133,40 @@ namespace InvoiceManager_DBFirst
             this._setUserControls(row);
             this._setPictureBoxImage(row);
         }
-        
+
+        private void dataGridViewUsers_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            string columnName = this.dataGridViewUsers.Columns[e.ColumnIndex].HeaderText;
+
+            var query = from user in dbContext.User
+                        orderby user.Name ascending
+                        select new
+                        {
+                            userId = user.id,
+                            thumbnail = user.Thumbnail,
+                            userName = user.Name,
+                            userSurname = user.Surname,
+                            userFullname = user.Fullname
+                        };
+
+            switch (columnName)
+            {
+                case "Name":
+                    this.dataGridViewUsers.DataSource = (this._columnSortOrdersUsers[0][0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.userName).ToList() : query.OrderByDescending(r => r.userName).ToList();
+                    this._columnSortOrdersUsers[0][0] = (this._columnSortOrdersUsers[0][0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    break;
+
+                case "Surname":
+                    this.dataGridViewUsers.DataSource = (this._columnSortOrdersUsers[1][0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.userSurname).ToList() : query.OrderByDescending(r => r.userSurname).ToList();
+                    this._columnSortOrdersUsers[1][0] = (this._columnSortOrdersUsers[1][0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    break;
+                case "Full name":
+                    this.dataGridViewUsers.DataSource = (this._columnSortOrdersUsers[2][0] == ColumnSortOrder.ASC) ? query.OrderBy(r => r.userFullname).ToList() : query.OrderByDescending(r => r.userFullname).ToList();
+                    this._columnSortOrdersUsers[2][0] = (this._columnSortOrdersUsers[2][0] == ColumnSortOrder.ASC) ? ColumnSortOrder.DESC : ColumnSortOrder.ASC;
+                    break;
+            }
+        }
+
         private void dataGridViewUsers_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.ColumnIndex == 1 && e.Value != null)
@@ -119,16 +179,6 @@ namespace InvoiceManager_DBFirst
                     e.Value = GetBytesOfImage(img);
                 }
             }
-        }
-
-        private void TextBoxUserOptionsName_Leave(object sender, EventArgs e)
-        {
-            this._setFullnameField();
-        }
-
-        private void TextBoxUserOptionsSurname_Leave(object sender, EventArgs e)
-        {
-            this._setFullnameField();
         }
 
         private void buttonNewUser_Click(object sender, EventArgs e)
@@ -401,36 +451,95 @@ namespace InvoiceManager_DBFirst
             }
         }
 
-        private void buttonClose_Click(object sender, EventArgs e)
+        private void textBoxUserOptionsName_Leave(object sender, EventArgs e)
         {
-            this.Close();
+            this._setFullnameField();
         }
 
-        private void _saveAsThumbnail(User user, Image image)
+        private void textBoxUserOptionsSurname_Leave(object sender, EventArgs e)
         {
-            Image tempImage = ResizeImage(image, new Size(24, 24));
-            user.Thumbnail = GetBytesOfImage(tempImage);
-
-            try
-            {
-                this.dbContext.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred while saving thumbnail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            this._setFullnameField();
         }
 
-        private void _removeThumbnail(User user)
-        {
-            user.Thumbnail = null;
-        }
+        #endregion
+
+        #region Databind Queries
 
         private void _bindDataToGridViewUser()
         {
             this._refreshData();
-            //this.onUsersLoaded("Users", "User data loaded", DateTime.Now);
+            this.onUsersLoaded("Users", "User data loaded", DateTime.Now);
         }
+
+        private void _refreshData()
+        {
+            BindingSource bs = new BindingSource();
+
+            var query = from user in dbContext.User
+                        orderby user.Name ascending
+                        select new
+                        {
+                            userId = user.id,
+                            thumbnail = user.Thumbnail,
+                            userName = user.Name,
+                            userSurname = user.Surname,
+                            userFullname = user.Fullname
+                        };
+
+            bs.DataSource = query.ToList();
+
+            this.dataGridViewUsers.DataSource = bs;
+            this.dataGridViewUsers.Refresh();
+        }
+
+        #endregion
+
+        #region Set data to Controls
+
+        private void _setUserControls(DataGridViewRow row)
+        {
+            int userId = Convert.ToInt32(row.Cells["userId"].Value);
+
+            this.textBoxUserOptionsName.Text = row.Cells["userName"].Value.ToString();
+            this.textBoxUserOptionsSurname.Text = row.Cells["userSurname"].Value.ToString();
+            this.textBoxUserOptionsFullname.Text = row.Cells["userFullname"].Value.ToString();
+        }
+
+        private void _setPictureBoxImage(DataGridViewRow row)
+        {
+            int userId = Convert.ToInt32(row.Cells["userId"].Value);
+
+            List<UserImage> userImages = dbContext.UserImage.Where(r => r.userId == userId).ToList();
+
+            if (userImages.Count > 0)
+            {
+                if (!this._currentImageIndexDict.ContainsKey(userId))
+                    this._currentImageIndexDict.Add(userId, 0);
+
+                UserImage userImage = userImages[this._currentImageIndexDict[userId]];
+                this.pictureBoxUser.Image = (userImage != null) ? GetImageFromBytes(userImage.imageData) : BitmapResourceLoader.DefaultUser;
+                this.pictureBoxUser.Tag = userImage.id;
+                this._checkCheckBoxDefault(userImage.isDefault);
+            }
+            else
+            {
+                this.pictureBoxUser.Image = BitmapResourceLoader.DefaultUser;
+                this.pictureBoxUser.Tag = null;
+                this._checkCheckBoxDefault(false);
+            }
+
+            this.pictureBoxUser.SizeMode = PictureBoxSizeMode.Zoom;
+        }
+
+        private void _setFullnameField()
+        {
+            if (!string.IsNullOrEmpty(this.textBoxUserOptionsName.Text) && !string.IsNullOrEmpty(this.textBoxUserOptionsSurname.Text))
+                this.textBoxUserOptionsFullname.Text = $"{this.textBoxUserOptionsName.Text} {this.textBoxUserOptionsSurname.Text}";
+        }
+
+        #endregion
+
+        #region Get data from Controls
 
         private void _setUserDataFromUiToObject(User user)
         {
@@ -477,46 +586,9 @@ namespace InvoiceManager_DBFirst
             userImage.isDefault = (dbContext.UserImage.Where(r => r.userId == this._newUser.id).Any()) ? this.checkBoxDefaultUserImage.Checked : true;
         }
 
-        private void _setUserControls(DataGridViewRow row)
-        {
-            int userId = Convert.ToInt32(row.Cells["userId"].Value);
+        #endregion
 
-            this.textBoxUserOptionsName.Text = row.Cells["userName"].Value.ToString();
-            this.textBoxUserOptionsSurname.Text = row.Cells["userSurname"].Value.ToString();
-            this.textBoxUserOptionsFullname.Text = row.Cells["userFullname"].Value.ToString();
-        }
-
-        private void _setPictureBoxImage(DataGridViewRow row)
-        {
-            int userId = Convert.ToInt32(row.Cells["userId"].Value);
-
-            List<UserImage> userImages = dbContext.UserImage.Where(r => r.userId == userId).ToList();
-
-            if (userImages.Count > 0)
-            {
-                if (!this._currentImageIndexDict.ContainsKey(userId))
-                    this._currentImageIndexDict.Add(userId, 0);
-
-                UserImage userImage = userImages[this._currentImageIndexDict[userId]];
-                this.pictureBoxUser.Image = (userImage != null) ? GetImageFromBytes(userImage.imageData) : BitmapResourceLoader.DefaultUser;
-                this.pictureBoxUser.Tag = userImage.id;
-                this._checkCheckBoxDefault(userImage.isDefault);
-            }
-            else
-            {
-                this.pictureBoxUser.Image = BitmapResourceLoader.DefaultUser;
-                this.pictureBoxUser.Tag = null;
-                this._checkCheckBoxDefault(false);
-            }
-
-            this.pictureBoxUser.SizeMode = PictureBoxSizeMode.Zoom;
-        }
-
-        private void _setFullnameField()
-        {
-            if (!string.IsNullOrEmpty(this.textBoxUserOptionsName.Text) && !string.IsNullOrEmpty(this.textBoxUserOptionsSurname.Text))
-                this.textBoxUserOptionsFullname.Text = $"{this.textBoxUserOptionsName.Text} {this.textBoxUserOptionsSurname.Text}";
-        }
+        #region Set Enabled & Checked & Read-only Controls
 
         private void _setEditableUsers(bool isEditable)
         {
@@ -530,41 +602,15 @@ namespace InvoiceManager_DBFirst
             this.checkBoxDefaultUserImage.Checked = check;
         }
 
-
-        private static void _setDefaultGridViewStyles(DataGridView gridview)
+        private void _setModes(Mode mode)
         {
-            gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            gridview.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
-
-            gridview.DefaultCellStyle.Font = new Font("Calibri", 10);
-            gridview.DefaultCellStyle.ForeColor = Color.FromArgb(7, 7, 7); //  152, g: 255, b: 152
-            gridview.DefaultCellStyle.BackColor = Color.White;
-
-            gridview.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(7, 7, 7);
-            gridview.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 240, 240);
-
-            gridview.DefaultCellStyle.SelectionForeColor = Color.FromArgb(7, 7, 7);
-            gridview.DefaultCellStyle.SelectionBackColor = Color.FromArgb(163, 255, 179);
-
-            gridview.ColumnHeadersDefaultCellStyle.Font = new Font("Calibri", 9.5f, FontStyle.Bold);
-            gridview.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            this._userMode = mode;
+            this._userImageMode = mode;
         }
 
-        private static void _setDefaultGridViewHeaderStyles(DataGridView gridview, string[] headerTexts, int[] columnWidths, DataGridViewContentAlignment[] columnAlignments)
-        {
-            for (int i = 0; i < gridview.Columns.Count; ++i)
-            {
-                gridview.Columns[i].HeaderCell.Value = headerTexts[i];
-                gridview.Columns[i].Width = columnWidths[i];
-                gridview.Columns[i].DefaultCellStyle.Alignment = columnAlignments[i];
-            }
-        }
+        #endregion
 
-        public static void _enableDataGridViewMultiSelect(DataGridView gridview, bool enable)
-        {
-            gridview.MultiSelect = enable;
-        }
-
+        #region Clear Controls
         private void _clearUserControls()
         {
             this.pictureBoxUser.Image = null;
@@ -575,33 +621,9 @@ namespace InvoiceManager_DBFirst
                     ((TextBox)c).Clear();
         }
 
-        private void _setModes(Mode mode)
-        {
-            this._userMode = mode;
-            this._userImageMode = mode;
-        }
+        #endregion
 
-        // New approach. Apply this method to other forms.
-        private void _refreshData()
-        {
-            BindingSource bs = new BindingSource();
-
-            var query = from user in dbContext.User
-                        orderby user.Name ascending
-                        select new
-                        {
-                            userId = user.id,
-                            thumbnail = user.Thumbnail,
-                            userName = user.Name,
-                            userSurname = user.Surname,
-                            userFullname = user.Fullname
-                        };
-
-            bs.DataSource = query.ToList();
-
-            this.dataGridViewUsers.DataSource = bs;
-            this.dataGridViewUsers.Refresh();
-        }
+        #region Operations
 
         private byte[] _saveImage()
         {
@@ -641,17 +663,81 @@ namespace InvoiceManager_DBFirst
             return (Image)b;
         }
 
-        public static byte[] GetBytesOfImage(Image img)
+        private static byte[] GetBytesOfImage(Image img)
         {
             ImageConverter converter = new ImageConverter();
             return (byte[])converter.ConvertTo(img, typeof(byte[]));
         }
 
-        public static Image GetImageFromBytes(byte[] imageData)
+        private static Image GetImageFromBytes(byte[] imageData)
         {
             MemoryStream ms = new MemoryStream(imageData);
             return new Bitmap(ms);
         }
 
+        private void _saveAsThumbnail(User user, Image image)
+        {
+            Image tempImage = ResizeImage(image, new Size(24, 24));
+            user.Thumbnail = GetBytesOfImage(tempImage);
+
+            try
+            {
+                this.dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while saving thumbnail.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void _removeThumbnail(User user)
+        {
+            user.Thumbnail = null;
+        }
+
+        #endregion
+
+        #region User-defined Event Handlers
+
+        protected virtual void onUsersLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.UsersLoaded?.Invoke(actionType, message, eventTime);
+            this.onUserChanged(actionType, message, eventTime);
+        }
+
+        protected virtual void onUserSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.UserSaved?.Invoke(actionType, message, eventTime);
+            this.onUserChanged(actionType, message, eventTime);
+        }
+
+        protected virtual void onUserUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.UserUpdated?.Invoke(actionType, message, eventTime);
+            this.onUserChanged(actionType, message, eventTime);
+        }
+
+        protected virtual void onUserRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.UserRemoved?.Invoke(actionType, message, eventTime);
+            this.onUserChanged(actionType, message, eventTime);
+        }
+
+        protected virtual void onUserChanged(string actionType, string message, DateTime eventTime)
+        {
+            this.UserChanged?.Invoke(actionType, message, eventTime);
+        }
+
+        protected virtual void onUserFormOpened(string actionType, string message, DateTime eventTime)
+        {
+            this.UserFormOpened?.Invoke(actionType, message, eventTime);
+        }
+
+        protected virtual void onUserFormClosed(string actionType, string message, DateTime eventTime)
+        {
+            this.UserFormClosed?.Invoke(actionType, message, eventTime);
+        }
+
+        #endregion
     }
 }

@@ -1000,6 +1000,54 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region User-defined Event Handlers
 
+        protected virtual void onShopTypesLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopTypesLoaded?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
+        }
+
+        protected virtual void onShopTypeSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopTypeSaved?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
+        }
+
+        protected virtual void onShopTypeUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopTypeUpdated?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
+        }
+
+        protected virtual void onShopTypeRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopTypeRemoved?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
+        }
+
+        protected virtual void onShopGroupsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopGroupsLoaded?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
+        }
+
+        protected virtual void onShopGroupSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopGroupSaved?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
+        }
+
+        protected virtual void onShopGroupUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopGroupUpdated?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
+        }
+
+        protected virtual void onShopGroupRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        {
+            this.ShopGroupRemoved?.Invoke(actionType, message, eventTime);
+            this.onShopChanged(actionType, message, eventTime);
+        }
+
         protected virtual void onShopsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
         {
             this.ShopsLoaded?.Invoke(actionType, message, eventTime);
@@ -1023,55 +1071,7 @@ namespace InvoiceManager_DBFirst.UserControls
             this.ShopRemoved?.Invoke(actionType, message, eventTime);
             this.onShopChanged(actionType, message, eventTime);
         }
-
-        protected virtual void onShopGroupSaved(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.ShopGroupSaved?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
-        }
-
-        protected virtual void onShopGroupUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.ShopGroupUpdated?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
-        }
-
-        protected virtual void onShopGroupsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.ShopGroupsLoaded?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
-        }
-
-        protected virtual void onShopGroupRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.ShopGroupRemoved?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
-        }
-
-        protected virtual void onShopTypeSaved(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.ShopTypeSaved?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
-        }
-
-        protected virtual void onShopTypeUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.ShopTypeUpdated?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
-        }
-
-        protected virtual void onShopTypesLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.ShopTypesLoaded?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
-        }
-
-        protected virtual void onShopTypeRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.ShopTypeRemoved?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
-        }
-
+        
         protected virtual void onShopChanged(string actionType, string message, DateTime eventTime)
         {
             this.ShopChanged?.Invoke(actionType, message, eventTime);
