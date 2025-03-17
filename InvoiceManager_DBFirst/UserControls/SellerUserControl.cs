@@ -48,6 +48,11 @@ namespace InvoiceManager_DBFirst.UserControls
             this.dataGridViewSellers.DataSourceChanged += dataGridViewSellers_DataSourceChanged;
             this.dataGridViewSellers.CellClick += dataGridViewSellers_CellClick;
             this.dataGridViewSellers.ColumnHeaderMouseClick += dataGridViewSellers_ColumnHeaderMouseClick;
+
+            this.buttonNewSeller.Click += buttonNewSeller_Click;
+            this.buttonSaveSeller.Click += buttonSaveSeller_Click;
+            this.buttonUpdateSeller.Click += buttonUpdateSeller_Click;
+            this.buttonDeleteSeller.Click += buttonDeleteSeller_Click;
         }
 
         #region Event Handlers
