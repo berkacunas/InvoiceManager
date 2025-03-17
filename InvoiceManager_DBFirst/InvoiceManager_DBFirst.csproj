@@ -314,20 +314,8 @@
     <Compile Include="PaymentMethod.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="PaymentMethodForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PaymentMethodForm.Designer.cs">
-      <DependentUpon>PaymentMethodForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RowComparer.cs" />
-    <Compile Include="ItemForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ItemForm.Designer.cs">
-      <DependentUpon>ItemForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -342,26 +330,8 @@
     <Compile Include="Seller.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="SellerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SellerForm.Designer.cs">
-      <DependentUpon>SellerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shop.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ShopForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ShopForm.Designer.cs">
-      <DependentUpon>ShopForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ShopGroup.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
@@ -380,12 +350,6 @@
     </Compile>
     <Compile Include="TactionDetails.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="TactionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TactionForm.Designer.cs">
-      <DependentUpon>TactionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TactionReportForm.cs">
       <SubType>Form</SubType>
@@ -438,12 +402,6 @@
     <Compile Include="UserControls\UserUserControl.Designer.cs">
       <DependentUpon>UserUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserForm.Designer.cs">
-      <DependentUpon>UserForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserImage.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -451,17 +409,11 @@
     <EmbeddedResource Include="UserControls\ApplicationLogUserControl.resx">
       <DependentUpon>ApplicationLogUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ItemForm.resx">
-      <DependentUpon>ItemForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ItemSubTypeBatcherForm.resx">
       <DependentUpon>ItemSubTypeBatcherForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PaymentMethodForm.resx">
-      <DependentUpon>PaymentMethodForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -472,20 +424,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="SellerForm.resx">
-      <DependentUpon>SellerForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ShopForm.resx">
-      <DependentUpon>ShopForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="SyncSqliteForm.resx">
       <DependentUpon>SyncSqliteForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TactionForm.resx">
-      <DependentUpon>TactionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TactionReportForm.resx">
       <DependentUpon>TactionReportForm.cs</DependentUpon>
@@ -510,9 +450,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserUserControl.resx">
       <DependentUpon>UserUserControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserForm.resx">
-      <DependentUpon>UserForm.cs</DependentUpon>
     </EmbeddedResource>
     <EntityDeploy Include="InvoiceModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

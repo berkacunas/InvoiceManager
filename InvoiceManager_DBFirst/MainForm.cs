@@ -123,7 +123,7 @@ namespace InvoiceManager_DBFirst
 
         private void toolStripMenuItemSettings_Click(object sender, EventArgs e)
         {
-            this._initializeSettingsForm();
+            this.initializeSettingsUserControl();
         }
 
         private void toolStripMenuItemApplicationLog_Click(object sender, EventArgs e)
@@ -175,7 +175,7 @@ namespace InvoiceManager_DBFirst
 
         private void ToolStripButtonSettings_Click(object sender, EventArgs e)
         {
-            this._initializeSettingsForm();
+            this.initializeSettingsUserControl();
         }
 
         #endregion
@@ -351,12 +351,6 @@ namespace InvoiceManager_DBFirst
 
             this.placeHolder.Controls.Clear();
             this.placeHolder.Controls.Add(settingsUserControl);
-        }
-
-        private void _initializeSettingsForm()
-        {
-            SettingsForm settingsForm = new SettingsForm();
-            settingsForm.ShowDialog();
         }
 
         private void initializeApplicationLogUserControl()
