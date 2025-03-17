@@ -414,6 +414,12 @@
     <Compile Include="UserControls\SellerUserControl.Designer.cs">
       <DependentUpon>SellerUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\SettingsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\SettingsUserControl.Designer.cs">
+      <DependentUpon>SettingsUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ShopUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -492,6 +498,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\SellerUserControl.resx">
       <DependentUpon>SellerUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\SettingsUserControl.resx">
+      <DependentUpon>SettingsUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ShopUserControl.resx">
       <DependentUpon>ShopUserControl.cs</DependentUpon>
