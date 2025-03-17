@@ -19,16 +19,6 @@ namespace InvoiceManager_DBFirst.UserControls
         public event Notify SellerUpdated;
         public event Notify SellerRemoved;
 
-        public event Notify SellerGroupsLoaded;
-        public event Notify SellerGroupSaved;
-        public event Notify SellerGroupUpdated;
-        public event Notify SellerGroupRemoved;
-
-        public event Notify SellerTypesLoaded;
-        public event Notify SellerTypeSaved;
-        public event Notify SellerTypeUpdated;
-        public event Notify SellerTypeRemoved;
-
         public event Notify SellerChanged;
         public event Notify SellerFormOpened;
         public event Notify SellerFormClosed;

@@ -337,6 +337,9 @@ namespace InvoiceManager_DBFirst
         private void initializeSellerUserControl()
         {
             SellerUserControl sellerUserControl = new SellerUserControl();
+            sellerUserControl.SellerFormOpened += UserControl_ActionHandler;
+            sellerUserControl.SellerChanged += UserControl_ActionHandler;
+            sellerUserControl.SellerFormClosed += UserControl_ActionHandler;
 
             this.placeHolder.Controls.Clear();
             this.placeHolder.Controls.Add(sellerUserControl);
