@@ -67,6 +67,16 @@ namespace InvoiceManager_DBFirst
             this.onSellerFormOpened("Shops", "Window opened", DateTime.Now);
         }
 
+        private void DataGridViewSellers_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewSellers.Rows.Count > 0)
+            {
+                DataGridViewRow row = this.dataGridViewSellers.Rows[0];
+                if (row != null)
+                    this._setSellerControls(row);
+            }
+        }
+
         private void DataGridViewSellers_DataSourceChanged(object sender, EventArgs e)
         {
             if (this.dataGridViewSellers.DataSource == null)
@@ -89,23 +99,12 @@ namespace InvoiceManager_DBFirst
             this.dataGridViewSellers.Columns["Email"].Visible = false;
         }
 
-        private void DataGridViewSellers_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            if (e.ListChangedType == ListChangedType.Reset && this.dataGridViewSellers.Rows.Count > 0)
-            {
-                DataGridViewRow row = this.dataGridViewSellers.Rows[0];
-                if (row != null)
-                    this._setSellerControls(row);
-            }
-        }
-
         private void DataGridViewSellers_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             this._clearSellerControls();
             DataGridViewRow row = this.dataGridViewSellers.CurrentRow;
             this._setSellerControls(row);
         }
-
 
         private void _bindDataToGridViewSellers()
         {
@@ -151,7 +150,6 @@ namespace InvoiceManager_DBFirst
             seller.Web = this.textBoxSellerOptionsWeb.Text;
             seller.Email = this.textBoxSellerOptionsEmail.Text;
         }
-
 
         private static void _setDefaultGridViewStyles(DataGridView gridview)
         {
@@ -395,5 +393,6 @@ namespace InvoiceManager_DBFirst
 
             this._bindDataToGridViewSellers();
         }
+
     }
 }

@@ -67,7 +67,7 @@
             this.groupBoxSellerOptions.Controls.Add(this.buttonUpdateSeller);
             this.groupBoxSellerOptions.Controls.Add(this.buttonSaveSeller);
             this.groupBoxSellerOptions.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxSellerOptions.Location = new System.Drawing.Point(4, 561);
+            this.groupBoxSellerOptions.Location = new System.Drawing.Point(4, 567);
             this.groupBoxSellerOptions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxSellerOptions.Name = "groupBoxSellerOptions";
             this.groupBoxSellerOptions.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
