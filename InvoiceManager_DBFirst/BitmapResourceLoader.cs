@@ -113,6 +113,37 @@ namespace InvoiceManager_DBFirst
             get { return _getBitmap("think.png"); }
         }
 
+
+        public static Bitmap Delete
+        {
+            get { return _getBitmap("delete.png"); }
+        }
+
+        public static Bitmap DeleteButton
+        {
+            get { return _getBitmap("delete-button.png"); }
+        }
+
+        public static Bitmap Remove
+        {
+            get { return _getBitmap("remove.png"); }
+        }
+
+        public static Bitmap XButton
+        {
+            get { return _getBitmap("x-button.png"); }
+        }
+
+        public static Bitmap Switch
+        {
+            get { return _getBitmap("switch.png"); }
+        }
+
+        public static Bitmap PowerButton
+        {
+            get { return _getBitmap("power-button.png"); }
+        }
+
         public static Bitmap Settings
         {
             get { return _getBitmap("settings.png"); }

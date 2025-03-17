@@ -494,6 +494,12 @@
     <EmbeddedResource Include="assets\question1.png" />
     <EmbeddedResource Include="assets\question2.png" />
     <EmbeddedResource Include="assets\think.png" />
+    <EmbeddedResource Include="assets\delete-button.png" />
+    <EmbeddedResource Include="assets\delete.png" />
+    <EmbeddedResource Include="assets\remove.png" />
+    <EmbeddedResource Include="assets\switch.png" />
+    <EmbeddedResource Include="assets\x-button.png" />
+    <EmbeddedResource Include="assets\power-button.png" />
     <Content Include="cash.ico" />
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
     <Content Include="InvoiceModel.Context.tt">

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSync = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,6 +43,7 @@
             this.toolStripMenuItemPaymentMethods = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemUsers = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSellers = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemApplicationLog = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemView = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,11 +60,11 @@
             this.panelBottomSide = new System.Windows.Forms.Panel();
             this.listBoxSidePanel = new System.Windows.Forms.ListBox();
             this.panelTopSide = new System.Windows.Forms.Panel();
-            this.treeViewSidePanel = new System.Windows.Forms.TreeView();
             this.placeHolder = new System.Windows.Forms.Panel();
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
-            this.toolStripMenuItemApplicationLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.listViewActiveControls = new System.Windows.Forms.ListView();
+            this.contextMenuStripTileView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuStripMain.SuspendLayout();
             this.statusStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
@@ -103,7 +105,7 @@
             this.toolStripMenuItemSync.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemSyncSqlite});
             this.toolStripMenuItemSync.Name = "toolStripMenuItemSync";
-            this.toolStripMenuItemSync.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemSync.Size = new System.Drawing.Size(135, 22);
             this.toolStripMenuItemSync.Text = "Sync";
             // 
             // toolStripMenuItemSyncSqlite
@@ -120,7 +122,7 @@
             this.toolStripMenuItemBatch.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemBatchItemSubTypes});
             this.toolStripMenuItemBatch.Name = "toolStripMenuItemBatch";
-            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(135, 22);
             this.toolStripMenuItemBatch.Text = "Batch";
             // 
             // toolStripMenuItemBatchItemSubTypes
@@ -135,7 +137,7 @@
             this.toolStripMenuItemExit.Name = "toolStripMenuItemExit";
             this.toolStripMenuItemExit.ShortcutKeyDisplayString = "";
             this.toolStripMenuItemExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.toolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemExit.Size = new System.Drawing.Size(135, 22);
             this.toolStripMenuItemExit.Text = "Exit";
             this.toolStripMenuItemExit.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -201,6 +203,13 @@
             this.toolStripMenuItemSellers.Text = "Sellers";
             this.toolStripMenuItemSellers.Click += new System.EventHandler(this.toolStripMenuItemSellers_Click);
             // 
+            // toolStripMenuItemApplicationLog
+            // 
+            this.toolStripMenuItemApplicationLog.Name = "toolStripMenuItemApplicationLog";
+            this.toolStripMenuItemApplicationLog.Size = new System.Drawing.Size(212, 22);
+            this.toolStripMenuItemApplicationLog.Text = "Application Log";
+            this.toolStripMenuItemApplicationLog.Click += new System.EventHandler(this.toolStripMenuItemApplicationLog_Click);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -212,7 +221,7 @@
             // toolStripMenuItemSettings
             // 
             this.toolStripMenuItemSettings.Name = "toolStripMenuItemSettings";
-            this.toolStripMenuItemSettings.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemSettings.Size = new System.Drawing.Size(116, 22);
             this.toolStripMenuItemSettings.Text = "Settings";
             this.toolStripMenuItemSettings.Click += new System.EventHandler(this.toolStripMenuItemSettings_Click);
             // 
@@ -342,20 +351,11 @@
             this.panelTopSide.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelTopSide.Controls.Add(this.treeViewSidePanel);
+            this.panelTopSide.Controls.Add(this.listViewActiveControls);
             this.panelTopSide.Location = new System.Drawing.Point(0, 0);
             this.panelTopSide.Name = "panelTopSide";
             this.panelTopSide.Size = new System.Drawing.Size(144, 436);
             this.panelTopSide.TabIndex = 1;
-            // 
-            // treeViewSidePanel
-            // 
-            this.treeViewSidePanel.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.treeViewSidePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeViewSidePanel.Location = new System.Drawing.Point(0, 0);
-            this.treeViewSidePanel.Name = "treeViewSidePanel";
-            this.treeViewSidePanel.Size = new System.Drawing.Size(144, 436);
-            this.treeViewSidePanel.TabIndex = 0;
             // 
             // placeHolder
             // 
@@ -387,12 +387,22 @@
             this.labelHorizontalLine1.Size = new System.Drawing.Size(1326, 2);
             this.labelHorizontalLine1.TabIndex = 7;
             // 
-            // toolStripMenuItemApplicationLog
+            // listViewActiveControls
             // 
-            this.toolStripMenuItemApplicationLog.Name = "toolStripMenuItemApplicationLog";
-            this.toolStripMenuItemApplicationLog.Size = new System.Drawing.Size(212, 22);
-            this.toolStripMenuItemApplicationLog.Text = "Application Log";
-            this.toolStripMenuItemApplicationLog.Click += new System.EventHandler(this.toolStripMenuItemApplicationLog_Click);
+            this.listViewActiveControls.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewActiveControls.HideSelection = false;
+            this.listViewActiveControls.Location = new System.Drawing.Point(0, 0);
+            this.listViewActiveControls.Name = "listViewActiveControls";
+            this.listViewActiveControls.Size = new System.Drawing.Size(144, 436);
+            this.listViewActiveControls.TabIndex = 0;
+            this.listViewActiveControls.UseCompatibleStateImageBehavior = false;
+            // 
+            // contextMenuStripTileView
+            // 
+            this.contextMenuStripTileView.Name = "contextMenuStripTileView";
+            this.contextMenuStripTileView.Size = new System.Drawing.Size(181, 26);
             // 
             // MainForm
             // 
@@ -452,7 +462,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolbarToolStripMenuItemShow;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReportABug;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAbout;
-        private System.Windows.Forms.TreeView treeViewSidePanel;
         private System.Windows.Forms.Label labelHorizontalLine1;
         private System.Windows.Forms.Panel panelTopSide;
         private System.Windows.Forms.ListBox listBoxSidePanel;
@@ -461,6 +470,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBatchItemSubTypes;
         private System.Windows.Forms.Panel placeHolder;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemApplicationLog;
+        private System.Windows.Forms.ListView listViewActiveControls;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripTileView;
     }
 }
 
