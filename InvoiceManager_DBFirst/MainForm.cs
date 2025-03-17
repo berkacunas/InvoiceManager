@@ -345,6 +345,14 @@ namespace InvoiceManager_DBFirst
             this.placeHolder.Controls.Add(sellerUserControl);
         }
 
+        private void initializeSettingsUserControl()
+        {
+            SettingsUserControl settingsUserControl = new SettingsUserControl();
+
+            this.placeHolder.Controls.Clear();
+            this.placeHolder.Controls.Add(settingsUserControl);
+        }
+
         private void _initializeSettingsForm()
         {
             SettingsForm settingsForm = new SettingsForm();
