@@ -449,7 +449,17 @@ namespace InvoiceManager_DBFirst.UserControls
                 itemSubTypeId = ((ItemSubType)this.comboBoxItemSubType.SelectedItem).id;
 
             int itemId = dbContext.Item.Where(r => r.Name == itemName).FirstOrDefault().id;
-            this.textBoxUnitPrice.Text = adviceUnitPriceForItem(itemId, itemSubTypeId).ToString();
+
+            try
+            {
+                this.textBoxUnitPrice.Text = adviceUnitPriceForItem(itemId, itemSubTypeId).ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Cannot find unit price for this item. TactionDetails is NULL.", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             this.textBoxVat.Text = adviceVatForItem(itemId).ToString();
         }
 
@@ -1325,7 +1335,11 @@ namespace InvoiceManager_DBFirst.UserControls
             if (itemSubTypeId > 0)
                 query = query.Where(r => r.ItemSubTypeId == itemSubTypeId);
 
-            return Convert.ToDecimal(query.OrderByDescending(r => r.Taction.Dt).FirstOrDefault().UnitPrice);
+            TactionDetails tactionDetails = query.OrderByDescending(r => r.Taction.Dt).FirstOrDefault();
+            if (tactionDetails == null)
+                throw new Exception("TactionDetails is null");
+
+            return Convert.ToDecimal(tactionDetails.UnitPrice);
         }
 
         private int adviceVatForItem(int itemId)
