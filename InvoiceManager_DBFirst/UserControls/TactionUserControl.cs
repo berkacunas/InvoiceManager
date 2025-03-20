@@ -1181,6 +1181,7 @@ namespace InvoiceManager_DBFirst.UserControls
             this.buttonAddDetail.Enabled = isEditable;
             this.buttonUpdateDetail.Enabled = isEditable;
             this.buttonRemoveDetail.Enabled = isEditable;
+            this.buttonClearDetail.Enabled = isEditable;
             this.buttonAdviceLastUnitPrice.Enabled = isEditable;
             this.checkBoxDiscount.Enabled = isEditable;
             this.textBoxItemGroup.ReadOnly = !isEditable;
