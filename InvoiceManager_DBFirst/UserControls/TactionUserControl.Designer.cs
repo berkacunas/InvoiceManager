@@ -81,6 +81,7 @@
             this.dataGridViewTactionDetails = new System.Windows.Forms.DataGridView();
             this.groupBoxTactions = new System.Windows.Forms.GroupBox();
             this.dataGridViewTactions = new System.Windows.Forms.DataGridView();
+            this.buttonClearDetail = new System.Windows.Forms.Button();
             this.groupBoxTactionOptions.SuspendLayout();
             this.groupBoxTactionDetailsOptions.SuspendLayout();
             this.groupBoxTactionDetails.SuspendLayout();
@@ -309,6 +310,7 @@
             // 
             // groupBoxTactionDetailsOptions
             // 
+            this.groupBoxTactionDetailsOptions.Controls.Add(this.buttonClearDetail);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.comboBoxItemSubType);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.buttonAdviceLastUnitPrice);
             this.groupBoxTactionDetailsOptions.Controls.Add(this.labelVatPercantage);
@@ -598,6 +600,15 @@
             this.dataGridViewTactions.Size = new System.Drawing.Size(721, 899);
             this.dataGridViewTactions.TabIndex = 0;
             // 
+            // buttonClearDetail
+            // 
+            this.buttonClearDetail.Location = new System.Drawing.Point(279, 133);
+            this.buttonClearDetail.Name = "buttonClearDetail";
+            this.buttonClearDetail.Size = new System.Drawing.Size(75, 25);
+            this.buttonClearDetail.TabIndex = 35;
+            this.buttonClearDetail.Text = "Remove";
+            this.buttonClearDetail.UseVisualStyleBackColor = true;
+            // 
             // TactionUserControl
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -677,5 +688,6 @@
         private System.Windows.Forms.DataGridView dataGridViewTactionDetails;
         private System.Windows.Forms.GroupBox groupBoxTactions;
         private System.Windows.Forms.DataGridView dataGridViewTactions;
+        private System.Windows.Forms.Button buttonClearDetail;
     }
 }

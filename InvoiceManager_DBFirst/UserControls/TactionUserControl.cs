@@ -57,6 +57,7 @@ namespace InvoiceManager_DBFirst.UserControls
             this.buttonAddDetail.Click += buttonAddDetail_Click;
             this.buttonUpdateDetail.Click += buttonUpdateDetail_Click;
             this.buttonRemoveDetail.Click += buttonRemoveDetail_Click;
+            this.buttonClearDetail.Click += buttonClearDetail_Click;
 
             this.buttonAdviceLastUnitPrice.Click += buttonAdviceLastUnitPrice_Click;
 
@@ -426,6 +427,11 @@ namespace InvoiceManager_DBFirst.UserControls
                 this.updateDataGridViewTactionDetails();
                 this.setTactionTotalPrice(_newTaction);
             }
+        }
+
+        private void buttonClearDetail_Click(object sender, EventArgs e)
+        {
+            this.clearDetailsControls();
         }
 
         private void buttonAdviceLastUnitPrice_Click(object sender, EventArgs e)
