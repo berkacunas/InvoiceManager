@@ -1186,7 +1186,6 @@ namespace InvoiceManager_DBFirst.UserControls
             this.checkBoxDiscount.Enabled = isEditable;
             this.textBoxItemGroup.ReadOnly = !isEditable;
             this.textBoxItem.ReadOnly = !isEditable;
-            //this.textBoxItemSubType.ReadOnly = !isEditable;
             this.comboBoxItemSubType.Enabled = !isEditable;
             this.textBoxUnit.ReadOnly = !isEditable;
             this.textBoxUnitPrice.ReadOnly = !isEditable;

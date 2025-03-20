@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IdentityModel.Tokens;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -244,89 +245,143 @@ namespace InvoiceManager_DBFirst
         #region Initialize User Controls
         private void initializeTactionUserControl()
         {
-            TactionUserControl tactionUserControl = new TactionUserControl();
-            tactionUserControl.Tag = "Transactions";
+            this.visibleUserControls(false);
+            UserControl userControl = this.selectUserControl("Transactions");
 
-            tactionUserControl.TransactionFormOpened += UserControl_ActionHandler;
-            tactionUserControl.TransactionChanged += UserControl_ActionHandler;
-            tactionUserControl.TransactionFormClosed += UserControl_ActionHandler;
+            if (userControl == null)
+            {
+                TactionUserControl tactionUserControl = new TactionUserControl();
+                tactionUserControl.Tag = "Transactions";
+                tactionUserControl.TransactionFormOpened += UserControl_ActionHandler;
+                tactionUserControl.TransactionChanged += UserControl_ActionHandler;
+                tactionUserControl.TransactionFormClosed += UserControl_ActionHandler;
 
-            this.placeHolder.Controls.Clear();
-            this.placeHolder.Controls.Add(tactionUserControl);
+                this.placeHolder.Controls.Add(tactionUserControl);
+            }
+            else
+                userControl.Visible = true;
         }
 
         private void initializeItemUserControl()
         {
-            ItemUserControl itemUserControl = new ItemUserControl();
-            itemUserControl.Tag = "Items";
+            this.visibleUserControls(false);
 
-            itemUserControl.ItemFormOpened += UserControl_ActionHandler;
-            itemUserControl.ItemChanged += UserControl_ActionHandler;
-            itemUserControl.ItemFormClosed += UserControl_ActionHandler;
+            UserControl userControl = this.selectUserControl("Items");
+            if (userControl == null) {
 
-            this.placeHolder.Controls.Clear();
-            this.placeHolder.Controls.Add(itemUserControl);
+                ItemUserControl itemUserControl = new ItemUserControl();
+                itemUserControl.Tag = "Items";
+
+                itemUserControl.ItemFormOpened += UserControl_ActionHandler;
+                itemUserControl.ItemChanged += UserControl_ActionHandler;
+                itemUserControl.ItemFormClosed += UserControl_ActionHandler;
+
+                this.placeHolder.Controls.Add(itemUserControl);
+
+            }
+            else
+                userControl.Visible = true;
         }
 
         private void initializeShopUserControl()
         {
-            ShopUserControl shopUserControl = new ShopUserControl();
-            shopUserControl.Tag = "Shops";
+            this.visibleUserControls(false);
+            UserControl userControl = this.selectUserControl("Shops");
 
-            shopUserControl.ShopFormOpened += UserControl_ActionHandler;
-            shopUserControl.ShopChanged += UserControl_ActionHandler;
-            shopUserControl.ShopFormClosed += UserControl_ActionHandler;
+            if (userControl == null)
+            {
+                ShopUserControl shopUserControl = new ShopUserControl();
+                shopUserControl.Tag = "Shops";
 
-            this.placeHolder.Controls.Clear();
-            this.placeHolder.Controls.Add(shopUserControl);
+                shopUserControl.ShopFormOpened += UserControl_ActionHandler;
+                shopUserControl.ShopChanged += UserControl_ActionHandler;
+                shopUserControl.ShopFormClosed += UserControl_ActionHandler;
+
+                this.placeHolder.Controls.Add(shopUserControl);
+
+            }
+            else
+                userControl.Visible = true;
         }
 
         private void initializePaymentMethodUserControl()
         {
-            PaymentMethodUserControl paymentMethodUserControl = new PaymentMethodUserControl();
-            paymentMethodUserControl.Tag = "PaymentMethods";
+            this.visibleUserControls(false);
+            UserControl userControl = this.selectUserControl("PaymentMethods");
 
-            paymentMethodUserControl.PaymentMethodFormOpened += UserControl_ActionHandler;
-            paymentMethodUserControl.DataChanged += UserControl_ActionHandler;
-            paymentMethodUserControl.PaymentMethodFormClosed += UserControl_ActionHandler;
+            if (userControl == null)
+            {
+                PaymentMethodUserControl paymentMethodUserControl = new PaymentMethodUserControl();
+                paymentMethodUserControl.Tag = "PaymentMethods";
 
-            this.placeHolder.Controls.Clear();
-            this.placeHolder.Controls.Add(paymentMethodUserControl);
+                paymentMethodUserControl.PaymentMethodFormOpened += UserControl_ActionHandler;
+                paymentMethodUserControl.DataChanged += UserControl_ActionHandler;
+                paymentMethodUserControl.PaymentMethodFormClosed += UserControl_ActionHandler;
+
+                this.placeHolder.Controls.Add(paymentMethodUserControl);
+
+            }
+            else
+                userControl.Visible = true;
         }
 
         private void initializeUserUserControl()
         {
-            UserUserControl userUserControl = new UserUserControl();
-            userUserControl.Tag = "Users";
+            this.visibleUserControls(false);
+            UserControl userControl = this.selectUserControl("Users");
 
-            userUserControl.UserFormOpened += UserControl_ActionHandler;
-            userUserControl.UserChanged += UserControl_ActionHandler;
-            userUserControl.UserFormClosed += UserControl_ActionHandler;
+            if (userControl == null)
+            {
+                UserUserControl userUserControl = new UserUserControl();
+                userUserControl.Tag = "Users";
 
-            this.placeHolder.Controls.Clear();
-            this.placeHolder.Controls.Add(userUserControl);
+                userUserControl.UserFormOpened += UserControl_ActionHandler;
+                userUserControl.UserChanged += UserControl_ActionHandler;
+                userUserControl.UserFormClosed += UserControl_ActionHandler;
+
+                this.placeHolder.Controls.Add(userUserControl);
+
+            }
+            else
+                userControl.Visible = true;
         }
 
         private void initializeSellerUserControl()
         {
-            SellerUserControl sellerUserControl = new SellerUserControl();
-            sellerUserControl.Tag = "Sellers";
+            this.visibleUserControls(false);
+            UserControl userControl = this.selectUserControl("Sellers");
 
-            sellerUserControl.SellerFormOpened += UserControl_ActionHandler;
-            sellerUserControl.SellerChanged += UserControl_ActionHandler;
-            sellerUserControl.SellerFormClosed += UserControl_ActionHandler;
+            if (userControl == null)
+            {
+                SellerUserControl sellerUserControl = new SellerUserControl();
+                sellerUserControl.Tag = "Sellers";
 
-            this.placeHolder.Controls.Clear();
-            this.placeHolder.Controls.Add(sellerUserControl);
+                sellerUserControl.SellerFormOpened += UserControl_ActionHandler;
+                sellerUserControl.SellerChanged += UserControl_ActionHandler;
+                sellerUserControl.SellerFormClosed += UserControl_ActionHandler;
+
+                this.placeHolder.Controls.Add(sellerUserControl);
+
+            }
+            else
+                userControl.Visible = true;
         }
 
         private void initializeSettingsUserControl()
         {
-            SettingsUserControl settingsUserControl = new SettingsUserControl();
-            settingsUserControl.Tag = "Settings";
+            this.visibleUserControls(false);
+            UserControl userControl = this.selectUserControl("Settings");
 
-            this.placeHolder.Controls.Clear();
-            this.placeHolder.Controls.Add(settingsUserControl);
+            if (userControl == null)
+            {
+                SettingsUserControl settingsUserControl = new SettingsUserControl();
+                settingsUserControl.Tag = "Settings";
+
+                this.placeHolder.Controls.Add(settingsUserControl);
+
+            }
+            else
+                userControl.Visible = true;
         }
 
         private void initializeApplicationLogUserControl()
@@ -342,6 +397,15 @@ namespace InvoiceManager_DBFirst
         #endregion
 
         #region Private Functions
+
+        private UserControl selectUserControl(string tag)
+        {
+            UserControl userControl = (from UserControl control in this.placeHolder.Controls
+                                       where control.Tag.ToString() == tag
+                                       select control).FirstOrDefault();
+
+            return userControl;
+        }
 
         private void addLog(string actionType, string message, DateTime eventTime)
         {
@@ -377,6 +441,12 @@ namespace InvoiceManager_DBFirst
             this.listViewActiveControls.Items.Remove(removedItem);
         }
 
+        private void visibleUserControls(bool visible)
+        {
+            foreach (Control c in this.placeHolder.Controls)
+                c.Visible = false;
+        }
+        
         private void createImageListActiveControlIcons()
         {
             this._activeControlsImageList = new ImageList();
