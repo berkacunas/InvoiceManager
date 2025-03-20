@@ -45,20 +45,9 @@ namespace InvoiceManager_DBFirst
             this.placeHolder.ControlAdded += placeHolder_ControlAdded;
             this.placeHolder.ControlRemoved += placeHolder_ControlRemoved;
 
+            this.listViewActiveControls.MouseDoubleClick += listViewActiveControls_MouseDoubleClick;
             this.listViewActiveControls.MouseUp += listViewActiveControls_MouseUp;
             this.listViewActiveControls.ClientSizeChanged += listViewActiveControls_ClientSizeChanged;
-        }
-
-        private void listViewActiveControls_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                var focusedItem = this.listViewActiveControls.FocusedItem;
-                if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
-                {
-                    contextMenuStripTileView.Show(Cursor.Position);
-                }
-            }
         }
 
         #region Event Handlers
@@ -82,16 +71,6 @@ namespace InvoiceManager_DBFirst
             this.contextMenuStripTileView.Items.Add("Remove", BitmapResourceLoader.Remove, contextMenuStripTileView_remove);
         }
 
-        private void contextMenuStripTileView_activate(object sender, EventArgs e)
-        {
-
-        }
-
-        private void contextMenuStripTileView_remove(object sender, EventArgs e)
-        {
-
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.dbContext.AppLog.AddRange(this._appLogs);
@@ -106,10 +85,9 @@ namespace InvoiceManager_DBFirst
             }
         }
 
-        private void listViewActiveControls_ClientSizeChanged(object sender, EventArgs e)
+        private void timer_callback(object state)
         {
-            this.listViewActiveControls.TileSize = new Size(this.listViewActiveControls.Size.Width, 45);
-            this.listViewActiveControls.Refresh();
+            this.InvokeEx(f => f.toolStripStatusLabelLiveDateTime.Text = DateTime.Now.ToString("d MMMM yyyy dddd HH:mm:ss"));
         }
 
         private void placeHolder_ControlAdded(object sender, ControlEventArgs e)
@@ -117,7 +95,6 @@ namespace InvoiceManager_DBFirst
             Control control = e.Control;
             string tileMessage = $"Add, Edit, Remove {control.Tag.ToString()}";
             this.addActiveControlToListView(control.Tag.ToString(), tileMessage, control.Tag.ToString());
-
         }
 
         private void placeHolder_ControlRemoved(object sender, ControlEventArgs e)
@@ -125,14 +102,64 @@ namespace InvoiceManager_DBFirst
             removeActiveControlFromListView(e.Control.Tag.ToString());
         }
 
-        private void timer_callback(object state)
+        private void listViewActiveControls_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            this.InvokeEx(f => f.toolStripStatusLabelLiveDateTime.Text = DateTime.Now.ToString("d MMMM yyyy dddd HH:mm:ss"));
+            this.visibleUserControls(false);
+
+            ListViewItem selectedItem = null;
+            if (this.listViewActiveControls.SelectedItems != null)
+                selectedItem = this.listViewActiveControls.SelectedItems[0];
+
+            UserControl userControl = this.selectUserControl(selectedItem.Text);
+            userControl.Visible = true;
+        }
+
+        private void listViewActiveControls_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var focusedItem = this.listViewActiveControls.FocusedItem;
+                if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
+                {
+                    contextMenuStripTileView.Show(Cursor.Position);
+                }
+            }
+        }
+
+        private void listViewActiveControls_ClientSizeChanged(object sender, EventArgs e)
+        {
+            this.listViewActiveControls.TileSize = new Size(this.listViewActiveControls.Size.Width, 45);
+            this.listViewActiveControls.Refresh();
+        }
+
+        private void contextMenuStripTileView_activate(object sender, EventArgs e)
+        {
+            this.visibleUserControls(false);
+
+            ListViewItem selectedItem = null;
+            if (this.listViewActiveControls.SelectedItems != null)
+                selectedItem = this.listViewActiveControls.SelectedItems[0];
+
+            UserControl userControl = this.selectUserControl(selectedItem.Text);
+            userControl.Visible = true;
+        }
+
+        private void contextMenuStripTileView_remove(object sender, EventArgs e)
+        {
+            ListViewItem selectedItem = null;
+            if (this.listViewActiveControls.SelectedItems != null)
+                selectedItem = this.listViewActiveControls.SelectedItems[0];
+
+            UserControl userControl = this.selectUserControl(selectedItem.Text);
+            this.placeHolder.Controls.Remove(userControl);
+
+            this.placeHolder.Controls[this.placeHolder.Controls.Count - 1].Visible = true;
         }
 
         #endregion
 
         #region ToolStripMenuItem Events
+
         private void toolStripMenuItemSyncSqlite_Click(object sender, EventArgs e)
         {
             SyncSqliteForm syncSqliteForm = new SyncSqliteForm();
@@ -465,6 +492,7 @@ namespace InvoiceManager_DBFirst
         {
             this.listViewActiveControls.View = View.Tile;
             this.listViewActiveControls.LargeImageList = this._activeControlsImageList;
+            this.listViewActiveControls.MultiSelect = false;
 
             /* Add column headers so the subitems will appear. */
             this.listViewActiveControls.Columns.AddRange(new ColumnHeader[]
