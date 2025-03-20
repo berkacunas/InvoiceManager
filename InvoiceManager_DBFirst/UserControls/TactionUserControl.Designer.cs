@@ -606,7 +606,7 @@
             this.buttonClearDetail.Name = "buttonClearDetail";
             this.buttonClearDetail.Size = new System.Drawing.Size(75, 25);
             this.buttonClearDetail.TabIndex = 35;
-            this.buttonClearDetail.Text = "Remove";
+            this.buttonClearDetail.Text = "Clear";
             this.buttonClearDetail.UseVisualStyleBackColor = true;
             // 
             // TactionUserControl
