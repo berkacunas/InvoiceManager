@@ -44,5 +44,11 @@ namespace InvoiceManager_DBFirst
         public virtual DbSet<ItemSubTypeDetails> ItemSubTypeDetails { get; set; }
         public virtual DbSet<AppLog> AppLog { get; set; }
         public virtual DbSet<AppLogActionType> AppLogActionType { get; set; }
+        public virtual DbSet<CardTaction> CardTaction { get; set; }
+        public virtual DbSet<CardTactionDetails> CardTactionDetails { get; set; }
+        public virtual DbSet<CardTactionOperationType> CardTactionOperationType { get; set; }
+        public virtual DbSet<UserLog> UserLog { get; set; }
+        public virtual DbSet<UserLogin> UserLogin { get; set; }
+        public virtual DbSet<UserLoginDetails> UserLoginDetails { get; set; }
     }
 }

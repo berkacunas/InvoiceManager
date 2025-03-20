@@ -67,5 +67,11 @@ namespace InvoiceManager_DBFirst.Globals
             button.FlatStyle = flatStyle;
             button.FlatAppearance.BorderSize = borderWidth;
         }
+
+        public static void CheckToolStripToogleButton(ToolStripButton button, bool check)
+        {
+            button.Checked = check;
+        }
+
     }
 }

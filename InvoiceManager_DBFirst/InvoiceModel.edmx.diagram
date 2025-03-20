@@ -45,6 +45,16 @@
         <EntityTypeShape EntityType="InvoicesModel.AppLog" Width="1.5" PointX="12.625" PointY="0.875" />
         <EntityTypeShape EntityType="InvoicesModel.AppLogActionType" Width="1.5" PointX="10.375" PointY="1.125" />
         <AssociationConnector Association="InvoicesModel.FK_AppLog_ActionTypeId" />
+        <EntityTypeShape EntityType="InvoicesModel.CardTaction" Width="1.5" PointX="8.25" PointY="13.375" />
+        <EntityTypeShape EntityType="InvoicesModel.CardTactionDetails" Width="1.5" PointX="12.625" PointY="13.875" />
+        <EntityTypeShape EntityType="InvoicesModel.CardTactionOperationType" Width="1.5" PointX="10.375" PointY="14.25" />
+        <EntityTypeShape EntityType="InvoicesModel.UserLog" Width="1.5" PointX="3" PointY="9.625" />
+        <EntityTypeShape EntityType="InvoicesModel.UserLogin" Width="1.5" PointX="10.375" PointY="9.875" />
+        <EntityTypeShape EntityType="InvoicesModel.UserLoginDetails" Width="1.5" PointX="12.625" PointY="9.875" />
+        <AssociationConnector Association="InvoicesModel.FK_CardTaction_PaymentMethodId" />
+        <AssociationConnector Association="InvoicesModel.FK_CardTactionDetails_CardTactionOperationTypeId" />
+        <AssociationConnector Association="InvoicesModel.FK_UserLog_UserId" />
+        <AssociationConnector Association="InvoicesModel.FK_UserLoginDetails_UserLoginId" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

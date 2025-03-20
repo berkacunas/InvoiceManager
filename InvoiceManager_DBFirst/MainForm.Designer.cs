@@ -58,13 +58,13 @@
             this.toolStripStatusLabelLiveDateTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.panelBottomSide = new System.Windows.Forms.Panel();
-            this.listBoxSidePanel = new System.Windows.Forms.ListBox();
             this.panelTopSide = new System.Windows.Forms.Panel();
+            this.listViewActiveControls = new System.Windows.Forms.ListView();
             this.placeHolder = new System.Windows.Forms.Panel();
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
-            this.listViewActiveControls = new System.Windows.Forms.ListView();
             this.contextMenuStripTileView = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.panelLoginInfo = new System.Windows.Forms.Panel();
             this.menuStripMain.SuspendLayout();
             this.statusStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
@@ -105,7 +105,7 @@
             this.toolStripMenuItemSync.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemSyncSqlite});
             this.toolStripMenuItemSync.Name = "toolStripMenuItemSync";
-            this.toolStripMenuItemSync.Size = new System.Drawing.Size(135, 22);
+            this.toolStripMenuItemSync.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSync.Text = "Sync";
             // 
             // toolStripMenuItemSyncSqlite
@@ -122,7 +122,7 @@
             this.toolStripMenuItemBatch.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemBatchItemSubTypes});
             this.toolStripMenuItemBatch.Name = "toolStripMenuItemBatch";
-            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(135, 22);
+            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemBatch.Text = "Batch";
             // 
             // toolStripMenuItemBatchItemSubTypes
@@ -137,7 +137,7 @@
             this.toolStripMenuItemExit.Name = "toolStripMenuItemExit";
             this.toolStripMenuItemExit.ShortcutKeyDisplayString = "";
             this.toolStripMenuItemExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.toolStripMenuItemExit.Size = new System.Drawing.Size(135, 22);
+            this.toolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemExit.Text = "Exit";
             this.toolStripMenuItemExit.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -323,28 +323,17 @@
             // 
             this.splitContainerMain.Panel2.Controls.Add(this.placeHolder);
             this.splitContainerMain.Size = new System.Drawing.Size(1325, 668);
-            this.splitContainerMain.SplitterDistance = 146;
+            this.splitContainerMain.SplitterDistance = 167;
             this.splitContainerMain.TabIndex = 5;
             // 
             // panelBottomSide
             // 
-            this.panelBottomSide.Controls.Add(this.listBoxSidePanel);
+            this.panelBottomSide.Controls.Add(this.panelLoginInfo);
             this.panelBottomSide.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottomSide.Location = new System.Drawing.Point(0, 442);
             this.panelBottomSide.Name = "panelBottomSide";
-            this.panelBottomSide.Size = new System.Drawing.Size(146, 226);
+            this.panelBottomSide.Size = new System.Drawing.Size(167, 226);
             this.panelBottomSide.TabIndex = 2;
-            // 
-            // listBoxSidePanel
-            // 
-            this.listBoxSidePanel.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBoxSidePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxSidePanel.FormattingEnabled = true;
-            this.listBoxSidePanel.ItemHeight = 15;
-            this.listBoxSidePanel.Location = new System.Drawing.Point(0, 0);
-            this.listBoxSidePanel.Name = "listBoxSidePanel";
-            this.listBoxSidePanel.Size = new System.Drawing.Size(146, 226);
-            this.listBoxSidePanel.TabIndex = 0;
             // 
             // panelTopSide
             // 
@@ -354,8 +343,21 @@
             this.panelTopSide.Controls.Add(this.listViewActiveControls);
             this.panelTopSide.Location = new System.Drawing.Point(0, 0);
             this.panelTopSide.Name = "panelTopSide";
-            this.panelTopSide.Size = new System.Drawing.Size(144, 436);
+            this.panelTopSide.Size = new System.Drawing.Size(165, 436);
             this.panelTopSide.TabIndex = 1;
+            // 
+            // listViewActiveControls
+            // 
+            this.listViewActiveControls.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewActiveControls.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewActiveControls.HideSelection = false;
+            this.listViewActiveControls.Location = new System.Drawing.Point(0, 0);
+            this.listViewActiveControls.Name = "listViewActiveControls";
+            this.listViewActiveControls.Size = new System.Drawing.Size(165, 436);
+            this.listViewActiveControls.TabIndex = 0;
+            this.listViewActiveControls.UseCompatibleStateImageBehavior = false;
             // 
             // placeHolder
             // 
@@ -365,7 +367,7 @@
             this.placeHolder.AutoScroll = true;
             this.placeHolder.Location = new System.Drawing.Point(0, 0);
             this.placeHolder.Name = "placeHolder";
-            this.placeHolder.Size = new System.Drawing.Size(1176, 668);
+            this.placeHolder.Size = new System.Drawing.Size(1155, 668);
             this.placeHolder.TabIndex = 0;
             // 
             // toolStripMain
@@ -387,22 +389,18 @@
             this.labelHorizontalLine1.Size = new System.Drawing.Size(1326, 2);
             this.labelHorizontalLine1.TabIndex = 7;
             // 
-            // listViewActiveControls
-            // 
-            this.listViewActiveControls.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listViewActiveControls.HideSelection = false;
-            this.listViewActiveControls.Location = new System.Drawing.Point(0, 0);
-            this.listViewActiveControls.Name = "listViewActiveControls";
-            this.listViewActiveControls.Size = new System.Drawing.Size(144, 436);
-            this.listViewActiveControls.TabIndex = 0;
-            this.listViewActiveControls.UseCompatibleStateImageBehavior = false;
-            // 
             // contextMenuStripTileView
             // 
             this.contextMenuStripTileView.Name = "contextMenuStripTileView";
-            this.contextMenuStripTileView.Size = new System.Drawing.Size(181, 26);
+            this.contextMenuStripTileView.Size = new System.Drawing.Size(61, 4);
+            // 
+            // panelLoginInfo
+            // 
+            this.panelLoginInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelLoginInfo.Location = new System.Drawing.Point(0, 0);
+            this.panelLoginInfo.Name = "panelLoginInfo";
+            this.panelLoginInfo.Size = new System.Drawing.Size(167, 226);
+            this.panelLoginInfo.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -464,7 +462,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAbout;
         private System.Windows.Forms.Label labelHorizontalLine1;
         private System.Windows.Forms.Panel panelTopSide;
-        private System.Windows.Forms.ListBox listBoxSidePanel;
         private System.Windows.Forms.Panel panelBottomSide;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBatch;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBatchItemSubTypes;
@@ -472,6 +469,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemApplicationLog;
         private System.Windows.Forms.ListView listViewActiveControls;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTileView;
+        private System.Windows.Forms.Panel panelLoginInfo;
     }
 }
 

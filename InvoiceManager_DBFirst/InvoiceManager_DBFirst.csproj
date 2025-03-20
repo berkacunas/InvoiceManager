@@ -254,8 +254,23 @@
     <Compile Include="AppLogActionType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="CardTaction.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CardTactionDetails.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CardTactionOperationType.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Globals\Delegates.cs" />
     <Compile Include="Globals\Enumerations.cs" />
+    <Compile Include="LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ApplicationLogUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -406,6 +421,18 @@
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Globals\WinFormsHelper.cs" />
+    <Compile Include="UserLog.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserLogin.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserLoginDetails.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="LoginForm.resx">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ApplicationLogUserControl.resx">
       <DependentUpon>ApplicationLogUserControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -500,6 +527,11 @@
     <EmbeddedResource Include="assets\switch.png" />
     <EmbeddedResource Include="assets\x-button.png" />
     <EmbeddedResource Include="assets\power-button.png" />
+    <EmbeddedResource Include="assets\login.png" />
+    <EmbeddedResource Include="assets\logbook1.png" />
+    <EmbeddedResource Include="assets\logbook2.png" />
+    <EmbeddedResource Include="assets\logbook3.png" />
+    <EmbeddedResource Include="assets\logbook4.png" />
     <Content Include="cash.ico" />
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
     <Content Include="InvoiceModel.Context.tt">

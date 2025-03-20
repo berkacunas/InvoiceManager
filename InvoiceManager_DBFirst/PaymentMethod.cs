@@ -19,6 +19,7 @@ namespace InvoiceManager_DBFirst
         {
             this.CashTransfer = new HashSet<CashTransfer>();
             this.Taction = new HashSet<Taction>();
+            this.CardTaction = new HashSet<CardTaction>();
         }
     
         public int id { get; set; }
@@ -32,5 +33,7 @@ namespace InvoiceManager_DBFirst
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Taction> Taction { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CardTaction> CardTaction { get; set; }
     }
 }

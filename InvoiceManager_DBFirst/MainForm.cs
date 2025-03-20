@@ -3,21 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.IdentityModel.Tokens;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Net.Sockets;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Serialization;
-using Dotmim.Sync;
 using InvoiceManager_DBFirst.UserControls;
-using Maya.DatabaseSynchronization;
-using Maya.Redirection;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
+using InvoiceManager_DBFirst.Globals;
 
 namespace InvoiceManager_DBFirst
 {
@@ -28,7 +18,7 @@ namespace InvoiceManager_DBFirst
 
         private List<AppLog> _appLogs;
         private ImageList _activeControlsImageList;
-        
+
 
         public MainForm()
         {
@@ -62,7 +52,8 @@ namespace InvoiceManager_DBFirst
             this.createImageListActiveControlIcons();
             this.createListViewActiveControls();
             this.populateContextMenuStripTileView();
-            this.initializeTactionUserControl();
+            //this.initializeTactionUserControl();
+            ((ToolStripButton)this.toolStripMain.Items[2]).Checked = true;  // Triggers a set of useful events.
         }
 
         private void populateContextMenuStripTileView()
@@ -232,44 +223,269 @@ namespace InvoiceManager_DBFirst
 
         #region ToolStripButton Events
 
-        private void ToolStripButtonTactions_Click(object sender, EventArgs e)
+        private void toolStripButtonTactions_CheckedChanged(object sender, EventArgs e)
         {
-            this.initializeTactionUserControl();
+            ToolStripButton button = (ToolStripButton)sender;
+            if (button.Checked)
+            {
+                this.initializeTactionUserControl();
+                this.uncheckToolStripToggleButtonsExcept(button);
+            }
         }
 
-        private void ToolStripButtonItems_Click(object sender, EventArgs e)
+        private void toolStripButtonItems_CheckedChanged(object sender, EventArgs e)
         {
-            this.initializeItemUserControl();
+            ToolStripButton button = (ToolStripButton)sender;
+            if (button.Checked)
+            {
+                this.initializeItemUserControl();
+                this.uncheckToolStripToggleButtonsExcept(button);
+            }
         }
 
-        private void ToolStripButtonShops_Click(object sender, EventArgs e)
+        private void toolStripButtonShops_CheckedChanged(object sender, EventArgs e)
         {
-            this.initializeShopUserControl();
+            ToolStripButton button = (ToolStripButton)sender;
+            if (button.Checked)
+            {
+                this.initializeShopUserControl();
+                this.uncheckToolStripToggleButtonsExcept(button);
+            }
         }
 
-        private void ToolStripButtonPaymentMethods_Click(object sender, EventArgs e)
+        private void toolStripButtonPaymentMethods_CheckedChanged(object sender, EventArgs e)
         {
-            this.initializePaymentMethodUserControl();
+            ToolStripButton button = (ToolStripButton)sender;
+            if (button.Checked)
+            {
+                this.initializePaymentMethodUserControl();
+                this.uncheckToolStripToggleButtonsExcept(button);
+            }
         }
 
-        private void ToolStripButtonUsers_Click(object sender, EventArgs e)
+        private void toolStripButtonUsers_CheckedChanged(object sender, EventArgs e)
         {
-            this.initializeUserUserControl();
+            ToolStripButton button = (ToolStripButton)sender;
+            if (button.Checked)
+            {
+                this.initializeUserUserControl();
+                this.uncheckToolStripToggleButtonsExcept(button);
+            }
         }
 
-        private void ToolStripButtonSellers_Click(object sender, EventArgs e)
+        private void toolStripButtonSellers_CheckedChanged(object sender, EventArgs e)
         {
-            this.initializeSellerUserControl();
+            ToolStripButton button = (ToolStripButton)sender;
+            if (button.Checked)
+            {
+                this.initializeSellerUserControl();
+                this.uncheckToolStripToggleButtonsExcept(button);
+            }
         }
 
-        private void ToolStripButtonSettings_Click(object sender, EventArgs e)
+        private void toolStripButtonApplicationLog_CheckedChanged(object sender, EventArgs e)
         {
-            this.initializeSettingsUserControl();
+            ToolStripButton button = (ToolStripButton)sender;
+            if (button.Checked)
+            {
+                this.initializeApplicationLogUserControl();
+                this.uncheckToolStripToggleButtonsExcept(button);
+            }
+        }
+
+        private void toolStripButtonSettings_CheckedChanged(object sender, EventArgs e)
+        {
+            ToolStripButton button = (ToolStripButton)sender;
+            if (button.Checked)
+            {
+                this.initializeSettingsUserControl();
+                this.uncheckToolStripToggleButtonsExcept(button);
+            }
+        }
+
+        private void toolStripButtonLogin_CheckedChanged(object sender, EventArgs e)
+        {
+            ToolStripButton button = (ToolStripButton)sender;
+            if (button.Checked)
+            {
+                this.initializeLoginForm();
+                this.uncheckToolStripToggleButtonsExcept(button);
+            }
         }
 
         #endregion
 
+        #region Helper Functions
+
+        private UserControl selectUserControl(string tag)
+        {
+            UserControl userControl = (from UserControl control in this.placeHolder.Controls
+                                       where control.Tag.ToString() == tag
+                                       select control).FirstOrDefault();
+
+            return userControl;
+        }
+
+        private void addLog(string actionType, string message, DateTime eventTime)
+        {
+            AppLog appLog = new AppLog();
+            AppLogActionType appLogActionType = this.dbContext.AppLogActionType.Where(r => r.Name == actionType).FirstOrDefault();
+
+            if (appLogActionType == null)
+            {
+                appLogActionType = new AppLogActionType();
+                appLogActionType.Name = actionType;
+
+                this.dbContext.AppLogActionType.Add(appLogActionType);
+                this.dbContext.SaveChanges();
+            }
+
+            appLog.AppLogActionType = appLogActionType;
+            appLog.ActionTypeId = appLogActionType.id;
+            appLog.Message = message;
+            appLog.EventTime = eventTime;
+
+            this._appLogs.Add(appLog);
+        }
+
+        private void addActiveControlToListView(string controlName, string tileMessage, string imageListKey)
+        {
+            ListViewItem activeItem = new ListViewItem(new string[] { controlName, tileMessage }, imageListKey);
+            this.listViewActiveControls.Items.Add(activeItem);
+        }
+
+        private void removeActiveControlFromListView(string itemKey)
+        {
+            ListViewItem removedItem = listViewActiveControls.FindItemWithText(itemKey);
+            this.listViewActiveControls.Items.Remove(removedItem);
+        }
+
+        private void visibleUserControls(bool visible)
+        {
+            foreach (Control c in this.placeHolder.Controls)
+                c.Visible = false;
+        }
+
+        private void createImageListActiveControlIcons()
+        {
+            this._activeControlsImageList = new ImageList();
+            this._activeControlsImageList.ImageSize = new Size(32, 32);
+
+            this._activeControlsImageList.Images.Add("Transactions", BitmapResourceLoader.Transaction);
+            this._activeControlsImageList.Images.Add("Items", BitmapResourceLoader.Item);
+            this._activeControlsImageList.Images.Add("Shops", BitmapResourceLoader.Shop);
+            this._activeControlsImageList.Images.Add("PaymentMethods", BitmapResourceLoader.PaymentMethod);
+            this._activeControlsImageList.Images.Add("Users", BitmapResourceLoader.User);
+            this._activeControlsImageList.Images.Add("Sellers", BitmapResourceLoader.Seller);
+            this._activeControlsImageList.Images.Add("Settings", BitmapResourceLoader.Settings);
+        }
+
+        private void createListViewActiveControls()
+        {
+            this.listViewActiveControls.View = View.Tile;
+            this.listViewActiveControls.LargeImageList = this._activeControlsImageList;
+            this.listViewActiveControls.MultiSelect = false;
+
+            /* Add column headers so the subitems will appear. */
+            this.listViewActiveControls.Columns.AddRange(new ColumnHeader[]
+            {
+                new ColumnHeader(), new ColumnHeader(), new ColumnHeader()
+            });
+        }
+
+        private void loadToolStripMenuItemIcons()
+        {
+            this.toolStripMenuItemSync.Image = BitmapResourceLoader.Loop;
+            this.toolStripMenuItemExit.Image = BitmapResourceLoader.Exit;
+            this.toolStripMenuItemSyncSqlite.Image = BitmapResourceLoader.Sqlite;
+            this.toolStripMenuItemTransactions.Image = BitmapResourceLoader.Transaction;
+            this.toolStripMenuItemItems.Image = BitmapResourceLoader.Item;
+            this.toolStripMenuItemShops.Image = BitmapResourceLoader.Shop;
+            this.toolStripMenuItemPaymentMethods.Image = BitmapResourceLoader.PaymentMethod;
+            this.toolStripMenuItemUsers.Image = BitmapResourceLoader.User;
+            this.toolStripMenuItemSellers.Image = BitmapResourceLoader.Seller;
+            this.toolStripMenuItemSettings.Image = BitmapResourceLoader.Settings;
+        }
+
+        private void createToolStripButtons()
+        {
+
+            ToolStripButton toolStripButtonSyncSqlite = new ToolStripButton();
+            ToolStripSeparator separator1 = new ToolStripSeparator();
+            ToolStripButton toolStripButtonTactions = new ToolStripButton();
+            ToolStripButton toolStripButtonItems = new ToolStripButton();
+            ToolStripButton toolStripButtonShops = new ToolStripButton();
+            ToolStripButton toolStripButtonPaymentMethods = new ToolStripButton();
+            ToolStripButton toolStripButtonUsers = new ToolStripButton();
+            ToolStripButton toolStripButtonSellers = new ToolStripButton();
+            ToolStripSeparator separator2 = new ToolStripSeparator();
+            ToolStripButton toolStripButtonApplicationLog = new ToolStripButton();
+            ToolStripButton toolStripButtonSettings = new ToolStripButton();
+            ToolStripSeparator separator3 = new ToolStripSeparator();
+            ToolStripButton toolStripButtonLogin = new ToolStripButton();
+
+            Padding padding = new Padding(4, 0, 4, 0);
+            separator1.Margin = padding;
+            separator2.Margin = padding;
+            separator3.Margin = padding;
+
+            toolStripButtonSyncSqlite.Image = BitmapResourceLoader.Sqlite;
+            toolStripButtonTactions.Image = BitmapResourceLoader.Transaction;
+            toolStripButtonItems.Image = BitmapResourceLoader.Item;
+            toolStripButtonShops.Image = BitmapResourceLoader.Shop;
+            toolStripButtonPaymentMethods.Image = BitmapResourceLoader.PaymentMethod;
+            toolStripButtonUsers.Image = BitmapResourceLoader.User;
+            toolStripButtonSellers.Image = BitmapResourceLoader.Seller;
+            toolStripButtonApplicationLog.Image = BitmapResourceLoader.LogBook2;
+            toolStripButtonSettings.Image = BitmapResourceLoader.Settings;
+            toolStripButtonLogin.Image = BitmapResourceLoader.Login;
+
+            this.toolStripMain.Items.AddRange(new ToolStripItem[] {
+                toolStripButtonSyncSqlite, separator1,
+                toolStripButtonTactions, toolStripButtonItems,
+                toolStripButtonShops, toolStripButtonPaymentMethods,
+                toolStripButtonUsers, toolStripButtonSellers,
+                separator2, toolStripButtonApplicationLog, toolStripButtonSettings,
+                separator3, toolStripButtonLogin
+            });
+
+            foreach (ToolStripItem item in toolStripMain.Items)
+            {
+                if (item.GetType() == typeof(ToolStripSeparator))
+                    continue;
+
+                ((ToolStripButton)item).CheckOnClick = true;
+            }
+
+            toolStripButtonTactions.CheckedChanged += toolStripButtonTactions_CheckedChanged; ;
+            toolStripButtonItems.CheckedChanged += toolStripButtonItems_CheckedChanged;
+            toolStripButtonShops.CheckedChanged += toolStripButtonShops_CheckedChanged;
+            toolStripButtonPaymentMethods.CheckedChanged += toolStripButtonPaymentMethods_CheckedChanged;
+            toolStripButtonUsers.CheckedChanged += toolStripButtonUsers_CheckedChanged;
+            toolStripButtonSellers.CheckedChanged += toolStripButtonSellers_CheckedChanged;
+
+            toolStripButtonApplicationLog.CheckedChanged += toolStripButtonApplicationLog_CheckedChanged;
+            toolStripButtonSettings.CheckedChanged += toolStripButtonSettings_CheckedChanged;
+            toolStripButtonLogin.CheckedChanged += toolStripButtonLogin_CheckedChanged;
+        }
+
+        private void uncheckToolStripToggleButtonsExcept(ToolStripButton button)
+        {
+            foreach (ToolStripItem item in this.toolStripMain.Items)
+            {
+                if (item.GetType() == typeof(ToolStripSeparator))
+                    continue;
+
+                if (item != button)
+                    ((ToolStripButton)item).Checked = false;
+            }
+        }
+
+        #endregion
+
+
         #region Initialize User Controls
+
         private void initializeTactionUserControl()
         {
             this.visibleUserControls(false);
@@ -294,7 +510,8 @@ namespace InvoiceManager_DBFirst
             this.visibleUserControls(false);
 
             UserControl userControl = this.selectUserControl("Items");
-            if (userControl == null) {
+            if (userControl == null)
+            {
 
                 ItemUserControl itemUserControl = new ItemUserControl();
                 itemUserControl.Tag = "Items";
@@ -413,154 +630,33 @@ namespace InvoiceManager_DBFirst
 
         private void initializeApplicationLogUserControl()
         {
-            ApplicationLogUserControl applicationLogUserControl = new ApplicationLogUserControl(this._appLogs);
-            applicationLogUserControl.Tag = "ApplicationLog";
+            this.visibleUserControls(false);
+            UserControl userControl = this.selectUserControl("ApplicationLog");
 
-            this.placeHolder.Controls.Clear();
-            this.placeHolder.Controls.Add(applicationLogUserControl);
-        }
-
-
-        #endregion
-
-        #region Private Functions
-
-        private UserControl selectUserControl(string tag)
-        {
-            UserControl userControl = (from UserControl control in this.placeHolder.Controls
-                                       where control.Tag.ToString() == tag
-                                       select control).FirstOrDefault();
-
-            return userControl;
-        }
-
-        private void addLog(string actionType, string message, DateTime eventTime)
-        {
-            AppLog appLog = new AppLog();
-            AppLogActionType appLogActionType = this.dbContext.AppLogActionType.Where(r => r.Name == actionType).FirstOrDefault();
-
-            if (appLogActionType == null)
+            if (userControl == null)
             {
-                appLogActionType = new AppLogActionType();
-                appLogActionType.Name = actionType;
+                ApplicationLogUserControl applicationLogUserControl = new ApplicationLogUserControl(this._appLogs);
+                applicationLogUserControl.Tag = "ApplicationLog";
 
-                this.dbContext.AppLogActionType.Add(appLogActionType);
-                this.dbContext.SaveChanges();
+                this.placeHolder.Controls.Add(applicationLogUserControl);
+
             }
-
-            appLog.AppLogActionType = appLogActionType;
-            appLog.ActionTypeId = appLogActionType.id;
-            appLog.Message = message;
-            appLog.EventTime = eventTime;
-
-            this._appLogs.Add(appLog);
+            else
+                userControl.Visible = true;
         }
 
-        private void addActiveControlToListView(string controlName, string tileMessage, string imageListKey)
+        private void initializeLoginForm()
         {
-            ListViewItem activeItem = new ListViewItem(new string[] { controlName, tileMessage }, imageListKey);
-            this.listViewActiveControls.Items.Add(activeItem);
-        }
-
-        private void removeActiveControlFromListView(string itemKey)
-        {
-            ListViewItem removedItem = listViewActiveControls.FindItemWithText(itemKey);
-            this.listViewActiveControls.Items.Remove(removedItem);
-        }
-
-        private void visibleUserControls(bool visible)
-        {
-            foreach (Control c in this.placeHolder.Controls)
-                c.Visible = false;
-        }
-        
-        private void createImageListActiveControlIcons()
-        {
-            this._activeControlsImageList = new ImageList();
-            this._activeControlsImageList.ImageSize = new Size(32, 32);
-
-            this._activeControlsImageList.Images.Add("Transactions", BitmapResourceLoader.Transaction);
-            this._activeControlsImageList.Images.Add("Items", BitmapResourceLoader.Item);
-            this._activeControlsImageList.Images.Add("Shops", BitmapResourceLoader.Shop);
-            this._activeControlsImageList.Images.Add("PaymentMethods", BitmapResourceLoader.PaymentMethod);
-            this._activeControlsImageList.Images.Add("Users", BitmapResourceLoader.User);
-            this._activeControlsImageList.Images.Add("Sellers", BitmapResourceLoader.Seller);
-            this._activeControlsImageList.Images.Add("Settings", BitmapResourceLoader.Settings);
-        }
-
-        private void createListViewActiveControls()
-        {
-            this.listViewActiveControls.View = View.Tile;
-            this.listViewActiveControls.LargeImageList = this._activeControlsImageList;
-            this.listViewActiveControls.MultiSelect = false;
-
-            /* Add column headers so the subitems will appear. */
-            this.listViewActiveControls.Columns.AddRange(new ColumnHeader[]
+            LoginForm loginForm = new LoginForm();
+            if (loginForm.ShowDialog() == DialogResult.OK)
             {
-                new ColumnHeader(), new ColumnHeader(), new ColumnHeader()
-            });
-        }
-
-        private void loadToolStripMenuItemIcons()
-        {
-            this.toolStripMenuItemSync.Image = BitmapResourceLoader.Loop;
-            this.toolStripMenuItemExit.Image = BitmapResourceLoader.Exit;
-            this.toolStripMenuItemSyncSqlite.Image = BitmapResourceLoader.Sqlite;
-            this.toolStripMenuItemTransactions.Image = BitmapResourceLoader.Transaction;
-            this.toolStripMenuItemItems.Image = BitmapResourceLoader.Item;
-            this.toolStripMenuItemShops.Image = BitmapResourceLoader.Shop;
-            this.toolStripMenuItemPaymentMethods.Image = BitmapResourceLoader.PaymentMethod;
-            this.toolStripMenuItemUsers.Image = BitmapResourceLoader.User;
-            this.toolStripMenuItemSellers.Image = BitmapResourceLoader.Seller;
-            this.toolStripMenuItemSettings.Image = BitmapResourceLoader.Settings;
-        }
-
-        private void createToolStripButtons()
-        {
-
-            ToolStripButton toolStripButtonSyncSqlite = new ToolStripButton();
-            ToolStripSeparator separator1 = new ToolStripSeparator();
-            ToolStripButton toolStripButtonTactions = new ToolStripButton();
-            ToolStripButton toolStripButtonItems = new ToolStripButton();
-            ToolStripButton toolStripButtonShops = new ToolStripButton();
-            ToolStripButton toolStripButtonPaymentMethods = new ToolStripButton();
-            ToolStripButton toolStripButtonUsers = new ToolStripButton();
-            ToolStripButton toolStripButtonSellers = new ToolStripButton();
-            ToolStripSeparator separator2 = new ToolStripSeparator();
-            ToolStripButton toolStripButtonSettings = new ToolStripButton();
-
-            Padding padding = new Padding(4, 0, 4, 0);
-            separator1.Margin = padding;
-            separator2.Margin = padding;
-
-            toolStripButtonSyncSqlite.Image = BitmapResourceLoader.Sqlite;
-            toolStripButtonTactions.Image = BitmapResourceLoader.Transaction;
-            toolStripButtonItems.Image = BitmapResourceLoader.Item;
-            toolStripButtonShops.Image = BitmapResourceLoader.Shop;
-            toolStripButtonPaymentMethods.Image = BitmapResourceLoader.PaymentMethod;
-            toolStripButtonUsers.Image = BitmapResourceLoader.User;
-            toolStripButtonSellers.Image = BitmapResourceLoader.Seller;
-            toolStripButtonSettings.Image = BitmapResourceLoader.Settings;
-
-            toolStripMain.Items.AddRange(new ToolStripItem[] {
-                toolStripButtonSyncSqlite, separator1,
-                toolStripButtonTactions, toolStripButtonItems,
-                toolStripButtonShops, toolStripButtonPaymentMethods,
-                toolStripButtonUsers, toolStripButtonSellers,
-                separator2, toolStripButtonSettings
-            });
-
-
-            toolStripButtonTactions.Click += ToolStripButtonTactions_Click;
-            toolStripButtonItems.Click += ToolStripButtonItems_Click;
-            toolStripButtonShops.Click += ToolStripButtonShops_Click;
-            toolStripButtonPaymentMethods.Click += ToolStripButtonPaymentMethods_Click;
-            toolStripButtonUsers.Click += ToolStripButtonUsers_Click;
-            toolStripButtonSellers.Click += ToolStripButtonSellers_Click;
-            toolStripButtonSettings.Click += ToolStripButtonSettings_Click;
+                string fullname = $"{loginForm.UserLogin.FirstName} {loginForm.UserLogin.LastName}";
+                MessageBox.Show($"{fullname} logged in successfully at {loginForm.UserLogin.LoginDate.ToString()}", "Welcome !", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         #endregion
+
 
         #region User-Defined Form Events
 
@@ -571,9 +667,5 @@ namespace InvoiceManager_DBFirst
 
         #endregion
 
-        
-
-        
-        
     }
 }
