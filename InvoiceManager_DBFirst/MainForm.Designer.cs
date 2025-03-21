@@ -64,13 +64,16 @@
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
             this.contextMenuStripTileView = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.pictureBoxUserLoginDetails = new System.Windows.Forms.PictureBox();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
             this.splitContainerMain.SuspendLayout();
             this.panelBottomSide.SuspendLayout();
+            this.panelLoginInfo.SuspendLayout();
             this.panelTopSide.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUserLoginDetails)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStripMain
@@ -328,6 +331,7 @@
             // 
             // panelLoginInfo
             // 
+            this.panelLoginInfo.Controls.Add(this.pictureBoxUserLoginDetails);
             this.panelLoginInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelLoginInfo.Location = new System.Drawing.Point(0, 0);
             this.panelLoginInfo.Name = "panelLoginInfo";
@@ -393,6 +397,14 @@
             this.contextMenuStripTileView.Name = "contextMenuStripTileView";
             this.contextMenuStripTileView.Size = new System.Drawing.Size(61, 4);
             // 
+            // pictureBoxUserLoginDetails
+            // 
+            this.pictureBoxUserLoginDetails.Location = new System.Drawing.Point(12, 3);
+            this.pictureBoxUserLoginDetails.Name = "pictureBoxUserLoginDetails";
+            this.pictureBoxUserLoginDetails.Size = new System.Drawing.Size(69, 84);
+            this.pictureBoxUserLoginDetails.TabIndex = 0;
+            this.pictureBoxUserLoginDetails.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -415,7 +427,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
             this.splitContainerMain.ResumeLayout(false);
             this.panelBottomSide.ResumeLayout(false);
+            this.panelLoginInfo.ResumeLayout(false);
             this.panelTopSide.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUserLoginDetails)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -458,6 +472,7 @@
         private System.Windows.Forms.ListView listViewActiveControls;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTileView;
         private System.Windows.Forms.Panel panelLoginInfo;
+        private System.Windows.Forms.PictureBox pictureBoxUserLoginDetails;
     }
 }
 

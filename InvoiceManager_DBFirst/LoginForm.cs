@@ -119,7 +119,6 @@ namespace InvoiceManager_DBFirst
 
         private void buttonExit_Click(object sender, EventArgs e)
         {
-
             this.DialogResult = DialogResult.Cancel;
         }
 

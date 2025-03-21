@@ -67,24 +67,6 @@ namespace InvoiceManager_DBFirst
             ((ToolStripButton)this.toolStripMain.Items[2]).Checked = true;  // Triggers a set of useful events.
         }
 
-        private void createToolStripStatusBar()
-        {
-            ToolStripSeparator separator1 = new ToolStripSeparator();
-            ToolStripStatusLabel toolStripStatusLabelLoginDetails = new ToolStripStatusLabel();
-
-            this.statusStripMain.Items.AddRange(new ToolStripItem[] {
-                this._toolStripStatusLabelLiveDateTime, separator1, 
-                toolStripStatusLabelLoginDetails
-            });
-            
-        }
-
-        private void populateContextMenuStripTileView()
-        {
-            this.contextMenuStripTileView.Items.Add("Activate", BitmapResourceLoader.PowerButton, contextMenuStripTileView_activate);
-            this.contextMenuStripTileView.Items.Add("Remove", BitmapResourceLoader.Remove, contextMenuStripTileView_remove);
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.dbContext.AppLog.AddRange(this._appLogs);
@@ -384,6 +366,25 @@ namespace InvoiceManager_DBFirst
             return userControl;
         }
 
+        private ToolStripButton selectToolStripButton(string tag)
+        {
+            ToolStripButton button = null;
+
+            foreach (ToolStripItem item in this.toolStripMain.Items)
+            {
+                if (item.GetType() != typeof(ToolStripButton))
+                    continue;
+
+                if (((ToolStripButton)item).Tag.ToString() == tag)
+                {
+                    button = (ToolStripButton)item;
+                    break;
+                }
+            }
+
+            return button;
+        }
+
         private void addLog(string actionType, string message, DateTime eventTime)
         {
             AppLog appLog = new AppLog();
@@ -467,7 +468,6 @@ namespace InvoiceManager_DBFirst
 
         private void createToolStripButtons()
         {
-
             ToolStripButton toolStripButtonSyncSqlite = new ToolStripButton();
             ToolStripSeparator separator1 = new ToolStripSeparator();
             ToolStripButton toolStripButtonTactions = new ToolStripButton();
@@ -498,6 +498,17 @@ namespace InvoiceManager_DBFirst
             toolStripButtonSettings.Image = BitmapResourceLoader.Settings;
             toolStripButtonLogin.Image = BitmapResourceLoader.Login;
 
+            toolStripButtonSyncSqlite.Tag = "toolStripButtonSyncSqlite";
+            toolStripButtonTactions.Tag = "toolStripButtonTactions";
+            toolStripButtonItems.Tag = "toolStripButtonItems";
+            toolStripButtonShops.Tag = "toolStripButtonShops";
+            toolStripButtonPaymentMethods.Tag = "toolStripButtonPaymentMethods";
+            toolStripButtonUsers.Tag = "toolStripButtonUsers";
+            toolStripButtonSellers.Tag = "toolStripButtonSellers";
+            toolStripButtonApplicationLog.Tag = "toolStripButtonApplicationLog";
+            toolStripButtonSettings.Tag = "toolStripButtonSettings";
+            toolStripButtonLogin.Tag = "toolStripButtonLogin";
+
             this.toolStripMain.Items.AddRange(new ToolStripItem[] {
                 toolStripButtonSyncSqlite, separator1,
                 toolStripButtonTactions, toolStripButtonItems,
@@ -525,6 +536,24 @@ namespace InvoiceManager_DBFirst
             toolStripButtonApplicationLog.CheckedChanged += toolStripButtonApplicationLog_CheckedChanged;
             toolStripButtonSettings.CheckedChanged += toolStripButtonSettings_CheckedChanged;
             toolStripButtonLogin.CheckedChanged += toolStripButtonLogin_CheckedChanged;
+        }
+
+        private void createToolStripStatusBar()
+        {
+            ToolStripSeparator separator1 = new ToolStripSeparator();
+            ToolStripStatusLabel toolStripStatusLabelLoginDetails = new ToolStripStatusLabel();
+
+            this.statusStripMain.Items.AddRange(new ToolStripItem[] {
+                this._toolStripStatusLabelLiveDateTime, separator1,
+                toolStripStatusLabelLoginDetails
+            });
+
+        }
+
+        private void populateContextMenuStripTileView()
+        {
+            this.contextMenuStripTileView.Items.Add("Activate", BitmapResourceLoader.PowerButton, contextMenuStripTileView_activate);
+            this.contextMenuStripTileView.Items.Add("Remove", BitmapResourceLoader.Remove, contextMenuStripTileView_remove);
         }
 
         private void uncheckToolStripToggleButtonsExcept(ToolStripButton button)
@@ -733,6 +762,13 @@ namespace InvoiceManager_DBFirst
 
                 MessageBox.Show($"{fullname} logged in successfully at {this._userLogin.LoginDate.ToString()}", "Welcome !", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.updateStatusBarLoginDetails(fullname, this._loginDetails.LoginDate);
+            }   
+            else
+            {
+                ToolStripButton button = this.selectToolStripButton("toolStripButtonLogin");
+                button.CheckedChanged -= toolStripButtonLogin_CheckedChanged;
+                button.Checked = false;
+                button.CheckedChanged += toolStripButtonLogin_CheckedChanged;
             }
         }
 
