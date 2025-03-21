@@ -9,16 +9,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using InvoiceManager_DBFirst.Globals;
+
 namespace InvoiceManager_DBFirst
 {
     public partial class LoginForm : Form
     {
         private InvoicesEntities dbContext;
         private UserLogin _userLogin;
+        private UserLoginDetails _loginDetails;
+
+        private const int MAX_PASSWORD_ERROR = 3;
 
         public UserLogin UserLogin
         {
             get { return _userLogin; }
+        }
+
+        public UserLoginDetails LoginDetails
+        {
+            get { return _loginDetails; }
         }
 
         public LoginForm()
@@ -26,7 +36,9 @@ namespace InvoiceManager_DBFirst
             InitializeComponent();
 
             this.dbContext = new InvoicesEntities();
+            
             this._userLogin = null;
+            this._loginDetails = new UserLoginDetails();
 
             this.Load += loginForm_Load;
 
@@ -45,20 +57,64 @@ namespace InvoiceManager_DBFirst
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
+            if (_loginDetails.PasswordErrorCount == MAX_PASSWORD_ERROR)
+            {
+                MessageBox.Show("You have reached max password entry limit. Your account is locked.", "Spam", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             string firstName = this.textBoxLoginFirstName.Text;
             string lastName = this.textBoxLoginLastName.Text;
             string password = this.textBoxLoginPassword.Text;
 
-            _userLogin = this.dbContext.UserLogin.Where(r => r.FirstName == firstName && r.LastName == lastName && r.Password == password).FirstOrDefault();
-
-            if (_userLogin != null)
-                this.DialogResult = DialogResult.OK;
-            else
+            if (string.IsNullOrEmpty(firstName))
             {
-                MessageBox.Show("Invalid login.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Enter first name.", "Missing value", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
+            if (string.IsNullOrEmpty(lastName))
+            {
+                MessageBox.Show("Enter last name.", "Missing value", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("Enter password.", "Missing value", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+
+            _userLogin = this.dbContext.UserLogin.Where(r => r.FirstName == firstName && r.LastName == lastName && r.Password == password).FirstOrDefault();
+
+            if (_userLogin != null)
+            {
+                _loginDetails.UserLogin = _userLogin;
+                _loginDetails.LoginType = LoginType.Login.ToString();
+                _loginDetails.LoginDate = DateTime.Now;     // User's login datetime.
+                _loginDetails.IsSuccess = true;
+
+                this.dbContext.UserLoginDetails.Add(this._loginDetails);
+
+                try
+                {
+                    this.dbContext.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Cannot save user login details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                this.DialogResult = DialogResult.OK;
+            }
+            else
+            {
+                ++_loginDetails.PasswordErrorCount;
+                MessageBox.Show("Invalid login.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
         }
 
         private void buttonExit_Click(object sender, EventArgs e)
@@ -108,7 +164,7 @@ namespace InvoiceManager_DBFirst
             userLogin.FirstName = firstName;
             userLogin.LastName = lastName;
             userLogin.Password = password;
-            userLogin.LoginDate = DateTime.Now;
+            userLogin.LoginDate = DateTime.Now;     // User's sign-up datetime.
 
             this.dbContext.UserLogin.Add(userLogin);
 

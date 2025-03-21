@@ -251,6 +251,7 @@
           <Property Name="LoginDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="IsSuccess" Type="bit" Nullable="false" />
           <Property Name="PasswordErrorCount" Type="int" Nullable="false" />
+          <Property Name="LoginType" Type="nvarchar" MaxLength="16" Nullable="false" />
         </EntityType>
         <Association Name="FK_AppLog_ActionTypeId">
           <End Role="AppLogActionType" Type="Self.AppLogActionType" Multiplicity="1" />
@@ -1358,6 +1359,7 @@
           <Property Name="IsSuccess" Type="Boolean" Nullable="false" />
           <Property Name="PasswordErrorCount" Type="Int32" Nullable="false" />
           <NavigationProperty Name="UserLogin" Relationship="InvoicesModel.FK_UserLoginDetails_UserLoginId" FromRole="UserLoginDetails" ToRole="UserLogin" />
+          <Property Name="LoginType" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_CardTaction_PaymentMethodId">
           <End Type="InvoicesModel.PaymentMethod" Role="PaymentMethod" Multiplicity="1" />
@@ -1677,6 +1679,7 @@
           <EntitySetMapping Name="UserLoginDetails">
             <EntityTypeMapping TypeName="InvoicesModel.UserLoginDetails">
               <MappingFragment StoreEntitySet="UserLoginDetails">
+                <ScalarProperty Name="LoginType" ColumnName="LoginType" />
                 <ScalarProperty Name="PasswordErrorCount" ColumnName="PasswordErrorCount" />
                 <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
                 <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />

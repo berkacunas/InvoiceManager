@@ -19,6 +19,7 @@ namespace InvoiceManager_DBFirst
         public System.DateTime LoginDate { get; set; }
         public bool IsSuccess { get; set; }
         public int PasswordErrorCount { get; set; }
+        public string LoginType { get; set; }
     
         public virtual UserLogin UserLogin { get; set; }
     }

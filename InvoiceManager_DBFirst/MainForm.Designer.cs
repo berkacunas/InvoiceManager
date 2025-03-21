@@ -55,18 +55,16 @@
             this.toolStripMenuItemReportABug = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabelLiveDateTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.panelBottomSide = new System.Windows.Forms.Panel();
+            this.panelLoginInfo = new System.Windows.Forms.Panel();
             this.panelTopSide = new System.Windows.Forms.Panel();
             this.listViewActiveControls = new System.Windows.Forms.ListView();
             this.placeHolder = new System.Windows.Forms.Panel();
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
             this.contextMenuStripTileView = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.panelLoginInfo = new System.Windows.Forms.Panel();
             this.menuStripMain.SuspendLayout();
-            this.statusStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
@@ -105,7 +103,7 @@
             this.toolStripMenuItemSync.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemSyncSqlite});
             this.toolStripMenuItemSync.Name = "toolStripMenuItemSync";
-            this.toolStripMenuItemSync.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemSync.Size = new System.Drawing.Size(135, 22);
             this.toolStripMenuItemSync.Text = "Sync";
             // 
             // toolStripMenuItemSyncSqlite
@@ -122,7 +120,7 @@
             this.toolStripMenuItemBatch.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemBatchItemSubTypes});
             this.toolStripMenuItemBatch.Name = "toolStripMenuItemBatch";
-            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(135, 22);
             this.toolStripMenuItemBatch.Text = "Batch";
             // 
             // toolStripMenuItemBatchItemSubTypes
@@ -137,7 +135,7 @@
             this.toolStripMenuItemExit.Name = "toolStripMenuItemExit";
             this.toolStripMenuItemExit.ShortcutKeyDisplayString = "";
             this.toolStripMenuItemExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.toolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemExit.Size = new System.Drawing.Size(135, 22);
             this.toolStripMenuItemExit.Text = "Exit";
             this.toolStripMenuItemExit.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -292,19 +290,12 @@
             // 
             // statusStripMain
             // 
-            this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelLiveDateTime});
             this.statusStripMain.Location = new System.Drawing.Point(0, 725);
             this.statusStripMain.Name = "statusStripMain";
             this.statusStripMain.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
             this.statusStripMain.Size = new System.Drawing.Size(1326, 22);
             this.statusStripMain.TabIndex = 1;
             this.statusStripMain.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabelLiveDateTime
-            // 
-            this.toolStripStatusLabelLiveDateTime.Name = "toolStripStatusLabelLiveDateTime";
-            this.toolStripStatusLabelLiveDateTime.Size = new System.Drawing.Size(0, 17);
             // 
             // splitContainerMain
             // 
@@ -334,6 +325,14 @@
             this.panelBottomSide.Name = "panelBottomSide";
             this.panelBottomSide.Size = new System.Drawing.Size(167, 226);
             this.panelBottomSide.TabIndex = 2;
+            // 
+            // panelLoginInfo
+            // 
+            this.panelLoginInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelLoginInfo.Location = new System.Drawing.Point(0, 0);
+            this.panelLoginInfo.Name = "panelLoginInfo";
+            this.panelLoginInfo.Size = new System.Drawing.Size(167, 226);
+            this.panelLoginInfo.TabIndex = 0;
             // 
             // panelTopSide
             // 
@@ -394,14 +393,6 @@
             this.contextMenuStripTileView.Name = "contextMenuStripTileView";
             this.contextMenuStripTileView.Size = new System.Drawing.Size(61, 4);
             // 
-            // panelLoginInfo
-            // 
-            this.panelLoginInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelLoginInfo.Location = new System.Drawing.Point(0, 0);
-            this.panelLoginInfo.Name = "panelLoginInfo";
-            this.panelLoginInfo.Size = new System.Drawing.Size(167, 226);
-            this.panelLoginInfo.TabIndex = 0;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -419,8 +410,6 @@
             this.Text = "Invoice Manager";
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
-            this.statusStripMain.ResumeLayout(false);
-            this.statusStripMain.PerformLayout();
             this.splitContainerMain.Panel1.ResumeLayout(false);
             this.splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
@@ -446,7 +435,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUsers;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSellers;
         private System.Windows.Forms.StatusStrip statusStripMain;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelLiveDateTime;
         private System.Windows.Forms.SplitContainer splitContainerMain;
         private System.Windows.Forms.ToolStrip toolStripMain;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemExit;

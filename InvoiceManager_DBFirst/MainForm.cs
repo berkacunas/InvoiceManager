@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using InvoiceManager_DBFirst.UserControls;
 
 using InvoiceManager_DBFirst.Globals;
+using System.IdentityModel.Tokens;
 
 namespace InvoiceManager_DBFirst
 {
@@ -18,6 +19,10 @@ namespace InvoiceManager_DBFirst
 
         private List<AppLog> _appLogs;
         private ImageList _activeControlsImageList;
+        private UserLogin _userLogin;
+        private UserLoginDetails _loginDetails;
+
+        private ToolStripStatusLabel _toolStripStatusLabelLiveDateTime; // Have to be accessed in class scope.
 
 
         public MainForm()
@@ -28,6 +33,10 @@ namespace InvoiceManager_DBFirst
             this.dbContext = new InvoicesEntities();
 
             this._appLogs = new List<AppLog>();
+            this._userLogin = null;
+            this._loginDetails = null;
+
+            this._toolStripStatusLabelLiveDateTime = new ToolStripStatusLabel();
 
             this.Load += MainForm_Load;
             this.FormClosing += MainForm_FormClosing;
@@ -49,11 +58,24 @@ namespace InvoiceManager_DBFirst
 
             this.loadToolStripMenuItemIcons();
             this.createToolStripButtons();
+            this.createToolStripStatusBar();
             this.createImageListActiveControlIcons();
             this.createListViewActiveControls();
             this.populateContextMenuStripTileView();
             //this.initializeTactionUserControl();
             ((ToolStripButton)this.toolStripMain.Items[2]).Checked = true;  // Triggers a set of useful events.
+        }
+
+        private void createToolStripStatusBar()
+        {
+            ToolStripSeparator separator1 = new ToolStripSeparator();
+            ToolStripStatusLabel toolStripStatusLabelLoginDetails = new ToolStripStatusLabel();
+
+            this.statusStripMain.Items.AddRange(new ToolStripItem[] {
+                this._toolStripStatusLabelLiveDateTime, separator1, 
+                toolStripStatusLabelLoginDetails
+            });
+            
         }
 
         private void populateContextMenuStripTileView()
@@ -78,7 +100,7 @@ namespace InvoiceManager_DBFirst
 
         private void timer_callback(object state)
         {
-            this.InvokeEx(f => f.toolStripStatusLabelLiveDateTime.Text = DateTime.Now.ToString("d MMMM yyyy dddd HH:mm:ss"));
+            this.InvokeEx(f => f._toolStripStatusLabelLiveDateTime.Text = DateTime.Now.ToString("d MMMM yyyy dddd HH:mm:ss"));
         }
 
         private void placeHolder_ControlAdded(object sender, ControlEventArgs e)
@@ -307,9 +329,44 @@ namespace InvoiceManager_DBFirst
         {
             ToolStripButton button = (ToolStripButton)sender;
             if (button.Checked)
-            {
                 this.initializeLoginForm();
-                this.uncheckToolStripToggleButtonsExcept(button);
+            else
+            {
+                button.CheckedChanged -= toolStripButtonLogin_CheckedChanged;
+                button.Checked = true;
+
+                DialogResult dr = MessageBox.Show("Do you want to logout ?.", "You are exiting...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.No)
+                {
+                    button.CheckedChanged += toolStripButtonLogin_CheckedChanged;
+                    return;
+                }
+
+                button.Checked = false;
+                button.CheckedChanged += toolStripButtonLogin_CheckedChanged;
+
+                UserLoginDetails logoutDetails = new UserLoginDetails();
+                logoutDetails.UserLoginId = this._userLogin.id;
+                logoutDetails.IsSuccess = true;
+                logoutDetails.LoginDate = DateTime.Now;
+                logoutDetails.LoginType = LoginType.Logout.ToString();
+
+                this.dbContext.UserLoginDetails.Add(logoutDetails);
+                this.clearStatusBarLoginDetails();
+
+                try
+                {
+                    this.dbContext.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Cannot save user logout details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                this._userLogin = null;
+                this._loginDetails = null;
+                MessageBox.Show("You are logged out.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -481,6 +538,24 @@ namespace InvoiceManager_DBFirst
             }
         }
 
+        private void updateStatusBarLoginDetails(string fullname, DateTime loginDate)
+        {
+            ToolStripStatusLabel toolStripStatusLabelLoginDetails = this.statusStripMain.Items[2] as ToolStripStatusLabel;
+            string text = $"User {fullname} logged in at {loginDate.ToString()}";
+            toolStripStatusLabelLoginDetails.Text = text;
+        }
+
+        private void clearStatusBarLoginDetails()
+        {
+            ToolStripStatusLabel toolStripStatusLabelLoginDetails = this.statusStripMain.Items[2] as ToolStripStatusLabel;
+            toolStripStatusLabelLoginDetails.Text = string.Empty;
+        }
+
+        private string createFullname(string firstName, string lastName)
+        {
+            return $"{firstName} {lastName}";
+        }
+
         #endregion
 
 
@@ -650,13 +725,18 @@ namespace InvoiceManager_DBFirst
             LoginForm loginForm = new LoginForm();
             if (loginForm.ShowDialog() == DialogResult.OK)
             {
-                string fullname = $"{loginForm.UserLogin.FirstName} {loginForm.UserLogin.LastName}";
-                MessageBox.Show($"{fullname} logged in successfully at {loginForm.UserLogin.LoginDate.ToString()}", "Welcome !", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this._userLogin = loginForm.UserLogin;
+                this._loginDetails = loginForm.LoginDetails;
+
+                string fullname = this.createFullname(this._userLogin.FirstName, this._userLogin.LastName);
+                string loginStatus = $"User {fullname} logged in at {_loginDetails.LoginDate.ToString()}";
+
+                MessageBox.Show($"{fullname} logged in successfully at {this._userLogin.LoginDate.ToString()}", "Welcome !", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.updateStatusBarLoginDetails(fullname, this._loginDetails.LoginDate);
             }
         }
 
         #endregion
-
 
         #region User-Defined Form Events
 

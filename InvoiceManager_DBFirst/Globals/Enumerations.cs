@@ -27,4 +27,10 @@ namespace InvoiceManager_DBFirst.Globals
         DESC,
         UNORDERED
     }
+
+    public enum LoginType
+    {
+        Login,
+        Logout
+    }
 }
