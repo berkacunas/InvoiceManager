@@ -5,10 +5,9 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using InvoiceManager_DBFirst.UserControls;
 
+using InvoiceManager_DBFirst.UserControls;
 using InvoiceManager_DBFirst.Globals;
-using System.IdentityModel.Tokens;
 
 namespace InvoiceManager_DBFirst
 {
@@ -54,7 +53,6 @@ namespace InvoiceManager_DBFirst
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
-            this._timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
 
             this.loadToolStripMenuItemIcons();
             this.createToolStripButtons();
@@ -62,6 +60,9 @@ namespace InvoiceManager_DBFirst
             this.createImageListActiveControlIcons();
             this.createListViewActiveControls();
             this.populateContextMenuStripTileView();
+            
+            this._timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
+
             //this.initializeTactionUserControl();
             ((ToolStripButton)this.toolStripMain.Items[2]).Checked = true;  // Triggers a set of useful events.
         }
@@ -100,7 +101,7 @@ namespace InvoiceManager_DBFirst
 
         private void timer_callback(object state)
         {
-            this.InvokeEx(f => f._toolStripStatusLabelLiveDateTime.Text = DateTime.Now.ToString("d MMMM yyyy dddd HH:mm:ss"));
+            this.statusStripMain.Items[0].Text = DateTime.Now.ToString("d MMMM yyyy dddd HH:mm:ss");
         }
 
         private void placeHolder_ControlAdded(object sender, ControlEventArgs e)

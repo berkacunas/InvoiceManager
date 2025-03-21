@@ -302,7 +302,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="ISynchronizeInvokeExtensions.cs" />
     <Compile Include="Item.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
