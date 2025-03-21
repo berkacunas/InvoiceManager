@@ -558,7 +558,6 @@ namespace InvoiceManager_DBFirst
 
         #endregion
 
-
         #region Initialize User Controls
 
         private void initializeTactionUserControl()
