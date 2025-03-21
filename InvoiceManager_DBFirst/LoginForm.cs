@@ -156,7 +156,7 @@ namespace InvoiceManager_DBFirst
 
             if (password != passwordAgain)
             {
-                MessageBox.Show("Passwords doesn't match.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Passwords don't match.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
