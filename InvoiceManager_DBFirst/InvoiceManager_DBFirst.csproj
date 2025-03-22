@@ -328,7 +328,6 @@
     <Compile Include="PaymentMethod.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RowComparer.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
