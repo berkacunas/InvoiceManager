@@ -54,6 +54,9 @@ namespace InvoiceManager_DBFirst
         {
             this.WindowState = FormWindowState.Maximized;
 
+            this.splitContainerMain.SplitterDistance = 225;
+            this.panelBottomSide.Height = 250;
+
             this.arrangePictureBoxUserLogin();
 
             this.loadToolStripMenuItemIcons();
@@ -429,6 +432,7 @@ namespace InvoiceManager_DBFirst
 
         private void arrangePictureBoxUserLogin()
         {
+            this.pictureBoxUserLoginDetails.Size = new Size(110, 115);
             this.pictureBoxUserLoginDetails.SizeMode = PictureBoxSizeMode.Zoom;
             this.pictureBoxUserLoginDetails.BorderStyle = BorderStyle.FixedSingle;
             this.pictureBoxUserLoginDetails.Image = BitmapResourceLoader.DefaultUser;
@@ -769,7 +773,7 @@ namespace InvoiceManager_DBFirst
                 string fullname = this.createFullname(this._userLogin.FirstName, this._userLogin.LastName);
                 string loginStatus = $"User {fullname} logged in at {_loginDetails.LoginDate.ToString()}";
 
-                MessageBox.Show($"{fullname} logged in successfully at {this._userLogin.LoginDate.ToString()}", "Welcome !", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show($"{fullname} logged in successfully at {this._userLogin.LoginDate.ToString()}", "Welcome !", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.updateStatusBarLoginDetails(fullname, this._loginDetails.LoginDate);
 
                 User user = this.dbContext.User.Where(r => r.Fullname == fullname).FirstOrDefault();
@@ -777,6 +781,7 @@ namespace InvoiceManager_DBFirst
                 {
                     try
                     {
+                        labelLoginDetailsFullNameVal.Text = user.Fullname;
                         byte[] imageData = this.dbContext.UserImage.Where(r => r.userId == user.id && r.isDefault).FirstOrDefault().imageData;
                         this.pictureBoxUserLoginDetails.Image = ImageHelper.GetImageFromBytes(imageData);
                     }
@@ -785,6 +790,10 @@ namespace InvoiceManager_DBFirst
                         this.pictureBoxUserLoginDetails.Image = BitmapResourceLoader.DefaultUser;
                         MessageBox.Show($"No default image for this user has found.\nPlease upload a default image for {user.Fullname}", "No image!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
+                }
+                else
+                {
+                    labelLoginDetailsFullNameVal.Text = "Please create a user from User window.";
                 }
             }   
             else
