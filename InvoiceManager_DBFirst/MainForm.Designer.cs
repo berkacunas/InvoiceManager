@@ -58,13 +58,13 @@
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.panelBottomSide = new System.Windows.Forms.Panel();
             this.panelLoginInfo = new System.Windows.Forms.Panel();
+            this.pictureBoxUserLoginDetails = new System.Windows.Forms.PictureBox();
             this.panelTopSide = new System.Windows.Forms.Panel();
             this.listViewActiveControls = new System.Windows.Forms.ListView();
             this.placeHolder = new System.Windows.Forms.Panel();
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
             this.contextMenuStripTileView = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.pictureBoxUserLoginDetails = new System.Windows.Forms.PictureBox();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -72,8 +72,8 @@
             this.splitContainerMain.SuspendLayout();
             this.panelBottomSide.SuspendLayout();
             this.panelLoginInfo.SuspendLayout();
-            this.panelTopSide.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUserLoginDetails)).BeginInit();
+            this.panelTopSide.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripMain
@@ -338,6 +338,15 @@
             this.panelLoginInfo.Size = new System.Drawing.Size(167, 226);
             this.panelLoginInfo.TabIndex = 0;
             // 
+            // pictureBoxUserLoginDetails
+            // 
+            this.pictureBoxUserLoginDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBoxUserLoginDetails.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxUserLoginDetails.Name = "pictureBoxUserLoginDetails";
+            this.pictureBoxUserLoginDetails.Size = new System.Drawing.Size(167, 226);
+            this.pictureBoxUserLoginDetails.TabIndex = 0;
+            this.pictureBoxUserLoginDetails.TabStop = false;
+            // 
             // panelTopSide
             // 
             this.panelTopSide.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -397,14 +406,6 @@
             this.contextMenuStripTileView.Name = "contextMenuStripTileView";
             this.contextMenuStripTileView.Size = new System.Drawing.Size(61, 4);
             // 
-            // pictureBoxUserLoginDetails
-            // 
-            this.pictureBoxUserLoginDetails.Location = new System.Drawing.Point(12, 3);
-            this.pictureBoxUserLoginDetails.Name = "pictureBoxUserLoginDetails";
-            this.pictureBoxUserLoginDetails.Size = new System.Drawing.Size(69, 84);
-            this.pictureBoxUserLoginDetails.TabIndex = 0;
-            this.pictureBoxUserLoginDetails.TabStop = false;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -428,8 +429,8 @@
             this.splitContainerMain.ResumeLayout(false);
             this.panelBottomSide.ResumeLayout(false);
             this.panelLoginInfo.ResumeLayout(false);
-            this.panelTopSide.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUserLoginDetails)).EndInit();
+            this.panelTopSide.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

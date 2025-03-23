@@ -54,6 +54,8 @@ namespace InvoiceManager_DBFirst
         {
             this.WindowState = FormWindowState.Maximized;
 
+            this.arrangePictureBoxUserLogin();
+
             this.loadToolStripMenuItemIcons();
             this.createToolStripButtons();
             this.createToolStripStatusBar();
@@ -425,6 +427,13 @@ namespace InvoiceManager_DBFirst
                 c.Visible = false;
         }
 
+        private void arrangePictureBoxUserLogin()
+        {
+            this.pictureBoxUserLoginDetails.SizeMode = PictureBoxSizeMode.Zoom;
+            this.pictureBoxUserLoginDetails.BorderStyle = BorderStyle.FixedSingle;
+            this.pictureBoxUserLoginDetails.Image = BitmapResourceLoader.DefaultUser;
+        }
+
         private void createImageListActiveControlIcons()
         {
             this._activeControlsImageList = new ImageList();
@@ -762,6 +771,21 @@ namespace InvoiceManager_DBFirst
 
                 MessageBox.Show($"{fullname} logged in successfully at {this._userLogin.LoginDate.ToString()}", "Welcome !", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.updateStatusBarLoginDetails(fullname, this._loginDetails.LoginDate);
+
+                User user = this.dbContext.User.Where(r => r.Fullname == fullname).FirstOrDefault();
+                if (user != null)
+                {
+                    try
+                    {
+                        byte[] imageData = this.dbContext.UserImage.Where(r => r.userId == user.id && r.isDefault).FirstOrDefault().imageData;
+                        this.pictureBoxUserLoginDetails.Image = ImageHelper.GetImageFromBytes(imageData);
+                    }
+                    catch
+                    {
+                        this.pictureBoxUserLoginDetails.Image = BitmapResourceLoader.DefaultUser;
+                        MessageBox.Show($"No default image for this user has found.\nPlease upload a default image for {user.Fullname}", "No image!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
             }   
             else
             {

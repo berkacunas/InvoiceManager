@@ -175,8 +175,8 @@ namespace InvoiceManager_DBFirst.UserControls
 
                 using (var ms = new MemoryStream(data))
                 {
-                    Image img = ResizeImage(new Bitmap(ms), new Size(16, 16));
-                    e.Value = GetBytesOfImage(img);
+                    Image img = ImageHelper.ResizeImage(new Bitmap(ms), new Size(16, 16));
+                    e.Value = ImageHelper.GetBytesOfImage(img);
                 }
             }
         }
@@ -517,7 +517,7 @@ namespace InvoiceManager_DBFirst.UserControls
                     this._currentImageIndexDict.Add(userId, 0);
 
                 UserImage userImage = userImages[this._currentImageIndexDict[userId]];
-                this.pictureBoxUser.Image = (userImage != null) ? GetImageFromBytes(userImage.imageData) : BitmapResourceLoader.DefaultUser;
+                this.pictureBoxUser.Image = (userImage != null) ? ImageHelper.GetImageFromBytes(userImage.imageData) : BitmapResourceLoader.DefaultUser;
                 this.pictureBoxUser.Tag = userImage.id;
                 this._checkCheckBoxDefault(userImage.isDefault);
             }
@@ -633,52 +633,10 @@ namespace InvoiceManager_DBFirst.UserControls
             return ms.GetBuffer();
         }
 
-        private static Image ResizeImage(Image imgToResize, Size size)
-        {
-            int sourceWidth = imgToResize.Width;
-            int sourceHeight = imgToResize.Height;
-
-            double nPercent = 0;
-            double nPercentW = 0;
-            double nPercentH = 0;
-
-            // Calculate width and height with new desired size
-            nPercentW = ((double)size.Width / (double)sourceWidth);
-            nPercentH = ((double)size.Height / (double)sourceHeight);
-            nPercent = Math.Min(nPercentW, nPercentH);
-
-            // New Width and Height
-            int destWidth = (int)(sourceWidth * nPercent);
-            int destHeight = (int)(sourceHeight * nPercent);
-
-            Bitmap b = new Bitmap(destWidth, destHeight);
-
-            Graphics g = Graphics.FromImage((Image)b);
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-
-            // Draw image with new width and height
-            g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
-            g.Dispose();
-
-            return (Image)b;
-        }
-
-        private static byte[] GetBytesOfImage(Image img)
-        {
-            ImageConverter converter = new ImageConverter();
-            return (byte[])converter.ConvertTo(img, typeof(byte[]));
-        }
-
-        private static Image GetImageFromBytes(byte[] imageData)
-        {
-            MemoryStream ms = new MemoryStream(imageData);
-            return new Bitmap(ms);
-        }
-
         private void _saveAsThumbnail(User user, Image image)
         {
-            Image tempImage = ResizeImage(image, new Size(24, 24));
-            user.Thumbnail = GetBytesOfImage(tempImage);
+            Image tempImage = ImageHelper.ResizeImage(image, new Size(24, 24));
+            user.Thumbnail = ImageHelper.GetBytesOfImage(tempImage);
 
             try
             {

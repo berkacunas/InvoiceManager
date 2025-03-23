@@ -306,7 +306,7 @@
             // LoginForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            this.ClientSize = new System.Drawing.Size(670, 213);
+            this.ClientSize = new System.Drawing.Size(637, 213);
             this.Controls.Add(this.tableLayoutPanelLogin);
             this.Controls.Add(this.tableLayoutPanelSignUp);
             this.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
