@@ -154,7 +154,8 @@ namespace InvoiceManager_DBFirst
             UserControl userControl = this.selectUserControl(selectedItem.Text);
             this.placeHolder.Controls.Remove(userControl);
 
-            this.placeHolder.Controls[this.placeHolder.Controls.Count - 1].Visible = true;
+            if (this.placeHolder.Controls.Count > 0)
+                this.placeHolder.Controls[this.placeHolder.Controls.Count - 1].Visible = true;
         }
 
         #endregion
