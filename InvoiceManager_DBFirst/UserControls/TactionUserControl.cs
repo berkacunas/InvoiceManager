@@ -572,7 +572,7 @@ namespace InvoiceManager_DBFirst.UserControls
             this.textBoxItemGroup.AutoCompleteCustomSource = autoCompleteStringCollection;
         }
 
-        private void contextMenuItemReportSelection_Click(object sender, EventArgs e)
+        private void contextMenuItemReportByItemSubType_Click(object sender, EventArgs e)
         {
             DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
             if (selectedRows == null)
@@ -582,8 +582,8 @@ namespace InvoiceManager_DBFirst.UserControls
             }
 
             TactionReportForm tactionReportForm = new TactionReportForm();
-            tactionReportForm.ReportType = TactionReportType.Selection;
-            tactionReportForm.SelectedTactions = getSelectedTactions(selectedRows);
+            tactionReportForm.ReportType = TactionReportType.ItemSubType;
+            tactionReportForm.SelectedTactions = this.getSelectedTactions(selectedRows);
 
             if (tactionReportForm.ShowDialog() == DialogResult.OK)
             {
@@ -591,7 +591,7 @@ namespace InvoiceManager_DBFirst.UserControls
             }
         }
 
-        private void contextMenuItemReportDaily_Click(object sender, EventArgs e)
+        private void contextMenuItemReportByItem_Click(object sender, EventArgs e)
         {
             DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
             if (selectedRows == null)
@@ -604,8 +604,8 @@ namespace InvoiceManager_DBFirst.UserControls
             DateTime selectedDate = this.getTactionFromRow(row).Dt;
 
             TactionReportForm tactionReportForm = new TactionReportForm();
-            tactionReportForm.ReportType = TactionReportType.Daily;
-            tactionReportForm.SelectedTactions = null;
+            tactionReportForm.ReportType = TactionReportType.Item;
+            tactionReportForm.SelectedTactions = this.getSelectedTactions(selectedRows);
 
             if (tactionReportForm.ShowDialog() == DialogResult.OK)
             {
@@ -613,7 +613,7 @@ namespace InvoiceManager_DBFirst.UserControls
             }
         }
 
-        private void contextMenuItemReportWeekly_Click(object sender, EventArgs e)
+        private void contextMenuItemReportByItemGroup_Click(object sender, EventArgs e)
         {
             DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
             if (selectedRows == null)
@@ -623,8 +623,8 @@ namespace InvoiceManager_DBFirst.UserControls
             }
 
             TactionReportForm tactionReportForm = new TactionReportForm();
-            tactionReportForm.ReportType = TactionReportType.Weekly;
-            tactionReportForm.DbSetTaction = this.dbContext.Taction;
+            tactionReportForm.ReportType = TactionReportType.ItemGroup;
+            tactionReportForm.SelectedTactions = this.getSelectedTactions(selectedRows);
 
             if (tactionReportForm.ShowDialog() == DialogResult.OK)
             {
@@ -1128,15 +1128,15 @@ namespace InvoiceManager_DBFirst.UserControls
         {
             ContextMenuStrip menuStrip = new ContextMenuStrip();
 
-            ToolStripMenuItem contextMenuItemReportSelection = new ToolStripMenuItem("Report selection...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportSelection_Click), Keys.None);
-            ToolStripMenuItem contextMenuItemReportDaily = new ToolStripMenuItem("Report daily...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportDaily_Click), Keys.None);
-            ToolStripMenuItem contextMenuItemReportWeekly = new ToolStripMenuItem("Report weekly...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportWeekly_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportByItemSubType = new ToolStripMenuItem("Report by Item Sub Type...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportByItemSubType_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportByItem = new ToolStripMenuItem("Report by Item...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportByItem_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportByItemGroup = new ToolStripMenuItem("Report by Item Group...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportByItemGroup_Click), Keys.None);
             ToolStripMenuItem contextMenuItemReportYearly = new ToolStripMenuItem("Report monthly...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportMonthly_Click), Keys.None);
             ToolStripMenuItem contextMenuItemExit = new ToolStripMenuItem("Exit");
 
-            menuStrip.Items.AddRange(new ToolStripItem[] { contextMenuItemReportSelection,
-                                                           contextMenuItemReportDaily,
-                                                           contextMenuItemReportWeekly,
+            menuStrip.Items.AddRange(new ToolStripItem[] { contextMenuItemReportByItemSubType,
+                                                           contextMenuItemReportByItem,
+                                                           contextMenuItemReportByItemGroup,
                                                            contextMenuItemReportYearly,
                                                            contextMenuItemExit });
 
