@@ -10,13 +10,14 @@ using System.Windows.Forms;
 using Spire.Xls;
 
 using InvoiceManager_DBFirst.Globals;
+using Microsoft.Build.Tasks.Deployment.Bootstrapper;
 
 namespace InvoiceManager_DBFirst
 {
     public enum TactionReportType
     {
-        Item = 0,
-        ItemSubType = 1,
+        ItemSubType = 0,
+        Item = 1,
         ItemGroup = 2,
         Weekly = 3,
         Monthly = 4
@@ -63,6 +64,9 @@ namespace InvoiceManager_DBFirst
         {
             InitializeComponent();
 
+            this.dataGridViewTactionReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewTactionReport.ReadOnly = true;
+
             this._items = new List<ItemsReport>();
             this._isInitializing = true;
 
@@ -73,7 +77,7 @@ namespace InvoiceManager_DBFirst
         {
             WinFormsHelper.SetDefaultGridViewStyles(this.dataGridViewTactionReport);
 
-            this._comboBoxReportTypeItems = new List<string>(new string[] { "Item's Sub Type", "Report daily", "Report weekly", "Report monthly" });
+            this._comboBoxReportTypeItems = new List<string>(new string[] { "Item's Sub Type", "Item", "Item Group", "Report monthly" });
             this.comboBoxReportType.DataSource = _comboBoxReportTypeItems;
         }
 
@@ -100,12 +104,10 @@ namespace InvoiceManager_DBFirst
                 case TactionReportType.ItemSubType:
                     this.dataGridViewTactionReport.Columns["ItemName"].Visible = true;
                     this.dataGridViewTactionReport.Columns["ItemSubTypeName"].Visible = true;
-                    this.dataGridViewTactionReport.Columns["ItemUnit"].Visible = true;
                     break;
 
                 case TactionReportType.Item:
                     this.dataGridViewTactionReport.Columns["ItemSubTypeName"].Visible = false;
-                    this.dataGridViewTactionReport.Columns["ItemUnit"].Visible = false;
                     break;
 
                 case TactionReportType.ItemGroup:
@@ -114,6 +116,8 @@ namespace InvoiceManager_DBFirst
                     this.dataGridViewTactionReport.Columns["ItemUnit"].Visible = false;
                     break;
             }
+
+            //this.resizeForm();
 
             this.dataGridViewTactionReport.Columns["itemId"].Visible = false;
             this.dataGridViewTactionReport.Columns["itemSubTypeId"].Visible = false;
@@ -159,6 +163,7 @@ namespace InvoiceManager_DBFirst
                         }
                     }
 
+                    this.resetItemUnit();
                     break;
 
                 case TactionReportType.ItemSubType:
@@ -217,9 +222,7 @@ namespace InvoiceManager_DBFirst
                         }
                     }
 
-                    break;
-
-
+                    this.resetItemUnit();
                     break;
 
                 case TactionReportType.Weekly:
@@ -236,6 +239,43 @@ namespace InvoiceManager_DBFirst
                 this.dataGridViewTactionReport.DataSource = this._items.OrderByDescending(r => r.TotalPricePerItem).ToList();
                 this.textBoxTotalPrice.Text = System.Math.Round(this._items.Sum(r => r.TotalPricePerItem), 2).ToString();
             }
+        }
+
+        private void resetItemUnit()
+        {
+            List<ItemsReport> items = null;
+            int id = 0;
+
+            foreach (ItemsReport report in this._items)
+            {
+                items = this._items.Where(r => r.ItemId == report.ItemId).ToList();
+                if (items.Count > 1) 
+                    ;
+
+                for (int i = 0; i < items.Count; i++)
+                {
+                    if (items[i].ItemSubTypeId != null)
+                    {
+                        if (id != 0 && items[i].ItemSubTypeId != id)
+                            this._items[i].ItemUnit = null;
+
+                        id = this._items[i].ItemSubTypeId.Value;
+                    }
+                }
+
+            }
+
+            //for (int i = 0; i < this._items.Count; i++)
+            //{
+            //    itemId = this._items[i].ItemId;
+            //    if (this._items[i].ItemSubTypeId != null)
+            //    {
+            //        if (subItemId != 0 && this._items[i].ItemId == itemId && this._items[i].ItemSubTypeId != subItemId)
+            //            this._items[i].ItemUnit = null;
+
+            //        subItemId = this._items[i].ItemSubTypeId.Value;
+            //    }
+            //}
         }
 
         private void toolStripMenuItemTextFile_Click(object sender, EventArgs e)
@@ -345,6 +385,29 @@ namespace InvoiceManager_DBFirst
 
             // Dispose resources
             workbook.Dispose();
+        }
+
+        private void resizeForm()
+        {
+            switch (this._reportType)
+            {
+                case TactionReportType.ItemSubType:
+                    this.Size = new Size(706, 652);
+                    this.groupBoxReportType.Size = new Size(660, 46);
+                    this.dataGridViewTactionReport.Size = new Size(660, 494);
+                    break;
+                case TactionReportType.Item:
+                    this.Size = new Size(561, 652); // 145
+                    this.groupBoxReportType.Size = new Size(515, 46);
+                    this.dataGridViewTactionReport.Size = new Size(515, 494);
+                    break;
+                case TactionReportType.ItemGroup:
+                    this.Size = new Size(306, 652);
+                    this.groupBoxReportType.Size = new Size(260, 46);
+                    this.dataGridViewTactionReport.Size = new Size(260, 494);
+                    break;
+            }
+            
         }
 
         #region Helper Functions

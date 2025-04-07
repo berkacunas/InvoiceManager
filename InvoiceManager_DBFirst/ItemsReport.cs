@@ -26,7 +26,7 @@ namespace InvoiceManager_DBFirst
 
         public string ItemSubTypeName { get; set; }
 
-        public decimal ItemUnit { get; set; }
+        public decimal? ItemUnit { get; set; }
 
         public decimal TotalPricePerItem { get; set; }
 
@@ -59,7 +59,7 @@ namespace InvoiceManager_DBFirst
 
         public void FormatItemUnit()
         {
-            this.ItemUnit = (MayaMath.isInteger(this.ItemUnit)) ? System.Math.Round(this.ItemUnit) : this.ItemUnit;
+            this.ItemUnit = (MayaMath.isInteger(this.ItemUnit.Value)) ? System.Math.Round(this.ItemUnit.Value) : this.ItemUnit;
         }
 
         public void FormatTotalPricePerItem()

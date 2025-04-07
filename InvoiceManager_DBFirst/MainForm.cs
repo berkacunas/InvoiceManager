@@ -68,8 +68,13 @@ namespace InvoiceManager_DBFirst
             
             this._timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
 
-            //this.initializeTactionUserControl();
-            ((ToolStripButton)this.toolStripMain.Items[2]).Checked = true;  // Triggers a set of useful events.
+            if (!isDbConnectionExists())
+            {
+                MessageBox.Show("Database connection doesn't exist.", "Database not found !", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
+            ((ToolStripButton)this.toolStripMain.Items[2]).Checked = true;  // Triggers a set of useful events. Replace of this.initializeTactionUserControl();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -598,6 +603,11 @@ namespace InvoiceManager_DBFirst
         private string createFullname(string firstName, string lastName)
         {
             return $"{firstName} {lastName}";
+        }
+
+        private bool isDbConnectionExists()
+        {
+            return this.dbContext.Database.Exists();
         }
 
         #endregion
