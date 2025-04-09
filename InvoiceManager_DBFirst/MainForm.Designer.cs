@@ -57,25 +57,25 @@
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.panelBottomSide = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.pictureBoxUserLoginDetails = new System.Windows.Forms.PictureBox();
+            this.labelLoginDetailsFullNameVal = new System.Windows.Forms.Label();
+            this.labelLoginDetailsFullNameText = new System.Windows.Forms.Label();
             this.panelTopSide = new System.Windows.Forms.Panel();
             this.listViewActiveControls = new System.Windows.Forms.ListView();
             this.placeHolder = new System.Windows.Forms.Panel();
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
             this.contextMenuStripTileView = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.pictureBoxUserLoginDetails = new System.Windows.Forms.PictureBox();
-            this.labelLoginDetailsFullNameText = new System.Windows.Forms.Label();
-            this.labelLoginDetailsFullNameVal = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
             this.splitContainerMain.SuspendLayout();
             this.panelBottomSide.SuspendLayout();
-            this.panelTopSide.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUserLoginDetails)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUserLoginDetails)).BeginInit();
+            this.panelTopSide.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripMain
@@ -108,7 +108,7 @@
             this.toolStripMenuItemSync.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemSyncSqlite});
             this.toolStripMenuItemSync.Name = "toolStripMenuItemSync";
-            this.toolStripMenuItemSync.Size = new System.Drawing.Size(135, 22);
+            this.toolStripMenuItemSync.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSync.Text = "Sync";
             // 
             // toolStripMenuItemSyncSqlite
@@ -125,7 +125,7 @@
             this.toolStripMenuItemBatch.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemBatchItemSubTypes});
             this.toolStripMenuItemBatch.Name = "toolStripMenuItemBatch";
-            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(135, 22);
+            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemBatch.Text = "Batch";
             // 
             // toolStripMenuItemBatchItemSubTypes
@@ -140,7 +140,7 @@
             this.toolStripMenuItemExit.Name = "toolStripMenuItemExit";
             this.toolStripMenuItemExit.ShortcutKeyDisplayString = "";
             this.toolStripMenuItemExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.toolStripMenuItemExit.Size = new System.Drawing.Size(135, 22);
+            this.toolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemExit.Text = "Exit";
             this.toolStripMenuItemExit.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -331,6 +331,58 @@
             this.panelBottomSide.Size = new System.Drawing.Size(224, 226);
             this.panelBottomSide.TabIndex = 2;
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 47.32143F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.67857F));
+            this.tableLayoutPanel1.Controls.Add(this.labelLoginDetailsFullNameVal, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.labelLoginDetailsFullNameText, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBoxUserLoginDetails, 0, 3);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(224, 226);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // pictureBoxUserLoginDetails
+            // 
+            this.pictureBoxUserLoginDetails.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tableLayoutPanel1.SetColumnSpan(this.pictureBoxUserLoginDetails, 2);
+            this.pictureBoxUserLoginDetails.Location = new System.Drawing.Point(3, 88);
+            this.pictureBoxUserLoginDetails.Name = "pictureBoxUserLoginDetails";
+            this.pictureBoxUserLoginDetails.Size = new System.Drawing.Size(95, 121);
+            this.pictureBoxUserLoginDetails.TabIndex = 1;
+            this.pictureBoxUserLoginDetails.TabStop = false;
+            // 
+            // labelLoginDetailsFullNameVal
+            // 
+            this.labelLoginDetailsFullNameVal.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelLoginDetailsFullNameVal.AutoSize = true;
+            this.labelLoginDetailsFullNameVal.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLoginDetailsFullNameVal.Location = new System.Drawing.Point(109, 3);
+            this.labelLoginDetailsFullNameVal.Name = "labelLoginDetailsFullNameVal";
+            this.labelLoginDetailsFullNameVal.Size = new System.Drawing.Size(91, 18);
+            this.labelLoginDetailsFullNameVal.TabIndex = 3;
+            this.labelLoginDetailsFullNameVal.Text = "Not logged in";
+            // 
+            // labelLoginDetailsFullNameText
+            // 
+            this.labelLoginDetailsFullNameText.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelLoginDetailsFullNameText.AutoSize = true;
+            this.labelLoginDetailsFullNameText.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLoginDetailsFullNameText.Location = new System.Drawing.Point(3, 3);
+            this.labelLoginDetailsFullNameText.Name = "labelLoginDetailsFullNameText";
+            this.labelLoginDetailsFullNameText.Size = new System.Drawing.Size(83, 18);
+            this.labelLoginDetailsFullNameText.TabIndex = 2;
+            this.labelLoginDetailsFullNameText.Text = "Active User:";
+            // 
             // panelTopSide
             // 
             this.panelTopSide.Controls.Add(this.listViewActiveControls);
@@ -359,7 +411,7 @@
             this.placeHolder.AutoScroll = true;
             this.placeHolder.Location = new System.Drawing.Point(0, 0);
             this.placeHolder.Name = "placeHolder";
-            this.placeHolder.Size = new System.Drawing.Size(1125, 668);
+            this.placeHolder.Size = new System.Drawing.Size(1098, 668);
             this.placeHolder.TabIndex = 0;
             // 
             // toolStripMain
@@ -386,58 +438,6 @@
             this.contextMenuStripTileView.Name = "contextMenuStripTileView";
             this.contextMenuStripTileView.Size = new System.Drawing.Size(61, 4);
             // 
-            // pictureBoxUserLoginDetails
-            // 
-            this.pictureBoxUserLoginDetails.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tableLayoutPanel1.SetColumnSpan(this.pictureBoxUserLoginDetails, 2);
-            this.pictureBoxUserLoginDetails.Location = new System.Drawing.Point(3, 88);
-            this.pictureBoxUserLoginDetails.Name = "pictureBoxUserLoginDetails";
-            this.pictureBoxUserLoginDetails.Size = new System.Drawing.Size(95, 121);
-            this.pictureBoxUserLoginDetails.TabIndex = 1;
-            this.pictureBoxUserLoginDetails.TabStop = false;
-            // 
-            // labelLoginDetailsFullNameText
-            // 
-            this.labelLoginDetailsFullNameText.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelLoginDetailsFullNameText.AutoSize = true;
-            this.labelLoginDetailsFullNameText.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelLoginDetailsFullNameText.Location = new System.Drawing.Point(3, 3);
-            this.labelLoginDetailsFullNameText.Name = "labelLoginDetailsFullNameText";
-            this.labelLoginDetailsFullNameText.Size = new System.Drawing.Size(83, 18);
-            this.labelLoginDetailsFullNameText.TabIndex = 2;
-            this.labelLoginDetailsFullNameText.Text = "Active User:";
-            // 
-            // labelLoginDetailsFullNameVal
-            // 
-            this.labelLoginDetailsFullNameVal.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelLoginDetailsFullNameVal.AutoSize = true;
-            this.labelLoginDetailsFullNameVal.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelLoginDetailsFullNameVal.Location = new System.Drawing.Point(109, 3);
-            this.labelLoginDetailsFullNameVal.Name = "labelLoginDetailsFullNameVal";
-            this.labelLoginDetailsFullNameVal.Size = new System.Drawing.Size(91, 18);
-            this.labelLoginDetailsFullNameVal.TabIndex = 3;
-            this.labelLoginDetailsFullNameVal.Text = "Not logged in";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 47.32143F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.67857F));
-            this.tableLayoutPanel1.Controls.Add(this.labelLoginDetailsFullNameVal, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.labelLoginDetailsFullNameText, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.pictureBoxUserLoginDetails, 0, 3);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(224, 226);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -460,10 +460,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
             this.splitContainerMain.ResumeLayout(false);
             this.panelBottomSide.ResumeLayout(false);
-            this.panelTopSide.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUserLoginDetails)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUserLoginDetails)).EndInit();
+            this.panelTopSide.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 using InvoiceManager_DBFirst.UserControls;
 using InvoiceManager_DBFirst.Globals;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace InvoiceManager_DBFirst
 {
@@ -22,6 +23,7 @@ namespace InvoiceManager_DBFirst
         private UserLoginDetails _loginDetails;
 
         private ToolStripStatusLabel _toolStripStatusLabelLiveDateTime; // Have to be accessed in class scope.
+        private int _lastSelectedListViewActiveControlsIndex = -1;
 
 
         public MainForm()
@@ -43,8 +45,9 @@ namespace InvoiceManager_DBFirst
             this.placeHolder.ControlAdded += placeHolder_ControlAdded;
             this.placeHolder.ControlRemoved += placeHolder_ControlRemoved;
 
-            this.listViewActiveControls.MouseDoubleClick += listViewActiveControls_MouseDoubleClick;
+            this.listViewActiveControls.MouseClick += listViewActiveControls_MouseClick;
             this.listViewActiveControls.MouseUp += listViewActiveControls_MouseUp;
+            this.listViewActiveControls.KeyUp += listViewActiveControls_KeyUp;
             this.listViewActiveControls.ClientSizeChanged += listViewActiveControls_ClientSizeChanged;
         }
 
@@ -108,14 +111,22 @@ namespace InvoiceManager_DBFirst
             removeActiveControlFromListView(e.Control.Tag.ToString());
         }
 
-        private void listViewActiveControls_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void listViewActiveControls_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.setSelectedListViewActiveControlsItem();
+        }
+
+        private void setSelectedListViewActiveControlsItem()
         {
             this.visibleUserControls(false);
 
             ListViewItem selectedItem = null;
             if (this.listViewActiveControls.SelectedItems != null)
+            {
                 selectedItem = this.listViewActiveControls.SelectedItems[0];
-
+                this._lastSelectedListViewActiveControlsIndex = this.listViewActiveControls.SelectedIndices[0];
+            }
+           
             UserControl userControl = this.selectUserControl(selectedItem.Text);
             userControl.Visible = true;
         }
@@ -124,10 +135,32 @@ namespace InvoiceManager_DBFirst
         {
             if (e.Button == MouseButtons.Right)
             {
+                // Check Right-clicked on listViewActiveControls.
                 var focusedItem = this.listViewActiveControls.FocusedItem;
                 if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
-                {
                     contextMenuStripTileView.Show(Cursor.Position);
+            }
+        }
+
+        private void listViewActiveControls_KeyUp(object sender, KeyEventArgs e)
+        {
+            //string s = $"KeyUp code: {e.KeyCode}, value: {e.KeyValue}, modifiers: {e.Modifiers}";
+            //MessageBox.Show(s);
+
+            if (e.KeyCode == Keys.Up && e.Modifiers == Keys.None)
+            {
+                if (this._lastSelectedListViewActiveControlsIndex > 0)
+                {
+                    --this._lastSelectedListViewActiveControlsIndex;
+                    this.setSelectedListViewActiveControlsItem();
+                }
+            }
+            else if (e.KeyCode == Keys.Down && e.Modifiers == Keys.None)
+            {
+                if (this._lastSelectedListViewActiveControlsIndex < this.listViewActiveControls.Items.Count - 1)
+                {
+                    ++this._lastSelectedListViewActiveControlsIndex;
+                    this.setSelectedListViewActiveControlsItem();
                 }
             }
         }
@@ -246,6 +279,12 @@ namespace InvoiceManager_DBFirst
             {
                 this.initializeTactionUserControl();
                 this.uncheckToolStripToggleButtonsExcept(button);
+            }
+            else
+            {
+                button.CheckedChanged -= toolStripButtonTactions_CheckedChanged;
+                button.Checked = true;
+                button.CheckedChanged += toolStripButtonTactions_CheckedChanged;
             }
         }
 
@@ -422,6 +461,7 @@ namespace InvoiceManager_DBFirst
         {
             ListViewItem activeItem = new ListViewItem(new string[] { controlName, tileMessage }, imageListKey);
             this.listViewActiveControls.Items.Add(activeItem);
+            activeItem.Selected = true;
         }
 
         private void removeActiveControlFromListView(string itemKey)
@@ -463,6 +503,8 @@ namespace InvoiceManager_DBFirst
             this.listViewActiveControls.View = View.Tile;
             this.listViewActiveControls.LargeImageList = this._activeControlsImageList;
             this.listViewActiveControls.MultiSelect = false;
+            this.listViewActiveControls.FullRowSelect = true;
+            this.listViewActiveControls.HideSelection = false;
 
             /* Add column headers so the subitems will appear. */
             this.listViewActiveControls.Columns.AddRange(new ColumnHeader[]
