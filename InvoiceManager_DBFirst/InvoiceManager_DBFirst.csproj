@@ -254,6 +254,18 @@
     <Compile Include="AppLogActionType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Bank.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BankAccount.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BankAccountType.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BankCard.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="CardTaction.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -263,31 +275,15 @@
     <Compile Include="CardTactionOperationType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Globals\Delegates.cs" />
-    <Compile Include="Globals\Enumerations.cs" />
-    <Compile Include="Globals\ImageHelper.cs" />
-    <Compile Include="LoginForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LoginForm.Designer.cs">
-      <DependentUpon>LoginForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ApplicationLogUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ApplicationLogUserControl.Designer.cs">
-      <DependentUpon>ApplicationLogUserControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="BankCard.cs">
-      <DependentUpon>InvoiceModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BitmapResourceLoader.cs" />
     <Compile Include="CashTransfer.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CurrencyMovement.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Globals\Delegates.cs" />
+    <Compile Include="Globals\Enumerations.cs" />
+    <Compile Include="Globals\ImageHelper.cs" />
     <Compile Include="InvoiceModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -306,18 +302,11 @@
     <Compile Include="Item.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ItemsReport.cs" />
     <Compile Include="ItemGroup.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemSubType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ItemSubTypeBatcherForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ItemSubTypeBatcherForm.Designer.cs">
-      <DependentUpon>ItemSubTypeBatcherForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ItemSubTypeDetails.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
@@ -325,22 +314,15 @@
     <Compile Include="ItemTopGroup.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="MayaMath.cs" />
+    <Compile Include="LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PaymentMethod.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RowComparer.cs" />
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="NumericTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Seller.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -353,11 +335,8 @@
     <Compile Include="ShopType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="SyncSqliteForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SyncSqliteForm.Designer.cs">
-      <DependentUpon>SyncSqliteForm.cs</DependentUpon>
+    <Compile Include="sysdiagrams.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Taction.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
@@ -365,14 +344,47 @@
     <Compile Include="TactionDetails.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="User.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ApplicationLogUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ApplicationLogUserControl.Designer.cs">
+      <DependentUpon>ApplicationLogUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BitmapResourceLoader.cs" />
+    <Compile Include="ItemsReport.cs" />
+    <Compile Include="ItemSubTypeBatcherForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ItemSubTypeBatcherForm.Designer.cs">
+      <DependentUpon>ItemSubTypeBatcherForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MayaMath.cs" />
+    <Compile Include="RowComparer.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NumericTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SyncSqliteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SyncSqliteForm.Designer.cs">
+      <DependentUpon>SyncSqliteForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TactionReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TactionReportForm.Designer.cs">
       <DependentUpon>TactionReportForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="User.cs">
-      <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ItemUserControl.cs">
       <SubType>UserControl</SubType>
@@ -416,17 +428,17 @@
     <Compile Include="UserControls\UserUserControl.Designer.cs">
       <DependentUpon>UserUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Globals\WinFormsHelper.cs" />
     <Compile Include="UserImage.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Globals\WinFormsHelper.cs" />
     <Compile Include="UserLog.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserLogin.cs">
+    <Compile Include="UserLoginDetails.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserLoginDetails.cs">
+    <Compile Include="UserProfile.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <EmbeddedResource Include="LoginForm.resx">

@@ -19,7 +19,7 @@ namespace InvoiceManager_DBFirst
 
         private List<AppLog> _appLogs;
         private ImageList _activeControlsImageList;
-        private UserLogin _userLogin;
+        private UserProfile _userProfile;
         private UserLoginDetails _loginDetails;
 
         private ToolStripStatusLabel _toolStripStatusLabelLiveDateTime; // Have to be accessed in class scope.
@@ -34,7 +34,7 @@ namespace InvoiceManager_DBFirst
             this.dbContext = new InvoicesEntities();
 
             this._appLogs = new List<AppLog>();
-            this._userLogin = null;
+            this._userProfile = null;
             this._loginDetails = null;
 
             this._toolStripStatusLabelLiveDateTime = new ToolStripStatusLabel();
@@ -60,7 +60,7 @@ namespace InvoiceManager_DBFirst
             this.splitContainerMain.SplitterDistance = 225;
             this.panelBottomSide.Height = 250;
 
-            this.arrangePictureBoxUserLogin();
+            this.arrangePictureBoxUserProfile();
 
             this.loadToolStripMenuItemIcons();
             this.createToolStripButtons();
@@ -375,7 +375,7 @@ namespace InvoiceManager_DBFirst
                 button.CheckedChanged += toolStripButtonLogin_CheckedChanged;
 
                 UserLoginDetails logoutDetails = new UserLoginDetails();
-                logoutDetails.UserLoginId = this._userLogin.id;
+                logoutDetails.UserLoginId = this._userProfile.id;
                 logoutDetails.IsSuccess = true;
                 logoutDetails.LoginDate = DateTime.Now;
                 logoutDetails.LoginType = LoginType.Logout.ToString();
@@ -393,7 +393,7 @@ namespace InvoiceManager_DBFirst
                     return;
                 }
 
-                this._userLogin = null;
+                this._userProfile = null;
                 this._loginDetails = null;
                 MessageBox.Show("You are logged out.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -472,7 +472,7 @@ namespace InvoiceManager_DBFirst
                 c.Visible = false;
         }
 
-        private void arrangePictureBoxUserLogin()
+        private void arrangePictureBoxUserProfile()
         {
             this.pictureBoxUserLoginDetails.Size = new Size(110, 115);
             this.pictureBoxUserLoginDetails.SizeMode = PictureBoxSizeMode.Zoom;
@@ -615,17 +615,15 @@ namespace InvoiceManager_DBFirst
 
         private void uncheckToolStripToggleButtonsExcept(string buttonText)
         {
-            foreach ( ToolStripItem item in this.toolStripMain.Items)
+            string[] buttonsIgnored = { "Login" };
+            foreach (ToolStripItem item in this.toolStripMain.Items)
             {
                 if (item.GetType() == typeof(ToolStripSeparator))
                     continue;
 
-                if (item.Tag.ToString() != buttonText)
-                    ((ToolStripButton)item).Checked = false;
-                else
-                {
-                    ((ToolStripButton)item).Checked = true;
-                }
+                string itemText = item.Tag.ToString();
+                if (!buttonsIgnored.Contains(itemText))
+                    ((ToolStripButton)item).Checked = (itemText == buttonText);
             }
         }
 
@@ -820,13 +818,13 @@ namespace InvoiceManager_DBFirst
             LoginForm loginForm = new LoginForm();
             if (loginForm.ShowDialog() == DialogResult.OK)
             {
-                this._userLogin = loginForm.UserLogin;
+                this._userProfile = loginForm.UserProfile;
                 this._loginDetails = loginForm.LoginDetails;
 
-                string fullname = this.createFullname(this._userLogin.FirstName, this._userLogin.LastName);
+                string fullname = this.createFullname(this._userProfile.FirstName, this._userProfile.LastName);
                 string loginStatus = $"User {fullname} logged in at {_loginDetails.LoginDate.ToString()}";
 
-                //MessageBox.Show($"{fullname} logged in successfully at {this._userLogin.LoginDate.ToString()}", "Welcome !", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show($"{fullname} logged in successfully at {this._userProfile.LoginDate.ToString()}", "Welcome !", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.updateStatusBarLoginDetails(fullname, this._loginDetails.LoginDate);
 
                 User user = this.dbContext.User.Where(r => r.Fullname == fullname).FirstOrDefault();

@@ -21,6 +21,6 @@ namespace InvoiceManager_DBFirst
         public int PasswordErrorCount { get; set; }
         public string LoginType { get; set; }
     
-        public virtual UserLogin UserLogin { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
     }
 }

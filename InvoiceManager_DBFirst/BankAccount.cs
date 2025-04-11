@@ -12,14 +12,16 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemSubTypeDetails
+    public partial class BankAccount
     {
         public int id { get; set; }
-        public int ItemId { get; set; }
-        public int ItemSubTypeId { get; set; }
-        public Nullable<System.DateTime> AddedDate { get; set; }
+        public int BankId { get; set; }
+        public int TypeId { get; set; }
+        public string Owner { get; set; }
+        public System.DateTime CreatedOn { get; set; }
+        public Nullable<System.DateTime> DeletedOn { get; set; }
     
-        public virtual Item Item { get; set; }
-        public virtual ItemSubType ItemSubType { get; set; }
+        public virtual Bank Bank { get; set; }
+        public virtual BankAccountType BankAccountType { get; set; }
     }
 }

@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace InvoiceManager_DBFirst.Globals
 {
     public delegate void Notify(string actionType, string message, DateTime eventTime);
-    public delegate void LoginHandler(UserLogin userLogin, UserLoginDetails loginDetails);
+    public delegate void LoginHandler(UserProfile userProfile, UserLoginDetails loginDetails);
 }

@@ -16,14 +16,14 @@ namespace InvoiceManager_DBFirst
     public partial class LoginForm : Form
     {
         private InvoicesEntities dbContext;
-        private UserLogin _userLogin;
+        private UserProfile _userProfile;
         private UserLoginDetails _loginDetails;
 
         private const int MAX_PASSWORD_ERROR = 3;
 
-        public UserLogin UserLogin
+        public UserProfile UserProfile
         {
-            get { return _userLogin; }
+            get { return _userProfile; }
         }
 
         public UserLoginDetails LoginDetails
@@ -37,7 +37,7 @@ namespace InvoiceManager_DBFirst
 
             this.dbContext = new InvoicesEntities();
             
-            this._userLogin = null;
+            this._userProfile = null;
             this._loginDetails = new UserLoginDetails();
 
             this.Load += loginForm_Load;
@@ -86,11 +86,11 @@ namespace InvoiceManager_DBFirst
             }
 
 
-            _userLogin = this.dbContext.UserLogin.Where(r => r.FirstName == firstName && r.LastName == lastName && r.Password == password).FirstOrDefault();
+            _userProfile = this.dbContext.UserProfile.Where(r => r.FirstName == firstName && r.LastName == lastName && r.Password == password).FirstOrDefault();
 
-            if (_userLogin != null)
+            if (_userProfile != null)
             {
-                _loginDetails.UserLogin = _userLogin;
+                _loginDetails.UserProfile = _userProfile;
                 _loginDetails.LoginType = LoginType.Login.ToString();
                 _loginDetails.LoginDate = DateTime.Now;     // User's login datetime.
                 _loginDetails.IsSuccess = true;
@@ -159,13 +159,13 @@ namespace InvoiceManager_DBFirst
                 return;
             }
 
-            UserLogin userLogin = new UserLogin();
-            userLogin.FirstName = firstName;
-            userLogin.LastName = lastName;
-            userLogin.Password = password;
-            userLogin.LoginDate = DateTime.Now;     // User's sign-up datetime.
+            UserProfile userProfile = new UserProfile();
+            userProfile.FirstName = firstName;
+            userProfile.LastName = lastName;
+            userProfile.Password = password;
+            userProfile.LoginDate = DateTime.Now;     // User's sign-up datetime.
 
-            this.dbContext.UserLogin.Add(userLogin);
+            this.dbContext.UserProfile.Add(userProfile);
 
             try
             {

@@ -187,7 +187,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
             WinFormsHelper.SetDefaultGridViewHeaderStyles(this.dataGridViewItemTopGroups, headerTexts, columnWidths, columnAlignments);
 
-            this.dataGridViewItemTopGroups.Columns["id"].Visible = false;
+            this.dataGridViewItemTopGroups.Columns["itemTopGroupId"].Visible = false;
         }
 
         private void dataGridViewItemGroups_DataSourceChanged(object sender, EventArgs e)
@@ -923,7 +923,11 @@ namespace InvoiceManager_DBFirst.UserControls
         {
             var query = from itemTopGroup in dbContext.ItemTopGroup
                         orderby itemTopGroup.Name
-                        select itemTopGroup;
+                        select new
+                        {
+                            itemTopGroupId = itemTopGroup.id,
+                            itemTopGroupName = itemTopGroup.Name
+                        };
 
             this.dataGridViewItemTopGroups.DataSource = query.ToList();
         }
