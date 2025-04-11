@@ -32,7 +32,6 @@
         <EntityTypeShape EntityType="InvoicesModel.User" Width="1.5" PointX="0.75" PointY="9.125" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.UserImage" Width="1.5" PointX="3" PointY="16.125" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.UserLog" Width="1.5" PointX="3" PointY="18.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.UserLoginDetails" Width="1.5" PointX="18" PointY="6" IsExpanded="true" />
         <EntityTypeShape EntityType="InvoicesModel.UserProfile" Width="1.5" PointX="15.75" PointY="5.875" IsExpanded="true" />
         <AssociationConnector Association="InvoicesModel.FK_AppLog_ActionTypeId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_BankAccount_BankId" ManuallyRouted="false" />
@@ -60,8 +59,9 @@
         <AssociationConnector Association="InvoicesModel.FK_TactionDetails_TactionId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_UserImage_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_UserLog_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_UserLoginDetails_UserLoginId" ManuallyRouted="false" />
-      </Diagram>
+        <EntityTypeShape EntityType="InvoicesModel.UserLoginDetails" Width="1.5" PointX="18" PointY="6" />
+        <AssociationConnector Association="InvoicesModel.FK_UserLoginDetails_UserProfileId" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

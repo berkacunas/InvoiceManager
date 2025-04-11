@@ -52,7 +52,7 @@ namespace InvoiceManager_DBFirst
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserImage> UserImage { get; set; }
         public virtual DbSet<UserLog> UserLog { get; set; }
-        public virtual DbSet<UserLoginDetails> UserLoginDetails { get; set; }
         public virtual DbSet<UserProfile> UserProfile { get; set; }
+        public virtual DbSet<UserLoginDetails> UserLoginDetails { get; set; }
     }
 }

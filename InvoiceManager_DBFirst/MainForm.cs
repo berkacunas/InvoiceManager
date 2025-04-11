@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using InvoiceManager_DBFirst.UserControls;
 using InvoiceManager_DBFirst.Globals;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Data.SqlTypes;
 
 namespace InvoiceManager_DBFirst
 {
@@ -58,7 +59,7 @@ namespace InvoiceManager_DBFirst
             this.WindowState = FormWindowState.Maximized;
 
             this.splitContainerMain.SplitterDistance = 225;
-            this.panelBottomSide.Height = 250;
+            this.panelProfile.Height = 250;
 
             this.arrangePictureBoxUserProfile();
 
@@ -68,6 +69,7 @@ namespace InvoiceManager_DBFirst
             this.createImageListActiveControlIcons();
             this.createListViewActiveControls();
             this.populateContextMenuStripTileView();
+            this.setPanelProfile();
             
             this._timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
 
@@ -78,6 +80,13 @@ namespace InvoiceManager_DBFirst
             }
             
             ((ToolStripButton)this.toolStripMain.Items[2]).Checked = true;  // Triggers a set of useful events. Replace of this.initializeTactionUserControl();
+        }
+
+        private void setPanelProfile()
+        {
+            this.labelProfileTransactionsVal.Text = $"{dbContext.Taction.Count(r => r.id > 0)} / {dbContext.TactionDetails.Count(r => r.id > 0)}";
+            this.labelProfileItemsVal.Text = $"{dbContext.Item.Count(r => r.id > 0).ToString()} / {dbContext.ItemGroup.Count(r => r.id > 0).ToString()} / {dbContext.ItemTopGroup.Count(r => r.id > 0).ToString()}";
+            this.labelProfileShopsVal.Text = $"{dbContext.Shop.Count(r => r.id > 0).ToString()} / {dbContext.ShopGroup.Count(r => r.id > 0).ToString()} / {dbContext.ShopType.Count(r => r.id > 0).ToString()}";
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -375,13 +384,14 @@ namespace InvoiceManager_DBFirst
                 button.CheckedChanged += toolStripButtonLogin_CheckedChanged;
 
                 UserLoginDetails logoutDetails = new UserLoginDetails();
-                logoutDetails.UserLoginId = this._userProfile.id;
+                logoutDetails.UserProfileId = this._userProfile.id;
                 logoutDetails.IsSuccess = true;
                 logoutDetails.LoginDate = DateTime.Now;
                 logoutDetails.LoginType = LoginType.Logout.ToString();
 
                 this.dbContext.UserLoginDetails.Add(logoutDetails);
                 this.clearStatusBarLoginDetails();
+                this.clearPanelProfile();
 
                 try
                 {
@@ -474,10 +484,10 @@ namespace InvoiceManager_DBFirst
 
         private void arrangePictureBoxUserProfile()
         {
-            this.pictureBoxUserLoginDetails.Size = new Size(110, 115);
-            this.pictureBoxUserLoginDetails.SizeMode = PictureBoxSizeMode.Zoom;
-            this.pictureBoxUserLoginDetails.BorderStyle = BorderStyle.FixedSingle;
-            this.pictureBoxUserLoginDetails.Image = BitmapResourceLoader.DefaultUser;
+            this.pictureBoxUserProfile.Size = new Size(110, 115);
+            this.pictureBoxUserProfile.SizeMode = PictureBoxSizeMode.Zoom;
+            this.pictureBoxUserProfile.BorderStyle = BorderStyle.FixedSingle;
+            this.pictureBoxUserProfile.Image = BitmapResourceLoader.DefaultUser;
         }
 
         private void createImageListActiveControlIcons()
@@ -638,6 +648,12 @@ namespace InvoiceManager_DBFirst
         {
             ToolStripStatusLabel toolStripStatusLabelLoginDetails = this.statusStripMain.Items[2] as ToolStripStatusLabel;
             toolStripStatusLabelLoginDetails.Text = string.Empty;
+        }
+
+        private void clearPanelProfile()
+        {
+            this.pictureBoxUserProfile.Image = BitmapResourceLoader.DefaultUser;
+            this.labelActiveProfileText.Text = string.Empty;
         }
 
         private string createFullname(string firstName, string lastName)
@@ -832,19 +848,19 @@ namespace InvoiceManager_DBFirst
                 {
                     try
                     {
-                        labelLoginDetailsFullNameVal.Text = user.Fullname;
+                        labelActiveProfileText.Text = user.Fullname;
                         byte[] imageData = this.dbContext.UserImage.Where(r => r.userId == user.id && r.isDefault).FirstOrDefault().imageData;
-                        this.pictureBoxUserLoginDetails.Image = ImageHelper.GetImageFromBytes(imageData);
+                        this.pictureBoxUserProfile.Image = ImageHelper.GetImageFromBytes(imageData);
                     }
                     catch
                     {
-                        this.pictureBoxUserLoginDetails.Image = BitmapResourceLoader.DefaultUser;
+                        this.pictureBoxUserProfile.Image = BitmapResourceLoader.DefaultUser;
                         MessageBox.Show($"No default image for this user has found.\nPlease upload a default image for {user.Fullname}", "No image!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 else
                 {
-                    labelLoginDetailsFullNameVal.Text = "Please create a user from User window.";
+                    labelActiveProfileText.Text = "Please create a user from User window.";
                 }
             }   
             else

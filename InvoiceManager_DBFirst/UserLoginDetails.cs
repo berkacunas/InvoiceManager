@@ -15,7 +15,7 @@ namespace InvoiceManager_DBFirst
     public partial class UserLoginDetails
     {
         public int id { get; set; }
-        public int UserLoginId { get; set; }
+        public int UserProfileId { get; set; }
         public System.DateTime LoginDate { get; set; }
         public bool IsSuccess { get; set; }
         public int PasswordErrorCount { get; set; }

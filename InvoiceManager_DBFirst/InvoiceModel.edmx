@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="InvoicesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="InvoicesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AppLog">
           <Key>
             <PropertyRef Name="id" />
@@ -286,7 +286,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserLoginId" Type="int" Nullable="false" />
+          <Property Name="UserProfileId" Type="int" Nullable="false" />
           <Property Name="LoginDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="IsSuccess" Type="bit" Nullable="false" />
           <Property Name="PasswordErrorCount" Type="int" Nullable="false" />
@@ -616,7 +616,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserLoginDetails_UserLoginId">
+        <Association Name="FK_UserLoginDetails_UserProfileId">
           <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
           <End Role="UserLoginDetails" Type="Self.UserLoginDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -624,7 +624,7 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="UserLoginDetails">
-              <PropertyRef Name="UserLoginId" />
+              <PropertyRef Name="UserProfileId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -762,13 +762,12 @@
             <End Role="User" EntitySet="User" />
             <End Role="UserLog" EntitySet="UserLog" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserLoginDetails_UserLoginId" Association="Self.FK_UserLoginDetails_UserLoginId">
+          <AssociationSet Name="FK_UserLoginDetails_UserProfileId" Association="Self.FK_UserLoginDetails_UserProfileId">
             <End Role="UserProfile" EntitySet="UserProfile" />
             <End Role="UserLoginDetails" EntitySet="UserLoginDetails" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="InvoicesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1100,18 +1099,6 @@
           <Property Name="LogTime" Type="DateTime" Nullable="false" Precision="7" />
           <NavigationProperty Name="User" Relationship="Self.FK_UserLog_UserId" FromRole="UserLog" ToRole="User" />
         </EntityType>
-        <EntityType Name="UserLoginDetails">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserLoginId" Type="Int32" Nullable="false" />
-          <Property Name="LoginDate" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="IsSuccess" Type="Boolean" Nullable="false" />
-          <Property Name="PasswordErrorCount" Type="Int32" Nullable="false" />
-          <Property Name="LoginType" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="UserProfile" Relationship="Self.FK_UserLoginDetails_UserLoginId" FromRole="UserLoginDetails" ToRole="UserProfile" />
-        </EntityType>
         <EntityType Name="UserProfile">
           <Key>
             <PropertyRef Name="id" />
@@ -1123,8 +1110,8 @@
           <Property Name="Fullname" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="LoginDate" Type="DateTime" Nullable="false" Precision="7" />
-          <NavigationProperty Name="UserLoginDetails" Relationship="Self.FK_UserLoginDetails_UserLoginId" FromRole="UserProfile" ToRole="UserLoginDetails" />
-        </EntityType>
+          <NavigationProperty Name="UserLoginDetails" Relationship="InvoicesModel.FK_UserLoginDetails_UserProfileId" FromRole="UserProfile" ToRole="UserLoginDetails" />
+          </EntityType>
         <Association Name="FK_AppLog_ActionTypeId">
           <End Role="AppLogActionType" Type="Self.AppLogActionType" Multiplicity="1" />
           <End Role="AppLog" Type="Self.AppLog" Multiplicity="*" />
@@ -1437,18 +1424,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserLoginDetails_UserLoginId">
-          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
-          <End Role="UserLoginDetails" Type="Self.UserLoginDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserProfile">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="UserLoginDetails">
-              <PropertyRef Name="UserLoginId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="InvoicesEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AppLog" EntityType="Self.AppLog" />
           <EntitySet Name="AppLogActionType" EntityType="Self.AppLogActionType" />
@@ -1477,7 +1452,6 @@
           <EntitySet Name="User" EntityType="Self.User" />
           <EntitySet Name="UserImage" EntityType="Self.UserImage" />
           <EntitySet Name="UserLog" EntityType="Self.UserLog" />
-          <EntitySet Name="UserLoginDetails" EntityType="Self.UserLoginDetails" />
           <EntitySet Name="UserProfile" EntityType="Self.UserProfile" />
           <AssociationSet Name="FK_AppLog_ActionTypeId" Association="Self.FK_AppLog_ActionTypeId">
             <End Role="AppLogActionType" EntitySet="AppLogActionType" />
@@ -1583,11 +1557,36 @@
             <End Role="User" EntitySet="User" />
             <End Role="UserLog" EntitySet="UserLog" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserLoginDetails_UserLoginId" Association="Self.FK_UserLoginDetails_UserLoginId">
+          <EntitySet Name="UserLoginDetails" EntityType="InvoicesModel.UserLoginDetails" />
+          <AssociationSet Name="FK_UserLoginDetails_UserProfileId" Association="InvoicesModel.FK_UserLoginDetails_UserProfileId">
             <End Role="UserProfile" EntitySet="UserProfile" />
             <End Role="UserLoginDetails" EntitySet="UserLoginDetails" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
+        <EntityType Name="UserLoginDetails">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserProfileId" Type="Int32" Nullable="false" />
+          <Property Name="LoginDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsSuccess" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordErrorCount" Type="Int32" Nullable="false" />
+          <Property Name="LoginType" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserProfile" Relationship="InvoicesModel.FK_UserLoginDetails_UserProfileId" FromRole="UserLoginDetails" ToRole="UserProfile" />
+        </EntityType>
+        <Association Name="FK_UserLoginDetails_UserProfileId">
+          <End Type="InvoicesModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="InvoicesModel.UserLoginDetails" Role="UserLoginDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserLoginDetails">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1897,18 +1896,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserLoginDetails">
-            <EntityTypeMapping TypeName="InvoicesModel.UserLoginDetails">
-              <MappingFragment StoreEntitySet="UserLoginDetails">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="UserLoginId" ColumnName="UserLoginId" />
-                <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
-                <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
-                <ScalarProperty Name="PasswordErrorCount" ColumnName="PasswordErrorCount" />
-                <ScalarProperty Name="LoginType" ColumnName="LoginType" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="UserProfile">
             <EntityTypeMapping TypeName="InvoicesModel.UserProfile">
               <MappingFragment StoreEntitySet="UserProfile">
@@ -1919,6 +1906,18 @@
                 <ScalarProperty Name="Fullname" ColumnName="Fullname" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserLoginDetails">
+            <EntityTypeMapping TypeName="InvoicesModel.UserLoginDetails">
+              <MappingFragment StoreEntitySet="UserLoginDetails">
+                <ScalarProperty Name="LoginType" ColumnName="LoginType" />
+                <ScalarProperty Name="PasswordErrorCount" ColumnName="PasswordErrorCount" />
+                <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
+                <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
+                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
