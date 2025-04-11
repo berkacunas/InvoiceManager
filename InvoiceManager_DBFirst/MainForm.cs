@@ -119,14 +119,16 @@ namespace InvoiceManager_DBFirst
         private void setSelectedListViewActiveControlsItem()
         {
             this.visibleUserControls(false);
-
+            
             ListViewItem selectedItem = null;
             if (this.listViewActiveControls.SelectedItems != null)
             {
                 selectedItem = this.listViewActiveControls.SelectedItems[0];
                 this._lastSelectedListViewActiveControlsIndex = this.listViewActiveControls.SelectedIndices[0];
             }
-           
+
+            this.uncheckToolStripToggleButtonsExcept(selectedItem.Text);
+
             UserControl userControl = this.selectUserControl(selectedItem.Text);
             userControl.Visible = true;
         }
@@ -278,13 +280,7 @@ namespace InvoiceManager_DBFirst
             if (button.Checked)
             {
                 this.initializeTactionUserControl();
-                this.uncheckToolStripToggleButtonsExcept(button);
-            }
-            else
-            {
-                button.CheckedChanged -= toolStripButtonTactions_CheckedChanged;
-                button.Checked = true;
-                button.CheckedChanged += toolStripButtonTactions_CheckedChanged;
+                this.uncheckToolStripToggleButtonsExcept(button.Tag.ToString());
             }
         }
 
@@ -294,7 +290,7 @@ namespace InvoiceManager_DBFirst
             if (button.Checked)
             {
                 this.initializeItemUserControl();
-                this.uncheckToolStripToggleButtonsExcept(button);
+                this.uncheckToolStripToggleButtonsExcept(button.Tag.ToString());
             }
         }
 
@@ -304,7 +300,7 @@ namespace InvoiceManager_DBFirst
             if (button.Checked)
             {
                 this.initializeShopUserControl();
-                this.uncheckToolStripToggleButtonsExcept(button);
+                this.uncheckToolStripToggleButtonsExcept(button.Tag.ToString());
             }
         }
 
@@ -314,7 +310,7 @@ namespace InvoiceManager_DBFirst
             if (button.Checked)
             {
                 this.initializePaymentMethodUserControl();
-                this.uncheckToolStripToggleButtonsExcept(button);
+                this.uncheckToolStripToggleButtonsExcept(button.Tag.ToString());
             }
         }
 
@@ -324,7 +320,7 @@ namespace InvoiceManager_DBFirst
             if (button.Checked)
             {
                 this.initializeUserUserControl();
-                this.uncheckToolStripToggleButtonsExcept(button);
+                this.uncheckToolStripToggleButtonsExcept(button.Tag.ToString());
             }
         }
 
@@ -334,7 +330,7 @@ namespace InvoiceManager_DBFirst
             if (button.Checked)
             {
                 this.initializeSellerUserControl();
-                this.uncheckToolStripToggleButtonsExcept(button);
+                this.uncheckToolStripToggleButtonsExcept(button.Tag.ToString());
             }
         }
 
@@ -344,7 +340,7 @@ namespace InvoiceManager_DBFirst
             if (button.Checked)
             {
                 this.initializeApplicationLogUserControl();
-                this.uncheckToolStripToggleButtonsExcept(button);
+                this.uncheckToolStripToggleButtonsExcept(button.Tag.ToString());
             }
         }
 
@@ -354,7 +350,7 @@ namespace InvoiceManager_DBFirst
             if (button.Checked)
             {
                 this.initializeSettingsUserControl();
-                this.uncheckToolStripToggleButtonsExcept(button);
+                this.uncheckToolStripToggleButtonsExcept(button.Tag.ToString());
             }
         }
 
@@ -559,16 +555,16 @@ namespace InvoiceManager_DBFirst
             toolStripButtonSettings.Image = BitmapResourceLoader.Settings;
             toolStripButtonLogin.Image = BitmapResourceLoader.Login;
 
-            toolStripButtonSyncSqlite.Tag = "toolStripButtonSyncSqlite";
-            toolStripButtonTactions.Tag = "toolStripButtonTactions";
-            toolStripButtonItems.Tag = "toolStripButtonItems";
-            toolStripButtonShops.Tag = "toolStripButtonShops";
-            toolStripButtonPaymentMethods.Tag = "toolStripButtonPaymentMethods";
-            toolStripButtonUsers.Tag = "toolStripButtonUsers";
-            toolStripButtonSellers.Tag = "toolStripButtonSellers";
-            toolStripButtonApplicationLog.Tag = "toolStripButtonApplicationLog";
-            toolStripButtonSettings.Tag = "toolStripButtonSettings";
-            toolStripButtonLogin.Tag = "toolStripButtonLogin";
+            toolStripButtonSyncSqlite.Tag = "SyncSqlite";
+            toolStripButtonTactions.Tag = "Transactions";
+            toolStripButtonItems.Tag = "Items";
+            toolStripButtonShops.Tag = "Shops";
+            toolStripButtonPaymentMethods.Tag = "PaymentMethods";
+            toolStripButtonUsers.Tag = "Users";
+            toolStripButtonSellers.Tag = "Sellers";
+            toolStripButtonApplicationLog.Tag = "ApplicationLog";
+            toolStripButtonSettings.Tag = "Settings";
+            toolStripButtonLogin.Tag = "Login";
 
             this.toolStripMain.Items.AddRange(new ToolStripItem[] {
                 toolStripButtonSyncSqlite, separator1,
@@ -617,15 +613,19 @@ namespace InvoiceManager_DBFirst
             this.contextMenuStripTileView.Items.Add("Remove", BitmapResourceLoader.Remove, contextMenuStripTileView_remove);
         }
 
-        private void uncheckToolStripToggleButtonsExcept(ToolStripButton button)
+        private void uncheckToolStripToggleButtonsExcept(string buttonText)
         {
-            foreach (ToolStripItem item in this.toolStripMain.Items)
+            foreach ( ToolStripItem item in this.toolStripMain.Items)
             {
                 if (item.GetType() == typeof(ToolStripSeparator))
                     continue;
 
-                if (item != button)
+                if (item.Tag.ToString() != buttonText)
                     ((ToolStripButton)item).Checked = false;
+                else
+                {
+                    ((ToolStripButton)item).Checked = true;
+                }
             }
         }
 
