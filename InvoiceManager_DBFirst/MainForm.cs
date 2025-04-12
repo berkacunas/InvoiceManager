@@ -92,15 +92,8 @@ namespace InvoiceManager_DBFirst
             }
 
             this.initProfileCounts();
-            this.setPanelProfile();
+            this.setPanelProfileCounts();
             ((ToolStripButton)this.toolStripMain.Items[2]).Checked = true;  // Triggers a set of useful events. Replace of this.initializeTactionUserControl();
-        }
-
-        private void setPanelProfile()
-        {
-            this.labelProfileTransactionsVal.Text = $"{this._profileCounts["Taction"].ToString()} / {this._profileCounts["TactionDetail"].ToString()}";
-            this.labelProfileItemsVal.Text = $"{this._profileCounts["Item"].ToString()} / {this._profileCounts["ItemGroup"].ToString()} / {this._profileCounts["ItemTopGroup"].ToString()}";
-            this.labelProfileShopsVal.Text = $"{this._profileCounts["Shop"].ToString()} / {this._profileCounts["ShopGroup"].ToString()} / {this._profileCounts["ShopType"].ToString()}";
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -137,23 +130,6 @@ namespace InvoiceManager_DBFirst
         private void listViewActiveControls_MouseClick(object sender, MouseEventArgs e)
         {
             this.setSelectedListViewActiveControlsItem();
-        }
-
-        private void setSelectedListViewActiveControlsItem()
-        {
-            this.visibleUserControls(false);
-            
-            ListViewItem selectedItem = null;
-            if (this.listViewActiveControls.SelectedItems != null)
-            {
-                selectedItem = this.listViewActiveControls.SelectedItems[0];
-                this._lastSelectedListViewActiveControlsIndex = this.listViewActiveControls.SelectedIndices[0];
-            }
-
-            this.uncheckToolStripToggleButtonsExcept(selectedItem.Text);
-
-            UserControl userControl = this.selectUserControl(selectedItem.Text);
-            userControl.Visible = true;
         }
 
         private void listViewActiveControls_MouseUp(object sender, MouseEventArgs e)
@@ -484,6 +460,23 @@ namespace InvoiceManager_DBFirst
             activeItem.Selected = true;
         }
 
+        private void setSelectedListViewActiveControlsItem()
+        {
+            this.visibleUserControls(false);
+
+            ListViewItem selectedItem = null;
+            if (this.listViewActiveControls.SelectedItems != null)
+            {
+                selectedItem = this.listViewActiveControls.SelectedItems[0];
+                this._lastSelectedListViewActiveControlsIndex = this.listViewActiveControls.SelectedIndices[0];
+            }
+
+            this.uncheckToolStripToggleButtonsExcept(selectedItem.Text);
+
+            UserControl userControl = this.selectUserControl(selectedItem.Text);
+            userControl.Visible = true;
+        }
+
         private void removeActiveControlFromListView(string itemKey)
         {
             ListViewItem removedItem = listViewActiveControls.FindItemWithText(itemKey);
@@ -680,6 +673,13 @@ namespace InvoiceManager_DBFirst
             return this.dbContext.Database.Exists();
         }
 
+        private void setPanelProfileCounts()
+        {
+            this.labelProfileTransactionsVal.Text = $"{this._profileCounts["Taction"].ToString()} / {this._profileCounts["TactionDetail"].ToString()}";
+            this.labelProfileItemsVal.Text = $"{this._profileCounts["Item"].ToString()} / {this._profileCounts["ItemGroup"].ToString()} / {this._profileCounts["ItemTopGroup"].ToString()}";
+            this.labelProfileShopsVal.Text = $"{this._profileCounts["Shop"].ToString()} / {this._profileCounts["ShopGroup"].ToString()} / {this._profileCounts["ShopType"].ToString()}";
+        }
+
         private void initProfileCounts()
         {
             _profileCounts["Taction"] = dbContext.Taction.Count(r => r.id > 0);
@@ -749,7 +749,9 @@ namespace InvoiceManager_DBFirst
                 tactionUserControl.TransactionChanged += UserControl_ActionHandler;
                 tactionUserControl.TransactionFormClosed += UserControl_ActionHandler;
                 
-                tactionUserControl.TransactionSaved += tactionUserControl_TransactionSaved;
+                tactionUserControl.TransactionSave += tactionUserControl_TransactionSave;
+                tactionUserControl.TransactionUpdate += tactionUserControl_TransactionUpdate;
+                tactionUserControl.TransactionRemove += tactionUserControl_TransactionRemove;
                 this.placeHolder.Controls.Add(tactionUserControl);
             }
             else
@@ -948,11 +950,26 @@ namespace InvoiceManager_DBFirst
             this.addLog(actionType, message, eventTime);
         }
 
-        private void tactionUserControl_TransactionSaved(string actionType, string message, DateTime eventTime)
+        private void tactionUserControl_TransactionSave(Taction taction)
         {
-            this.updateTactionProfileCounts(1);
+            this.updateTactionProfileCounts(+1);
+            this.updateTactionDetailsProfileCounts(+taction.TactionDetails.Count);
+            this.setPanelProfileCounts();
+        }
+        private void tactionUserControl_TransactionUpdate(Taction newTaction, Taction oldTaction)
+        {
+            int diff = newTaction.TactionDetails.Count - oldTaction.TactionDetails.Count;
+            this.updateTactionDetailsProfileCounts(diff);
+            this.setPanelProfileCounts();
         }
 
+
+        private void tactionUserControl_TransactionRemove(Taction taction)
+        {
+            this.updateTactionProfileCounts(-1);
+            this.updateTactionDetailsProfileCounts(-taction.TactionDetails.Count);
+            this.setPanelProfileCounts();
+        }
 
         #endregion
 

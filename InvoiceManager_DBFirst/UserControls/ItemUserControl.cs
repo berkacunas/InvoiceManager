@@ -15,28 +15,29 @@ namespace InvoiceManager_DBFirst.UserControls
 {
     public partial class ItemUserControl : UserControl
     {
-        public event Notify ItemsLoaded;
-        public event Notify ItemSaved;
-        public event Notify ItemUpdated;
-        public event Notify ItemRemoved;
-
-        public event Notify ItemSubTypeSaved;
-        public event Notify ItemSubTypeUpdated;
-        public event Notify ItemSubTypeRemoved;
-
-        public event Notify ItemGroupsLoaded;
-        public event Notify ItemGroupSaved;
-        public event Notify ItemGroupUpdated;
-        public event Notify ItemGroupRemoved;
-
-        public event Notify ItemTopGroupsLoaded;
-        public event Notify ItemTopGroupSaved;
-        public event Notify ItemTopGroupUpdated;
-        public event Notify ItemTopGroupRemoved;
+        public event Notify ItemsLoad;
+        public event Notify ItemGroupLoad;
+        public event Notify ItemTopGroupLoad;
 
         public event Notify ItemChanged;
         public event Notify ItemFormOpened;
         public event Notify ItemFormClosed;
+
+        public event Notify ItemSave;
+        public event Notify ItemUpdate;
+        public event Notify ItemRemove;
+
+        public event Notify ItemSubTypeSave;
+        public event Notify ItemSubTypeUpdate;
+        public event Notify ItemSubTypeRemove;
+        
+        public event Notify ItemGroupSave;
+        public event Notify ItemGroupUpdate;
+        public event Notify ItemGroupRemove;
+        
+        public event Notify ItemTopGroupSave;
+        public event Notify ItemTopGroupUpdate;
+        public event Notify ItemTopGroupRemove;
 
         private InvoicesEntities dbContext;
 
@@ -1264,91 +1265,91 @@ namespace InvoiceManager_DBFirst.UserControls
 
         protected virtual void onItemsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemsLoaded?.Invoke(actionType, message, eventTime);
+            this.ItemsLoad?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemSaved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemSaved?.Invoke(actionType, message, eventTime);
+            this.ItemSave?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemUpdated?.Invoke(actionType, message, eventTime);
+            this.ItemUpdate?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemRemoved?.Invoke(actionType, message, eventTime);
+            this.ItemRemove?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemSubTypeSaved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemSubTypeSaved?.Invoke(actionType, message, eventTime);
+            this.ItemSubTypeSave?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemSubTypeUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemSubTypeUpdated?.Invoke(actionType, message, eventTime);
+            this.ItemSubTypeUpdate?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemSubTypeRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemSubTypeRemoved?.Invoke(actionType, message, eventTime);
+            this.ItemSubTypeRemove?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemGroupSaved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemGroupSaved?.Invoke(actionType, message, eventTime);
+            this.ItemGroupSave?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemGroupUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemGroupUpdated?.Invoke(actionType, message, eventTime);
+            this.ItemGroupUpdate?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemGroupsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemGroupsLoaded?.Invoke(actionType, message, eventTime);
+            this.ItemGroupLoad?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemGroupRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemGroupRemoved?.Invoke(actionType, message, eventTime);
+            this.ItemGroupRemove?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemTopGroupSaved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemTopGroupSaved?.Invoke(actionType, message, eventTime);
+            this.ItemTopGroupSave?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemTopGroupUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemTopGroupUpdated?.Invoke(actionType, message, eventTime);
+            this.ItemTopGroupUpdate?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemTopGroupsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemTopGroupsLoaded?.Invoke(actionType, message, eventTime);
+            this.ItemTopGroupLoad?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 
         protected virtual void onItemTopGroupRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.ItemTopGroupRemoved?.Invoke(actionType, message, eventTime);
+            this.ItemTopGroupRemove?.Invoke(actionType, message, eventTime);
             this.onItemChanged(actionType, message, eventTime);
         }
 

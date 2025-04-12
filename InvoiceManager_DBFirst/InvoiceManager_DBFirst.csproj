@@ -283,6 +283,7 @@
     </Compile>
     <Compile Include="Globals\Delegates.cs" />
     <Compile Include="Globals\Enumerations.cs" />
+    <Compile Include="Globals\Func.cs" />
     <Compile Include="Globals\ImageHelper.cs" />
     <Compile Include="InvoiceModel.Context.cs">
       <AutoGen>True</AutoGen>

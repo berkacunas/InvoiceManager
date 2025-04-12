@@ -14,14 +14,16 @@ namespace InvoiceManager_DBFirst.UserControls
 {
     public partial class TactionUserControl : UserControl
     {
-        public event Notify TransactionsLoaded;
-        public event Notify TransactionSaved;
-        public event Notify TransactionUpdated;
-        public event Notify TransactionRemoved;
-
-        public event Notify TransactionChanged;
+        public event Notify TransactionsLoad;
         public event Notify TransactionFormOpened;
         public event Notify TransactionFormClosed;
+
+        public event Notify TransactionChanged;
+        public event Notify TransactionDetailsChanged;
+
+        public event TactionHandler TransactionSave;
+        public event TactionUpdateHandler TransactionUpdate;
+        public event TactionHandler TransactionRemove;
 
         private ImageList _imageList;
 
@@ -227,7 +229,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onTransactionSaved("Transactions", $"New transaction id {this._newTaction.id} saved", DateTime.Now);
+                this.onTransactionSaved(this._newTaction);
             }
             catch (Exception ex)
             {
@@ -254,6 +256,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
             Taction taction = dbContext.Taction.Where(r => r.id == tactionId).Include(r => r.TactionDetails).FirstOrDefault();
+            Taction oldTaction = dbContext.Taction.Where(r => r.id == tactionId).Include(r => r.TactionDetails).AsNoTracking().FirstOrDefault();
 
             if (taction.TactionDetails.Count == 0)
             {
@@ -266,7 +269,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onTransactionUpdated("Transactions", $"Transaction id {taction.id} updated", DateTime.Now);
+                this.onTransactionUpdated(taction, oldTaction);
             }
             catch (Exception ex)
             {
@@ -289,6 +292,8 @@ namespace InvoiceManager_DBFirst.UserControls
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
             var taction = dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
 
+            this.onTransactionRemoved(taction);
+
             try
             {
                 var details = taction.TactionDetails.ToList();
@@ -300,7 +305,6 @@ namespace InvoiceManager_DBFirst.UserControls
 
                 dbContext.Taction.Remove(taction);
                 this.dbContext.SaveChanges();
-                this.onTransactionRemoved("Transactions", $"Transaction id {taction.id} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -1363,28 +1367,28 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region User-defined Event Handlers
 
-        protected virtual void onTransactionSaved(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.TransactionSaved?.Invoke(actionType, message, eventTime);
-            this.onTransactionChanged(actionType, message, eventTime);
-        }
-
-        protected virtual void onTransactionUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.TransactionUpdated?.Invoke(actionType, message, eventTime);
-            this.onTransactionChanged(actionType, message, eventTime);
-        }
-
         protected virtual void onTransactionsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.TransactionsLoaded?.Invoke(actionType, message, eventTime);
+            this.TransactionsLoad?.Invoke(actionType, message, eventTime);
             this.onTransactionChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onTransactionRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onTransactionSaved(Taction taction) //protected virtual method
         {
-            this.TransactionRemoved?.Invoke(actionType, message, eventTime);
-            this.onTransactionChanged(actionType, message, eventTime);
+            this.TransactionSave?.Invoke(taction);
+            this.onTransactionChanged("Transactions", $"New transaction id {taction.id}: {taction.Shop.Name} saved", DateTime.Now);
+        }
+
+        protected virtual void onTransactionUpdated(Taction newTaction, Taction oldTaction) //protected virtual method
+        {
+            this.TransactionUpdate?.Invoke(newTaction, oldTaction);
+            this.onTransactionChanged("Transactions", $"Transaction id {oldTaction.id}: {newTaction.Shop.Name} updated", DateTime.Now);
+        }
+
+        protected virtual void onTransactionRemoved(Taction taction) //protected virtual method
+        {
+            this.TransactionRemove?.Invoke(taction);
+            this.onTransactionChanged("Transactions", $"Transaction id {taction.id}: {taction.Shop.Name} removed", DateTime.Now);
         }
 
         protected virtual void onTransactionChanged(string actionType, string message, DateTime eventTime) //protected virtual method
