@@ -10,6 +10,7 @@ using InvoiceManager_DBFirst.UserControls;
 using InvoiceManager_DBFirst.Globals;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Data.SqlTypes;
+using System.IdentityModel.Tokens;
 
 namespace InvoiceManager_DBFirst
 {
@@ -25,6 +26,18 @@ namespace InvoiceManager_DBFirst
 
         private ToolStripStatusLabel _toolStripStatusLabelLiveDateTime; // Have to be accessed in class scope.
         private int _lastSelectedListViewActiveControlsIndex = -1;
+
+        private IDictionary<string, int> _profileCounts = new Dictionary<string, int>() 
+        {
+            { "Taction", 0 },
+            { "TactionDetail", 0 },
+            { "Item", 0 },
+            { "ItemGroup", 0 },
+            { "ItemTopGroup", 0 },
+            { "Shop", 0 },
+            { "ShopGroup", 0 },
+            { "ShopType", 0 },
+        };
 
 
         public MainForm()
@@ -69,8 +82,7 @@ namespace InvoiceManager_DBFirst
             this.createImageListActiveControlIcons();
             this.createListViewActiveControls();
             this.populateContextMenuStripTileView();
-            this.setPanelProfile();
-            
+
             this._timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
 
             if (!isDbConnectionExists())
@@ -78,15 +90,17 @@ namespace InvoiceManager_DBFirst
                 MessageBox.Show("Database connection doesn't exist.", "Database not found !", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+
+            this.initProfileCounts();
+            this.setPanelProfile();
             ((ToolStripButton)this.toolStripMain.Items[2]).Checked = true;  // Triggers a set of useful events. Replace of this.initializeTactionUserControl();
         }
 
         private void setPanelProfile()
         {
-            this.labelProfileTransactionsVal.Text = $"{dbContext.Taction.Count(r => r.id > 0)} / {dbContext.TactionDetails.Count(r => r.id > 0)}";
-            this.labelProfileItemsVal.Text = $"{dbContext.Item.Count(r => r.id > 0).ToString()} / {dbContext.ItemGroup.Count(r => r.id > 0).ToString()} / {dbContext.ItemTopGroup.Count(r => r.id > 0).ToString()}";
-            this.labelProfileShopsVal.Text = $"{dbContext.Shop.Count(r => r.id > 0).ToString()} / {dbContext.ShopGroup.Count(r => r.id > 0).ToString()} / {dbContext.ShopType.Count(r => r.id > 0).ToString()}";
+            this.labelProfileTransactionsVal.Text = $"{this._profileCounts["Taction"].ToString()} / {this._profileCounts["TactionDetail"].ToString()}";
+            this.labelProfileItemsVal.Text = $"{this._profileCounts["Item"].ToString()} / {this._profileCounts["ItemGroup"].ToString()} / {this._profileCounts["ItemTopGroup"].ToString()}";
+            this.labelProfileShopsVal.Text = $"{this._profileCounts["Shop"].ToString()} / {this._profileCounts["ShopGroup"].ToString()} / {this._profileCounts["ShopType"].ToString()}";
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -666,6 +680,58 @@ namespace InvoiceManager_DBFirst
             return this.dbContext.Database.Exists();
         }
 
+        private void initProfileCounts()
+        {
+            _profileCounts["Taction"] = dbContext.Taction.Count(r => r.id > 0);
+            _profileCounts["TactionDetail"] = dbContext.TactionDetails.Count(r => r.id > 0);
+            _profileCounts["Item"] = dbContext.Item.Count(r => r.id > 0);
+            _profileCounts["ItemGroup"] = dbContext.ItemGroup.Count(r => r.id > 0);
+            _profileCounts["ItemTopGroup"] = dbContext.ItemTopGroup.Count(r => r.id > 0);
+            _profileCounts["Shop"] = dbContext.Shop.Count(r => r.id > 0);
+            _profileCounts["ShopGroup"] = dbContext.ShopGroup.Count(r => r.id > 0);
+            _profileCounts["ShopType"] = dbContext.ShopType.Count(r => r.id > 0);
+        }
+
+        private void updateTactionProfileCounts(int val)
+        {
+            _profileCounts["Taction"] += val;
+        }
+
+        private void updateTactionDetailsProfileCounts(int val)
+        {
+            _profileCounts["TactionDetail"] += val;
+        }
+
+        private void updateItemProfileCounts(int val)
+        {
+            _profileCounts["Item"] += val;
+        }
+
+        private void updateItemGroupProfileCounts(int val)
+        {
+            _profileCounts["ItemGroup"] += val;
+        }
+
+        private void updateItemTopGroupProfileCounts(int val)
+        {
+            _profileCounts["ItemTopGroup"] += val;
+        }
+
+        private void updateShopProfileCounts(int val)
+        {
+            _profileCounts["Shop"] += val;
+        }
+
+        private void updateShopGroupProfileCounts(int val)
+        {
+            _profileCounts["ShopGroup"] += val;
+        }
+
+        private void updateShopTypeProfileCounts(int val)
+        {
+            _profileCounts["ShopType"] += val;
+        }
+
         #endregion
 
         #region Initialize User Controls
@@ -682,7 +748,8 @@ namespace InvoiceManager_DBFirst
                 tactionUserControl.TransactionFormOpened += UserControl_ActionHandler;
                 tactionUserControl.TransactionChanged += UserControl_ActionHandler;
                 tactionUserControl.TransactionFormClosed += UserControl_ActionHandler;
-
+                
+                tactionUserControl.TransactionSaved += tactionUserControl_TransactionSaved;
                 this.placeHolder.Controls.Add(tactionUserControl);
             }
             else
@@ -880,6 +947,12 @@ namespace InvoiceManager_DBFirst
         {
             this.addLog(actionType, message, eventTime);
         }
+
+        private void tactionUserControl_TransactionSaved(string actionType, string message, DateTime eventTime)
+        {
+            this.updateTactionProfileCounts(1);
+        }
+
 
         #endregion
 
