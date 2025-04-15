@@ -963,7 +963,6 @@ namespace InvoiceManager_DBFirst
             this.setPanelProfileCounts();
         }
 
-
         private void tactionUserControl_TransactionRemove(Taction taction)
         {
             this.updateTactionProfileCounts(-1);

@@ -19,7 +19,6 @@ namespace InvoiceManager_DBFirst.UserControls
         public event Notify TransactionFormClosed;
 
         public event Notify TransactionChanged;
-        public event Notify TransactionDetailsChanged;
 
         public event TactionHandler TransactionSave;
         public event TactionUpdateHandler TransactionUpdate;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.IdentityModel.Tokens;
 using System.Linq;
@@ -23,21 +24,21 @@ namespace InvoiceManager_DBFirst.UserControls
         public event Notify ItemFormOpened;
         public event Notify ItemFormClosed;
 
-        public event Notify ItemSave;
-        public event Notify ItemUpdate;
-        public event Notify ItemRemove;
+        public event ItemHandler ItemSave;
+        public event ItemUpdateHandler ItemUpdate;
+        public event ItemHandler ItemRemove;
 
-        public event Notify ItemSubTypeSave;
-        public event Notify ItemSubTypeUpdate;
-        public event Notify ItemSubTypeRemove;
+        public event ItemSubTypeHandler ItemSubTypeSave;
+        public event ItemSubTypeUpdateHandler ItemSubTypeUpdate;
+        public event ItemSubTypeHandler ItemSubTypeRemove;
         
-        public event Notify ItemGroupSave;
-        public event Notify ItemGroupUpdate;
-        public event Notify ItemGroupRemove;
+        public event ItemGroupHandler ItemGroupSave;
+        public event ItemGroupUpdateHandler ItemGroupUpdate;
+        public event ItemGroupHandler ItemGroupRemove;
         
-        public event Notify ItemTopGroupSave;
-        public event Notify ItemTopGroupUpdate;
-        public event Notify ItemTopGroupRemove;
+        public event ItemTopGroupHandler ItemTopGroupSave;
+        public event ItemTopGroupUpdateHandler ItemTopGroupUpdate;
+        public event ItemTopGroupHandler ItemTopGroupRemove;
 
         private InvoicesEntities dbContext;
 
@@ -362,7 +363,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemTopGroupSaved("ItemTopGroups", $"New item top group {this._newItemTopGroup.id}: {this._newItemTopGroup.Name} saved.", DateTime.Now);
+                this.onItemTopGroupSaved(this._newItemTopGroup);
             }
             catch (Exception ex)
             {
@@ -390,12 +391,14 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int itemTopGroupId = Convert.ToInt32(row.Cells["id"].Value);
             ItemTopGroup itemTopGroup = (ItemTopGroup)dbContext.ItemTopGroup.Where(r => r.id == itemTopGroupId).FirstOrDefault();
+            ItemTopGroup oldItemTopGroup = (ItemTopGroup)dbContext.ItemTopGroup.Where(r => r.id == itemTopGroupId).AsNoTracking().FirstOrDefault();
+
             this.setItemTopGroupDataFromUiToObject(itemTopGroup);
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemTopGroupUpdated("ItemTopGroups", $"Item top group {itemTopGroup.id}: {itemTopGroup.Name} updated.", DateTime.Now);
+                this.onItemTopGroupUpdated(itemTopGroup, oldItemTopGroup);
             }
             catch (Exception ex)
             {
@@ -453,12 +456,12 @@ namespace InvoiceManager_DBFirst.UserControls
                     return;
             }
 
+            this.onItemTopGroupRemoved(itemTopGroup);
             dbContext.ItemTopGroup.Remove(itemTopGroup);
 
             try
             {
                 dbContext.SaveChanges();
-                this.onItemTopGroupRemoved("ItemTopGroups", $"Item top group {itemTopGroup.id}: {itemTopGroup.Name} removed.", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -500,7 +503,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemGroupSaved("ItemGroups", $"New item group {this._newItemGroup.id}: {this._newItemGroup.Name} saved.", DateTime.Now);
+                this.onItemGroupSaved(this._newItemGroup);
             }
             catch (Exception ex)
             {
@@ -532,7 +535,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemGroupUpdated("ItemGroups", $"Item group {itemGroup.id}: {itemGroup.Name} updated.", DateTime.Now);
+                this.onItemGroupUpdated(itemGroup, oldItemGroup);
             }
             catch (Exception ex)
             {
@@ -579,12 +582,12 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
             }
 
+            this.onItemGroupRemoved(itemGroup);
             dbContext.ItemGroup.Remove(itemGroup);
 
             try
             {
                 dbContext.SaveChanges();
-                this.onItemGroupRemoved("ItemGroups", $"Item group {itemGroup.id}: {itemGroup.Name} removed.", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -627,7 +630,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemSaved("Items", $"New item {_newItem.id}: {_newItem.Name} saved", DateTime.Now);
+                this.onItemSaved(this._newItem);
             }
             catch (Exception ex)
             {
@@ -653,14 +656,14 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
             Item item = dbContext.Item.Where(r => r.id == itemId).FirstOrDefault();
+            Item oldItem = dbContext.Item.Where(r => r.id == itemId).AsNoTracking().FirstOrDefault();
 
             this.setItemDataFromUiToObject(item);
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemUpdated("Items", $"Item {item.id}: {item.Name} updated", DateTime.Now);
-
+                this.onItemUpdated(item, oldItem);
             }
             catch (Exception ex)
             {
@@ -682,13 +685,13 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
             Item item = this.dbContext.Item.Where(r => r.id == itemId).FirstOrDefault();
-
+            
+            this.onItemRemoved(item);
             dbContext.Item.Remove(item);
 
             try
             {
                 dbContext.SaveChanges();
-                this.onItemRemoved("Items", $"Item {item.id}: {item.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -754,7 +757,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemSubTypeSaved("ItemSubTypes", $"New item sub type {itemSubType.id}: {itemSubType.Name} saved", DateTime.Now);
+                this.onItemSubTypeSaved(itemSubType);
             }
             catch (Exception ex)
             {
@@ -847,6 +850,8 @@ namespace InvoiceManager_DBFirst.UserControls
             int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
             ItemSubType itemSubType = (ItemSubType)this.comboBoxItemSubTypeOptionsItemSubType.SelectedItem;
 
+            this.onItemSubTypeRemoved(itemSubType);
+
             ItemSubTypeDetails itemSubTypeDetails = this.dbContext.ItemSubTypeDetails.Where(r => r.ItemId == itemId && r.ItemSubTypeId == itemSubType.id).FirstOrDefault();
             this.dbContext.ItemSubTypeDetails.Remove(itemSubTypeDetails);
 
@@ -856,7 +861,6 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemSubTypeRemoved("ItemSubTypes", $"Item sub type {itemSubType.id}: {itemSubType.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -1269,52 +1273,52 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onItemChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onItemSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onItemSaved(Item item) //protected virtual method
         {
-            this.ItemSave?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
+            this.ItemSave?.Invoke(item);
+            this.onItemChanged("Items", $"New item {_newItem.id}: {_newItem.Name} saved", DateTime.Now);
         }
 
-        protected virtual void onItemUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onItemUpdated(Item newItem, Item oldItem) //protected virtual method
         {
-            this.ItemUpdate?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
+            this.ItemUpdate?.Invoke(newItem, oldItem);
+            this.onItemChanged("Items", $"Item {newItem.id}: {newItem.Name} updated", DateTime.Now);
         }
 
-        protected virtual void onItemRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onItemRemoved(Item item) //protected virtual method
         {
-            this.ItemRemove?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
+            this.ItemRemove?.Invoke(item);
+            this.onItemChanged("Items", $"Item {item.id}: {item.Name} removed", DateTime.Now);
         }
 
-        protected virtual void onItemSubTypeSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onItemSubTypeSaved(ItemSubType itemSubType) //protected virtual method
         {
-            this.ItemSubTypeSave?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
+            this.ItemSubTypeSave?.Invoke(itemSubType);
+            this.onItemChanged("ItemSubTypes", $"New item sub type {itemSubType.id}: {itemSubType.Name} saved", DateTime.Now);
         }
 
-        protected virtual void onItemSubTypeUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onItemSubTypeUpdated(ItemSubType newSubType, ItemSubType oldSubType) //protected virtual method
         {
-            this.ItemSubTypeUpdate?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
+            this.ItemSubTypeUpdate?.Invoke(newSubType, oldSubType);
+            this.onItemChanged("ItemSubTypes", $"Item sub type {newSubType.id}: {newSubType.Name} updated", DateTime.Now);
         }
 
-        protected virtual void onItemSubTypeRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onItemSubTypeRemoved(ItemSubType itemSubType) //protected virtual method
         {
-            this.ItemSubTypeRemove?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
+            this.ItemSubTypeRemove?.Invoke(itemSubType);
+            this.onItemChanged("ItemSubTypes", $"Item sub type {itemSubType.id}: {itemSubType.Name} removed", DateTime.Now);
         }
 
-        protected virtual void onItemGroupSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onItemGroupSaved(ItemGroup itemGroup) //protected virtual method
         {
-            this.ItemGroupSave?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
+            this.ItemGroupSave?.Invoke(itemGroup);
+            this.onItemChanged("ItemGroups", $"New item group {itemGroup.id}: {itemGroup.Name} saved.", DateTime.Now);
         }
 
-        protected virtual void onItemGroupUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onItemGroupUpdated(ItemGroup newItemGroup, ItemGroup oldItemGroup) //protected virtual method
         {
-            this.ItemGroupUpdate?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
+            this.ItemGroupUpdate?.Invoke(newItemGroup, oldItemGroup);
+            this.onItemChanged("ItemGroups", $"Item group {newItemGroup.id}: {newItemGroup.Name} updated.", DateTime.Now);
         }
 
         protected virtual void onItemGroupsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
@@ -1323,22 +1327,10 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onItemChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onItemGroupRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onItemGroupRemoved(ItemGroup itemGroup) //protected virtual method
         {
-            this.ItemGroupRemove?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
-        }
-
-        protected virtual void onItemTopGroupSaved(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.ItemTopGroupSave?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
-        }
-
-        protected virtual void onItemTopGroupUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.ItemTopGroupUpdate?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
+            this.ItemGroupRemove?.Invoke(itemGroup);
+            this.onItemChanged("ItemGroups", $"Item group {itemGroup.id}: {itemGroup.Name} removed.", DateTime.Now);
         }
 
         protected virtual void onItemTopGroupsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
@@ -1347,10 +1339,22 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onItemChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onItemTopGroupRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onItemTopGroupSaved(ItemTopGroup itemTopGroup) //protected virtual method
         {
-            this.ItemTopGroupRemove?.Invoke(actionType, message, eventTime);
-            this.onItemChanged(actionType, message, eventTime);
+            this.ItemTopGroupSave?.Invoke(itemTopGroup);
+            this.onItemChanged("ItemTopGroups", $"New item top group {itemTopGroup.id}: {itemTopGroup.Name} saved.", DateTime.Now);
+        }
+
+        protected virtual void onItemTopGroupUpdated(ItemTopGroup newItemTopGroup, ItemTopGroup oldItemTopGroup) //protected virtual method
+        {
+            this.ItemTopGroupUpdate?.Invoke(newItemTopGroup, oldItemTopGroup);
+            this.onItemChanged("ItemTopGroups", $"Item top group {newItemTopGroup.id}: {newItemTopGroup.Name} updated.", DateTime.Now);
+        }
+
+        protected virtual void onItemTopGroupRemoved(ItemTopGroup itemTopGroup) //protected virtual method
+        {
+            this.ItemTopGroupRemove?.Invoke(itemTopGroup);
+            this.onItemChanged("ItemTopGroups", $"Item top group {itemTopGroup.id}: {itemTopGroup.Name} removed.", DateTime.Now);
         }
 
         protected virtual void onItemChanged(string actionType, string message, DateTime eventTime)
