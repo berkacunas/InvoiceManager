@@ -74,6 +74,12 @@ namespace InvoiceManager_DBFirst
             this.splitContainerMain.SplitterDistance = 225;
             this.panelProfile.Height = 250;
 
+            this.richTextBox1.Text = "Default";
+
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.ReadOnly = true;
+            
+
             this.arrangePictureBoxUserProfile();
 
             this.loadToolStripMenuItemIcons();
@@ -660,7 +666,7 @@ namespace InvoiceManager_DBFirst
         private void clearPanelProfile()
         {
             this.pictureBoxUserProfile.Image = BitmapResourceLoader.DefaultUser;
-            this.labelActiveProfileText.Text = string.Empty;
+            this.richTextBox1.Text = string.Empty;
         }
 
         private string createFullname(string firstName, string lastName)
@@ -917,7 +923,7 @@ namespace InvoiceManager_DBFirst
                 {
                     try
                     {
-                        labelActiveProfileText.Text = user.Fullname;
+                        this.richTextBox1.Text = user.Fullname;
                         byte[] imageData = this.dbContext.UserImage.Where(r => r.userId == user.id && r.isDefault).FirstOrDefault().imageData;
                         this.pictureBoxUserProfile.Image = ImageHelper.GetImageFromBytes(imageData);
                     }
@@ -929,7 +935,7 @@ namespace InvoiceManager_DBFirst
                 }
                 else
                 {
-                    labelActiveProfileText.Text = "Please create a user from User window.";
+                    this.richTextBox1.Text = "Please create a user from User window.";
                 }
             }   
             else
