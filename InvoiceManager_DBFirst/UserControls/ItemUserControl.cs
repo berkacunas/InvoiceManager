@@ -529,6 +529,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int groupId = Convert.ToInt32(row.Cells["itemGroupId"].Value);
             ItemGroup itemGroup = dbContext.ItemGroup.Where(r => r.id == groupId).FirstOrDefault();
+            ItemGroup oldItemGroup = dbContext.ItemGroup.Where(r => r.id == groupId).AsNoTracking().FirstOrDefault();
 
             this.setItemGroupDataFromUiToObject(itemGroup);
 
@@ -798,6 +799,8 @@ namespace InvoiceManager_DBFirst.UserControls
             }
 
             ItemSubType itemSubType = this.dbContext.ItemSubType.Where(r => r.Name == itemSubTypeName).FirstOrDefault();
+            ItemSubType oldItemSubType = this.dbContext.ItemSubType.Where(r => r.Name == itemSubTypeName).AsNoTracking().FirstOrDefault();
+
             if (itemSubType != null)
             {
                 if (this.dbContext.ItemSubTypeDetails.Any(r => r.ItemId == itemId && r.ItemSubTypeId == itemSubType.id))
@@ -819,7 +822,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onItemSubTypeUpdated("ItemSubTypes", $"Item sub type {itemSubType.id}: {itemSubType.Name} updated", DateTime.Now);
+                this.onItemSubTypeUpdated(itemSubType, oldItemSubType);
 
             }
             catch (Exception ex)

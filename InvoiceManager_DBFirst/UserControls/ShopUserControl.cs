@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,19 +16,20 @@ namespace InvoiceManager_DBFirst.UserControls
     public partial class ShopUserControl : UserControl
     {
         public event Notify ShopsLoaded;
-        public event Notify ShopSaved;
-        public event Notify ShopUpdated;
-        public event Notify ShopRemoved;
-
         public event Notify ShopGroupsLoaded;
-        public event Notify ShopGroupSaved;
-        public event Notify ShopGroupUpdated;
-        public event Notify ShopGroupRemoved;
-
         public event Notify ShopTypesLoaded;
-        public event Notify ShopTypeSaved;
-        public event Notify ShopTypeUpdated;
-        public event Notify ShopTypeRemoved;
+
+        public event ShopHandler ShopSaved;
+        public event ShopUpdateHandler ShopUpdated;
+        public event ShopHandler ShopRemoved;
+
+        public event ShopGroupHandler ShopGroupSaved;
+        public event ShopGroupUpdateHandler ShopGroupUpdated;
+        public event ShopGroupHandler ShopGroupRemoved;
+
+        public event ShopTypeHandler ShopTypeSaved;
+        public event ShopTypeUpdateHandler ShopTypeUpdated;
+        public event ShopTypeHandler ShopTypeRemoved;
 
         public event Notify ShopChanged;
         public event Notify ShopFormOpened;
@@ -371,7 +373,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopTypeSaved("ShopTypes", $"New shop type {this._newShopType.id}: {this._newShopType.Name} saved", DateTime.Now);
+                this.onShopTypeSaved(this._newShopType);
             }
             catch (Exception ex)
             {
@@ -406,12 +408,14 @@ namespace InvoiceManager_DBFirst.UserControls
             string shopTypeName = row.Cells["shopTypeName"].Value.ToString();
 
             ShopType shopType = this.dbContext.ShopType.Where(r => r.id == shopTypeId).FirstOrDefault();
+            ShopType oldShopType = this.dbContext.ShopType.Where(r => r.id == shopTypeId).AsNoTracking().FirstOrDefault();
+
             this.setShopTypeDataFromUiToObject(shopType);
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopTypeUpdated("ShopTypes", $"Shop type {shopType.id}: {shopType.Name} updated", DateTime.Now);
+                this.onShopTypeUpdated(shopType, oldShopType);
 
             }
             catch (Exception ex)
@@ -458,12 +462,12 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
             }
 
+            this.onShopTypeRemoved(shopType);
             dbContext.ShopType.Remove(shopType);
 
             try
             {
                 dbContext.SaveChanges();
-                this.onShopTypeRemoved("ShopTypes", $"Shop type {shopType.id}: {shopType.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -506,7 +510,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopGroupSaved("ShopGroups", $"New shop group {_newShopGroup.id}: {_newShopGroup.Name} saved.", DateTime.Now);
+                this.onShopGroupSaved(this._newShopGroup);
             }
             catch (Exception ex)
             {
@@ -532,13 +536,14 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int groupId = Convert.ToInt32(row.Cells["shopGroupId"].Value);
             ShopGroup shopGroup = dbContext.ShopGroup.Where(r => r.id == groupId).FirstOrDefault();
+            ShopGroup oldShopGroup = dbContext.ShopGroup.Where(r => r.id == groupId).AsNoTracking().FirstOrDefault();
 
             this.setShopGroupDataFromUiToObject(shopGroup);
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopGroupUpdated("ShopGroups", $"Shop group {shopGroup.id}: {shopGroup.Name} updated", DateTime.Now);
+                this.onShopGroupUpdated(shopGroup, oldShopGroup);
             }
             catch (Exception ex)
             {
@@ -584,12 +589,12 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
             }
 
+            this.onShopGroupRemoved(shopGroup);
             dbContext.ShopGroup.Remove(shopGroup);
 
             try
             {
                 dbContext.SaveChanges();
-                this.onShopGroupRemoved("ShopGroups", $"Shop group {shopGroup.id}: {shopGroup.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -630,7 +635,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopSaved("Shops", $"New shop {_newShop.id}: {_newShop.Name} saved", DateTime.Now);
+                this.onShopSaved(this._newShop);
             }
             catch (Exception ex)
             {
@@ -656,13 +661,14 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int shopId = Convert.ToInt32(row.Cells["shopId"].Value);
             Shop shop = dbContext.Shop.Where(r => r.id == shopId).FirstOrDefault();
+            Shop oldShop = dbContext.Shop.Where(r => r.id == shopId).AsNoTracking().FirstOrDefault();
 
             this.setShopDataFromUiToObject(shop);
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onShopSaved("Shops", $"Shop {shop.id}: {shop.Name} updated", DateTime.Now);
+                this.onShopUpdated(shop, oldShop);
             }
             catch (Exception ex)
             {
@@ -685,12 +691,12 @@ namespace InvoiceManager_DBFirst.UserControls
             int shopId = Convert.ToInt32(row.Cells["shopId"].Value);
             Shop shop = this.dbContext.Shop.Where(r => r.id == shopId).FirstOrDefault();
 
+            this.onShopRemoved(shop);
             this.dbContext.Shop.Remove(shop);
 
             try
             {
-                this.dbContext.SaveChanges();
-                this.onShopSaved("Shops", $"Shop {shop.id}: {shop.Name} removed", DateTime.Now);
+                this.dbContext.SaveChanges();   
             }
             catch (Exception ex)
             {
@@ -1006,22 +1012,22 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopTypeSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopTypeSaved(ShopType shopType) //protected virtual method
         {
-            this.ShopTypeSaved?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
+            this.ShopTypeSaved?.Invoke(shopType);
+            this.onShopChanged("ShopTypes", $"New shop type {shopType.id}: {shopType.Name} saved", DateTime.Now);
         }
 
-        protected virtual void onShopTypeUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopTypeUpdated(ShopType newShopType, ShopType oldShopType) //protected virtual method
         {
-            this.ShopTypeUpdated?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
+            this.ShopTypeUpdated?.Invoke(newShopType, oldShopType);
+            this.onShopChanged("ShopTypes", $"Shop type {newShopType.id}: {newShopType.Name} updated", DateTime.Now);
         }
 
-        protected virtual void onShopTypeRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopTypeRemoved(ShopType shopType) //protected virtual method
         {
-            this.ShopTypeRemoved?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
+            this.ShopTypeRemoved?.Invoke(shopType);
+            this.onShopChanged("ShopTypes", $"Shop type {shopType.id}: {shopType.Name} removed", DateTime.Now);
         }
 
         protected virtual void onShopGroupsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
@@ -1030,22 +1036,22 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopGroupSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopGroupSaved(ShopGroup shopGroup) //protected virtual method
         {
-            this.ShopGroupSaved?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
+            this.ShopGroupSaved?.Invoke(shopGroup);
+            this.onShopChanged("ShopGroups", $"New shop group {shopGroup.id}: {shopGroup.Name} saved.", DateTime.Now);
         }
 
-        protected virtual void onShopGroupUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopGroupUpdated(ShopGroup newShopGroup, ShopGroup oldShopGroup) //protected virtual method
         {
-            this.ShopGroupUpdated?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
+            this.ShopGroupUpdated?.Invoke(newShopGroup, oldShopGroup);
+            this.onShopChanged("ShopGroups", $"Shop group {newShopGroup.id}: {oldShopGroup.Name} updated", DateTime.Now);
         }
 
-        protected virtual void onShopGroupRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopGroupRemoved(ShopGroup shopGroup) //protected virtual method
         {
-            this.ShopGroupRemoved?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
+            this.ShopGroupRemoved?.Invoke(shopGroup);
+            this.onShopChanged("ShopGroups", $"Shop group {shopGroup.id}: {shopGroup.Name} removed", DateTime.Now);
         }
 
         protected virtual void onShopsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
@@ -1054,22 +1060,22 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onShopChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onShopSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopSaved(Shop shop) //protected virtual method
         {
-            this.ShopSaved?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
+            this.ShopSaved?.Invoke(shop);
+            this.onShopChanged("Shops", $"New shop {shop.id}: {shop.Name} saved", DateTime.Now);
         }
 
-        protected virtual void onShopUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopUpdated(Shop newShop, Shop oldShop) //protected virtual method
         {
-            this.ShopUpdated?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
+            this.ShopUpdated?.Invoke(newShop, oldShop);
+            this.onShopChanged("Shops", $"Shop {newShop.id}: {oldShop.Name} updated", DateTime.Now);
         }
 
-        protected virtual void onShopRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onShopRemoved(Shop shop) //protected virtual method
         {
-            this.ShopRemoved?.Invoke(actionType, message, eventTime);
-            this.onShopChanged(actionType, message, eventTime);
+            this.ShopRemoved?.Invoke(shop);
+            this.onShopChanged("Shops", $"Shop {shop.id}: {shop.Name} removed", DateTime.Now);
         }
         
         protected virtual void onShopChanged(string actionType, string message, DateTime eventTime)

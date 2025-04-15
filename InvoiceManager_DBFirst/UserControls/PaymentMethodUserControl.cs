@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -16,14 +17,15 @@ namespace InvoiceManager_DBFirst.UserControls
     public partial class PaymentMethodUserControl : UserControl
     {
         public event Notify BankCardsLoaded;
-        public event Notify BankCardSaved;
-        public event Notify BankCardUpdated;
-        public event Notify BankCardRemoved;
-
         public event Notify PaymentMethodsLoaded;
-        public event Notify PaymentMethodSaved;
-        public event Notify PaymentMethodUpdated;
-        public event Notify PaymentMethodRemoved;
+
+        public event BankCardHandler BankCardSaved;
+        public event BankCardUpdateHandler BankCardUpdated;
+        public event BankCardHandler BankCardRemoved;
+
+        public event PaymentMethodHandler PaymentMethodSaved;
+        public event PaymentMethodUpdateHandler PaymentMethodUpdated;
+        public event PaymentMethodHandler PaymentMethodRemoved;
 
         public event Notify DataChanged;
         public event Notify PaymentMethodFormOpened;
@@ -286,7 +288,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onBankCardSaved("BankCards", $"New bank card {_newBankCard.id}: {_newBankCard.Name} saved", DateTime.Now);
+                this.onBankCardSaved(this._newBankCard);
             }
             catch (Exception ex)
             {
@@ -313,13 +315,14 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int bankCardId = Convert.ToInt32(row.Cells["bankCardId"].Value);
             BankCard bankCard = dbContext.BankCard.Where(r => r.id == bankCardId).FirstOrDefault();
+            BankCard oldBankCard = dbContext.BankCard.Where(r => r.id == bankCardId).AsNoTracking().FirstOrDefault();
 
             this._setBankCardDataFromUiToObject(bankCard);
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onBankCardUpdated("BankCards", $"Bank card {bankCard.id}: {bankCard.Name} updated", DateTime.Now);
+                this.onBankCardUpdated(bankCard, oldBankCard);
             }
             catch (Exception ex)
             {
@@ -342,12 +345,12 @@ namespace InvoiceManager_DBFirst.UserControls
             int bankCardId = Convert.ToInt32(row.Cells["bankCardId"].Value);
             BankCard bankCard = dbContext.BankCard.Where(r => r.id == bankCardId).FirstOrDefault();
 
+            this.onBankCardRemoved(bankCard);
             dbContext.BankCard.Remove(bankCard);
 
             try
             {
                 dbContext.SaveChanges();
-                this.onBankCardRemoved("BankCards", $"Bank card {bankCard.id}: {bankCard.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -393,7 +396,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onPaymentMethodSaved("PaymentMethods", $"Payment method {_newPaymentMethod.id}: {_newPaymentMethod.Name} saved", DateTime.Now);
+                this.onPaymentMethodSaved(this._newPaymentMethod);
             }
             catch (Exception ex)
             {
@@ -419,13 +422,14 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int paymentMethodId = Convert.ToInt32(row.Cells["paymentMethodId"].Value);
             PaymentMethod paymentMethod = this.dbContext.PaymentMethod.Where(r => r.id == paymentMethodId).FirstOrDefault();
+            PaymentMethod oldPaymentMethod = this.dbContext.PaymentMethod.Where(r => r.id == paymentMethodId).AsNoTracking().FirstOrDefault();
 
             this._setPaymentMethodDataFromUiToObject(paymentMethod);
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onPaymentMethodUpdated("PaymentMethods", $"Payment method {paymentMethod.id}: {paymentMethod.Name} updated", DateTime.Now);
+                this.onPaymentMethodUpdated(paymentMethod, oldPaymentMethod);
             }
             catch (Exception ex)
             {
@@ -463,12 +467,12 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
             }
 
+            this.onPaymentMethodRemoved(paymentMethod);
             dbContext.PaymentMethod.Remove(paymentMethod);
 
             try
             {
                 dbContext.SaveChanges();
-                this.onPaymentMethodRemoved("PaymentMethods", $"Payment method {paymentMethod.id}: {paymentMethod.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -835,22 +839,22 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onDataChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onBankCardSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onBankCardSaved(BankCard bankCard) //protected virtual method
         {
-            this.BankCardSaved?.Invoke(actionType, message, eventTime);
-            this.onDataChanged(actionType, message, eventTime);
+            this.BankCardSaved?.Invoke(bankCard);
+            this.onDataChanged("BankCards", $"New bank card {bankCard.id}: {bankCard.Name} saved", DateTime.Now);
         }
 
-        protected virtual void onBankCardUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onBankCardUpdated(BankCard newBankCard, BankCard oldBankCard) //protected virtual method
         {
-            this.BankCardUpdated?.Invoke(actionType, message, eventTime);
-            this.onDataChanged(actionType, message, eventTime);
+            this.BankCardUpdated?.Invoke(newBankCard, oldBankCard);
+            this.onDataChanged("BankCards", $"Bank card {newBankCard.id}: {newBankCard.Name} updated", DateTime.Now);
         }
 
-        protected virtual void onBankCardRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onBankCardRemoved(BankCard bankCard) //protected virtual method
         {
-            this.BankCardRemoved?.Invoke(actionType, message, eventTime);
-            this.onDataChanged(actionType, message, eventTime);
+            this.BankCardRemoved?.Invoke(bankCard);
+            this.onDataChanged("BankCards", $"Bank card {bankCard.id}: {bankCard.Name} removed", DateTime.Now);
         }
 
         protected virtual void onPaymentMethodsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
@@ -859,22 +863,22 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onDataChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onPaymentMethodSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onPaymentMethodSaved(PaymentMethod paymentMethod) //protected virtual method
         {
-            this.PaymentMethodSaved?.Invoke(actionType, message, eventTime);
-            this.onDataChanged(actionType, message, eventTime);
+            this.PaymentMethodSaved?.Invoke(paymentMethod);
+            this.onDataChanged("PaymentMethods", $"Payment method {paymentMethod.id}: {paymentMethod.Name} saved", DateTime.Now);
         }
 
-        protected virtual void onPaymentMethodUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onPaymentMethodUpdated(PaymentMethod newPaymentMethod, PaymentMethod oldPaymentMethod) //protected virtual method
         {
-            this.PaymentMethodUpdated?.Invoke(actionType, message, eventTime);
-            this.onDataChanged(actionType, message, eventTime);
+            this.PaymentMethodUpdated?.Invoke(newPaymentMethod, oldPaymentMethod);
+            this.onDataChanged("PaymentMethods", $"Payment method {newPaymentMethod.id}: {newPaymentMethod.Name} updated", DateTime.Now);
         }
 
-        protected virtual void onPaymentMethodRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onPaymentMethodRemoved(PaymentMethod paymentMethod) //protected virtual method
         {
-            this.PaymentMethodRemoved?.Invoke(actionType, message, eventTime);
-            this.onDataChanged(actionType, message, eventTime);
+            this.PaymentMethodRemoved?.Invoke(paymentMethod);
+            this.onDataChanged("PaymentMethods", $"Payment method {paymentMethod.id}: {paymentMethod.Name} removed", DateTime.Now);
         }
 
         protected virtual void onDataChanged(string actionType, string message, DateTime eventTime)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,9 +16,10 @@ namespace InvoiceManager_DBFirst.UserControls
     public partial class SellerUserControl : UserControl
     {
         public event Notify SellersLoaded;
-        public event Notify SellerSaved;
-        public event Notify SellerUpdated;
-        public event Notify SellerRemoved;
+
+        public event SellerHandler SellerSaved;
+        public event SellerUpdateHandler SellerUpdated;
+        public event SellerHandler SellerRemoved;
 
         public event Notify SellerChanged;
         public event Notify SellerFormOpened;
@@ -168,7 +170,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onSellerSaved("Sellers", $"New seller {_newSeller.id}: {_newSeller.Name} saved", DateTime.Now);
+                this.onSellerSaved(this._newSeller);
             }
             catch (Exception ex)
             {
@@ -194,13 +196,14 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int sellerId = Convert.ToInt32(row.Cells["sellerId"].Value);
             Seller seller = dbContext.Seller.Where(r => r.id == sellerId).FirstOrDefault();
+            Seller oldSeller = dbContext.Seller.Where(r => r.id == sellerId).AsNoTracking().FirstOrDefault();
 
             this.setSellerDataFromUiToObject(seller);
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onSellerUpdated("Sellers", $"Seller {seller.id}: {seller.Name} updated", DateTime.Now);
+                this.onSellerUpdated(seller, oldSeller);
             }
             catch (Exception ex)
             {
@@ -243,12 +246,12 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
             }
 
+            this.onSellerRemoved(seller);
             this.dbContext.Seller.Remove(seller);
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onSellerRemoved("Sellers", $"Seller {seller.id}: {seller.Name} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -353,22 +356,22 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onSellerChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onSellerSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onSellerSaved(Seller seller) //protected virtual method
         {
-            this.SellerSaved?.Invoke(actionType, message, eventTime);
-            this.onSellerChanged(actionType, message, eventTime);
+            this.SellerSaved?.Invoke(seller);
+            this.onSellerChanged("Sellers", $"New seller {seller.id}: {seller.Name} saved", DateTime.Now);
         }
 
-        protected virtual void onSellerUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onSellerUpdated(Seller newSeller, Seller oldSeller) //protected virtual method
         {
-            this.SellerUpdated?.Invoke(actionType, message, eventTime);
-            this.onSellerChanged(actionType, message, eventTime);
+            this.SellerUpdated?.Invoke(newSeller, oldSeller);
+            this.onSellerChanged("Sellers", $"Seller {newSeller.id}: {newSeller.Name} updated", DateTime.Now);
         }
 
-        protected virtual void onSellerRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onSellerRemoved(Seller seller) //protected virtual method
         {
-            this.SellerRemoved?.Invoke(actionType, message, eventTime);
-            this.onSellerChanged(actionType, message, eventTime);
+            this.SellerRemoved?.Invoke(seller);
+            this.onSellerChanged("Sellers", $"Seller {seller.id}: {seller.Name} removed", DateTime.Now);
         }
 
         protected virtual void onSellerChanged(string actionType, string message, DateTime eventTime)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -17,9 +18,9 @@ namespace InvoiceManager_DBFirst.UserControls
     public partial class UserUserControl : UserControl
     {
         public event Notify UsersLoaded;
-        public event Notify UserSaved;
-        public event Notify UserUpdated;
-        public event Notify UserRemoved;
+        public event UserHandler UserSaved;
+        public event UserUpdateHandler UserUpdated;
+        public event UserHandler UserRemoved;
 
         public event Notify UserChanged;
         public event Notify UserFormOpened;
@@ -206,7 +207,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onUserSaved("Users", $"New user {_newUser.id}: {_newUser.Fullname} saved", DateTime.Now);
+                this.onUserSaved(this._newUser);
             }
             catch (Exception ex)
             {
@@ -232,13 +233,14 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int userId = Convert.ToInt32(row.Cells["userId"].Value);
             User user = dbContext.User.Where(r => r.id == userId).FirstOrDefault();
+            User oldUser = dbContext.User.Where(r => r.id == userId).AsNoTracking().FirstOrDefault();
 
             this._setUserDataFromUiToObject(user);
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onUserUpdated("Users", $"User {user.id}: {user.Fullname} updated", DateTime.Now);
+                this.onUserUpdated(user, oldUser);
 
             }
             catch (Exception ex)
@@ -280,9 +282,9 @@ namespace InvoiceManager_DBFirst.UserControls
                     dbContext.UserImage.Remove(userImage);
                 }
 
+                this.onUserRemoved(user);
                 dbContext.User.Remove(user);
                 dbContext.SaveChanges();
-                this.onUserRemoved("Users", $"User {user.id}: {user.Fullname} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -663,22 +665,22 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onUserChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onUserSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onUserSaved(User user) //protected virtual method
         {
-            this.UserSaved?.Invoke(actionType, message, eventTime);
-            this.onUserChanged(actionType, message, eventTime);
+            this.UserSaved?.Invoke(user);
+            this.onUserChanged("Users", $"New user {user.id}: {user.Fullname} saved", DateTime.Now);
         }
 
-        protected virtual void onUserUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onUserUpdated(User newUser, User oldUser) //protected virtual method
         {
-            this.UserUpdated?.Invoke(actionType, message, eventTime);
-            this.onUserChanged(actionType, message, eventTime);
+            this.UserUpdated?.Invoke(newUser, oldUser);
+            this.onUserChanged("Users", $"User {newUser.id}: {newUser.Fullname} updated", DateTime.Now);
         }
 
-        protected virtual void onUserRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onUserRemoved(User user) //protected virtual method
         {
-            this.UserRemoved?.Invoke(actionType, message, eventTime);
-            this.onUserChanged(actionType, message, eventTime);
+            this.UserRemoved?.Invoke(user);
+            this.onUserChanged("Users", $"User {user.id}: {user.Fullname} removed", DateTime.Now);
         }
 
         protected virtual void onUserChanged(string actionType, string message, DateTime eventTime)
