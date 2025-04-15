@@ -1093,7 +1093,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
         private void setItemTopGroupControls(DataGridViewRow row)
         {
-            int topGroupId = Convert.ToInt32(row.Cells["id"].Value);
+            int topGroupId = Convert.ToInt32(row.Cells["itemTopGroupId"].Value);
             this.bindDataComboBoxTopGroupOptionsTopGroup(BindType.Where, topGroupId);
         }
 
