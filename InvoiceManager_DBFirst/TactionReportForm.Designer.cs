@@ -38,12 +38,12 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewTactionReport = new System.Windows.Forms.DataGridView();
             this.groupBoxReportType = new System.Windows.Forms.GroupBox();
-            this.comboBoxReportType = new System.Windows.Forms.ComboBox();
-            this.labelReportBy = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.textBoxTotalPrice = new System.Windows.Forms.TextBox();
             this.labelTotalPrice = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.comboBoxReportType = new System.Windows.Forms.ComboBox();
+            this.labelReportBy = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTactionReport)).BeginInit();
             this.groupBoxReportType.SuspendLayout();
@@ -53,7 +53,7 @@
             // 
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(626, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(686, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip";
             // 
@@ -64,7 +64,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(626, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(686, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip";
             // 
@@ -84,34 +84,34 @@
             this.toolStripMenuItemExcel,
             this.toolStripMenuItemEmail});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.exportToolStripMenuItem.Text = "Export as...";
             // 
             // toolStripMenuItemTextFile
             // 
             this.toolStripMenuItemTextFile.Name = "toolStripMenuItemTextFile";
-            this.toolStripMenuItemTextFile.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemTextFile.Size = new System.Drawing.Size(116, 22);
             this.toolStripMenuItemTextFile.Text = "Text File";
             this.toolStripMenuItemTextFile.Click += new System.EventHandler(this.toolStripMenuItemTextFile_Click);
             // 
             // toolStripMenuItemExcel
             // 
             this.toolStripMenuItemExcel.Name = "toolStripMenuItemExcel";
-            this.toolStripMenuItemExcel.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemExcel.Size = new System.Drawing.Size(116, 22);
             this.toolStripMenuItemExcel.Text = "Excel";
             this.toolStripMenuItemExcel.Click += new System.EventHandler(this.toolStripMenuItemExcel_Click);
             // 
             // toolStripMenuItemEmail
             // 
             this.toolStripMenuItemEmail.Name = "toolStripMenuItemEmail";
-            this.toolStripMenuItemEmail.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemEmail.Size = new System.Drawing.Size(116, 22);
             this.toolStripMenuItemEmail.Text = "E-mail";
             this.toolStripMenuItemEmail.Click += new System.EventHandler(this.toolStripMenuItemEmail_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -121,7 +121,7 @@
             this.dataGridViewTactionReport.Location = new System.Drawing.Point(13, 104);
             this.dataGridViewTactionReport.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridViewTactionReport.Name = "dataGridViewTactionReport";
-            this.dataGridViewTactionReport.Size = new System.Drawing.Size(603, 494);
+            this.dataGridViewTactionReport.Size = new System.Drawing.Size(660, 494);
             this.dataGridViewTactionReport.TabIndex = 2;
             // 
             // groupBoxReportType
@@ -136,9 +136,48 @@
             this.groupBoxReportType.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBoxReportType.Name = "groupBoxReportType";
             this.groupBoxReportType.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBoxReportType.Size = new System.Drawing.Size(603, 46);
+            this.groupBoxReportType.Size = new System.Drawing.Size(660, 46);
             this.groupBoxReportType.TabIndex = 3;
             this.groupBoxReportType.TabStop = false;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(361, 16);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(26, 24);
+            this.button2.TabIndex = 7;
+            this.button2.Text = ">";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(328, 15);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(26, 24);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "<";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // textBoxTotalPrice
+            // 
+            this.textBoxTotalPrice.Location = new System.Drawing.Point(536, 16);
+            this.textBoxTotalPrice.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.textBoxTotalPrice.Name = "textBoxTotalPrice";
+            this.textBoxTotalPrice.Size = new System.Drawing.Size(116, 23);
+            this.textBoxTotalPrice.TabIndex = 5;
+            // 
+            // labelTotalPrice
+            // 
+            this.labelTotalPrice.AutoSize = true;
+            this.labelTotalPrice.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTotalPrice.Location = new System.Drawing.Point(456, 20);
+            this.labelTotalPrice.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelTotalPrice.Name = "labelTotalPrice";
+            this.labelTotalPrice.Size = new System.Drawing.Size(65, 15);
+            this.labelTotalPrice.TabIndex = 4;
+            this.labelTotalPrice.Text = "Total Price";
             // 
             // comboBoxReportType
             // 
@@ -160,50 +199,11 @@
             this.labelReportBy.TabIndex = 0;
             this.labelReportBy.Text = "Report by";
             // 
-            // textBoxTotalPrice
-            // 
-            this.textBoxTotalPrice.Location = new System.Drawing.Point(479, 15);
-            this.textBoxTotalPrice.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBoxTotalPrice.Name = "textBoxTotalPrice";
-            this.textBoxTotalPrice.Size = new System.Drawing.Size(116, 23);
-            this.textBoxTotalPrice.TabIndex = 5;
-            // 
-            // labelTotalPrice
-            // 
-            this.labelTotalPrice.AutoSize = true;
-            this.labelTotalPrice.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTotalPrice.Location = new System.Drawing.Point(399, 19);
-            this.labelTotalPrice.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelTotalPrice.Name = "labelTotalPrice";
-            this.labelTotalPrice.Size = new System.Drawing.Size(65, 15);
-            this.labelTotalPrice.TabIndex = 4;
-            this.labelTotalPrice.Text = "Total Price";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(328, 15);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(26, 24);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "<";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(361, 16);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(26, 24);
-            this.button2.TabIndex = 7;
-            this.button2.Text = ">";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
             // TactionReportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(626, 609);
+            this.ClientSize = new System.Drawing.Size(686, 609);
             this.Controls.Add(this.groupBoxReportType);
             this.Controls.Add(this.dataGridViewTactionReport);
             this.Controls.Add(this.toolStrip1);

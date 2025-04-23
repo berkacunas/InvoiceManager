@@ -22,6 +22,7 @@ namespace InvoiceManager_DBFirst
             this.PaymentMethod = new HashSet<PaymentMethod>();
             this.Taction = new HashSet<Taction>();
             this.UserImage = new HashSet<UserImage>();
+            this.UserLog = new HashSet<UserLog>();
         }
     
         public int id { get; set; }
@@ -40,5 +41,7 @@ namespace InvoiceManager_DBFirst
         public virtual ICollection<Taction> Taction { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserImage> UserImage { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserLog> UserLog { get; set; }
     }
 }

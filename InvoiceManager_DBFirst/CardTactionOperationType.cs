@@ -12,14 +12,18 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemSubTypeDetails
+    public partial class CardTactionOperationType
     {
-        public int id { get; set; }
-        public int ItemId { get; set; }
-        public int ItemSubTypeId { get; set; }
-        public Nullable<System.DateTime> AddedDate { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public CardTactionOperationType()
+        {
+            this.CardTactionDetails = new HashSet<CardTactionDetails>();
+        }
     
-        public virtual Item Item { get; set; }
-        public virtual ItemSubType ItemSubType { get; set; }
+        public int id { get; set; }
+        public string Type { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CardTactionDetails> CardTactionDetails { get; set; }
     }
 }

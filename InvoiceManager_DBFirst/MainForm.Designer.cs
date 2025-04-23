@@ -55,23 +55,32 @@
             this.toolStripMenuItemReportABug = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabelLiveDateTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
-            this.panelBottomSide = new System.Windows.Forms.Panel();
-            this.listBoxSidePanel = new System.Windows.Forms.ListBox();
+            this.panelProfile = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.labelProfileShopsText = new System.Windows.Forms.Label();
+            this.labelProfileActiveProfile = new System.Windows.Forms.Label();
+            this.pictureBoxUserProfile = new System.Windows.Forms.PictureBox();
+            this.labelProfileTransactionsText = new System.Windows.Forms.Label();
+            this.labelProfileItemsText = new System.Windows.Forms.Label();
+            this.labelProfileTransactionsVal = new System.Windows.Forms.Label();
+            this.labelProfileItemsVal = new System.Windows.Forms.Label();
+            this.labelProfileShopsVal = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.panelTopSide = new System.Windows.Forms.Panel();
+            this.listViewActiveControls = new System.Windows.Forms.ListView();
             this.placeHolder = new System.Windows.Forms.Panel();
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
-            this.listViewActiveControls = new System.Windows.Forms.ListView();
             this.contextMenuStripTileView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuStripMain.SuspendLayout();
-            this.statusStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
             this.splitContainerMain.SuspendLayout();
-            this.panelBottomSide.SuspendLayout();
+            this.panelProfile.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUserProfile)).BeginInit();
             this.panelTopSide.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -292,19 +301,12 @@
             // 
             // statusStripMain
             // 
-            this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelLiveDateTime});
             this.statusStripMain.Location = new System.Drawing.Point(0, 725);
             this.statusStripMain.Name = "statusStripMain";
             this.statusStripMain.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
             this.statusStripMain.Size = new System.Drawing.Size(1326, 22);
             this.statusStripMain.TabIndex = 1;
             this.statusStripMain.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabelLiveDateTime
-            // 
-            this.toolStripStatusLabelLiveDateTime.Name = "toolStripStatusLabelLiveDateTime";
-            this.toolStripStatusLabelLiveDateTime.Size = new System.Drawing.Size(0, 17);
             // 
             // splitContainerMain
             // 
@@ -316,35 +318,148 @@
             // 
             // splitContainerMain.Panel1
             // 
-            this.splitContainerMain.Panel1.Controls.Add(this.panelBottomSide);
+            this.splitContainerMain.Panel1.Controls.Add(this.panelProfile);
             this.splitContainerMain.Panel1.Controls.Add(this.panelTopSide);
             // 
             // splitContainerMain.Panel2
             // 
             this.splitContainerMain.Panel2.Controls.Add(this.placeHolder);
             this.splitContainerMain.Size = new System.Drawing.Size(1325, 668);
-            this.splitContainerMain.SplitterDistance = 146;
+            this.splitContainerMain.SplitterDistance = 224;
             this.splitContainerMain.TabIndex = 5;
             // 
-            // panelBottomSide
+            // panelProfile
             // 
-            this.panelBottomSide.Controls.Add(this.listBoxSidePanel);
-            this.panelBottomSide.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottomSide.Location = new System.Drawing.Point(0, 442);
-            this.panelBottomSide.Name = "panelBottomSide";
-            this.panelBottomSide.Size = new System.Drawing.Size(146, 226);
-            this.panelBottomSide.TabIndex = 2;
+            this.panelProfile.Controls.Add(this.tableLayoutPanel1);
+            this.panelProfile.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelProfile.Location = new System.Drawing.Point(0, 442);
+            this.panelProfile.Name = "panelProfile";
+            this.panelProfile.Size = new System.Drawing.Size(224, 226);
+            this.panelProfile.TabIndex = 2;
             // 
-            // listBoxSidePanel
+            // tableLayoutPanel1
             // 
-            this.listBoxSidePanel.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBoxSidePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxSidePanel.FormattingEnabled = true;
-            this.listBoxSidePanel.ItemHeight = 15;
-            this.listBoxSidePanel.Location = new System.Drawing.Point(0, 0);
-            this.listBoxSidePanel.Name = "listBoxSidePanel";
-            this.listBoxSidePanel.Size = new System.Drawing.Size(146, 226);
-            this.listBoxSidePanel.TabIndex = 0;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 47.32143F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.67857F));
+            this.tableLayoutPanel1.Controls.Add(this.labelProfileShopsText, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.labelProfileActiveProfile, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBoxUserProfile, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.labelProfileTransactionsText, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.labelProfileItemsText, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.labelProfileTransactionsVal, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.labelProfileItemsVal, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.labelProfileShopsVal, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.richTextBox1, 1, 1);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(224, 226);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // labelProfileShopsText
+            // 
+            this.labelProfileShopsText.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelProfileShopsText.AutoSize = true;
+            this.labelProfileShopsText.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelProfileShopsText.Location = new System.Drawing.Point(3, 202);
+            this.labelProfileShopsText.Name = "labelProfileShopsText";
+            this.labelProfileShopsText.Size = new System.Drawing.Size(49, 18);
+            this.labelProfileShopsText.TabIndex = 6;
+            this.labelProfileShopsText.Text = "Shops:";
+            // 
+            // labelProfileActiveProfile
+            // 
+            this.labelProfileActiveProfile.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelProfileActiveProfile.AutoSize = true;
+            this.labelProfileActiveProfile.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelProfileActiveProfile.Location = new System.Drawing.Point(3, 130);
+            this.labelProfileActiveProfile.Name = "labelProfileActiveProfile";
+            this.labelProfileActiveProfile.Size = new System.Drawing.Size(95, 18);
+            this.labelProfileActiveProfile.TabIndex = 2;
+            this.labelProfileActiveProfile.Text = "Active Profile:";
+            // 
+            // pictureBoxUserProfile
+            // 
+            this.pictureBoxUserProfile.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tableLayoutPanel1.SetColumnSpan(this.pictureBoxUserProfile, 2);
+            this.pictureBoxUserProfile.Location = new System.Drawing.Point(3, 3);
+            this.pictureBoxUserProfile.Name = "pictureBoxUserProfile";
+            this.pictureBoxUserProfile.Size = new System.Drawing.Size(95, 121);
+            this.pictureBoxUserProfile.TabIndex = 1;
+            this.pictureBoxUserProfile.TabStop = false;
+            // 
+            // labelProfileTransactionsText
+            // 
+            this.labelProfileTransactionsText.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelProfileTransactionsText.AutoSize = true;
+            this.labelProfileTransactionsText.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelProfileTransactionsText.Location = new System.Drawing.Point(3, 154);
+            this.labelProfileTransactionsText.Name = "labelProfileTransactionsText";
+            this.labelProfileTransactionsText.Size = new System.Drawing.Size(88, 18);
+            this.labelProfileTransactionsText.TabIndex = 4;
+            this.labelProfileTransactionsText.Text = "Transactions:";
+            // 
+            // labelProfileItemsText
+            // 
+            this.labelProfileItemsText.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelProfileItemsText.AutoSize = true;
+            this.labelProfileItemsText.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelProfileItemsText.Location = new System.Drawing.Point(3, 178);
+            this.labelProfileItemsText.Name = "labelProfileItemsText";
+            this.labelProfileItemsText.Size = new System.Drawing.Size(47, 18);
+            this.labelProfileItemsText.TabIndex = 5;
+            this.labelProfileItemsText.Text = "Items:";
+            // 
+            // labelProfileTransactionsVal
+            // 
+            this.labelProfileTransactionsVal.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelProfileTransactionsVal.AutoSize = true;
+            this.labelProfileTransactionsVal.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelProfileTransactionsVal.Location = new System.Drawing.Point(109, 154);
+            this.labelProfileTransactionsVal.Name = "labelProfileTransactionsVal";
+            this.labelProfileTransactionsVal.Size = new System.Drawing.Size(13, 18);
+            this.labelProfileTransactionsVal.TabIndex = 7;
+            this.labelProfileTransactionsVal.Text = "-";
+            // 
+            // labelProfileItemsVal
+            // 
+            this.labelProfileItemsVal.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelProfileItemsVal.AutoSize = true;
+            this.labelProfileItemsVal.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelProfileItemsVal.Location = new System.Drawing.Point(109, 178);
+            this.labelProfileItemsVal.Name = "labelProfileItemsVal";
+            this.labelProfileItemsVal.Size = new System.Drawing.Size(54, 18);
+            this.labelProfileItemsVal.TabIndex = 8;
+            this.labelProfileItemsVal.Text = "Default";
+            // 
+            // labelProfileShopsVal
+            // 
+            this.labelProfileShopsVal.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelProfileShopsVal.AutoSize = true;
+            this.labelProfileShopsVal.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelProfileShopsVal.Location = new System.Drawing.Point(109, 202);
+            this.labelProfileShopsVal.Name = "labelProfileShopsVal";
+            this.labelProfileShopsVal.Size = new System.Drawing.Size(54, 18);
+            this.labelProfileShopsVal.TabIndex = 9;
+            this.labelProfileShopsVal.Text = "Default";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox1.Location = new System.Drawing.Point(109, 130);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(112, 18);
+            this.richTextBox1.TabIndex = 10;
+            this.richTextBox1.Text = "";
             // 
             // panelTopSide
             // 
@@ -354,8 +469,21 @@
             this.panelTopSide.Controls.Add(this.listViewActiveControls);
             this.panelTopSide.Location = new System.Drawing.Point(0, 0);
             this.panelTopSide.Name = "panelTopSide";
-            this.panelTopSide.Size = new System.Drawing.Size(144, 436);
+            this.panelTopSide.Size = new System.Drawing.Size(224, 439);
             this.panelTopSide.TabIndex = 1;
+            // 
+            // listViewActiveControls
+            // 
+            this.listViewActiveControls.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewActiveControls.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewActiveControls.HideSelection = false;
+            this.listViewActiveControls.Location = new System.Drawing.Point(0, 0);
+            this.listViewActiveControls.Name = "listViewActiveControls";
+            this.listViewActiveControls.Size = new System.Drawing.Size(224, 415);
+            this.listViewActiveControls.TabIndex = 0;
+            this.listViewActiveControls.UseCompatibleStateImageBehavior = false;
             // 
             // placeHolder
             // 
@@ -365,7 +493,7 @@
             this.placeHolder.AutoScroll = true;
             this.placeHolder.Location = new System.Drawing.Point(0, 0);
             this.placeHolder.Name = "placeHolder";
-            this.placeHolder.Size = new System.Drawing.Size(1176, 668);
+            this.placeHolder.Size = new System.Drawing.Size(1098, 668);
             this.placeHolder.TabIndex = 0;
             // 
             // toolStripMain
@@ -387,22 +515,10 @@
             this.labelHorizontalLine1.Size = new System.Drawing.Size(1326, 2);
             this.labelHorizontalLine1.TabIndex = 7;
             // 
-            // listViewActiveControls
-            // 
-            this.listViewActiveControls.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listViewActiveControls.HideSelection = false;
-            this.listViewActiveControls.Location = new System.Drawing.Point(0, 0);
-            this.listViewActiveControls.Name = "listViewActiveControls";
-            this.listViewActiveControls.Size = new System.Drawing.Size(144, 436);
-            this.listViewActiveControls.TabIndex = 0;
-            this.listViewActiveControls.UseCompatibleStateImageBehavior = false;
-            // 
             // contextMenuStripTileView
             // 
             this.contextMenuStripTileView.Name = "contextMenuStripTileView";
-            this.contextMenuStripTileView.Size = new System.Drawing.Size(181, 26);
+            this.contextMenuStripTileView.Size = new System.Drawing.Size(61, 4);
             // 
             // MainForm
             // 
@@ -421,13 +537,14 @@
             this.Text = "Invoice Manager";
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
-            this.statusStripMain.ResumeLayout(false);
-            this.statusStripMain.PerformLayout();
             this.splitContainerMain.Panel1.ResumeLayout(false);
             this.splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
             this.splitContainerMain.ResumeLayout(false);
-            this.panelBottomSide.ResumeLayout(false);
+            this.panelProfile.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUserProfile)).EndInit();
             this.panelTopSide.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -448,7 +565,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUsers;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSellers;
         private System.Windows.Forms.StatusStrip statusStripMain;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelLiveDateTime;
         private System.Windows.Forms.SplitContainer splitContainerMain;
         private System.Windows.Forms.ToolStrip toolStripMain;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemExit;
@@ -464,14 +580,23 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAbout;
         private System.Windows.Forms.Label labelHorizontalLine1;
         private System.Windows.Forms.Panel panelTopSide;
-        private System.Windows.Forms.ListBox listBoxSidePanel;
-        private System.Windows.Forms.Panel panelBottomSide;
+        private System.Windows.Forms.Panel panelProfile;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBatch;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBatchItemSubTypes;
         private System.Windows.Forms.Panel placeHolder;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemApplicationLog;
         private System.Windows.Forms.ListView listViewActiveControls;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTileView;
+        private System.Windows.Forms.PictureBox pictureBoxUserProfile;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label labelProfileActiveProfile;
+        private System.Windows.Forms.Label labelProfileTransactionsText;
+        private System.Windows.Forms.Label labelProfileItemsText;
+        private System.Windows.Forms.Label labelProfileShopsText;
+        private System.Windows.Forms.Label labelProfileItemsVal;
+        private System.Windows.Forms.Label labelProfileShopsVal;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label labelProfileTransactionsVal;
     }
 }
 

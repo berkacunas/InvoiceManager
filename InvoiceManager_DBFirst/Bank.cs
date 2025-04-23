@@ -12,21 +12,26 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemGroup
+    public partial class Bank
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ItemGroup()
+        public Bank()
         {
-            this.Item = new HashSet<Item>();
+            this.BankAccount = new HashSet<BankAccount>();
         }
     
         public int id { get; set; }
-        public string Name { get; set; }
-        public int TopGroupId { get; set; }
-        public Nullable<System.DateTime> AddedDate { get; set; }
+        public string Title { get; set; }
+        public Nullable<int> EFTCode { get; set; }
+        public string Tel { get; set; }
+        public string Fax { get; set; }
+        public string Address { get; set; }
+        public string Web { get; set; }
+        public string Description { get; set; }
+        public Nullable<System.DateTime> AddedOn { get; set; }
+        public Nullable<System.DateTime> LastUpdated { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Item> Item { get; set; }
-        public virtual ItemTopGroup ItemTopGroup { get; set; }
+        public virtual ICollection<BankAccount> BankAccount { get; set; }
     }
 }

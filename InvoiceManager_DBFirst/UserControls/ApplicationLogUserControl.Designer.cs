@@ -49,6 +49,8 @@
             // listViewLog
             // 
             this.listViewLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewLog.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewLog.FullRowSelect = true;
             this.listViewLog.HideSelection = false;
             this.listViewLog.Location = new System.Drawing.Point(4, 16);
             this.listViewLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -59,7 +61,7 @@
             // 
             // ApplicationLogUserControl
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.Controls.Add(this.groupBoxWithListView);
             this.Name = "ApplicationLogUserControl";
             this.Size = new System.Drawing.Size(704, 459);

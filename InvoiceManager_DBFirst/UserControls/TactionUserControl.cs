@@ -14,14 +14,15 @@ namespace InvoiceManager_DBFirst.UserControls
 {
     public partial class TactionUserControl : UserControl
     {
-        public event Notify TransactionsLoaded;
-        public event Notify TransactionSaved;
-        public event Notify TransactionUpdated;
-        public event Notify TransactionRemoved;
-
-        public event Notify TransactionChanged;
+        public event Notify TransactionsLoad;
         public event Notify TransactionFormOpened;
         public event Notify TransactionFormClosed;
+
+        public event Notify TransactionChanged;
+
+        public event TactionHandler TransactionSave;
+        public event TactionUpdateHandler TransactionUpdate;
+        public event TactionHandler TransactionRemove;
 
         private ImageList _imageList;
 
@@ -227,7 +228,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onTransactionSaved("Transactions", $"New transaction id {this._newTaction.id} saved", DateTime.Now);
+                this.onTransactionSaved(this._newTaction);
             }
             catch (Exception ex)
             {
@@ -254,6 +255,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
             Taction taction = dbContext.Taction.Where(r => r.id == tactionId).Include(r => r.TactionDetails).FirstOrDefault();
+            Taction oldTaction = dbContext.Taction.Where(r => r.id == tactionId).Include(r => r.TactionDetails).AsNoTracking().FirstOrDefault();
 
             if (taction.TactionDetails.Count == 0)
             {
@@ -266,7 +268,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onTransactionUpdated("Transactions", $"Transaction id {taction.id} updated", DateTime.Now);
+                this.onTransactionUpdated(taction, oldTaction);
             }
             catch (Exception ex)
             {
@@ -289,6 +291,8 @@ namespace InvoiceManager_DBFirst.UserControls
             int tactionId = Convert.ToInt32(row.Cells["tactionId"].Value);
             var taction = dbContext.Taction.Where(r => r.id == tactionId).FirstOrDefault();
 
+            this.onTransactionRemoved(taction);
+
             try
             {
                 var details = taction.TactionDetails.ToList();
@@ -300,7 +304,6 @@ namespace InvoiceManager_DBFirst.UserControls
 
                 dbContext.Taction.Remove(taction);
                 this.dbContext.SaveChanges();
-                this.onTransactionRemoved("Transactions", $"Transaction id {taction.id} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -572,7 +575,7 @@ namespace InvoiceManager_DBFirst.UserControls
             this.textBoxItemGroup.AutoCompleteCustomSource = autoCompleteStringCollection;
         }
 
-        private void contextMenuItemReportSelection_Click(object sender, EventArgs e)
+        private void contextMenuItemReportByItemSubType_Click(object sender, EventArgs e)
         {
             DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
             if (selectedRows == null)
@@ -582,8 +585,8 @@ namespace InvoiceManager_DBFirst.UserControls
             }
 
             TactionReportForm tactionReportForm = new TactionReportForm();
-            tactionReportForm.ReportType = TactionReportType.Selection;
-            tactionReportForm.SelectedTactions = getSelectedTactions(selectedRows);
+            tactionReportForm.ReportType = TactionReportType.ItemSubType;
+            tactionReportForm.SelectedTactions = this.getSelectedTactions(selectedRows);
 
             if (tactionReportForm.ShowDialog() == DialogResult.OK)
             {
@@ -591,7 +594,7 @@ namespace InvoiceManager_DBFirst.UserControls
             }
         }
 
-        private void contextMenuItemReportDaily_Click(object sender, EventArgs e)
+        private void contextMenuItemReportByItem_Click(object sender, EventArgs e)
         {
             DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
             if (selectedRows == null)
@@ -604,8 +607,8 @@ namespace InvoiceManager_DBFirst.UserControls
             DateTime selectedDate = this.getTactionFromRow(row).Dt;
 
             TactionReportForm tactionReportForm = new TactionReportForm();
-            tactionReportForm.ReportType = TactionReportType.Daily;
-            tactionReportForm.SelectedTactions = null;
+            tactionReportForm.ReportType = TactionReportType.Item;
+            tactionReportForm.SelectedTactions = this.getSelectedTactions(selectedRows);
 
             if (tactionReportForm.ShowDialog() == DialogResult.OK)
             {
@@ -613,7 +616,7 @@ namespace InvoiceManager_DBFirst.UserControls
             }
         }
 
-        private void contextMenuItemReportWeekly_Click(object sender, EventArgs e)
+        private void contextMenuItemReportByItemGroup_Click(object sender, EventArgs e)
         {
             DataGridViewSelectedRowCollection selectedRows = this.dataGridViewTactions.SelectedRows;
             if (selectedRows == null)
@@ -623,8 +626,8 @@ namespace InvoiceManager_DBFirst.UserControls
             }
 
             TactionReportForm tactionReportForm = new TactionReportForm();
-            tactionReportForm.ReportType = TactionReportType.Weekly;
-            tactionReportForm.DbSetTaction = this.dbContext.Taction;
+            tactionReportForm.ReportType = TactionReportType.ItemGroup;
+            tactionReportForm.SelectedTactions = this.getSelectedTactions(selectedRows);
 
             if (tactionReportForm.ShowDialog() == DialogResult.OK)
             {
@@ -1128,15 +1131,15 @@ namespace InvoiceManager_DBFirst.UserControls
         {
             ContextMenuStrip menuStrip = new ContextMenuStrip();
 
-            ToolStripMenuItem contextMenuItemReportSelection = new ToolStripMenuItem("Report selection...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportSelection_Click), Keys.None);
-            ToolStripMenuItem contextMenuItemReportDaily = new ToolStripMenuItem("Report daily...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportDaily_Click), Keys.None);
-            ToolStripMenuItem contextMenuItemReportWeekly = new ToolStripMenuItem("Report weekly...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportWeekly_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportByItemSubType = new ToolStripMenuItem("Report by Item Sub Type...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportByItemSubType_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportByItem = new ToolStripMenuItem("Report by Item...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportByItem_Click), Keys.None);
+            ToolStripMenuItem contextMenuItemReportByItemGroup = new ToolStripMenuItem("Report by Item Group...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportByItemGroup_Click), Keys.None);
             ToolStripMenuItem contextMenuItemReportYearly = new ToolStripMenuItem("Report monthly...", BitmapResourceLoader.Sqlite, new EventHandler(contextMenuItemReportMonthly_Click), Keys.None);
             ToolStripMenuItem contextMenuItemExit = new ToolStripMenuItem("Exit");
 
-            menuStrip.Items.AddRange(new ToolStripItem[] { contextMenuItemReportSelection,
-                                                           contextMenuItemReportDaily,
-                                                           contextMenuItemReportWeekly,
+            menuStrip.Items.AddRange(new ToolStripItem[] { contextMenuItemReportByItemSubType,
+                                                           contextMenuItemReportByItem,
+                                                           contextMenuItemReportByItemGroup,
                                                            contextMenuItemReportYearly,
                                                            contextMenuItemExit });
 
@@ -1363,28 +1366,28 @@ namespace InvoiceManager_DBFirst.UserControls
 
         #region User-defined Event Handlers
 
-        protected virtual void onTransactionSaved(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.TransactionSaved?.Invoke(actionType, message, eventTime);
-            this.onTransactionChanged(actionType, message, eventTime);
-        }
-
-        protected virtual void onTransactionUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
-        {
-            this.TransactionUpdated?.Invoke(actionType, message, eventTime);
-            this.onTransactionChanged(actionType, message, eventTime);
-        }
-
         protected virtual void onTransactionsLoaded(string actionType, string message, DateTime eventTime) //protected virtual method
         {
-            this.TransactionsLoaded?.Invoke(actionType, message, eventTime);
+            this.TransactionsLoad?.Invoke(actionType, message, eventTime);
             this.onTransactionChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onTransactionRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onTransactionSaved(Taction taction) //protected virtual method
         {
-            this.TransactionRemoved?.Invoke(actionType, message, eventTime);
-            this.onTransactionChanged(actionType, message, eventTime);
+            this.TransactionSave?.Invoke(taction);
+            this.onTransactionChanged("Transactions", $"New transaction id {taction.id}: {taction.Shop.Name} saved", DateTime.Now);
+        }
+
+        protected virtual void onTransactionUpdated(Taction newTaction, Taction oldTaction) //protected virtual method
+        {
+            this.TransactionUpdate?.Invoke(newTaction, oldTaction);
+            this.onTransactionChanged("Transactions", $"Transaction id {oldTaction.id}: {newTaction.Shop.Name} updated", DateTime.Now);
+        }
+
+        protected virtual void onTransactionRemoved(Taction taction) //protected virtual method
+        {
+            this.TransactionRemove?.Invoke(taction);
+            this.onTransactionChanged("Transactions", $"Transaction id {taction.id}: {taction.Shop.Name} removed", DateTime.Now);
         }
 
         protected virtual void onTransactionChanged(string actionType, string message, DateTime eventTime) //protected virtual method

@@ -12,21 +12,23 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemGroup
+    public partial class UserProfile
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ItemGroup()
+        public UserProfile()
         {
-            this.Item = new HashSet<Item>();
+            this.UserLoginDetails = new HashSet<UserLoginDetails>();
         }
     
         public int id { get; set; }
-        public string Name { get; set; }
-        public int TopGroupId { get; set; }
-        public Nullable<System.DateTime> AddedDate { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string Fullname { get; set; }
+        public string Password { get; set; }
+        public System.DateTime LoginDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Item> Item { get; set; }
-        public virtual ItemTopGroup ItemTopGroup { get; set; }
+        public virtual ICollection<UserLoginDetails> UserLoginDetails { get; set; }
     }
 }

@@ -12,14 +12,15 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemSubTypeDetails
+    public partial class CardTaction
     {
         public int id { get; set; }
-        public int ItemId { get; set; }
-        public int ItemSubTypeId { get; set; }
-        public Nullable<System.DateTime> AddedDate { get; set; }
+        public System.DateTime Dt { get; set; }
+        public int PaymentMethodId { get; set; }
+        public decimal AvailableBalance { get; set; }
+        public decimal TotalExpenses { get; set; }
+        public decimal TotalDeposit { get; set; }
     
-        public virtual Item Item { get; set; }
-        public virtual ItemSubType ItemSubType { get; set; }
+        public virtual PaymentMethod PaymentMethod { get; set; }
     }
 }

@@ -12,14 +12,15 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemSubTypeDetails
+    public partial class UserLoginDetails
     {
         public int id { get; set; }
-        public int ItemId { get; set; }
-        public int ItemSubTypeId { get; set; }
-        public Nullable<System.DateTime> AddedDate { get; set; }
+        public int UserProfileId { get; set; }
+        public System.DateTime LoginDate { get; set; }
+        public bool IsSuccess { get; set; }
+        public int PasswordErrorCount { get; set; }
+        public string LoginType { get; set; }
     
-        public virtual Item Item { get; set; }
-        public virtual ItemSubType ItemSubType { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
     }
 }

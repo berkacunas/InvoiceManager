@@ -17,8 +17,8 @@ namespace InvoiceManager_DBFirst
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Item()
         {
-            this.TactionDetails = new HashSet<TactionDetails>();
             this.ItemSubTypeDetails = new HashSet<ItemSubTypeDetails>();
+            this.TactionDetails = new HashSet<TactionDetails>();
         }
     
         public int id { get; set; }
@@ -26,11 +26,12 @@ namespace InvoiceManager_DBFirst
         public int GroupId { get; set; }
         public string Size { get; set; }
         public string Note { get; set; }
+        public Nullable<System.DateTime> AddedDate { get; set; }
     
         public virtual ItemGroup ItemGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TactionDetails> TactionDetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ItemSubTypeDetails> ItemSubTypeDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TactionDetails> TactionDetails { get; set; }
     }
 }

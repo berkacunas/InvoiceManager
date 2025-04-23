@@ -17,6 +17,7 @@ namespace InvoiceManager_DBFirst
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PaymentMethod()
         {
+            this.CardTaction = new HashSet<CardTaction>();
             this.CashTransfer = new HashSet<CashTransfer>();
             this.Taction = new HashSet<Taction>();
         }
@@ -25,8 +26,11 @@ namespace InvoiceManager_DBFirst
         public int CardOwnerId { get; set; }
         public string Name { get; set; }
         public Nullable<int> BankCardId { get; set; }
+        public Nullable<int> BankAccountId { get; set; }
     
         public virtual BankCard BankCard { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CardTaction> CardTaction { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CashTransfer> CashTransfer { get; set; }
         public virtual User User { get; set; }

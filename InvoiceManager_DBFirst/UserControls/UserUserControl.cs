@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -17,9 +18,9 @@ namespace InvoiceManager_DBFirst.UserControls
     public partial class UserUserControl : UserControl
     {
         public event Notify UsersLoaded;
-        public event Notify UserSaved;
-        public event Notify UserUpdated;
-        public event Notify UserRemoved;
+        public event UserHandler UserSaved;
+        public event UserUpdateHandler UserUpdated;
+        public event UserHandler UserRemoved;
 
         public event Notify UserChanged;
         public event Notify UserFormOpened;
@@ -175,8 +176,8 @@ namespace InvoiceManager_DBFirst.UserControls
 
                 using (var ms = new MemoryStream(data))
                 {
-                    Image img = ResizeImage(new Bitmap(ms), new Size(16, 16));
-                    e.Value = GetBytesOfImage(img);
+                    Image img = ImageHelper.ResizeImage(new Bitmap(ms), new Size(16, 16));
+                    e.Value = ImageHelper.GetBytesOfImage(img);
                 }
             }
         }
@@ -206,7 +207,7 @@ namespace InvoiceManager_DBFirst.UserControls
             try
             {
                 this.dbContext.SaveChanges();
-                this.onUserSaved("Users", $"New user {_newUser.id}: {_newUser.Fullname} saved", DateTime.Now);
+                this.onUserSaved(this._newUser);
             }
             catch (Exception ex)
             {
@@ -232,13 +233,14 @@ namespace InvoiceManager_DBFirst.UserControls
 
             int userId = Convert.ToInt32(row.Cells["userId"].Value);
             User user = dbContext.User.Where(r => r.id == userId).FirstOrDefault();
+            User oldUser = dbContext.User.Where(r => r.id == userId).AsNoTracking().FirstOrDefault();
 
             this._setUserDataFromUiToObject(user);
 
             try
             {
                 this.dbContext.SaveChanges();
-                this.onUserUpdated("Users", $"User {user.id}: {user.Fullname} updated", DateTime.Now);
+                this.onUserUpdated(user, oldUser);
 
             }
             catch (Exception ex)
@@ -280,9 +282,9 @@ namespace InvoiceManager_DBFirst.UserControls
                     dbContext.UserImage.Remove(userImage);
                 }
 
+                this.onUserRemoved(user);
                 dbContext.User.Remove(user);
                 dbContext.SaveChanges();
-                this.onUserRemoved("Users", $"User {user.id}: {user.Fullname} removed", DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -517,7 +519,7 @@ namespace InvoiceManager_DBFirst.UserControls
                     this._currentImageIndexDict.Add(userId, 0);
 
                 UserImage userImage = userImages[this._currentImageIndexDict[userId]];
-                this.pictureBoxUser.Image = (userImage != null) ? GetImageFromBytes(userImage.imageData) : BitmapResourceLoader.DefaultUser;
+                this.pictureBoxUser.Image = (userImage != null) ? ImageHelper.GetImageFromBytes(userImage.imageData) : BitmapResourceLoader.DefaultUser;
                 this.pictureBoxUser.Tag = userImage.id;
                 this._checkCheckBoxDefault(userImage.isDefault);
             }
@@ -633,52 +635,10 @@ namespace InvoiceManager_DBFirst.UserControls
             return ms.GetBuffer();
         }
 
-        private static Image ResizeImage(Image imgToResize, Size size)
-        {
-            int sourceWidth = imgToResize.Width;
-            int sourceHeight = imgToResize.Height;
-
-            double nPercent = 0;
-            double nPercentW = 0;
-            double nPercentH = 0;
-
-            // Calculate width and height with new desired size
-            nPercentW = ((double)size.Width / (double)sourceWidth);
-            nPercentH = ((double)size.Height / (double)sourceHeight);
-            nPercent = Math.Min(nPercentW, nPercentH);
-
-            // New Width and Height
-            int destWidth = (int)(sourceWidth * nPercent);
-            int destHeight = (int)(sourceHeight * nPercent);
-
-            Bitmap b = new Bitmap(destWidth, destHeight);
-
-            Graphics g = Graphics.FromImage((Image)b);
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-
-            // Draw image with new width and height
-            g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
-            g.Dispose();
-
-            return (Image)b;
-        }
-
-        private static byte[] GetBytesOfImage(Image img)
-        {
-            ImageConverter converter = new ImageConverter();
-            return (byte[])converter.ConvertTo(img, typeof(byte[]));
-        }
-
-        private static Image GetImageFromBytes(byte[] imageData)
-        {
-            MemoryStream ms = new MemoryStream(imageData);
-            return new Bitmap(ms);
-        }
-
         private void _saveAsThumbnail(User user, Image image)
         {
-            Image tempImage = ResizeImage(image, new Size(24, 24));
-            user.Thumbnail = GetBytesOfImage(tempImage);
+            Image tempImage = ImageHelper.ResizeImage(image, new Size(24, 24));
+            user.Thumbnail = ImageHelper.GetBytesOfImage(tempImage);
 
             try
             {
@@ -705,22 +665,22 @@ namespace InvoiceManager_DBFirst.UserControls
             this.onUserChanged(actionType, message, eventTime);
         }
 
-        protected virtual void onUserSaved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onUserSaved(User user) //protected virtual method
         {
-            this.UserSaved?.Invoke(actionType, message, eventTime);
-            this.onUserChanged(actionType, message, eventTime);
+            this.UserSaved?.Invoke(user);
+            this.onUserChanged("Users", $"New user {user.id}: {user.Fullname} saved", DateTime.Now);
         }
 
-        protected virtual void onUserUpdated(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onUserUpdated(User newUser, User oldUser) //protected virtual method
         {
-            this.UserUpdated?.Invoke(actionType, message, eventTime);
-            this.onUserChanged(actionType, message, eventTime);
+            this.UserUpdated?.Invoke(newUser, oldUser);
+            this.onUserChanged("Users", $"User {newUser.id}: {newUser.Fullname} updated", DateTime.Now);
         }
 
-        protected virtual void onUserRemoved(string actionType, string message, DateTime eventTime) //protected virtual method
+        protected virtual void onUserRemoved(User user) //protected virtual method
         {
-            this.UserRemoved?.Invoke(actionType, message, eventTime);
-            this.onUserChanged(actionType, message, eventTime);
+            this.UserRemoved?.Invoke(user);
+            this.onUserChanged("Users", $"User {user.id}: {user.Fullname} removed", DateTime.Now);
         }
 
         protected virtual void onUserChanged(string actionType, string message, DateTime eventTime)

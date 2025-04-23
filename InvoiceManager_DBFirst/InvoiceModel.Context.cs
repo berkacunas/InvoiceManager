@@ -25,24 +25,34 @@ namespace InvoiceManager_DBFirst
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<AppLog> AppLog { get; set; }
+        public virtual DbSet<AppLogActionType> AppLogActionType { get; set; }
+        public virtual DbSet<Bank> Bank { get; set; }
+        public virtual DbSet<BankAccount> BankAccount { get; set; }
+        public virtual DbSet<BankAccountType> BankAccountType { get; set; }
         public virtual DbSet<BankCard> BankCard { get; set; }
+        public virtual DbSet<CardTaction> CardTaction { get; set; }
+        public virtual DbSet<CardTactionDetails> CardTactionDetails { get; set; }
+        public virtual DbSet<CardTactionOperationType> CardTactionOperationType { get; set; }
         public virtual DbSet<CashTransfer> CashTransfer { get; set; }
         public virtual DbSet<CurrencyMovement> CurrencyMovement { get; set; }
         public virtual DbSet<Item> Item { get; set; }
         public virtual DbSet<ItemGroup> ItemGroup { get; set; }
         public virtual DbSet<ItemSubType> ItemSubType { get; set; }
+        public virtual DbSet<ItemSubTypeDetails> ItemSubTypeDetails { get; set; }
         public virtual DbSet<ItemTopGroup> ItemTopGroup { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethod { get; set; }
         public virtual DbSet<Seller> Seller { get; set; }
         public virtual DbSet<Shop> Shop { get; set; }
         public virtual DbSet<ShopGroup> ShopGroup { get; set; }
         public virtual DbSet<ShopType> ShopType { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Taction> Taction { get; set; }
         public virtual DbSet<TactionDetails> TactionDetails { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserImage> UserImage { get; set; }
-        public virtual DbSet<ItemSubTypeDetails> ItemSubTypeDetails { get; set; }
-        public virtual DbSet<AppLog> AppLog { get; set; }
-        public virtual DbSet<AppLogActionType> AppLogActionType { get; set; }
+        public virtual DbSet<UserLog> UserLog { get; set; }
+        public virtual DbSet<UserProfile> UserProfile { get; set; }
+        public virtual DbSet<UserLoginDetails> UserLoginDetails { get; set; }
     }
 }
