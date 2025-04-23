@@ -1185,6 +1185,9 @@ namespace InvoiceManager_DBFirst.UserControls
 
         private void setItemSubTypeDetails(DataGridViewRow row)
         {
+            if (this._newItemSubTypeDetails == null)
+                return;
+
             int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
             this._newItemSubTypeDetails.ItemId = itemId;
         }
