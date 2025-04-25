@@ -919,7 +919,6 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
 
             this._newItemSubType = (ItemSubType)this.comboBoxItemSubTypeOptionsItemSubType.SelectedItem;
-            this._newItemSubTypeDetails = new ItemSubTypeDetails();
             this._newItemSubTypeDetails.ItemSubTypeId = this._newItemSubType.id;
         }
 
@@ -1185,10 +1184,8 @@ namespace InvoiceManager_DBFirst.UserControls
 
         private void setItemSubTypeDetails(DataGridViewRow row)
         {
-            if (this._newItemSubTypeDetails == null)
-                return;
-
             int itemId = Convert.ToInt32(row.Cells["itemId"].Value);
+            this._newItemSubTypeDetails = new ItemSubTypeDetails();
             this._newItemSubTypeDetails.ItemId = itemId;
         }
 
