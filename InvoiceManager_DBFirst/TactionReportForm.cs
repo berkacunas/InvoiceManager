@@ -243,6 +243,8 @@ namespace InvoiceManager_DBFirst
 
         private void resetItemUnit()
         {
+            // This func is incomplete.
+
             List<ItemsReport> items = null;
             int id = 0;
 
@@ -259,7 +261,8 @@ namespace InvoiceManager_DBFirst
                         if (id != 0 && items[i].ItemSubTypeId != id)
                             this._items[i].ItemUnit = null;
 
-                        id = this._items[i].ItemSubTypeId.Value;
+                        
+                        //id = this._items[i].ItemSubTypeId.Value; // What is the purpose of this assignment. Find out it and uncomment the line. (Problem: this._items[i].ItemSubTypeId might return as NULL. A NULL check might or might not be the proper way to fix it.)
                     }
                 }
 
