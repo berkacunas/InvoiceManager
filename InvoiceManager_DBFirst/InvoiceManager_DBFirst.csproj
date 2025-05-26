@@ -36,7 +36,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>cash.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <Win32Resource>
@@ -544,8 +545,6 @@
     <EmbeddedResource Include="assets\logbook2.png" />
     <EmbeddedResource Include="assets\logbook3.png" />
     <EmbeddedResource Include="assets\logbook4.png" />
-    <Content Include="cash.ico" />
-    <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
     <Content Include="InvoiceModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>InvoiceModel.edmx</DependentUpon>
