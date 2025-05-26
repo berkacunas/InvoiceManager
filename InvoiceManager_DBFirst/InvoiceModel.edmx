@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="InvoicesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="InvoicesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AppLog">
           <Key>
             <PropertyRef Name="id" />
@@ -46,6 +46,7 @@
           <Property Name="Owner" Type="nvarchar" MaxLength="128" />
           <Property Name="CreatedOn" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="DeletedOn" Type="datetime2" Precision="7" />
+          <Property Name="Nickname" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <EntityType Name="BankAccountType">
           <Key>
@@ -53,6 +54,7 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="BankCard">
           <Key>
@@ -61,6 +63,51 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="512" Nullable="false" />
           <Property Name="Type" Type="nvarchar" MaxLength="512" />
+        </EntityType>
+        <EntityType Name="BankEntity">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="BankId" Type="int" Nullable="false" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
+          <Property Name="RiskFactor" Type="int" />
+        </EntityType>
+        <EntityType Name="BankEntityGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="TopGroupId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BankEntityTaction">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Dt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="EntityId" Type="int" Nullable="false" />
+          <Property Name="EntityTypeId" Type="int" Nullable="false" />
+          <Property Name="Unit" Type="int" Nullable="false" />
+          <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="6" Nullable="false" />
+          <Property Name="TotalPrice" Type="decimal" Precision="18" Scale="6" Nullable="false" />
+          <Property Name="PaymentMethodId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BankEntityTactionType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BankEntityTopGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="512" Nullable="false" />
         </EntityType>
         <EntityType Name="CardTaction">
           <Key>
@@ -167,10 +214,11 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CardOwnerId" Type="int" Nullable="false" />
+          <Property Name="AccountOwnerId" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="BankCardId" Type="int" />
           <Property Name="BankAccountId" Type="int" />
+          <Property Name="IsDisplay" Type="bit" />
         </EntityType>
         <EntityType Name="Seller">
           <Key>
@@ -340,6 +388,78 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_BankEntity_BankEntityGroupId">
+          <End Role="BankEntityGroup" Type="Self.BankEntityGroup" Multiplicity="1" />
+          <End Role="BankEntity" Type="Self.BankEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankEntityGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntity">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankEntity_BankId">
+          <End Role="Bank" Type="Self.Bank" Multiplicity="1" />
+          <End Role="BankEntity" Type="Self.BankEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bank">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntity">
+              <PropertyRef Name="BankId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankEntityGroup_BankEntityTopGroupId">
+          <End Role="BankEntityTopGroup" Type="Self.BankEntityTopGroup" Multiplicity="1" />
+          <End Role="BankEntityGroup" Type="Self.BankEntityGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankEntityTopGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntityGroup">
+              <PropertyRef Name="TopGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankEntityTaction_BankEntityId">
+          <End Role="BankEntity" Type="Self.BankEntity" Multiplicity="1" />
+          <End Role="BankEntityTaction" Type="Self.BankEntityTaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankEntity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntityTaction">
+              <PropertyRef Name="EntityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankEntityTaction_BankEntityTypeId">
+          <End Role="BankEntityTactionType" Type="Self.BankEntityTactionType" Multiplicity="1" />
+          <End Role="BankEntityTaction" Type="Self.BankEntityTaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankEntityTactionType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntityTaction">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankEntityTaction_PaymentMethodId">
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
+          <End Role="BankEntityTaction" Type="Self.BankEntityTaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntityTaction">
+              <PropertyRef Name="PaymentMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CardTaction_PaymentMethodId">
           <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
           <End Role="CardTaction" Type="Self.CardTaction" Multiplicity="*" />
@@ -460,7 +580,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PaymentMethodCardOwnerId_PersonId">
+        <Association Name="FK_PaymentMethodAccountOwnerId_UserId">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="*" />
           <ReferentialConstraint>
@@ -468,7 +588,7 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="PaymentMethod">
-              <PropertyRef Name="CardOwnerId" />
+              <PropertyRef Name="AccountOwnerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -635,6 +755,11 @@
           <EntitySet Name="BankAccount" EntityType="Self.BankAccount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BankAccountType" EntityType="Self.BankAccountType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BankCard" EntityType="Self.BankCard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BankEntity" EntityType="Self.BankEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BankEntityGroup" EntityType="Self.BankEntityGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BankEntityTaction" EntityType="Self.BankEntityTaction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BankEntityTactionType" EntityType="Self.BankEntityTactionType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BankEntityTopGroup" EntityType="Self.BankEntityTopGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardTaction" EntityType="Self.CardTaction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardTactionDetails" EntityType="Self.CardTactionDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardTactionOperationType" EntityType="Self.CardTactionOperationType" Schema="dbo" store:Type="Tables" />
@@ -669,6 +794,30 @@
           <AssociationSet Name="FK_BankAccount_BankId" Association="Self.FK_BankAccount_BankId">
             <End Role="Bank" EntitySet="Bank" />
             <End Role="BankAccount" EntitySet="BankAccount" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankEntity_BankEntityGroupId" Association="Self.FK_BankEntity_BankEntityGroupId">
+            <End Role="BankEntityGroup" EntitySet="BankEntityGroup" />
+            <End Role="BankEntity" EntitySet="BankEntity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankEntity_BankId" Association="Self.FK_BankEntity_BankId">
+            <End Role="Bank" EntitySet="Bank" />
+            <End Role="BankEntity" EntitySet="BankEntity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankEntityGroup_BankEntityTopGroupId" Association="Self.FK_BankEntityGroup_BankEntityTopGroupId">
+            <End Role="BankEntityTopGroup" EntitySet="BankEntityTopGroup" />
+            <End Role="BankEntityGroup" EntitySet="BankEntityGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankEntityTaction_BankEntityId" Association="Self.FK_BankEntityTaction_BankEntityId">
+            <End Role="BankEntity" EntitySet="BankEntity" />
+            <End Role="BankEntityTaction" EntitySet="BankEntityTaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankEntityTaction_BankEntityTypeId" Association="Self.FK_BankEntityTaction_BankEntityTypeId">
+            <End Role="BankEntityTactionType" EntitySet="BankEntityTactionType" />
+            <End Role="BankEntityTaction" EntitySet="BankEntityTaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankEntityTaction_PaymentMethodId" Association="Self.FK_BankEntityTaction_PaymentMethodId">
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+            <End Role="BankEntityTaction" EntitySet="BankEntityTaction" />
           </AssociationSet>
           <AssociationSet Name="FK_CardTaction_PaymentMethodId" Association="Self.FK_CardTaction_PaymentMethodId">
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
@@ -710,7 +859,7 @@
             <End Role="BankCard" EntitySet="BankCard" />
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
           </AssociationSet>
-          <AssociationSet Name="FK_PaymentMethodCardOwnerId_PersonId" Association="Self.FK_PaymentMethodCardOwnerId_PersonId">
+          <AssociationSet Name="FK_PaymentMethodAccountOwnerId_UserId" Association="Self.FK_PaymentMethodAccountOwnerId_UserId">
             <End Role="User" EntitySet="User" />
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
           </AssociationSet>
@@ -767,7 +916,8 @@
             <End Role="UserLoginDetails" EntitySet="UserLoginDetails" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="InvoicesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -804,6 +954,7 @@
           <Property Name="AddedOn" Type="DateTime" Precision="7" />
           <Property Name="LastUpdated" Type="DateTime" Precision="7" />
           <NavigationProperty Name="BankAccount" Relationship="Self.FK_BankAccount_BankId" FromRole="Bank" ToRole="BankAccount" />
+          <NavigationProperty Name="BankEntity" Relationship="Self.FK_BankEntity_BankId" FromRole="Bank" ToRole="BankEntity" />
         </EntityType>
         <EntityType Name="BankAccount">
           <Key>
@@ -815,6 +966,7 @@
           <Property Name="Owner" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="DeletedOn" Type="DateTime" Precision="7" />
+          <Property Name="Nickname" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Bank" Relationship="Self.FK_BankAccount_BankId" FromRole="BankAccount" ToRole="Bank" />
           <NavigationProperty Name="BankAccountType" Relationship="Self.FK_BankAccount_BankAccountTypeId" FromRole="BankAccount" ToRole="BankAccountType" />
         </EntityType>
@@ -824,6 +976,7 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="BankAccount" Relationship="Self.FK_BankAccount_BankAccountTypeId" FromRole="BankAccountType" ToRole="BankAccount" />
         </EntityType>
         <EntityType Name="BankCard">
@@ -834,6 +987,61 @@
           <Property Name="Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Type" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_PaymentMethod_BankCardId" FromRole="BankCard" ToRole="PaymentMethod" />
+        </EntityType>
+        <EntityType Name="BankEntity">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BankId" Type="Int32" Nullable="false" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <Property Name="RiskFactor" Type="Int32" />
+          <NavigationProperty Name="Bank" Relationship="Self.FK_BankEntity_BankId" FromRole="BankEntity" ToRole="Bank" />
+          <NavigationProperty Name="BankEntityGroup" Relationship="Self.FK_BankEntity_BankEntityGroupId" FromRole="BankEntity" ToRole="BankEntityGroup" />
+          <NavigationProperty Name="BankEntityTaction" Relationship="Self.FK_BankEntityTaction_BankEntityId" FromRole="BankEntity" ToRole="BankEntityTaction" />
+        </EntityType>
+        <EntityType Name="BankEntityGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TopGroupId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="BankEntity" Relationship="Self.FK_BankEntity_BankEntityGroupId" FromRole="BankEntityGroup" ToRole="BankEntity" />
+          <NavigationProperty Name="BankEntityTopGroup" Relationship="Self.FK_BankEntityGroup_BankEntityTopGroupId" FromRole="BankEntityGroup" ToRole="BankEntityTopGroup" />
+        </EntityType>
+        <EntityType Name="BankEntityTaction">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Dt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="EntityId" Type="Int32" Nullable="false" />
+          <Property Name="EntityTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Unit" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="6" Nullable="false" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="18" Scale="6" Nullable="false" />
+          <Property Name="PaymentMethodId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="BankEntity" Relationship="Self.FK_BankEntityTaction_BankEntityId" FromRole="BankEntityTaction" ToRole="BankEntity" />
+          <NavigationProperty Name="BankEntityTactionType" Relationship="Self.FK_BankEntityTaction_BankEntityTypeId" FromRole="BankEntityTaction" ToRole="BankEntityTactionType" />
+          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_BankEntityTaction_PaymentMethodId" FromRole="BankEntityTaction" ToRole="PaymentMethod" />
+        </EntityType>
+        <EntityType Name="BankEntityTactionType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="BankEntityTaction" Relationship="Self.FK_BankEntityTaction_BankEntityTypeId" FromRole="BankEntityTactionType" ToRole="BankEntityTaction" />
+        </EntityType>
+        <EntityType Name="BankEntityTopGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="BankEntityGroup" Relationship="Self.FK_BankEntityGroup_BankEntityTopGroupId" FromRole="BankEntityTopGroup" ToRole="BankEntityGroup" />
         </EntityType>
         <EntityType Name="CardTaction">
           <Key>
@@ -956,14 +1164,16 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CardOwnerId" Type="Int32" Nullable="false" />
+          <Property Name="AccountOwnerId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="BankCardId" Type="Int32" />
           <Property Name="BankAccountId" Type="Int32" />
+          <Property Name="IsDisplay" Type="Boolean" />
           <NavigationProperty Name="BankCard" Relationship="Self.FK_PaymentMethod_BankCardId" FromRole="PaymentMethod" ToRole="BankCard" />
+          <NavigationProperty Name="BankEntityTaction" Relationship="Self.FK_BankEntityTaction_PaymentMethodId" FromRole="PaymentMethod" ToRole="BankEntityTaction" />
           <NavigationProperty Name="CardTaction" Relationship="Self.FK_CardTaction_PaymentMethodId" FromRole="PaymentMethod" ToRole="CardTaction" />
           <NavigationProperty Name="CashTransfer" Relationship="Self.FK_CashTransfer_PaymentMethodId" FromRole="PaymentMethod" ToRole="CashTransfer" />
-          <NavigationProperty Name="User" Relationship="Self.FK_PaymentMethodCardOwnerId_PersonId" FromRole="PaymentMethod" ToRole="User" />
+          <NavigationProperty Name="User" Relationship="Self.FK_PaymentMethodAccountOwnerId_UserId" FromRole="PaymentMethod" ToRole="User" />
           <NavigationProperty Name="Taction" Relationship="Self.FK_Taction_PaymentMethodId" FromRole="PaymentMethod" ToRole="Taction" />
         </EntityType>
         <EntityType Name="Seller">
@@ -1074,7 +1284,7 @@
           <Property Name="Thumbnail" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="CashTransfer" Relationship="Self.FK_CashTransferFrom_UserId" FromRole="User" ToRole="CashTransfer" />
           <NavigationProperty Name="CashTransfer1" Relationship="Self.FK_CashTransferTo_UserId" FromRole="User" ToRole="CashTransfer" />
-          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_PaymentMethodCardOwnerId_PersonId" FromRole="User" ToRole="PaymentMethod" />
+          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK_PaymentMethodAccountOwnerId_UserId" FromRole="User" ToRole="PaymentMethod" />
           <NavigationProperty Name="Taction" Relationship="Self.FK_Taction_WhoDidIt" FromRole="User" ToRole="Taction" />
           <NavigationProperty Name="UserImage" Relationship="Self.FK_UserImage_UserId" FromRole="User" ToRole="UserImage" />
           <NavigationProperty Name="UserLog" Relationship="Self.FK_UserLog_UserId" FromRole="User" ToRole="UserLog" />
@@ -1099,6 +1309,18 @@
           <Property Name="LogTime" Type="DateTime" Nullable="false" Precision="7" />
           <NavigationProperty Name="User" Relationship="Self.FK_UserLog_UserId" FromRole="UserLog" ToRole="User" />
         </EntityType>
+        <EntityType Name="UserLoginDetails">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserProfileId" Type="Int32" Nullable="false" />
+          <Property Name="LoginDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsSuccess" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordErrorCount" Type="Int32" Nullable="false" />
+          <Property Name="LoginType" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="UserProfile" Relationship="Self.FK_UserLoginDetails_UserProfileId" FromRole="UserLoginDetails" ToRole="UserProfile" />
+        </EntityType>
         <EntityType Name="UserProfile">
           <Key>
             <PropertyRef Name="id" />
@@ -1110,8 +1332,8 @@
           <Property Name="Fullname" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="LoginDate" Type="DateTime" Nullable="false" Precision="7" />
-          <NavigationProperty Name="UserLoginDetails" Relationship="InvoicesModel.FK_UserLoginDetails_UserProfileId" FromRole="UserProfile" ToRole="UserLoginDetails" />
-          </EntityType>
+          <NavigationProperty Name="UserLoginDetails" Relationship="Self.FK_UserLoginDetails_UserProfileId" FromRole="UserProfile" ToRole="UserLoginDetails" />
+        </EntityType>
         <Association Name="FK_AppLog_ActionTypeId">
           <End Role="AppLogActionType" Type="Self.AppLogActionType" Multiplicity="1" />
           <End Role="AppLog" Type="Self.AppLog" Multiplicity="*" />
@@ -1132,6 +1354,18 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="BankAccount">
+              <PropertyRef Name="BankId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankEntity_BankId">
+          <End Role="Bank" Type="Self.Bank" Multiplicity="1" />
+          <End Role="BankEntity" Type="Self.BankEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bank">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntity">
               <PropertyRef Name="BankId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1157,6 +1391,66 @@
             </Principal>
             <Dependent Role="PaymentMethod">
               <PropertyRef Name="BankCardId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankEntity_BankEntityGroupId">
+          <End Role="BankEntityGroup" Type="Self.BankEntityGroup" Multiplicity="1" />
+          <End Role="BankEntity" Type="Self.BankEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankEntityGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntity">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankEntityTaction_BankEntityId">
+          <End Role="BankEntity" Type="Self.BankEntity" Multiplicity="1" />
+          <End Role="BankEntityTaction" Type="Self.BankEntityTaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankEntity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntityTaction">
+              <PropertyRef Name="EntityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankEntityGroup_BankEntityTopGroupId">
+          <End Role="BankEntityTopGroup" Type="Self.BankEntityTopGroup" Multiplicity="1" />
+          <End Role="BankEntityGroup" Type="Self.BankEntityGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankEntityTopGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntityGroup">
+              <PropertyRef Name="TopGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankEntityTaction_BankEntityTypeId">
+          <End Role="BankEntityTactionType" Type="Self.BankEntityTactionType" Multiplicity="1" />
+          <End Role="BankEntityTaction" Type="Self.BankEntityTaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankEntityTactionType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntityTaction">
+              <PropertyRef Name="EntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankEntityTaction_PaymentMethodId">
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
+          <End Role="BankEntityTaction" Type="Self.BankEntityTaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankEntityTaction">
+              <PropertyRef Name="PaymentMethodId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1292,7 +1586,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PaymentMethodCardOwnerId_PersonId">
+        <Association Name="FK_PaymentMethodAccountOwnerId_UserId">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1300,7 +1594,7 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="PaymentMethod">
-              <PropertyRef Name="CardOwnerId" />
+              <PropertyRef Name="AccountOwnerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1424,6 +1718,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserLoginDetails_UserProfileId">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="UserLoginDetails" Type="Self.UserLoginDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserLoginDetails">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="InvoicesEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AppLog" EntityType="Self.AppLog" />
           <EntitySet Name="AppLogActionType" EntityType="Self.AppLogActionType" />
@@ -1431,6 +1737,11 @@
           <EntitySet Name="BankAccount" EntityType="Self.BankAccount" />
           <EntitySet Name="BankAccountType" EntityType="Self.BankAccountType" />
           <EntitySet Name="BankCard" EntityType="Self.BankCard" />
+          <EntitySet Name="BankEntity" EntityType="Self.BankEntity" />
+          <EntitySet Name="BankEntityGroup" EntityType="Self.BankEntityGroup" />
+          <EntitySet Name="BankEntityTaction" EntityType="Self.BankEntityTaction" />
+          <EntitySet Name="BankEntityTactionType" EntityType="Self.BankEntityTactionType" />
+          <EntitySet Name="BankEntityTopGroup" EntityType="Self.BankEntityTopGroup" />
           <EntitySet Name="CardTaction" EntityType="Self.CardTaction" />
           <EntitySet Name="CardTactionDetails" EntityType="Self.CardTactionDetails" />
           <EntitySet Name="CardTactionOperationType" EntityType="Self.CardTactionOperationType" />
@@ -1452,6 +1763,7 @@
           <EntitySet Name="User" EntityType="Self.User" />
           <EntitySet Name="UserImage" EntityType="Self.UserImage" />
           <EntitySet Name="UserLog" EntityType="Self.UserLog" />
+          <EntitySet Name="UserLoginDetails" EntityType="Self.UserLoginDetails" />
           <EntitySet Name="UserProfile" EntityType="Self.UserProfile" />
           <AssociationSet Name="FK_AppLog_ActionTypeId" Association="Self.FK_AppLog_ActionTypeId">
             <End Role="AppLogActionType" EntitySet="AppLogActionType" />
@@ -1461,6 +1773,10 @@
             <End Role="Bank" EntitySet="Bank" />
             <End Role="BankAccount" EntitySet="BankAccount" />
           </AssociationSet>
+          <AssociationSet Name="FK_BankEntity_BankId" Association="Self.FK_BankEntity_BankId">
+            <End Role="Bank" EntitySet="Bank" />
+            <End Role="BankEntity" EntitySet="BankEntity" />
+          </AssociationSet>
           <AssociationSet Name="FK_BankAccount_BankAccountTypeId" Association="Self.FK_BankAccount_BankAccountTypeId">
             <End Role="BankAccountType" EntitySet="BankAccountType" />
             <End Role="BankAccount" EntitySet="BankAccount" />
@@ -1468,6 +1784,26 @@
           <AssociationSet Name="FK_PaymentMethod_BankCardId" Association="Self.FK_PaymentMethod_BankCardId">
             <End Role="BankCard" EntitySet="BankCard" />
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankEntity_BankEntityGroupId" Association="Self.FK_BankEntity_BankEntityGroupId">
+            <End Role="BankEntityGroup" EntitySet="BankEntityGroup" />
+            <End Role="BankEntity" EntitySet="BankEntity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankEntityTaction_BankEntityId" Association="Self.FK_BankEntityTaction_BankEntityId">
+            <End Role="BankEntity" EntitySet="BankEntity" />
+            <End Role="BankEntityTaction" EntitySet="BankEntityTaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankEntityGroup_BankEntityTopGroupId" Association="Self.FK_BankEntityGroup_BankEntityTopGroupId">
+            <End Role="BankEntityTopGroup" EntitySet="BankEntityTopGroup" />
+            <End Role="BankEntityGroup" EntitySet="BankEntityGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankEntityTaction_BankEntityTypeId" Association="Self.FK_BankEntityTaction_BankEntityTypeId">
+            <End Role="BankEntityTactionType" EntitySet="BankEntityTactionType" />
+            <End Role="BankEntityTaction" EntitySet="BankEntityTaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankEntityTaction_PaymentMethodId" Association="Self.FK_BankEntityTaction_PaymentMethodId">
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+            <End Role="BankEntityTaction" EntitySet="BankEntityTaction" />
           </AssociationSet>
           <AssociationSet Name="FK_CardTaction_PaymentMethodId" Association="Self.FK_CardTaction_PaymentMethodId">
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
@@ -1513,7 +1849,7 @@
             <End Role="ItemSubType" EntitySet="ItemSubType" />
             <End Role="TactionDetails" EntitySet="TactionDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_PaymentMethodCardOwnerId_PersonId" Association="Self.FK_PaymentMethodCardOwnerId_PersonId">
+          <AssociationSet Name="FK_PaymentMethodAccountOwnerId_UserId" Association="Self.FK_PaymentMethodAccountOwnerId_UserId">
             <End Role="User" EntitySet="User" />
             <End Role="PaymentMethod" EntitySet="PaymentMethod" />
           </AssociationSet>
@@ -1557,36 +1893,11 @@
             <End Role="User" EntitySet="User" />
             <End Role="UserLog" EntitySet="UserLog" />
           </AssociationSet>
-          <EntitySet Name="UserLoginDetails" EntityType="InvoicesModel.UserLoginDetails" />
-          <AssociationSet Name="FK_UserLoginDetails_UserProfileId" Association="InvoicesModel.FK_UserLoginDetails_UserProfileId">
+          <AssociationSet Name="FK_UserLoginDetails_UserProfileId" Association="Self.FK_UserLoginDetails_UserProfileId">
             <End Role="UserProfile" EntitySet="UserProfile" />
             <End Role="UserLoginDetails" EntitySet="UserLoginDetails" />
           </AssociationSet>
-          </EntityContainer>
-        <EntityType Name="UserLoginDetails">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserProfileId" Type="Int32" Nullable="false" />
-          <Property Name="LoginDate" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="IsSuccess" Type="Boolean" Nullable="false" />
-          <Property Name="PasswordErrorCount" Type="Int32" Nullable="false" />
-          <Property Name="LoginType" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="UserProfile" Relationship="InvoicesModel.FK_UserLoginDetails_UserProfileId" FromRole="UserLoginDetails" ToRole="UserProfile" />
-        </EntityType>
-        <Association Name="FK_UserLoginDetails_UserProfileId">
-          <End Type="InvoicesModel.UserProfile" Role="UserProfile" Multiplicity="1" />
-          <End Type="InvoicesModel.UserLoginDetails" Role="UserLoginDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserProfile">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="UserLoginDetails">
-              <PropertyRef Name="UserProfileId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1636,6 +1947,7 @@
                 <ScalarProperty Name="Owner" ColumnName="Owner" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1644,6 +1956,7 @@
               <MappingFragment StoreEntitySet="BankAccountType">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1653,6 +1966,56 @@
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BankEntity">
+            <EntityTypeMapping TypeName="InvoicesModel.BankEntity">
+              <MappingFragment StoreEntitySet="BankEntity">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="BankId" ColumnName="BankId" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="RiskFactor" ColumnName="RiskFactor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BankEntityGroup">
+            <EntityTypeMapping TypeName="InvoicesModel.BankEntityGroup">
+              <MappingFragment StoreEntitySet="BankEntityGroup">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="TopGroupId" ColumnName="TopGroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BankEntityTaction">
+            <EntityTypeMapping TypeName="InvoicesModel.BankEntityTaction">
+              <MappingFragment StoreEntitySet="BankEntityTaction">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Dt" ColumnName="Dt" />
+                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
+                <ScalarProperty Name="EntityTypeId" ColumnName="EntityTypeId" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="PaymentMethodId" ColumnName="PaymentMethodId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BankEntityTactionType">
+            <EntityTypeMapping TypeName="InvoicesModel.BankEntityTactionType">
+              <MappingFragment StoreEntitySet="BankEntityTactionType">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BankEntityTopGroup">
+            <EntityTypeMapping TypeName="InvoicesModel.BankEntityTopGroup">
+              <MappingFragment StoreEntitySet="BankEntityTopGroup">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1770,10 +2133,11 @@
             <EntityTypeMapping TypeName="InvoicesModel.PaymentMethod">
               <MappingFragment StoreEntitySet="PaymentMethod">
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="CardOwnerId" ColumnName="CardOwnerId" />
+                <ScalarProperty Name="AccountOwnerId" ColumnName="AccountOwnerId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="BankCardId" ColumnName="BankCardId" />
                 <ScalarProperty Name="BankAccountId" ColumnName="BankAccountId" />
+                <ScalarProperty Name="IsDisplay" ColumnName="IsDisplay" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1896,6 +2260,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="UserLoginDetails">
+            <EntityTypeMapping TypeName="InvoicesModel.UserLoginDetails">
+              <MappingFragment StoreEntitySet="UserLoginDetails">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+                <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
+                <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
+                <ScalarProperty Name="PasswordErrorCount" ColumnName="PasswordErrorCount" />
+                <ScalarProperty Name="LoginType" ColumnName="LoginType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="UserProfile">
             <EntityTypeMapping TypeName="InvoicesModel.UserProfile">
               <MappingFragment StoreEntitySet="UserProfile">
@@ -1906,18 +2282,6 @@
                 <ScalarProperty Name="Fullname" ColumnName="Fullname" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserLoginDetails">
-            <EntityTypeMapping TypeName="InvoicesModel.UserLoginDetails">
-              <MappingFragment StoreEntitySet="UserLoginDetails">
-                <ScalarProperty Name="LoginType" ColumnName="LoginType" />
-                <ScalarProperty Name="PasswordErrorCount" ColumnName="PasswordErrorCount" />
-                <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
-                <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
-                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
-                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

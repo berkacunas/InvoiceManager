@@ -12,19 +12,23 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class BankAccountType
+    public partial class BankEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public BankAccountType()
+        public BankEntity()
         {
-            this.BankAccount = new HashSet<BankAccount>();
+            this.BankEntityTaction = new HashSet<BankEntityTaction>();
         }
     
         public int id { get; set; }
         public string Title { get; set; }
-        public string Description { get; set; }
+        public int BankId { get; set; }
+        public int GroupId { get; set; }
+        public Nullable<int> RiskFactor { get; set; }
     
+        public virtual Bank Bank { get; set; }
+        public virtual BankEntityGroup BankEntityGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BankAccount> BankAccount { get; set; }
+        public virtual ICollection<BankEntityTaction> BankEntityTaction { get; set; }
     }
 }

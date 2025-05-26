@@ -31,6 +31,11 @@ namespace InvoiceManager_DBFirst
         public virtual DbSet<BankAccount> BankAccount { get; set; }
         public virtual DbSet<BankAccountType> BankAccountType { get; set; }
         public virtual DbSet<BankCard> BankCard { get; set; }
+        public virtual DbSet<BankEntity> BankEntity { get; set; }
+        public virtual DbSet<BankEntityGroup> BankEntityGroup { get; set; }
+        public virtual DbSet<BankEntityTaction> BankEntityTaction { get; set; }
+        public virtual DbSet<BankEntityTactionType> BankEntityTactionType { get; set; }
+        public virtual DbSet<BankEntityTopGroup> BankEntityTopGroup { get; set; }
         public virtual DbSet<CardTaction> CardTaction { get; set; }
         public virtual DbSet<CardTactionDetails> CardTactionDetails { get; set; }
         public virtual DbSet<CardTactionOperationType> CardTactionOperationType { get; set; }
@@ -52,7 +57,7 @@ namespace InvoiceManager_DBFirst
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserImage> UserImage { get; set; }
         public virtual DbSet<UserLog> UserLog { get; set; }
-        public virtual DbSet<UserProfile> UserProfile { get; set; }
         public virtual DbSet<UserLoginDetails> UserLoginDetails { get; set; }
+        public virtual DbSet<UserProfile> UserProfile { get; set; }
     }
 }
