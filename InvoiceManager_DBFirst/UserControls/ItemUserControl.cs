@@ -389,7 +389,7 @@ namespace InvoiceManager_DBFirst.UserControls
                 return;
             }
 
-            int itemTopGroupId = Convert.ToInt32(row.Cells["id"].Value);
+            int itemTopGroupId = Convert.ToInt32(row.Cells["itemTopGroupId"].Value);
             ItemTopGroup itemTopGroup = (ItemTopGroup)dbContext.ItemTopGroup.Where(r => r.id == itemTopGroupId).FirstOrDefault();
             ItemTopGroup oldItemTopGroup = (ItemTopGroup)dbContext.ItemTopGroup.Where(r => r.id == itemTopGroupId).AsNoTracking().FirstOrDefault();
 
