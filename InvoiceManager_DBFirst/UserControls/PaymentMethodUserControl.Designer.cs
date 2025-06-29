@@ -39,8 +39,8 @@
             this.buttonSaveCard = new System.Windows.Forms.Button();
             this.labelCardOptionsCard = new System.Windows.Forms.Label();
             this.groupBoxPaymentMethodOptions = new System.Windows.Forms.GroupBox();
-            this.comboBoxPaymentMethodOptionsCardOwner = new System.Windows.Forms.ComboBox();
-            this.labelPaymentMethodOptionsCardOwner = new System.Windows.Forms.Label();
+            this.comboBoxPaymentMethodOptionsAccountOwner = new System.Windows.Forms.ComboBox();
+            this.labelPaymentMethodOptionsAccountOwner = new System.Windows.Forms.Label();
             this.comboBoxPaymentMethodOptionsCardType = new System.Windows.Forms.ComboBox();
             this.labelPaymentMethodOptionsCardType = new System.Windows.Forms.Label();
             this.comboBoxPaymentMethodOptionsCard = new System.Windows.Forms.ComboBox();
@@ -77,14 +77,14 @@
             this.groupBoxBankCardOptions.Controls.Add(this.labelCardOptionsCard);
             this.groupBoxBankCardOptions.Location = new System.Drawing.Point(1032, 3);
             this.groupBoxBankCardOptions.Name = "groupBoxBankCardOptions";
-            this.groupBoxBankCardOptions.Size = new System.Drawing.Size(392, 125);
+            this.groupBoxBankCardOptions.Size = new System.Drawing.Size(408, 125);
             this.groupBoxBankCardOptions.TabIndex = 15;
             this.groupBoxBankCardOptions.TabStop = false;
             this.groupBoxBankCardOptions.Text = "Card Options";
             // 
             // textBoxCardOptionsCard
             // 
-            this.textBoxCardOptionsCard.Location = new System.Drawing.Point(94, 31);
+            this.textBoxCardOptionsCard.Location = new System.Drawing.Point(111, 31);
             this.textBoxCardOptionsCard.Name = "textBoxCardOptionsCard";
             this.textBoxCardOptionsCard.Size = new System.Drawing.Size(284, 23);
             this.textBoxCardOptionsCard.TabIndex = 11;
@@ -92,7 +92,7 @@
             // comboBoxCardOptionsCardType
             // 
             this.comboBoxCardOptionsCardType.FormattingEnabled = true;
-            this.comboBoxCardOptionsCardType.Location = new System.Drawing.Point(94, 61);
+            this.comboBoxCardOptionsCardType.Location = new System.Drawing.Point(111, 61);
             this.comboBoxCardOptionsCardType.Name = "comboBoxCardOptionsCardType";
             this.comboBoxCardOptionsCardType.Size = new System.Drawing.Size(284, 23);
             this.comboBoxCardOptionsCardType.TabIndex = 13;
@@ -100,7 +100,7 @@
             // checkBoxCardOptionsEdit
             // 
             this.checkBoxCardOptionsEdit.AutoSize = true;
-            this.checkBoxCardOptionsEdit.Location = new System.Drawing.Point(7, 96);
+            this.checkBoxCardOptionsEdit.Location = new System.Drawing.Point(13, 96);
             this.checkBoxCardOptionsEdit.Name = "checkBoxCardOptionsEdit";
             this.checkBoxCardOptionsEdit.Size = new System.Drawing.Size(47, 19);
             this.checkBoxCardOptionsEdit.TabIndex = 11;
@@ -109,7 +109,7 @@
             // 
             // buttonNewCard
             // 
-            this.buttonNewCard.Location = new System.Drawing.Point(94, 92);
+            this.buttonNewCard.Location = new System.Drawing.Point(111, 92);
             this.buttonNewCard.Name = "buttonNewCard";
             this.buttonNewCard.Size = new System.Drawing.Size(65, 23);
             this.buttonNewCard.TabIndex = 11;
@@ -119,7 +119,7 @@
             // labelCardOptionsCardType
             // 
             this.labelCardOptionsCardType.AutoSize = true;
-            this.labelCardOptionsCardType.Location = new System.Drawing.Point(40, 66);
+            this.labelCardOptionsCardType.Location = new System.Drawing.Point(65, 64);
             this.labelCardOptionsCardType.Name = "labelCardOptionsCardType";
             this.labelCardOptionsCardType.Size = new System.Drawing.Size(31, 15);
             this.labelCardOptionsCardType.TabIndex = 9;
@@ -127,7 +127,7 @@
             // 
             // buttonDeleteCard
             // 
-            this.buttonDeleteCard.Location = new System.Drawing.Point(313, 92);
+            this.buttonDeleteCard.Location = new System.Drawing.Point(330, 92);
             this.buttonDeleteCard.Name = "buttonDeleteCard";
             this.buttonDeleteCard.Size = new System.Drawing.Size(65, 23);
             this.buttonDeleteCard.TabIndex = 8;
@@ -136,7 +136,7 @@
             // 
             // buttonUpdateCard
             // 
-            this.buttonUpdateCard.Location = new System.Drawing.Point(240, 92);
+            this.buttonUpdateCard.Location = new System.Drawing.Point(257, 92);
             this.buttonUpdateCard.Name = "buttonUpdateCard";
             this.buttonUpdateCard.Size = new System.Drawing.Size(65, 23);
             this.buttonUpdateCard.TabIndex = 7;
@@ -145,7 +145,7 @@
             // 
             // buttonSaveCard
             // 
-            this.buttonSaveCard.Location = new System.Drawing.Point(167, 92);
+            this.buttonSaveCard.Location = new System.Drawing.Point(184, 92);
             this.buttonSaveCard.Name = "buttonSaveCard";
             this.buttonSaveCard.Size = new System.Drawing.Size(65, 23);
             this.buttonSaveCard.TabIndex = 6;
@@ -155,7 +155,7 @@
             // labelCardOptionsCard
             // 
             this.labelCardOptionsCard.AutoSize = true;
-            this.labelCardOptionsCard.Location = new System.Drawing.Point(38, 36);
+            this.labelCardOptionsCard.Location = new System.Drawing.Point(63, 34);
             this.labelCardOptionsCard.Name = "labelCardOptionsCard";
             this.labelCardOptionsCard.Size = new System.Drawing.Size(33, 15);
             this.labelCardOptionsCard.TabIndex = 0;
@@ -163,8 +163,8 @@
             // 
             // groupBoxPaymentMethodOptions
             // 
-            this.groupBoxPaymentMethodOptions.Controls.Add(this.comboBoxPaymentMethodOptionsCardOwner);
-            this.groupBoxPaymentMethodOptions.Controls.Add(this.labelPaymentMethodOptionsCardOwner);
+            this.groupBoxPaymentMethodOptions.Controls.Add(this.comboBoxPaymentMethodOptionsAccountOwner);
+            this.groupBoxPaymentMethodOptions.Controls.Add(this.labelPaymentMethodOptionsAccountOwner);
             this.groupBoxPaymentMethodOptions.Controls.Add(this.comboBoxPaymentMethodOptionsCardType);
             this.groupBoxPaymentMethodOptions.Controls.Add(this.labelPaymentMethodOptionsCardType);
             this.groupBoxPaymentMethodOptions.Controls.Add(this.comboBoxPaymentMethodOptionsCard);
@@ -178,32 +178,32 @@
             this.groupBoxPaymentMethodOptions.Controls.Add(this.labelPaymentMethodOptionsCard);
             this.groupBoxPaymentMethodOptions.Location = new System.Drawing.Point(1032, 134);
             this.groupBoxPaymentMethodOptions.Name = "groupBoxPaymentMethodOptions";
-            this.groupBoxPaymentMethodOptions.Size = new System.Drawing.Size(392, 191);
+            this.groupBoxPaymentMethodOptions.Size = new System.Drawing.Size(408, 191);
             this.groupBoxPaymentMethodOptions.TabIndex = 14;
             this.groupBoxPaymentMethodOptions.TabStop = false;
             this.groupBoxPaymentMethodOptions.Text = "Payment Method Options";
             // 
-            // comboBoxPaymentMethodOptionsCardOwner
+            // comboBoxPaymentMethodOptionsAccountOwner
             // 
-            this.comboBoxPaymentMethodOptionsCardOwner.FormattingEnabled = true;
-            this.comboBoxPaymentMethodOptionsCardOwner.Location = new System.Drawing.Point(94, 125);
-            this.comboBoxPaymentMethodOptionsCardOwner.Name = "comboBoxPaymentMethodOptionsCardOwner";
-            this.comboBoxPaymentMethodOptionsCardOwner.Size = new System.Drawing.Size(284, 23);
-            this.comboBoxPaymentMethodOptionsCardOwner.TabIndex = 18;
+            this.comboBoxPaymentMethodOptionsAccountOwner.FormattingEnabled = true;
+            this.comboBoxPaymentMethodOptionsAccountOwner.Location = new System.Drawing.Point(111, 63);
+            this.comboBoxPaymentMethodOptionsAccountOwner.Name = "comboBoxPaymentMethodOptionsAccountOwner";
+            this.comboBoxPaymentMethodOptionsAccountOwner.Size = new System.Drawing.Size(284, 23);
+            this.comboBoxPaymentMethodOptionsAccountOwner.TabIndex = 18;
             // 
-            // labelPaymentMethodOptionsCardOwner
+            // labelPaymentMethodOptionsAccountOwner
             // 
-            this.labelPaymentMethodOptionsCardOwner.AutoSize = true;
-            this.labelPaymentMethodOptionsCardOwner.Location = new System.Drawing.Point(4, 129);
-            this.labelPaymentMethodOptionsCardOwner.Name = "labelPaymentMethodOptionsCardOwner";
-            this.labelPaymentMethodOptionsCardOwner.Size = new System.Drawing.Size(72, 15);
-            this.labelPaymentMethodOptionsCardOwner.TabIndex = 17;
-            this.labelPaymentMethodOptionsCardOwner.Text = "Card Owner";
+            this.labelPaymentMethodOptionsAccountOwner.AutoSize = true;
+            this.labelPaymentMethodOptionsAccountOwner.Location = new System.Drawing.Point(6, 66);
+            this.labelPaymentMethodOptionsAccountOwner.Name = "labelPaymentMethodOptionsAccountOwner";
+            this.labelPaymentMethodOptionsAccountOwner.Size = new System.Drawing.Size(90, 15);
+            this.labelPaymentMethodOptionsAccountOwner.TabIndex = 17;
+            this.labelPaymentMethodOptionsAccountOwner.Text = "Account Owner";
             // 
             // comboBoxPaymentMethodOptionsCardType
             // 
             this.comboBoxPaymentMethodOptionsCardType.FormattingEnabled = true;
-            this.comboBoxPaymentMethodOptionsCardType.Location = new System.Drawing.Point(94, 94);
+            this.comboBoxPaymentMethodOptionsCardType.Location = new System.Drawing.Point(111, 123);
             this.comboBoxPaymentMethodOptionsCardType.Name = "comboBoxPaymentMethodOptionsCardType";
             this.comboBoxPaymentMethodOptionsCardType.Size = new System.Drawing.Size(284, 23);
             this.comboBoxPaymentMethodOptionsCardType.TabIndex = 16;
@@ -211,7 +211,7 @@
             // labelPaymentMethodOptionsCardType
             // 
             this.labelPaymentMethodOptionsCardType.AutoSize = true;
-            this.labelPaymentMethodOptionsCardType.Location = new System.Drawing.Point(16, 98);
+            this.labelPaymentMethodOptionsCardType.Location = new System.Drawing.Point(36, 126);
             this.labelPaymentMethodOptionsCardType.Name = "labelPaymentMethodOptionsCardType";
             this.labelPaymentMethodOptionsCardType.Size = new System.Drawing.Size(60, 15);
             this.labelPaymentMethodOptionsCardType.TabIndex = 15;
@@ -220,7 +220,7 @@
             // comboBoxPaymentMethodOptionsCard
             // 
             this.comboBoxPaymentMethodOptionsCard.FormattingEnabled = true;
-            this.comboBoxPaymentMethodOptionsCard.Location = new System.Drawing.Point(94, 63);
+            this.comboBoxPaymentMethodOptionsCard.Location = new System.Drawing.Point(111, 92);
             this.comboBoxPaymentMethodOptionsCard.Name = "comboBoxPaymentMethodOptionsCard";
             this.comboBoxPaymentMethodOptionsCard.Size = new System.Drawing.Size(284, 23);
             this.comboBoxPaymentMethodOptionsCard.TabIndex = 14;
@@ -228,7 +228,7 @@
             // checkBoxPaymentMethodOptionsEdit
             // 
             this.checkBoxPaymentMethodOptionsEdit.AutoSize = true;
-            this.checkBoxPaymentMethodOptionsEdit.Location = new System.Drawing.Point(6, 163);
+            this.checkBoxPaymentMethodOptionsEdit.Location = new System.Drawing.Point(13, 161);
             this.checkBoxPaymentMethodOptionsEdit.Name = "checkBoxPaymentMethodOptionsEdit";
             this.checkBoxPaymentMethodOptionsEdit.Size = new System.Drawing.Size(47, 19);
             this.checkBoxPaymentMethodOptionsEdit.TabIndex = 10;
@@ -237,7 +237,7 @@
             // 
             // buttonNewPaymentMethod
             // 
-            this.buttonNewPaymentMethod.Location = new System.Drawing.Point(94, 157);
+            this.buttonNewPaymentMethod.Location = new System.Drawing.Point(111, 157);
             this.buttonNewPaymentMethod.Name = "buttonNewPaymentMethod";
             this.buttonNewPaymentMethod.Size = new System.Drawing.Size(65, 23);
             this.buttonNewPaymentMethod.TabIndex = 9;
@@ -246,7 +246,7 @@
             // 
             // buttonDeletePaymentMethod
             // 
-            this.buttonDeletePaymentMethod.Location = new System.Drawing.Point(313, 157);
+            this.buttonDeletePaymentMethod.Location = new System.Drawing.Point(330, 157);
             this.buttonDeletePaymentMethod.Name = "buttonDeletePaymentMethod";
             this.buttonDeletePaymentMethod.Size = new System.Drawing.Size(65, 23);
             this.buttonDeletePaymentMethod.TabIndex = 8;
@@ -255,7 +255,7 @@
             // 
             // buttonUpdatePaymentMethod
             // 
-            this.buttonUpdatePaymentMethod.Location = new System.Drawing.Point(240, 157);
+            this.buttonUpdatePaymentMethod.Location = new System.Drawing.Point(257, 157);
             this.buttonUpdatePaymentMethod.Name = "buttonUpdatePaymentMethod";
             this.buttonUpdatePaymentMethod.Size = new System.Drawing.Size(65, 23);
             this.buttonUpdatePaymentMethod.TabIndex = 7;
@@ -264,7 +264,7 @@
             // 
             // buttonSavePaymentMethod
             // 
-            this.buttonSavePaymentMethod.Location = new System.Drawing.Point(167, 157);
+            this.buttonSavePaymentMethod.Location = new System.Drawing.Point(184, 157);
             this.buttonSavePaymentMethod.Name = "buttonSavePaymentMethod";
             this.buttonSavePaymentMethod.Size = new System.Drawing.Size(65, 23);
             this.buttonSavePaymentMethod.TabIndex = 6;
@@ -274,7 +274,7 @@
             // labelPaymentMethodOptionsPaymentMethod
             // 
             this.labelPaymentMethodOptionsPaymentMethod.AutoSize = true;
-            this.labelPaymentMethodOptionsPaymentMethod.Location = new System.Drawing.Point(27, 36);
+            this.labelPaymentMethodOptionsPaymentMethod.Location = new System.Drawing.Point(47, 37);
             this.labelPaymentMethodOptionsPaymentMethod.Name = "labelPaymentMethodOptionsPaymentMethod";
             this.labelPaymentMethodOptionsPaymentMethod.Size = new System.Drawing.Size(49, 15);
             this.labelPaymentMethodOptionsPaymentMethod.TabIndex = 2;
@@ -282,7 +282,7 @@
             // 
             // textBoxPaymentMethodOptionsPaymentMethod
             // 
-            this.textBoxPaymentMethodOptionsPaymentMethod.Location = new System.Drawing.Point(94, 32);
+            this.textBoxPaymentMethodOptionsPaymentMethod.Location = new System.Drawing.Point(111, 34);
             this.textBoxPaymentMethodOptionsPaymentMethod.Name = "textBoxPaymentMethodOptionsPaymentMethod";
             this.textBoxPaymentMethodOptionsPaymentMethod.Size = new System.Drawing.Size(284, 23);
             this.textBoxPaymentMethodOptionsPaymentMethod.TabIndex = 1;
@@ -290,7 +290,7 @@
             // labelPaymentMethodOptionsCard
             // 
             this.labelPaymentMethodOptionsCard.AutoSize = true;
-            this.labelPaymentMethodOptionsCard.Location = new System.Drawing.Point(43, 67);
+            this.labelPaymentMethodOptionsCard.Location = new System.Drawing.Point(63, 95);
             this.labelPaymentMethodOptionsCard.Name = "labelPaymentMethodOptionsCard";
             this.labelPaymentMethodOptionsCard.Size = new System.Drawing.Size(33, 15);
             this.labelPaymentMethodOptionsCard.TabIndex = 0;
@@ -381,8 +381,8 @@
         private System.Windows.Forms.Button buttonSaveCard;
         private System.Windows.Forms.Label labelCardOptionsCard;
         private System.Windows.Forms.GroupBox groupBoxPaymentMethodOptions;
-        private System.Windows.Forms.ComboBox comboBoxPaymentMethodOptionsCardOwner;
-        private System.Windows.Forms.Label labelPaymentMethodOptionsCardOwner;
+        private System.Windows.Forms.ComboBox comboBoxPaymentMethodOptionsAccountOwner;
+        private System.Windows.Forms.Label labelPaymentMethodOptionsAccountOwner;
         private System.Windows.Forms.ComboBox comboBoxPaymentMethodOptionsCardType;
         private System.Windows.Forms.Label labelPaymentMethodOptionsCardType;
         private System.Windows.Forms.ComboBox comboBoxPaymentMethodOptionsCard;

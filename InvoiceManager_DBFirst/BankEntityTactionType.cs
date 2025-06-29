@@ -12,17 +12,18 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class BankAccount
+    public partial class BankEntityTactionType
     {
-        public int id { get; set; }
-        public int BankId { get; set; }
-        public int TypeId { get; set; }
-        public string Owner { get; set; }
-        public System.DateTime CreatedOn { get; set; }
-        public Nullable<System.DateTime> DeletedOn { get; set; }
-        public string Nickname { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public BankEntityTactionType()
+        {
+            this.BankEntityTaction = new HashSet<BankEntityTaction>();
+        }
     
-        public virtual Bank Bank { get; set; }
-        public virtual BankAccountType BankAccountType { get; set; }
+        public int id { get; set; }
+        public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BankEntityTaction> BankEntityTaction { get; set; }
     }
 }

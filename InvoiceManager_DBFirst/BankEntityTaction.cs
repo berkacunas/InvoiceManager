@@ -12,17 +12,19 @@ namespace InvoiceManager_DBFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class BankAccount
+    public partial class BankEntityTaction
     {
         public int id { get; set; }
-        public int BankId { get; set; }
-        public int TypeId { get; set; }
-        public string Owner { get; set; }
-        public System.DateTime CreatedOn { get; set; }
-        public Nullable<System.DateTime> DeletedOn { get; set; }
-        public string Nickname { get; set; }
+        public System.DateTime Dt { get; set; }
+        public int EntityId { get; set; }
+        public int EntityTypeId { get; set; }
+        public int Unit { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal TotalPrice { get; set; }
+        public int PaymentMethodId { get; set; }
     
-        public virtual Bank Bank { get; set; }
-        public virtual BankAccountType BankAccountType { get; set; }
+        public virtual BankEntity BankEntity { get; set; }
+        public virtual BankEntityTactionType BankEntityTactionType { get; set; }
+        public virtual PaymentMethod PaymentMethod { get; set; }
     }
 }

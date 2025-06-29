@@ -18,6 +18,7 @@ namespace InvoiceManager_DBFirst
         public Bank()
         {
             this.BankAccount = new HashSet<BankAccount>();
+            this.BankEntity = new HashSet<BankEntity>();
         }
     
         public int id { get; set; }
@@ -33,5 +34,7 @@ namespace InvoiceManager_DBFirst
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BankAccount> BankAccount { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BankEntity> BankEntity { get; set; }
     }
 }
