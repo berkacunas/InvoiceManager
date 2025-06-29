@@ -514,6 +514,7 @@ namespace InvoiceManager_DBFirst
 
         private void loadToolStripMenuItemIcons()
         {
+            this.toolStripMenuItemLogin.Image = BitmapResourceLoader.Login;
             this.toolStripMenuItemExit.Image = BitmapResourceLoader.Exit;
             this.toolStripMenuItemTransactions.Image = BitmapResourceLoader.Transaction;
             this.toolStripMenuItemItems.Image = BitmapResourceLoader.Item;
@@ -522,30 +523,33 @@ namespace InvoiceManager_DBFirst
             this.toolStripMenuItemUsers.Image = BitmapResourceLoader.User;
             this.toolStripMenuItemSellers.Image = BitmapResourceLoader.Seller;
             this.toolStripMenuItemSettings.Image = BitmapResourceLoader.Settings;
+
+            this.toolStripMenuItemFetchBankFunds.Image = BitmapResourceLoader.BankBond1;
+            this.toolStripMenuItemFetchBankFundTypes.Image = BitmapResourceLoader.BankBond2;
+            this.toolStripMenuItemFetchBankFundValues.Image = BitmapResourceLoader.BankBond3;
+            this.toolStripMenuItemFetchGroupBankFunds.Image = BitmapResourceLoader.DataTransfer;
+            this.toolStripMenuItemBankFunds.Image = BitmapResourceLoader.Bank;
+
         }
 
         private void createToolStripButtons()
         {
-            ToolStripButton toolStripButtonSyncSqlite = new ToolStripButton();
-            ToolStripSeparator separator1 = new ToolStripSeparator();
             ToolStripButton toolStripButtonTactions = new ToolStripButton();
             ToolStripButton toolStripButtonItems = new ToolStripButton();
             ToolStripButton toolStripButtonShops = new ToolStripButton();
             ToolStripButton toolStripButtonPaymentMethods = new ToolStripButton();
             ToolStripButton toolStripButtonUsers = new ToolStripButton();
             ToolStripButton toolStripButtonSellers = new ToolStripButton();
-            ToolStripSeparator separator2 = new ToolStripSeparator();
+            ToolStripSeparator separator1 = new ToolStripSeparator();
             ToolStripButton toolStripButtonApplicationLog = new ToolStripButton();
             ToolStripButton toolStripButtonSettings = new ToolStripButton();
-            ToolStripSeparator separator3 = new ToolStripSeparator();
+            ToolStripSeparator separator2 = new ToolStripSeparator();
             ToolStripButton toolStripButtonLogin = new ToolStripButton();
 
             Padding padding = new Padding(4, 0, 4, 0);
             separator1.Margin = padding;
             separator2.Margin = padding;
-            separator3.Margin = padding;
 
-            toolStripButtonSyncSqlite.Image = BitmapResourceLoader.Sqlite;
             toolStripButtonTactions.Image = BitmapResourceLoader.Transaction;
             toolStripButtonItems.Image = BitmapResourceLoader.Item;
             toolStripButtonShops.Image = BitmapResourceLoader.Shop;
@@ -556,7 +560,6 @@ namespace InvoiceManager_DBFirst
             toolStripButtonSettings.Image = BitmapResourceLoader.Settings;
             toolStripButtonLogin.Image = BitmapResourceLoader.Login;
 
-            toolStripButtonSyncSqlite.Tag = "SyncSqlite";
             toolStripButtonTactions.Tag = "Transactions";
             toolStripButtonItems.Tag = "Items";
             toolStripButtonShops.Tag = "Shops";
@@ -568,12 +571,11 @@ namespace InvoiceManager_DBFirst
             toolStripButtonLogin.Tag = "Login";
 
             this.toolStripMain.Items.AddRange(new ToolStripItem[] {
-                toolStripButtonSyncSqlite, separator1,
                 toolStripButtonTactions, toolStripButtonItems,
                 toolStripButtonShops, toolStripButtonPaymentMethods,
                 toolStripButtonUsers, toolStripButtonSellers,
-                separator2, toolStripButtonApplicationLog, toolStripButtonSettings,
-                separator3, toolStripButtonLogin
+                separator1, toolStripButtonApplicationLog, toolStripButtonSettings,
+                separator2, toolStripButtonLogin
             });
 
             foreach (ToolStripItem item in toolStripMain.Items)
@@ -979,6 +981,11 @@ namespace InvoiceManager_DBFirst
         private void toolStripMenuItemFetchBankFundValues_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void toolStripMenuItemLogin_Click(object sender, EventArgs e)
+        {
+            this.initializeLoginForm();
         }
     }
 }

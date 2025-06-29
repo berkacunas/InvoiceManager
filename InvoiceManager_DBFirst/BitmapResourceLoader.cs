@@ -176,7 +176,30 @@ namespace InvoiceManager_DBFirst
             get { return _getBitmap("logbook4.png"); }
         }
 
-        
+        public static Bitmap BankBond1
+        {
+            get { return _getBitmap("bond-1.png"); }
+        }
+
+        public static Bitmap BankBond2
+        {
+            get { return _getBitmap("bond-2.png"); }
+        }
+
+        public static Bitmap BankBond3
+        {
+            get { return _getBitmap("bond-3.png"); }
+        }
+
+        public static Bitmap DataTransfer
+        {
+            get { return _getBitmap("data-transfer.png"); }
+        }
+
+        public static Bitmap Bank
+        {
+            get { return _getBitmap("bank.png"); }
+        }
 
         public static Bitmap DefaultUser
         {

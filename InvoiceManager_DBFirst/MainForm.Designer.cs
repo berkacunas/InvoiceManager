@@ -41,8 +41,8 @@
             this.toolStripMenuItemSellers = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemApplicationLog = new System.Windows.Forms.ToolStripMenuItem();
             this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bankFundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fetchBankFundTypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemBankFunds = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemFetchGroupBankFunds = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemFetchBankFunds = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemFetchBankFundTypes = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemFetchBankFundValues = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,6 +75,7 @@
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
             this.contextMenuStripTileView = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemLogin = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -105,6 +106,7 @@
             // toolStripMenuItemFile
             // 
             this.toolStripMenuItemFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemLogin,
             this.toolStripMenuItemExit});
             this.toolStripMenuItemFile.Name = "toolStripMenuItemFile";
             this.toolStripMenuItemFile.Size = new System.Drawing.Size(37, 20);
@@ -191,47 +193,47 @@
             // dataToolStripMenuItem
             // 
             this.dataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bankFundsToolStripMenuItem});
+            this.toolStripMenuItemBankFunds});
             this.dataToolStripMenuItem.Name = "dataToolStripMenuItem";
             this.dataToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.dataToolStripMenuItem.Text = "Data";
             // 
-            // bankFundsToolStripMenuItem
+            // toolStripMenuItemBankFunds
             // 
-            this.bankFundsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fetchBankFundTypesToolStripMenuItem});
-            this.bankFundsToolStripMenuItem.Name = "bankFundsToolStripMenuItem";
-            this.bankFundsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
-            this.bankFundsToolStripMenuItem.Text = "Bank Funds";
+            this.toolStripMenuItemBankFunds.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemFetchGroupBankFunds});
+            this.toolStripMenuItemBankFunds.Name = "toolStripMenuItemBankFunds";
+            this.toolStripMenuItemBankFunds.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemBankFunds.Text = "Bank Funds";
             // 
-            // fetchBankFundTypesToolStripMenuItem
+            // toolStripMenuItemFetchGroupBankFunds
             // 
-            this.fetchBankFundTypesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemFetchGroupBankFunds.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemFetchBankFunds,
             this.toolStripMenuItemFetchBankFundTypes,
             this.toolStripMenuItemFetchBankFundValues});
-            this.fetchBankFundTypesToolStripMenuItem.Name = "fetchBankFundTypesToolStripMenuItem";
-            this.fetchBankFundTypesToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
-            this.fetchBankFundTypesToolStripMenuItem.Text = "Fetch";
+            this.toolStripMenuItemFetchGroupBankFunds.Name = "toolStripMenuItemFetchGroupBankFunds";
+            this.toolStripMenuItemFetchGroupBankFunds.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemFetchGroupBankFunds.Text = "Fetch";
             // 
             // toolStripMenuItemFetchBankFunds
             // 
             this.toolStripMenuItemFetchBankFunds.Name = "toolStripMenuItemFetchBankFunds";
-            this.toolStripMenuItemFetchBankFunds.Size = new System.Drawing.Size(137, 22);
+            this.toolStripMenuItemFetchBankFunds.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemFetchBankFunds.Text = "Funds";
             this.toolStripMenuItemFetchBankFunds.Click += new System.EventHandler(this.toolStripMenuItemFetchBankFunds_Click);
             // 
             // toolStripMenuItemFetchBankFundTypes
             // 
             this.toolStripMenuItemFetchBankFundTypes.Name = "toolStripMenuItemFetchBankFundTypes";
-            this.toolStripMenuItemFetchBankFundTypes.Size = new System.Drawing.Size(137, 22);
+            this.toolStripMenuItemFetchBankFundTypes.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemFetchBankFundTypes.Text = "Fund Types";
             this.toolStripMenuItemFetchBankFundTypes.Click += new System.EventHandler(this.toolStripMenuItemFetchBankFundTypes_Click);
             // 
             // toolStripMenuItemFetchBankFundValues
             // 
             this.toolStripMenuItemFetchBankFundValues.Name = "toolStripMenuItemFetchBankFundValues";
-            this.toolStripMenuItemFetchBankFundValues.Size = new System.Drawing.Size(137, 22);
+            this.toolStripMenuItemFetchBankFundValues.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemFetchBankFundValues.Text = "Fund Values";
             this.toolStripMenuItemFetchBankFundValues.Click += new System.EventHandler(this.toolStripMenuItemFetchBankFundValues_Click);
             // 
@@ -536,6 +538,13 @@
             this.contextMenuStripTileView.Name = "contextMenuStripTileView";
             this.contextMenuStripTileView.Size = new System.Drawing.Size(61, 4);
             // 
+            // toolStripMenuItemLogin
+            // 
+            this.toolStripMenuItemLogin.Name = "toolStripMenuItemLogin";
+            this.toolStripMenuItemLogin.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemLogin.Text = "Login";
+            this.toolStripMenuItemLogin.Click += new System.EventHandler(this.toolStripMenuItemLogin_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -610,11 +619,12 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label labelProfileTransactionsVal;
         private System.Windows.Forms.ToolStripMenuItem dataToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem bankFundsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fetchBankFundTypesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBankFunds;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFetchGroupBankFunds;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFetchBankFunds;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFetchBankFundTypes;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFetchBankFundValues;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemLogin;
     }
 }
 

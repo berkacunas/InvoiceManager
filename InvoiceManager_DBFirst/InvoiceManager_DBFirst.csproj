@@ -543,6 +543,11 @@
     <EmbeddedResource Include="assets\logbook2.png" />
     <EmbeddedResource Include="assets\logbook3.png" />
     <EmbeddedResource Include="assets\logbook4.png" />
+    <EmbeddedResource Include="assets\bond-1.png" />
+    <EmbeddedResource Include="assets\bond-2.png" />
+    <EmbeddedResource Include="assets\bond-3.png" />
+    <EmbeddedResource Include="assets\data-transfer.png" />
+    <EmbeddedResource Include="assets\bank.png" />
     <Content Include="InvoiceModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>InvoiceModel.edmx</DependentUpon>
