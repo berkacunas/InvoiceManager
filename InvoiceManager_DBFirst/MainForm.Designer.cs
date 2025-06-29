@@ -31,10 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemSync = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemSyncSqlite = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemBatch = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemBatchItemSubTypes = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemWindows = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemTransactions = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +40,12 @@
             this.toolStripMenuItemUsers = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSellers = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemApplicationLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bankFundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fetchBankFundTypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemFetchBankFunds = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemFetchBankFundTypes = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemFetchBankFundValues = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemView = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,12 +75,6 @@
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
             this.contextMenuStripTileView = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bankFundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fetchBankFundTypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemFetchBankFunds = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemFetchBankFundTypes = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemFetchBankFundValues = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -109,51 +105,17 @@
             // toolStripMenuItemFile
             // 
             this.toolStripMenuItemFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemSync,
-            this.toolStripMenuItemBatch,
             this.toolStripMenuItemExit});
             this.toolStripMenuItemFile.Name = "toolStripMenuItemFile";
             this.toolStripMenuItemFile.Size = new System.Drawing.Size(37, 20);
             this.toolStripMenuItemFile.Text = "&File";
-            // 
-            // toolStripMenuItemSync
-            // 
-            this.toolStripMenuItemSync.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemSyncSqlite});
-            this.toolStripMenuItemSync.Name = "toolStripMenuItemSync";
-            this.toolStripMenuItemSync.Size = new System.Drawing.Size(135, 22);
-            this.toolStripMenuItemSync.Text = "Sync";
-            // 
-            // toolStripMenuItemSyncSqlite
-            // 
-            this.toolStripMenuItemSyncSqlite.Name = "toolStripMenuItemSyncSqlite";
-            this.toolStripMenuItemSyncSqlite.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
-            | System.Windows.Forms.Keys.S)));
-            this.toolStripMenuItemSyncSqlite.Size = new System.Drawing.Size(166, 22);
-            this.toolStripMenuItemSyncSqlite.Text = "Sqlite";
-            this.toolStripMenuItemSyncSqlite.Click += new System.EventHandler(this.toolStripMenuItemSyncSqlite_Click);
-            // 
-            // toolStripMenuItemBatch
-            // 
-            this.toolStripMenuItemBatch.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemBatchItemSubTypes});
-            this.toolStripMenuItemBatch.Name = "toolStripMenuItemBatch";
-            this.toolStripMenuItemBatch.Size = new System.Drawing.Size(135, 22);
-            this.toolStripMenuItemBatch.Text = "Batch";
-            // 
-            // toolStripMenuItemBatchItemSubTypes
-            // 
-            this.toolStripMenuItemBatchItemSubTypes.Name = "toolStripMenuItemBatchItemSubTypes";
-            this.toolStripMenuItemBatchItemSubTypes.Size = new System.Drawing.Size(147, 22);
-            this.toolStripMenuItemBatchItemSubTypes.Text = "ItemSubTypes";
-            this.toolStripMenuItemBatchItemSubTypes.Click += new System.EventHandler(this.toolStripMenuItemBatchItemSubTypes_Click);
             // 
             // toolStripMenuItemExit
             // 
             this.toolStripMenuItemExit.Name = "toolStripMenuItemExit";
             this.toolStripMenuItemExit.ShortcutKeyDisplayString = "";
             this.toolStripMenuItemExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.toolStripMenuItemExit.Size = new System.Drawing.Size(135, 22);
+            this.toolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemExit.Text = "Exit";
             this.toolStripMenuItemExit.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -226,6 +188,53 @@
             this.toolStripMenuItemApplicationLog.Text = "Application Log";
             this.toolStripMenuItemApplicationLog.Click += new System.EventHandler(this.toolStripMenuItemApplicationLog_Click);
             // 
+            // dataToolStripMenuItem
+            // 
+            this.dataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bankFundsToolStripMenuItem});
+            this.dataToolStripMenuItem.Name = "dataToolStripMenuItem";
+            this.dataToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.dataToolStripMenuItem.Text = "Data";
+            // 
+            // bankFundsToolStripMenuItem
+            // 
+            this.bankFundsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fetchBankFundTypesToolStripMenuItem});
+            this.bankFundsToolStripMenuItem.Name = "bankFundsToolStripMenuItem";
+            this.bankFundsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.bankFundsToolStripMenuItem.Text = "Bank Funds";
+            // 
+            // fetchBankFundTypesToolStripMenuItem
+            // 
+            this.fetchBankFundTypesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemFetchBankFunds,
+            this.toolStripMenuItemFetchBankFundTypes,
+            this.toolStripMenuItemFetchBankFundValues});
+            this.fetchBankFundTypesToolStripMenuItem.Name = "fetchBankFundTypesToolStripMenuItem";
+            this.fetchBankFundTypesToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.fetchBankFundTypesToolStripMenuItem.Text = "Fetch";
+            // 
+            // toolStripMenuItemFetchBankFunds
+            // 
+            this.toolStripMenuItemFetchBankFunds.Name = "toolStripMenuItemFetchBankFunds";
+            this.toolStripMenuItemFetchBankFunds.Size = new System.Drawing.Size(137, 22);
+            this.toolStripMenuItemFetchBankFunds.Text = "Funds";
+            this.toolStripMenuItemFetchBankFunds.Click += new System.EventHandler(this.toolStripMenuItemFetchBankFunds_Click);
+            // 
+            // toolStripMenuItemFetchBankFundTypes
+            // 
+            this.toolStripMenuItemFetchBankFundTypes.Name = "toolStripMenuItemFetchBankFundTypes";
+            this.toolStripMenuItemFetchBankFundTypes.Size = new System.Drawing.Size(137, 22);
+            this.toolStripMenuItemFetchBankFundTypes.Text = "Fund Types";
+            this.toolStripMenuItemFetchBankFundTypes.Click += new System.EventHandler(this.toolStripMenuItemFetchBankFundTypes_Click);
+            // 
+            // toolStripMenuItemFetchBankFundValues
+            // 
+            this.toolStripMenuItemFetchBankFundValues.Name = "toolStripMenuItemFetchBankFundValues";
+            this.toolStripMenuItemFetchBankFundValues.Size = new System.Drawing.Size(137, 22);
+            this.toolStripMenuItemFetchBankFundValues.Text = "Fund Values";
+            this.toolStripMenuItemFetchBankFundValues.Click += new System.EventHandler(this.toolStripMenuItemFetchBankFundValues_Click);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -237,7 +246,7 @@
             // toolStripMenuItemSettings
             // 
             this.toolStripMenuItemSettings.Name = "toolStripMenuItemSettings";
-            this.toolStripMenuItemSettings.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemSettings.Size = new System.Drawing.Size(116, 22);
             this.toolStripMenuItemSettings.Text = "Settings";
             this.toolStripMenuItemSettings.Click += new System.EventHandler(this.toolStripMenuItemSettings_Click);
             // 
@@ -527,53 +536,6 @@
             this.contextMenuStripTileView.Name = "contextMenuStripTileView";
             this.contextMenuStripTileView.Size = new System.Drawing.Size(61, 4);
             // 
-            // dataToolStripMenuItem
-            // 
-            this.dataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bankFundsToolStripMenuItem});
-            this.dataToolStripMenuItem.Name = "dataToolStripMenuItem";
-            this.dataToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.dataToolStripMenuItem.Text = "Data";
-            // 
-            // bankFundsToolStripMenuItem
-            // 
-            this.bankFundsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fetchBankFundTypesToolStripMenuItem});
-            this.bankFundsToolStripMenuItem.Name = "bankFundsToolStripMenuItem";
-            this.bankFundsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.bankFundsToolStripMenuItem.Text = "Bank Funds";
-            // 
-            // fetchBankFundTypesToolStripMenuItem
-            // 
-            this.fetchBankFundTypesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemFetchBankFunds,
-            this.toolStripMenuItemFetchBankFundTypes,
-            this.toolStripMenuItemFetchBankFundValues});
-            this.fetchBankFundTypesToolStripMenuItem.Name = "fetchBankFundTypesToolStripMenuItem";
-            this.fetchBankFundTypesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.fetchBankFundTypesToolStripMenuItem.Text = "Fetch";
-            // 
-            // toolStripMenuItemFetchBankFunds
-            // 
-            this.toolStripMenuItemFetchBankFunds.Name = "toolStripMenuItemFetchBankFunds";
-            this.toolStripMenuItemFetchBankFunds.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuItemFetchBankFunds.Text = "Funds";
-            this.toolStripMenuItemFetchBankFunds.Click += new System.EventHandler(this.toolStripMenuItemFetchBankFunds_Click);
-            // 
-            // toolStripMenuItemFetchBankFundTypes
-            // 
-            this.toolStripMenuItemFetchBankFundTypes.Name = "toolStripMenuItemFetchBankFundTypes";
-            this.toolStripMenuItemFetchBankFundTypes.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuItemFetchBankFundTypes.Text = "Fund Types";
-            this.toolStripMenuItemFetchBankFundTypes.Click += new System.EventHandler(this.toolStripMenuItemFetchBankFundTypes_Click);
-            // 
-            // toolStripMenuItemFetchBankFundValues
-            // 
-            this.toolStripMenuItemFetchBankFundValues.Name = "toolStripMenuItemFetchBankFundValues";
-            this.toolStripMenuItemFetchBankFundValues.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuItemFetchBankFundValues.Text = "Fund Values";
-            this.toolStripMenuItemFetchBankFundValues.Click += new System.EventHandler(this.toolStripMenuItemFetchBankFundValues_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -612,8 +574,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemWindows;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemTransactions;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemItems;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSync;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSyncSqlite;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemShops;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPaymentMethods;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUsers;
@@ -635,8 +595,6 @@
         private System.Windows.Forms.Label labelHorizontalLine1;
         private System.Windows.Forms.Panel panelTopSide;
         private System.Windows.Forms.Panel panelProfile;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBatch;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBatchItemSubTypes;
         private System.Windows.Forms.Panel placeHolder;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemApplicationLog;
         private System.Windows.Forms.ListView listViewActiveControls;

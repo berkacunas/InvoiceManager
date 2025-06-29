@@ -373,12 +373,6 @@
     </Compile>
     <Compile Include="BitmapResourceLoader.cs" />
     <Compile Include="ItemsReport.cs" />
-    <Compile Include="ItemSubTypeBatcherForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ItemSubTypeBatcherForm.Designer.cs">
-      <DependentUpon>ItemSubTypeBatcherForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="MayaMath.cs" />
     <Compile Include="RowComparer.cs" />
     <Compile Include="MainForm.cs">
@@ -392,12 +386,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SyncSqliteForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SyncSqliteForm.Designer.cs">
-      <DependentUpon>SyncSqliteForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="TactionReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -465,9 +453,6 @@
     <EmbeddedResource Include="UserControls\ApplicationLogUserControl.resx">
       <DependentUpon>ApplicationLogUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ItemSubTypeBatcherForm.resx">
-      <DependentUpon>ItemSubTypeBatcherForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -480,9 +465,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="SyncSqliteForm.resx">
-      <DependentUpon>SyncSqliteForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="TactionReportForm.resx">
       <DependentUpon>TactionReportForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -581,10 +563,6 @@
     <Content Include="assets\stand.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Maya.DatabaseSynchronization\Maya.DatabaseSynchronization.csproj">
-      <Project>{9795ae70-35f0-4f3b-94e7-0893570f9126}</Project>
-      <Name>Maya.DatabaseSynchronization</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Maya.Redirection\Maya.Redirection.csproj">
       <Project>{d4342fc4-6bf6-4134-817b-d79186e90c17}</Project>
       <Name>Maya.Redirection</Name>

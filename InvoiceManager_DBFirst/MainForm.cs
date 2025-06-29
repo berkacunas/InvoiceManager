@@ -207,26 +207,6 @@ namespace InvoiceManager_DBFirst
 
         #region ToolStripMenuItem Events
 
-        private void toolStripMenuItemSyncSqlite_Click(object sender, EventArgs e)
-        {
-            SyncSqliteForm syncSqliteForm = new SyncSqliteForm();
-
-            if (syncSqliteForm.ShowDialog() == DialogResult.OK)
-            {
-
-            }
-        }
-
-        private void toolStripMenuItemBatchItemSubTypes_Click(object sender, EventArgs e)
-        {
-            ItemSubTypeBatcherForm itemSubTypeBatcherForm = new ItemSubTypeBatcherForm();
-
-            if (itemSubTypeBatcherForm.ShowDialog() == DialogResult.OK)
-            {
-
-            }
-        }
-
         private void toolStripMenuItemTransactions_Click(object sender, EventArgs e)
         {
             this.initializeTactionUserControl();
@@ -534,9 +514,7 @@ namespace InvoiceManager_DBFirst
 
         private void loadToolStripMenuItemIcons()
         {
-            this.toolStripMenuItemSync.Image = BitmapResourceLoader.Loop;
             this.toolStripMenuItemExit.Image = BitmapResourceLoader.Exit;
-            this.toolStripMenuItemSyncSqlite.Image = BitmapResourceLoader.Sqlite;
             this.toolStripMenuItemTransactions.Image = BitmapResourceLoader.Transaction;
             this.toolStripMenuItemItems.Image = BitmapResourceLoader.Item;
             this.toolStripMenuItemShops.Image = BitmapResourceLoader.Shop;
