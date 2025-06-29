@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InvoiceManager_DBFirst
+namespace mayacs
 {
     internal static class MayaMath
     {

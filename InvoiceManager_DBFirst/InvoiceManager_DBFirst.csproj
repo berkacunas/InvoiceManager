@@ -337,6 +337,7 @@
     <Compile Include="LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MayaSubProcess.cs" />
     <Compile Include="PaymentMethod.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
@@ -570,6 +571,7 @@
       <DependentUpon>InvoiceModel.edmx</DependentUpon>
       <LastGenOutput>InvoiceModel.cs</LastGenOutput>
     </Content>
+    <Content Include="scripts\fetch_fundtypes.py" />
     <Content Include="todos.txt" />
     <EmbeddedResource Include="assets\item.png" />
     <EmbeddedResource Include="assets\payment-method.png" />

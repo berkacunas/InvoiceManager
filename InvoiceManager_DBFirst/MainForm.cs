@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 using InvoiceManager_DBFirst.UserControls;
 using InvoiceManager_DBFirst.Globals;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Data.SqlTypes;
-using System.IdentityModel.Tokens;
+
+using mayacs;
+using System.Diagnostics;
 
 namespace InvoiceManager_DBFirst
 {
@@ -978,5 +978,29 @@ namespace InvoiceManager_DBFirst
 
         #endregion
 
+        private void toolStripMenuItemFetchBankFunds_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripMenuItemFetchBankFundTypes_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "python.exe";
+            startInfo.Arguments = "../../scripts/fetch_fundtypes.py";
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = false;
+            startInfo.WindowStyle = ProcessWindowStyle.Maximized;
+
+            (string, string) output = MayaSubProcess.RunCommand(startInfo);
+
+            MessageBox.Show($"Stdout: {output.Item1}\nStderr: {output.Item2}");
+
+        }
+
+        private void toolStripMenuItemFetchBankFundValues_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
