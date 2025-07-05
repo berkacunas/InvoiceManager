@@ -93,7 +93,6 @@ def insert_bankfundtypes(fund_types_frame):
             cursor.execute(sql, (row.Code, bankfundtype_id, row.Count, ))
             print(f"BankFundType: {row.Code} added.")
                 
-            
         conn.commit()
         cursor.close()
     
