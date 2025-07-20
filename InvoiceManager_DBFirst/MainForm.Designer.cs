@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemLogin = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemWindows = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemTransactions = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,7 +76,12 @@
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.labelHorizontalLine1 = new System.Windows.Forms.Label();
             this.contextMenuStripTileView = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemLogin = new System.Windows.Forms.ToolStripMenuItem();
+            this.backupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemBackupCsvFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemBackupSqlite = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemRestoreSqlite = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemRestoreCsvFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -111,6 +117,13 @@
             this.toolStripMenuItemFile.Name = "toolStripMenuItemFile";
             this.toolStripMenuItemFile.Size = new System.Drawing.Size(37, 20);
             this.toolStripMenuItemFile.Text = "&File";
+            // 
+            // toolStripMenuItemLogin
+            // 
+            this.toolStripMenuItemLogin.Name = "toolStripMenuItemLogin";
+            this.toolStripMenuItemLogin.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemLogin.Text = "Login";
+            this.toolStripMenuItemLogin.Click += new System.EventHandler(this.toolStripMenuItemLogin_Click);
             // 
             // toolStripMenuItemExit
             // 
@@ -193,6 +206,8 @@
             // dataToolStripMenuItem
             // 
             this.dataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.backupToolStripMenuItem,
+            this.restoreToolStripMenuItem,
             this.toolStripMenuItemBankFunds});
             this.dataToolStripMenuItem.Name = "dataToolStripMenuItem";
             this.dataToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
@@ -248,7 +263,7 @@
             // toolStripMenuItemSettings
             // 
             this.toolStripMenuItemSettings.Name = "toolStripMenuItemSettings";
-            this.toolStripMenuItemSettings.Size = new System.Drawing.Size(116, 22);
+            this.toolStripMenuItemSettings.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSettings.Text = "Settings";
             this.toolStripMenuItemSettings.Click += new System.EventHandler(this.toolStripMenuItemSettings_Click);
             // 
@@ -538,12 +553,51 @@
             this.contextMenuStripTileView.Name = "contextMenuStripTileView";
             this.contextMenuStripTileView.Size = new System.Drawing.Size(61, 4);
             // 
-            // toolStripMenuItemLogin
+            // backupToolStripMenuItem
             // 
-            this.toolStripMenuItemLogin.Name = "toolStripMenuItemLogin";
-            this.toolStripMenuItemLogin.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuItemLogin.Text = "Login";
-            this.toolStripMenuItemLogin.Click += new System.EventHandler(this.toolStripMenuItemLogin_Click);
+            this.backupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemBackupSqlite,
+            this.toolStripMenuItemBackupCsvFile});
+            this.backupToolStripMenuItem.Name = "backupToolStripMenuItem";
+            this.backupToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.backupToolStripMenuItem.Text = "Backup";
+            // 
+            // restoreToolStripMenuItem
+            // 
+            this.restoreToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemRestoreSqlite,
+            this.toolStripMenuItemRestoreCsvFile});
+            this.restoreToolStripMenuItem.Name = "restoreToolStripMenuItem";
+            this.restoreToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.restoreToolStripMenuItem.Text = "Restore";
+            // 
+            // toolStripMenuItemBackupCsvFile
+            // 
+            this.toolStripMenuItemBackupCsvFile.Name = "toolStripMenuItemBackupCsvFile";
+            this.toolStripMenuItemBackupCsvFile.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemBackupCsvFile.Text = "Csv File...";
+            this.toolStripMenuItemBackupCsvFile.Click += new System.EventHandler(this.toolStripMenuItemBackupCsvFile_Click);
+            // 
+            // toolStripMenuItemBackupSqlite
+            // 
+            this.toolStripMenuItemBackupSqlite.Name = "toolStripMenuItemBackupSqlite";
+            this.toolStripMenuItemBackupSqlite.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemBackupSqlite.Text = "Sqlite";
+            this.toolStripMenuItemBackupSqlite.Click += new System.EventHandler(this.toolStripMenuItemBackupSqlite_Click);
+            // 
+            // toolStripMenuItemRestoreSqlite
+            // 
+            this.toolStripMenuItemRestoreSqlite.Name = "toolStripMenuItemRestoreSqlite";
+            this.toolStripMenuItemRestoreSqlite.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemRestoreSqlite.Text = "Sqlite";
+            this.toolStripMenuItemRestoreSqlite.Click += new System.EventHandler(this.toolStripMenuItemRestoreSqlite_Click);
+            // 
+            // toolStripMenuItemRestoreCsvFile
+            // 
+            this.toolStripMenuItemRestoreCsvFile.Name = "toolStripMenuItemRestoreCsvFile";
+            this.toolStripMenuItemRestoreCsvFile.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemRestoreCsvFile.Text = "Csv File...";
+            this.toolStripMenuItemRestoreCsvFile.Click += new System.EventHandler(this.toolStripMenuItemRestoreCsvFile_Click);
             // 
             // MainForm
             // 
@@ -625,6 +679,12 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFetchBankFundTypes;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFetchBankFundValues;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemLogin;
+        private System.Windows.Forms.ToolStripMenuItem backupToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBackupSqlite;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBackupCsvFile;
+        private System.Windows.Forms.ToolStripMenuItem restoreToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRestoreSqlite;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRestoreCsvFile;
     }
 }
 

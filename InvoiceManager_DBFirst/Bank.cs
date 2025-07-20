@@ -17,8 +17,8 @@ namespace InvoiceManager_DBFirst
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Bank()
         {
-            this.BankAccount = new HashSet<BankAccount>();
-            this.BankEntity = new HashSet<BankEntity>();
+            this.Bank_Account = new HashSet<BankAccount>();
+            this.Bank_Entity = new HashSet<BankEntity>();
         }
     
         public int id { get; set; }
@@ -33,8 +33,8 @@ namespace InvoiceManager_DBFirst
         public Nullable<System.DateTime> LastUpdated { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BankAccount> BankAccount { get; set; }
+        public virtual ICollection<BankAccount> Bank_Account { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BankEntity> BankEntity { get; set; }
+        public virtual ICollection<BankEntity> Bank_Entity { get; set; }
     }
 }

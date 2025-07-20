@@ -17,18 +17,18 @@ namespace InvoiceManager_DBFirst
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public BankEntity()
         {
-            this.BankEntityTaction = new HashSet<BankEntityTaction>();
+            this.Bank_AccountTaction = new HashSet<BankAccountTaction>();
         }
     
         public int id { get; set; }
-        public string Title { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
         public int BankId { get; set; }
         public int GroupId { get; set; }
         public Nullable<int> RiskFactor { get; set; }
     
         public virtual Bank Bank { get; set; }
-        public virtual BankEntityGroup BankEntityGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BankEntityTaction> BankEntityTaction { get; set; }
+        public virtual ICollection<BankAccountTaction> Bank_AccountTaction { get; set; }
     }
 }

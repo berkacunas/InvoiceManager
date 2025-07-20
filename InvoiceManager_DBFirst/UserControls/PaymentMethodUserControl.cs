@@ -193,7 +193,7 @@ namespace InvoiceManager_DBFirst.UserControls
         {
             string columnName = this.dataGridViewBankCards.Columns[e.ColumnIndex].HeaderText;
 
-            var query = from bankCard in dbContext.BankCard
+            var query = from bankCard in dbContext.Bank_Card
                         orderby bankCard.Name ascending
                         select new
                         {
@@ -221,7 +221,7 @@ namespace InvoiceManager_DBFirst.UserControls
             string columnName = this.dataGridViewPaymentMethods.Columns[e.ColumnIndex].HeaderText;
 
             var query = from paymentMethod in dbContext.PaymentMethod
-                        join bankCard in dbContext.BankCard on paymentMethod.BankCardId equals bankCard.id
+                        join bankCard in dbContext.Bank_Card on paymentMethod.BankCardId equals bankCard.id
                         join user in dbContext.User on paymentMethod.AccountOwnerId equals user.id
                         orderby paymentMethod.Name ascending
                         select new
@@ -283,7 +283,7 @@ namespace InvoiceManager_DBFirst.UserControls
         private void buttonSaveCard_Click(object sender, EventArgs e)
         {
             this._setBankCardDataFromUiToObject(this._newBankCard);
-            this.dbContext.BankCard.Add(this._newBankCard);
+            this.dbContext.Bank_Card.Add(this._newBankCard);
 
             try
             {
@@ -314,8 +314,8 @@ namespace InvoiceManager_DBFirst.UserControls
             }
 
             int bankCardId = Convert.ToInt32(row.Cells["bankCardId"].Value);
-            BankCard bankCard = dbContext.BankCard.Where(r => r.id == bankCardId).FirstOrDefault();
-            BankCard oldBankCard = dbContext.BankCard.Where(r => r.id == bankCardId).AsNoTracking().FirstOrDefault();
+            BankCard bankCard = dbContext.Bank_Card.Where(r => r.id == bankCardId).FirstOrDefault();
+            BankCard oldBankCard = dbContext.Bank_Card.Where(r => r.id == bankCardId).AsNoTracking().FirstOrDefault();
 
             this._setBankCardDataFromUiToObject(bankCard);
 
@@ -343,10 +343,10 @@ namespace InvoiceManager_DBFirst.UserControls
             }
 
             int bankCardId = Convert.ToInt32(row.Cells["bankCardId"].Value);
-            BankCard bankCard = dbContext.BankCard.Where(r => r.id == bankCardId).FirstOrDefault();
+            BankCard bankCard = dbContext.Bank_Card.Where(r => r.id == bankCardId).FirstOrDefault();
 
             this.onBankCardRemoved(bankCard);
-            dbContext.BankCard.Remove(bankCard);
+            dbContext.Bank_Card.Remove(bankCard);
 
             try
             {
@@ -566,7 +566,7 @@ namespace InvoiceManager_DBFirst.UserControls
 
         private void _bindDataToGridViewBankCard()
         {
-            var query = from bankCard in dbContext.BankCard
+            var query = from bankCard in dbContext.Bank_Card
                         orderby bankCard.Name ascending
                         select new
                         {
@@ -582,7 +582,7 @@ namespace InvoiceManager_DBFirst.UserControls
         private void _bindDataToGridViewPaymentMethod()
         {
             var query = from paymentMethod in dbContext.PaymentMethod
-                        join bankCard in dbContext.BankCard on paymentMethod.BankCardId equals bankCard.id into paymentMethodBankCardJoinTable
+                        join bankCard in dbContext.Bank_Card on paymentMethod.BankCardId equals bankCard.id into paymentMethodBankCardJoinTable
                         from pmbcTable in paymentMethodBankCardJoinTable.DefaultIfEmpty()
                         join user in dbContext.User on paymentMethod.AccountOwnerId equals user.id
                         orderby paymentMethod.Name ascending
@@ -608,10 +608,10 @@ namespace InvoiceManager_DBFirst.UserControls
             switch (bindType)
             {
                 case BindType.Select:
-                    query = from bankCard in dbContext.BankCard where bankCard.Name == bankCardName orderby bankCard.Name ascending select bankCard;
+                    query = from bankCard in dbContext.Bank_Card where bankCard.Name == bankCardName orderby bankCard.Name ascending select bankCard;
                     break;
                 case BindType.Where:
-                    query = from bankCard in dbContext.BankCard where bankCard.id == bankCardId select bankCard;
+                    query = from bankCard in dbContext.Bank_Card where bankCard.id == bankCardId select bankCard;
                     break;
                 case BindType.Setnull:
                     this.comboBoxCardOptionsCardType.DataSource = null;
@@ -632,14 +632,14 @@ namespace InvoiceManager_DBFirst.UserControls
             switch (bindType)
             {
                 case BindType.Select:
-                    var querySelect = from bankCard in dbContext.BankCard group bankCard by bankCard.Name into g orderby g.Key select new { Name = g.Key };
+                    var querySelect = from bankCard in dbContext.Bank_Card group bankCard by bankCard.Name into g orderby g.Key select new { Name = g.Key };
 
                     this.comboBoxPaymentMethodOptionsCard.DataSource = querySelect.ToList();
                     this.comboBoxPaymentMethodOptionsCard.DisplayMember = "Name";
                     this.comboBoxPaymentMethodOptionsCard.ValueMember = "Name";
                     break;
                 case BindType.Where:
-                    var queryWhere = from bankCard in dbContext.BankCard where bankCard.Name == bankCardName && bankCard.Type == bankCardType select bankCard;
+                    var queryWhere = from bankCard in dbContext.Bank_Card where bankCard.Name == bankCardName && bankCard.Type == bankCardType select bankCard;
 
                     this.comboBoxPaymentMethodOptionsCard.DataSource = queryWhere.ToList();
                     this.comboBoxPaymentMethodOptionsCard.DisplayMember = "Name";
@@ -661,10 +661,10 @@ namespace InvoiceManager_DBFirst.UserControls
             switch (bindType)
             {
                 case BindType.Select:
-                    query = from bankCard in dbContext.BankCard where bankCard.Name == bankCardName orderby bankCard.Name ascending select bankCard;
+                    query = from bankCard in dbContext.Bank_Card where bankCard.Name == bankCardName orderby bankCard.Name ascending select bankCard;
                     break;
                 case BindType.Where:
-                    query = from bankCard in dbContext.BankCard where bankCard.id == bankCardId select bankCard;
+                    query = from bankCard in dbContext.Bank_Card where bankCard.id == bankCardId select bankCard;
                     break;
                 case BindType.Setnull:
                     this.comboBoxPaymentMethodOptionsCardType.DataSource = null;
@@ -796,9 +796,9 @@ namespace InvoiceManager_DBFirst.UserControls
         private int _getBankCardId(string bankCardName, string bankCardType)
         {
             if (string.IsNullOrEmpty(bankCardType))
-                return this.dbContext.BankCard.Where(r => r.Name == bankCardName).FirstOrDefault().id;
+                return this.dbContext.Bank_Card.Where(r => r.Name == bankCardName).FirstOrDefault().id;
             else
-                return this.dbContext.BankCard.Where(r => r.Name == bankCardName && r.Type == bankCardType).FirstOrDefault().id;
+                return this.dbContext.Bank_Card.Where(r => r.Name == bankCardName && r.Type == bankCardType).FirstOrDefault().id;
         }
 
         #endregion

@@ -237,6 +237,67 @@ namespace InvoiceManager_DBFirst
             this.initializeSellerUserControl();
         }
 
+        private void toolStripMenuItemBackupSqlite_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "../../executables/bantu.exe";
+            //startInfo.Arguments = "../../executables/bantu.exe";
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = false;
+            startInfo.WindowStyle = ProcessWindowStyle.Maximized;
+
+            (string, string) output = MayaSubProcess.RunCommand(startInfo);
+
+            MessageBox.Show($"Stdout: {output.Item1}\nStderr: {output.Item2}");
+        }
+
+        private void toolStripMenuItemBackupCsvFile_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("toolStripMenuItemBackupCsvFile_Click");
+        }
+
+        private void toolStripMenuItemRestoreSqlite_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("toolStripMenuItemRestoreSqlite_Click");
+        }
+
+        private void toolStripMenuItemRestoreCsvFile_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("toolStripMenuItemRestoreCsvFile_Click");
+        }
+
+        private void toolStripMenuItemFetchBankFunds_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("toolStripMenuItemFetchBankFunds_Click");
+
+        }
+
+        private void toolStripMenuItemFetchBankFundTypes_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "python.exe";
+            startInfo.Arguments = "../../scripts/fetch_fundtypes.py";
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = false;
+            startInfo.WindowStyle = ProcessWindowStyle.Maximized;
+
+            (string, string) output = MayaSubProcess.RunCommand(startInfo);
+
+            MessageBox.Show($"Stdout: {output.Item1}\nStderr: {output.Item2}");
+        }
+
+        private void toolStripMenuItemFetchBankFundValues_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("toolStripMenuItemFetchBankFundValues_Click");
+        }
+
+        private void toolStripMenuItemLogin_Click(object sender, EventArgs e)
+        {
+            this.initializeLoginForm();
+        }
+
+        
+
         private void toolStripMenuItemSettings_Click(object sender, EventArgs e)
         {
             this.initializeSettingsUserControl();
@@ -958,34 +1019,6 @@ namespace InvoiceManager_DBFirst
 
         #endregion
 
-        private void toolStripMenuItemFetchBankFunds_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripMenuItemFetchBankFundTypes_Click(object sender, EventArgs e)
-        {
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = "python.exe";
-            startInfo.Arguments = "../../scripts/fetch_fundtypes.py";
-            startInfo.UseShellExecute = false;
-            startInfo.CreateNoWindow = false;
-            startInfo.WindowStyle = ProcessWindowStyle.Maximized;
-
-            (string, string) output = MayaSubProcess.RunCommand(startInfo);
-
-            MessageBox.Show($"Stdout: {output.Item1}\nStderr: {output.Item2}");
-
-        }
-
-        private void toolStripMenuItemFetchBankFundValues_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripMenuItemLogin_Click(object sender, EventArgs e)
-        {
-            this.initializeLoginForm();
-        }
+        
     }
 }

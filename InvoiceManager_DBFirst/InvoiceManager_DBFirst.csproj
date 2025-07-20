@@ -261,7 +261,10 @@
     <Compile Include="BankAccount.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="BankAccountType.cs">
+    <Compile Include="BankAccountTaction.cs">
+      <DependentUpon>InvoiceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BankAccountTactionType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="BankCard.cs">
@@ -270,16 +273,13 @@
     <Compile Include="BankEntity.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="BankEntityGroup.cs">
+    <Compile Include="BankEntityType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="BankEntityTaction.cs">
+    <Compile Include="BankFundType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="BankEntityTactionType.cs">
-      <DependentUpon>InvoiceModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BankEntityTopGroup.cs">
+    <Compile Include="Bank_AccountType.cs">
       <DependentUpon>InvoiceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CardTaction.cs">
@@ -548,6 +548,7 @@
     <EmbeddedResource Include="assets\bond-3.png" />
     <EmbeddedResource Include="assets\data-transfer.png" />
     <EmbeddedResource Include="assets\bank.png" />
+    <Content Include="executables\bantu.exe" />
     <Content Include="InvoiceModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>InvoiceModel.edmx</DependentUpon>

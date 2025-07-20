@@ -17,8 +17,7 @@ namespace InvoiceManager_DBFirst
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.CashTransfer = new HashSet<CashTransfer>();
-            this.CashTransfer1 = new HashSet<CashTransfer>();
+            this.Bank_Account = new HashSet<BankAccount>();
             this.PaymentMethod = new HashSet<PaymentMethod>();
             this.Taction = new HashSet<Taction>();
             this.UserImage = new HashSet<UserImage>();
@@ -32,9 +31,7 @@ namespace InvoiceManager_DBFirst
         public byte[] Thumbnail { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CashTransfer> CashTransfer { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CashTransfer> CashTransfer1 { get; set; }
+        public virtual ICollection<BankAccount> Bank_Account { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PaymentMethod> PaymentMethod { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

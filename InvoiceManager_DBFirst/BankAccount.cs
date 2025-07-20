@@ -17,12 +17,13 @@ namespace InvoiceManager_DBFirst
         public int id { get; set; }
         public int BankId { get; set; }
         public int TypeId { get; set; }
-        public string Owner { get; set; }
+        public int UserId { get; set; }
         public System.DateTime CreatedOn { get; set; }
         public Nullable<System.DateTime> DeletedOn { get; set; }
         public string Nickname { get; set; }
     
         public virtual Bank Bank { get; set; }
-        public virtual BankAccountType BankAccountType { get; set; }
+        public virtual Bank_AccountType Bank_AccountType { get; set; }
+        public virtual User User { get; set; }
     }
 }

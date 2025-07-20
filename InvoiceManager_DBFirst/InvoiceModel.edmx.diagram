@@ -4,56 +4,53 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="b5ec491284134234a5a55eede77114b7" Name="Diagram1">
-        <EntityTypeShape EntityType="InvoicesModel.AppLog" Width="1.5" PointX="16" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.AppLogActionType" Width="1.5" PointX="13.75" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.Bank" Width="1.5" PointX="3.75" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.BankAccount" Width="1.5" PointX="6" PointY="6.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.BankAccountType" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.BankCard" Width="1.5" PointX="3.75" PointY="8.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.BankEntity" Width="1.5" PointX="6" PointY="2.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.BankEntityGroup" Width="1.5" PointX="3.75" PointY="16" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.BankEntityTaction" Width="1.5" PointX="8.25" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.BankEntityTactionType" Width="1.5" PointX="6" PointY="15.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.BankEntityTopGroup" Width="1.5" PointX="1.5" PointY="16.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.CardTaction" Width="1.5" PointX="8.25" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.CardTactionDetails" Width="1.5" PointX="14" PointY="6.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.CardTactionOperationType" Width="1.5" PointX="11.75" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.CashTransfer" Width="1.5" PointX="3" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.CurrencyMovement" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.Item" Width="1.5" PointX="11.25" PointY="19.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.ItemGroup" Width="1.5" PointX="9" PointY="19.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.ItemSubType" Width="1.5" PointX="11.25" PointY="15.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.ItemSubTypeDetails" Width="1.5" PointX="13.5" PointY="17.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.ItemTopGroup" Width="1.5" PointX="6.75" PointY="19.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.PaymentMethod" Width="1.5" PointX="6" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.Seller" Width="1.5" PointX="9" PointY="7.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.Shop" Width="1.5" PointX="9" PointY="25.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.ShopGroup" Width="1.5" PointX="6.75" PointY="25.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.ShopType" Width="1.5" PointX="4.5" PointY="25.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="6" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.Taction" Width="1.5" PointX="11.25" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.TactionDetails" Width="1.5" PointX="13.5" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.User" Width="1.5" PointX="0.75" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.UserImage" Width="1.5" PointX="3" PointY="18.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.UserLog" Width="1.5" PointX="3" PointY="21.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.UserLoginDetails" Width="1.5" PointX="11" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="InvoicesModel.UserProfile" Width="1.5" PointX="8.75" PointY="2.125" IsExpanded="true" />
+      <Diagram DiagramId="607a952d985444e0953db5e739af9eaf" Name="Diagram1" ZoomLevel="100" ShowGrid="false">
+        <EntityTypeShape EntityType="InvoicesModel.AppLog" Width="1.5" PointX="18" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.AppLogActionType" Width="1.5" PointX="15.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.Bank" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.BankAccount" Width="1.5" PointX="3" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.BankAccountTaction" Width="1.5" PointX="8.25" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.BankAccountTactionType" Width="1.5" PointX="6" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.Bank_AccountType" Width="1.5" PointX="0.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.BankCard" Width="1.5" PointX="3.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.BankEntity" Width="1.5" PointX="6" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.BankEntityType" Width="1.5" PointX="15.75" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.BankFundType" Width="1.5" PointX="18" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.CardTaction" Width="1.5" PointX="8.25" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.CardTactionDetails" Width="1.5" PointX="14" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.CardTactionOperationType" Width="1.5" PointX="11.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.CashTransfer" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.CurrencyMovement" Width="1.5" PointX="15.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.Item" Width="1.5" PointX="11.25" PointY="17.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.ItemGroup" Width="1.5" PointX="9" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.ItemSubType" Width="1.5" PointX="11.25" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.ItemSubTypeDetails" Width="1.5" PointX="13.5" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.ItemTopGroup" Width="1.5" PointX="6.75" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.PaymentMethod" Width="1.5" PointX="6" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.Seller" Width="1.5" PointX="9" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.Shop" Width="1.5" PointX="9" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.ShopGroup" Width="1.5" PointX="6.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.ShopType" Width="1.5" PointX="4.5" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.sysdiagrams" Width="1.5" PointX="16.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.Taction" Width="1.5" PointX="11.25" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.TactionDetails" Width="1.5" PointX="13.5" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.User" Width="1.5" PointX="0.75" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.UserImage" Width="1.5" PointX="3" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.UserLog" Width="1.5" PointX="3" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.UserLoginDetails" Width="1.5" PointX="14" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="InvoicesModel.UserProfile" Width="1.5" PointX="11.75" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="InvoicesModel.FK_AppLog_ActionTypeId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_BankAccount_BankId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_BankEntity_BankId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_BankAccount_BankAccountTypeId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_PaymentMethod_BankCardId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_BankEntity_BankEntityGroupId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_BankAccount_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_BankEntityTaction_BankEntityId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_BankEntityGroup_BankEntityTopGroupId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_BankEntityTaction_BankEntityTypeId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_BankEntityTaction_PaymentMethodId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_PaymentMethod_BankCardId" ManuallyRouted="false" />
+        <AssociationConnector Association="InvoicesModel.FK_BankFundType_BankEntityTypeId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_CardTaction_PaymentMethodId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_CardTactionDetails_CardTactionOperationTypeId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_CashTransfer_PaymentMethodId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_CashTransferFrom_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="InvoicesModel.FK_CashTransferTo_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_Item_GroupId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_ItemSubTypeDetails_ItemId" ManuallyRouted="false" />
         <AssociationConnector Association="InvoicesModel.FK_TactionDetails_ItemId" ManuallyRouted="false" />

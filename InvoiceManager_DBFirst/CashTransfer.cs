@@ -20,12 +20,9 @@ namespace InvoiceManager_DBFirst
         public int To { get; set; }
         public string Direction { get; set; }
         public decimal Val { get; set; }
-        public int PaymentMethodId { get; set; }
+        public int FromPaymentMethodId { get; set; }
+        public Nullable<int> ToPaymentMethodId { get; set; }
         public string For { get; set; }
         public string Note { get; set; }
-    
-        public virtual PaymentMethod PaymentMethod { get; set; }
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
     }
 }
